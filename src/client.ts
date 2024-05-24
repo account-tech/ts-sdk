@@ -2,7 +2,7 @@ import { PACKAGE, CLOCK } from "./constants";
 import { SuiClient, SuiParsedData, getFullnodeUrl } from "@mysten/sui.js/client";
 import { TransactionBlock, TransactionResult } from "@mysten/sui.js/transactions";
 import { normalizeSuiAddress } from "@mysten/sui.js/utils";
-import { Account } from "./types";
+import { Account, Multisig, Proposal } from "./types";
 
 export class KrakenClient {
 	/**
@@ -15,7 +15,7 @@ export class KrakenClient {
 	constructor(
 		public network: string = 'mainnet',
 		public user: string = normalizeSuiAddress("0x0"),
-		public multisig: string = normalizeSuiAddress("0x0"),
+		public multisig: Multisig,
 	) {
 		let url = "";
 		if (network == 'mainnet'
@@ -31,11 +31,41 @@ export class KrakenClient {
 		this.client = new SuiClient({ url });
 	}
 
-	setMultisig(multisig: string) {
+	async setMultisig(id: string) {
+		const multisig = await this.getMultisig(id);
 		this.multisig = multisig;
 	}
 
 	// === Multisig ===
+
+	async getMultisig(id: string): Promise<Multisig> {
+		const { data: multisig } = await this.client.getObject({
+			id,
+			options: {
+				showContent: true
+			}
+		});
+
+		const content = multisig?.content as any;
+
+		const proposals = content.fields.proposals.fields.contents.map((proposal: any) => {
+			return {
+				key: proposal.fields.key,
+				description: proposal.fields.value.fields.description,
+				executionTime: proposal.fields.value.fields.execution_time,
+				expirationEpoch: proposal.fields.value.fields.expiration_epoch,
+				approved: proposal.fields.value.fields.approved.fields.contents,
+			}
+		});
+
+		return {
+			id: content.id.id,
+			name: content.fields.name,
+			threshold: content.fields.threshold,
+			members: content.fields.members.fields.contents,
+			proposals,
+		}
+	}
 
 	createMultisig(tx: TransactionBlock, members: string[]): TransactionResult {
 		const [multisig] = tx.moveCall({
@@ -93,41 +123,54 @@ export class KrakenClient {
 	cleanProposals(tx: TransactionBlock): TransactionResult {
 		return tx.moveCall({
 			target: `${PACKAGE}::multisig::clean_proposals`,
-			arguments: [tx.object(this.multisig)],
-		});
-	}
-
-	// if there has been a mistake when creating a proposal, 
-	// it can be deleted before anyone approved
-	deleteProposal(tx: TransactionBlock, proposal: string): TransactionResult {
-		return tx.moveCall({
-			target: `${PACKAGE}::multisig::delete_proposal`,
-			arguments: [tx.object(this.multisig), tx.pure(proposal)],
+			arguments: [tx.object(this.multisig.id)],
 		});
 	}
 
 	approveProposal(tx: TransactionBlock, proposal: string): TransactionResult {
 		return tx.moveCall({
 			target: `${PACKAGE}::multisig::approve_proposal`,
-			arguments: [tx.object(this.multisig), tx.pure(proposal)],
+			arguments: [tx.object(this.multisig.id), tx.pure(proposal)],
 		});
 	}
 
 	removeApproval(tx: TransactionBlock, proposal: string): TransactionResult {
 		return tx.moveCall({
 			target: `${PACKAGE}::multisig::remove_approval`,
-			arguments: [tx.object(this.multisig), tx.pure(proposal)],
+			arguments: [tx.object(this.multisig.id), tx.pure(proposal)],
 		});
 	}
 
 	executeProposal(tx: TransactionBlock, proposal: string): TransactionResult {
 		return tx.moveCall({
 			target: `${PACKAGE}::multisig::execute_proposal`,
-			arguments: [tx.object(this.multisig), tx.pure(proposal), tx.object(CLOCK)],
+			arguments: [tx.object(this.multisig.id), tx.pure(proposal), tx.object(CLOCK)],
 		});
 	}
 
 	// === Account ===
+
+	// TODO: implement merge accounts
+	async getAccount(user: string = this.user): Promise<Account> {
+		const { data: accounts } = await this.client.getOwnedObjects({
+			owner: user,
+			filter: {
+				StructType: `${PACKAGE}::account::Account`
+			},
+			options: {
+				showContent: true
+			}
+		});
+
+		const content = accounts[0].data?.content as any;
+
+		return {
+			id: content.id.id,
+			username: content.username,
+			profilePicture: content.profile_picture,
+			multisigs: content.multisigs.fields.contents,
+		}
+	}
 
 	createAccount(tx: TransactionBlock, username: string, profilePicture: string): TransactionResult {
 		return tx.moveCall({
@@ -161,7 +204,7 @@ export class KrakenClient {
 	sendInvite(tx: TransactionBlock, recipient: string): TransactionResult {
 		return tx.moveCall({
 			target: `${PACKAGE}::account::send_invite`,
-			arguments: [tx.object(this.multisig), tx.pure(recipient)],
+			arguments: [tx.object(this.multisig.id), tx.pure(recipient)],
 		});
 	}
 
@@ -181,35 +224,13 @@ export class KrakenClient {
 		});
 	}
 
-	// TODO: implement merge accounts
-	async getAccount(account: string = this.user): Promise<Account> {
-		const { data: accounts } = await this.client.getOwnedObjects({
-			owner: account,
-			filter: {
-				StructType: `${PACKAGE}::account::Account`
-			},
-			options: {
-				showContent: true
-			}
-		});
-
-		const content = accounts[0].data?.content as any;
-
-		return {
-			id: content.id.id,
-			username: content.username,
-			profilePicture: content.profile_picture,
-			multisigs: content.multisigs.fields.contents,
-		}
-	}
-
 	// === Coin operations (member only) ===
 
 	mergeCoins(tx: TransactionBlock, to_keep: string, to_merge: string[], coinType: string): TransactionResult {
 		return tx.moveCall({
 			target: `${PACKAGE}::coin_operations::merge`,
 			arguments: [
-				tx.object(this.multisig), 
+				tx.object(this.multisig.id), 
 				tx.pure(to_keep),
 				tx.pure(to_merge),
 			],
@@ -221,7 +242,7 @@ export class KrakenClient {
 		return tx.moveCall({
 			target: `${PACKAGE}::coin_operations::split`,
 			arguments: [
-				tx.object(this.multisig), 
+				tx.object(this.multisig.id), 
 				tx.pure(to_keep),
 				tx.pure(to_split),
 			],
@@ -231,6 +252,6 @@ export class KrakenClient {
 
 	// === Config ===
 
-	
+
 }
 
