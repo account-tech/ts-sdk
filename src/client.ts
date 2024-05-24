@@ -1,6 +1,6 @@
 import { PACKAGE, CLOCK } from "./constants";
 import { SuiClient, SuiParsedData, getFullnodeUrl } from "@mysten/sui.js/client";
-import { TransactionBlock } from "@mysten/sui.js/transactions";
+import { TransactionBlock, TransactionResult } from "@mysten/sui.js/transactions";
 import { normalizeSuiAddress } from "@mysten/sui.js/utils";
 import { Account } from "./types";
 
@@ -37,9 +37,7 @@ export class KrakenClient {
 
 	// === Multisig ===
 
-	createMultisig(members: string[]): TransactionBlock {
-		const tx = new TransactionBlock();
-
+	createMultisig(tx: TransactionBlock, members: string[]): TransactionResult {
 		const [multisig] = tx.moveCall({
 			target: `${PACKAGE}::multisig::new`,
 			arguments: [tx.pure("test")],
@@ -86,94 +84,101 @@ export class KrakenClient {
 			});
 		}
 
-		tx.moveCall({
+		return tx.moveCall({
 			target: `${PACKAGE}::multisig::share`,
 			arguments: [multisig],
 		});
+	}
 
-		return tx;
+	cleanProposals(tx: TransactionBlock): TransactionResult {
+		return tx.moveCall({
+			target: `${PACKAGE}::multisig::clean_proposals`,
+			arguments: [tx.object(this.multisig)],
+		});
+	}
+
+	// if there has been a mistake when creating a proposal, 
+	// it can be deleted before anyone approved
+	deleteProposal(tx: TransactionBlock, proposal: string): TransactionResult {
+		return tx.moveCall({
+			target: `${PACKAGE}::multisig::delete_proposal`,
+			arguments: [tx.object(this.multisig), tx.pure(proposal)],
+		});
+	}
+
+	approveProposal(tx: TransactionBlock, proposal: string): TransactionResult {
+		return tx.moveCall({
+			target: `${PACKAGE}::multisig::approve_proposal`,
+			arguments: [tx.object(this.multisig), tx.pure(proposal)],
+		});
+	}
+
+	removeApproval(tx: TransactionBlock, proposal: string): TransactionResult {
+		return tx.moveCall({
+			target: `${PACKAGE}::multisig::remove_approval`,
+			arguments: [tx.object(this.multisig), tx.pure(proposal)],
+		});
+	}
+
+	executeProposal(tx: TransactionBlock, proposal: string): TransactionResult {
+		return tx.moveCall({
+			target: `${PACKAGE}::multisig::execute_proposal`,
+			arguments: [tx.object(this.multisig), tx.pure(proposal), tx.object(CLOCK)],
+		});
 	}
 
 	// === Account ===
 
-	createAccount(username: string, profilePicture: string): TransactionBlock {
-		const tx = new TransactionBlock();
-
-		tx.moveCall({
+	createAccount(tx: TransactionBlock, username: string, profilePicture: string): TransactionResult {
+		return tx.moveCall({
 			target: `${PACKAGE}::account::new`,
 			arguments: [tx.pure(username), tx.pure(profilePicture)],
 		});
-
-		return tx;
 	}
 
-	deleteAccount(account: string): TransactionBlock {
-		const tx = new TransactionBlock();
-
-		tx.moveCall({
+	deleteAccount(tx: TransactionBlock, account: string): TransactionResult {
+		return tx.moveCall({
 			target: `${PACKAGE}::account::destroy`,
 			arguments: [tx.object(account)],
 		});
-
-		return tx;
 	}
 
-	joinMultisig(account: string, multisig: string): TransactionBlock {
-		const tx = new TransactionBlock();
-
-		tx.moveCall({
+	joinMultisig(tx: TransactionBlock, account: string, multisig: string): TransactionResult {
+		return tx.moveCall({
 			target: `${PACKAGE}::account::join_multisig`,
 			arguments: [tx.object(account), tx.pure(multisig)],
 		});
-
-		return tx;
 	}
 
-	leaveMultisig(account: string, multisig: string): TransactionBlock {
-		const tx = new TransactionBlock();
-
-		tx.moveCall({
+	leaveMultisig(tx: TransactionBlock, account: string, multisig: string): TransactionResult {
+		return tx.moveCall({
 			target: `${PACKAGE}::account::leave_multisig`,
 			arguments: [tx.object(account), tx.pure(multisig)],
 		});
-
-		return tx;
 	}
 
 	// member only
-	sendInvite(recipient: string): TransactionBlock {
-		const tx = new TransactionBlock();
-
-		tx.moveCall({
+	sendInvite(tx: TransactionBlock, recipient: string): TransactionResult {
+		return tx.moveCall({
 			target: `${PACKAGE}::account::send_invite`,
 			arguments: [tx.object(this.multisig), tx.pure(recipient)],
 		});
-
-		return tx;
 	}
 
 	// member only
-	acceptInvite(account: string, invite: string): TransactionBlock {
-		const tx = new TransactionBlock();
-
-		tx.moveCall({
+	acceptInvite(tx: TransactionBlock, account: string, invite: string): TransactionResult {
+		return tx.moveCall({
 			target: `${PACKAGE}::account::accept_invite`,
 			arguments: [tx.object(account), tx.object(invite)],
 		});
-
-		return tx;
 	}
 
 	// member only
-	refuseInvite(account: string, invite: string): TransactionBlock {
-		const tx = new TransactionBlock();
-
-		tx.moveCall({
+	refuseInvite(tx: TransactionBlock, account: string, invite: string): TransactionResult {
+		return tx.moveCall({
 			target: `${PACKAGE}::account::refuse_invite`,
 			arguments: [tx.object(account), tx.object(invite)],
 		});
-
-		return tx;
 	}
 
 	// TODO: implement merge accounts
@@ -200,10 +205,8 @@ export class KrakenClient {
 
 	// === Coin operations (member only) ===
 
-	mergeCoins(to_keep: string, to_merge: string[], coinType: string): TransactionBlock {
-		const tx = new TransactionBlock();
-
-		tx.moveCall({
+	mergeCoins(tx: TransactionBlock, to_keep: string, to_merge: string[], coinType: string): TransactionResult {
+		return tx.moveCall({
 			target: `${PACKAGE}::coin_operations::merge`,
 			arguments: [
 				tx.object(this.multisig), 
@@ -212,14 +215,10 @@ export class KrakenClient {
 			],
 			typeArguments: [coinType]
 		});
-		
-		return tx;
 	}
 	
-	splitCoins(to_keep: string, to_split: string[], coinType: string): TransactionBlock {
-		const tx = new TransactionBlock();
-		
-		tx.moveCall({
+	splitCoins(tx: TransactionBlock, to_keep: string, to_split: string[], coinType: string): TransactionResult {
+		return tx.moveCall({
 			target: `${PACKAGE}::coin_operations::split`,
 			arguments: [
 				tx.object(this.multisig), 
@@ -228,9 +227,9 @@ export class KrakenClient {
 			],
 			typeArguments: [coinType]
 		});
-
-		return tx;
 	}
+
+	// === Config ===
 
 	
 }
