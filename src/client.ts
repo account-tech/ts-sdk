@@ -252,6 +252,50 @@ export class KrakenClient {
 
 	// === Config ===
 
+	proposeModify(
+		tx: TransactionBlock, 
+		key: string, 
+		executionTime: number,
+		expirationEpoch: number,
+		description: string,
+		name: string,
+		threshold: number,
+		toAdd: string[],
+		toRemove: string[],
+	): TransactionResult {
+		tx.moveCall({
+			target: `${PACKAGE}::config::propose_modify`,
+			arguments: [
+				tx.object(this.multisig.id), 
+				tx.pure(key), 
+				tx.pure(executionTime), 
+				tx.pure(expirationEpoch), 
+				tx.pure(description), 
+				tx.pure(name), 
+				tx.pure(threshold), 
+				tx.pure(toAdd),
+				tx.pure(toRemove), 
+			],
+		});
 
+		tx.moveCall({
+			target: `${PACKAGE}::multisig::approve_proposal`,
+			arguments: [
+				tx.object(this.multisig.id), 
+				tx.pure(key), 
+			],
+		});
+
+		if (this.multisig.members.length == 1) {
+			tx.moveCall({
+				target: `${PACKAGE}::config::execute_modify`,
+				arguments: [
+					tx.object(this.multisig.id), 
+					tx.pure(key), 
+					tx.object(CLOCK),
+				],
+			});
+		}
+	}
 }
 
