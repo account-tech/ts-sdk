@@ -1,8 +1,7 @@
 import { PACKAGE, CLOCK, FRAMEWORK } from "./constants";
-import { Account, Kiosk, Multisig, Proposal } from "./types";
-import { SuiClient, SuiParsedData, getFullnodeUrl } from "@mysten/sui.js/client";
+import { Account, Kiosk, Multisig, Proposal, TransferPolicy } from "./types";
+import { SuiClient, getFullnodeUrl } from "@mysten/sui.js/client";
 import { TransactionBlock, TransactionResult } from "@mysten/sui.js/transactions";
-import { normalizeSuiAddress } from "@mysten/sui.js/utils";
 import { KioskClient, Network } from "@mysten/kiosk";
 
 export class KrakenClient {
@@ -15,18 +14,13 @@ export class KrakenClient {
 	private multisigData: Multisig | null;
 
 	constructor(
-		public network: string,
+		public network: "mainnet" | "testnet" | "devnet" | "localnet",
+		public url: string | null,
 		public user: string,
 		public multisigId: string,
 	) {
-		let url = "";
-		if (network == "mainnet"
-			|| network == "testnet"
-			|| network == "devnet"
-			|| network == "localnet") {
+		if (!url) {
 			url = getFullnodeUrl(network);
-		} else {
-			url = network as string;
 		}
 
 		this.client = new SuiClient({ url });
@@ -42,22 +36,38 @@ export class KrakenClient {
 	// === Multisig ===
 
 	async getMultisig(id: string): Promise<Multisig> {
+		// get Multisig 
 		const { data } = await this.client.getObject({
 			id,
-			options: {
-				showContent: true
-			}
+			options: { showContent: true }
 		});
 
 		const content = data?.content as any;
 
-		const proposals = content.fields.proposals.fields.contents.map((proposal: any) => {
+		// get proposals in multisig and each action attached to proposals
+		const proposals = content.fields.proposals.fields.contents.map(async (proposal: any) => {
+			// get the dynamic field action for each proposal
+			const parentId = proposal.fields.value.fields.id.id;
+			const { data } = await this.client.getDynamicFields({ parentId });
+			const df: any = await this.client.getObject({
+				id: data[0].objectId,
+				options: { showContent: true }
+			});
+
+			const content = df.data?.content?.fields.value;
+			const action = {
+				type: content.type.split("::").pop(), // The action Struct name
+				...content.fields // The action Struct fields
+			}
+
 			return {
+				id,
 				key: proposal.fields.key,
 				description: proposal.fields.value.fields.description,
 				executionTime: proposal.fields.value.fields.execution_time,
 				expirationEpoch: proposal.fields.value.fields.expiration_epoch,
 				approved: proposal.fields.value.fields.approved.fields.contents,
+				action
 			}
 		});
 
@@ -117,7 +127,7 @@ export class KrakenClient {
 		}
 
 		return tx.moveCall({
-			target: `${PACKAGE}::multisig::share`,
+			target: `${FRAMEWORK}::transfer::share_object`,
 			arguments: [multisig],
 		});
 	}
@@ -129,24 +139,24 @@ export class KrakenClient {
 		});
 	}
 
-	approveProposal(tx: TransactionBlock, proposal: string): TransactionResult {
+	approveProposal(tx: TransactionBlock, key: string): TransactionResult {
 		return tx.moveCall({
 			target: `${PACKAGE}::multisig::approve_proposal`,
-			arguments: [tx.object(this.multisigId), tx.pure(proposal)],
+			arguments: [tx.object(this.multisigId), tx.pure(key)],
 		});
 	}
 
-	removeApproval(tx: TransactionBlock, proposal: string): TransactionResult {
+	removeApproval(tx: TransactionBlock, key: string): TransactionResult {
 		return tx.moveCall({
 			target: `${PACKAGE}::multisig::remove_approval`,
-			arguments: [tx.object(this.multisigId), tx.pure(proposal)],
+			arguments: [tx.object(this.multisigId), tx.pure(key)],
 		});
 	}
 
-	executeProposal(tx: TransactionBlock, proposal: string): TransactionResult {
+	executeProposal(tx: TransactionBlock, key: string): TransactionResult {
 		return tx.moveCall({
 			target: `${PACKAGE}::multisig::execute_proposal`,
-			arguments: [tx.object(this.multisigId), tx.pure(proposal), tx.object(CLOCK)],
+			arguments: [tx.object(this.multisigId), tx.pure(key), tx.object(CLOCK)],
 		});
 	}
 
@@ -256,7 +266,7 @@ export class KrakenClient {
 
 	// === Config ===
 
-	// submit and approve proposal, execute if only member
+	// submit and approve proposal, execute if is only member
 	proposeModify(
 		tx: TransactionBlock, 
 		key: string, 
@@ -267,7 +277,7 @@ export class KrakenClient {
 		threshold: number,
 		toAdd: string[],
 		toRemove: string[],
-	): TransactionResult {
+	) {
 		tx.moveCall({
 			target: `${PACKAGE}::config::propose_modify`,
 			arguments: [
@@ -281,16 +291,10 @@ export class KrakenClient {
 				tx.pure(toAdd),
 				tx.pure(toRemove), 
 			],
-		});
-
-		tx.moveCall({
-			target: `${PACKAGE}::multisig::approve_proposal`,
-			arguments: [
-				tx.object(this.multisigId), 
-				tx.pure(key), 
-			],
-		});
-
+		});		
+		
+		this.approveProposal(tx, key);
+		
 		if (this.multisigData?.members.length == 1) {
 			tx.moveCall({
 				target: `${PACKAGE}::config::execute_modify`,
@@ -306,7 +310,7 @@ export class KrakenClient {
 	executeModify(
 		tx: TransactionBlock, 
 		key: string, 
-	): TransactionResult {
+	) {
 		tx.moveCall({
 			target: `${PACKAGE}::config::execute_modify`,
 			arguments: [

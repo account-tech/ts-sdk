@@ -6,11 +6,13 @@ export type Multisig = {
 }
 
 export type Proposal = {
+    id: string,
     key: string,
     description: string,
     executionTime: number,
     expirationEpoch: number,
     approved: string[],
+    action: any,
 }
 
 export type Account = {
@@ -25,5 +27,12 @@ export type Kiosk = {
     kiosk: string,
     profits: number,
     itemCount: number,
+}
+
+export type TransferPolicy = {
+    id: string,
+    hasFloorPrice: boolean,
+    hasRoyalty: boolean,
+    isLocked: boolean,
 }
 
