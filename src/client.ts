@@ -1,8 +1,9 @@
-import { PACKAGE, CLOCK } from "./constants";
+import { PACKAGE, CLOCK, FRAMEWORK } from "./constants";
+import { Account, Kiosk, Multisig, Proposal } from "./types";
 import { SuiClient, SuiParsedData, getFullnodeUrl } from "@mysten/sui.js/client";
 import { TransactionBlock, TransactionResult } from "@mysten/sui.js/transactions";
 import { normalizeSuiAddress } from "@mysten/sui.js/utils";
-import { Account, Multisig, Proposal } from "./types";
+import { KioskClient, Network } from "@mysten/kiosk";
 
 export class KrakenClient {
 	/**
@@ -11,42 +12,44 @@ export class KrakenClient {
 	 */
 
 	private client: SuiClient;
+	private multisigData: Multisig | null;
 
 	constructor(
-		public network: string = 'mainnet',
-		public user: string = normalizeSuiAddress("0x0"),
-		public multisig: Multisig,
+		public network: string,
+		public user: string,
+		public multisigId: string,
 	) {
 		let url = "";
-		if (network == 'mainnet'
-			|| network == 'testnet'
-			|| network == 'devnet'
-			|| network == 'localnet') {
+		if (network == "mainnet"
+			|| network == "testnet"
+			|| network == "devnet"
+			|| network == "localnet") {
 			url = getFullnodeUrl(network);
-		}
-		else {
+		} else {
 			url = network as string;
 		}
 
 		this.client = new SuiClient({ url });
+		this.multisigData = null;
 	}
 
-	async setMultisig(id: string) {
-		const multisig = await this.getMultisig(id);
-		this.multisig = multisig;
+	async fetchMultisigData() {
+		this.multisigData = await this.getMultisig(this.multisigId);
 	}
+
+	// ===== CORE =====
 
 	// === Multisig ===
 
 	async getMultisig(id: string): Promise<Multisig> {
-		const { data: multisig } = await this.client.getObject({
+		const { data } = await this.client.getObject({
 			id,
 			options: {
 				showContent: true
 			}
 		});
 
-		const content = multisig?.content as any;
+		const content = data?.content as any;
 
 		const proposals = content.fields.proposals.fields.contents.map((proposal: any) => {
 			return {
@@ -59,7 +62,6 @@ export class KrakenClient {
 		});
 
 		return {
-			id: content.id.id,
 			name: content.fields.name,
 			threshold: content.fields.threshold,
 			members: content.fields.members.fields.contents,
@@ -123,28 +125,28 @@ export class KrakenClient {
 	cleanProposals(tx: TransactionBlock): TransactionResult {
 		return tx.moveCall({
 			target: `${PACKAGE}::multisig::clean_proposals`,
-			arguments: [tx.object(this.multisig.id)],
+			arguments: [tx.object(this.multisigId)],
 		});
 	}
 
 	approveProposal(tx: TransactionBlock, proposal: string): TransactionResult {
 		return tx.moveCall({
 			target: `${PACKAGE}::multisig::approve_proposal`,
-			arguments: [tx.object(this.multisig.id), tx.pure(proposal)],
+			arguments: [tx.object(this.multisigId), tx.pure(proposal)],
 		});
 	}
 
 	removeApproval(tx: TransactionBlock, proposal: string): TransactionResult {
 		return tx.moveCall({
 			target: `${PACKAGE}::multisig::remove_approval`,
-			arguments: [tx.object(this.multisig.id), tx.pure(proposal)],
+			arguments: [tx.object(this.multisigId), tx.pure(proposal)],
 		});
 	}
 
 	executeProposal(tx: TransactionBlock, proposal: string): TransactionResult {
 		return tx.moveCall({
 			target: `${PACKAGE}::multisig::execute_proposal`,
-			arguments: [tx.object(this.multisig.id), tx.pure(proposal), tx.object(CLOCK)],
+			arguments: [tx.object(this.multisigId), tx.pure(proposal), tx.object(CLOCK)],
 		});
 	}
 
@@ -165,10 +167,10 @@ export class KrakenClient {
 		const content = accounts[0].data?.content as any;
 
 		return {
-			id: content.id.id,
-			username: content.username,
-			profilePicture: content.profile_picture,
-			multisigs: content.multisigs.fields.contents,
+			id: content.fields.id.id,
+			username: content.fields.username,
+			profilePicture: content.fields.profile_picture,
+			multisigs: content.fields.multisigs.fields.contents,
 		}
 	}
 
@@ -204,7 +206,7 @@ export class KrakenClient {
 	sendInvite(tx: TransactionBlock, recipient: string): TransactionResult {
 		return tx.moveCall({
 			target: `${PACKAGE}::account::send_invite`,
-			arguments: [tx.object(this.multisig.id), tx.pure(recipient)],
+			arguments: [tx.object(this.multisigId), tx.pure(recipient)],
 		});
 	}
 
@@ -230,7 +232,7 @@ export class KrakenClient {
 		return tx.moveCall({
 			target: `${PACKAGE}::coin_operations::merge`,
 			arguments: [
-				tx.object(this.multisig.id), 
+				tx.object(this.multisigId), 
 				tx.pure(to_keep),
 				tx.pure(to_merge),
 			],
@@ -242,7 +244,7 @@ export class KrakenClient {
 		return tx.moveCall({
 			target: `${PACKAGE}::coin_operations::split`,
 			arguments: [
-				tx.object(this.multisig.id), 
+				tx.object(this.multisigId), 
 				tx.pure(to_keep),
 				tx.pure(to_split),
 			],
@@ -250,8 +252,11 @@ export class KrakenClient {
 		});
 	}
 
+	// ===== PROPOSALS =====
+
 	// === Config ===
 
+	// submit and approve proposal, execute if only member
 	proposeModify(
 		tx: TransactionBlock, 
 		key: string, 
@@ -266,7 +271,7 @@ export class KrakenClient {
 		tx.moveCall({
 			target: `${PACKAGE}::config::propose_modify`,
 			arguments: [
-				tx.object(this.multisig.id), 
+				tx.object(this.multisigId), 
 				tx.pure(key), 
 				tx.pure(executionTime), 
 				tx.pure(expirationEpoch), 
@@ -281,21 +286,35 @@ export class KrakenClient {
 		tx.moveCall({
 			target: `${PACKAGE}::multisig::approve_proposal`,
 			arguments: [
-				tx.object(this.multisig.id), 
+				tx.object(this.multisigId), 
 				tx.pure(key), 
 			],
 		});
 
-		if (this.multisig.members.length == 1) {
+		if (this.multisigData?.members.length == 1) {
 			tx.moveCall({
 				target: `${PACKAGE}::config::execute_modify`,
 				arguments: [
-					tx.object(this.multisig.id), 
+					tx.object(this.multisigId), 
 					tx.pure(key), 
 					tx.object(CLOCK),
 				],
 			});
 		}
+	}
+
+	executeModify(
+		tx: TransactionBlock, 
+		key: string, 
+	): TransactionResult {
+		tx.moveCall({
+			target: `${PACKAGE}::config::execute_modify`,
+			arguments: [
+				tx.object(this.multisigId), 
+				tx.pure(key), 
+				tx.object(CLOCK),
+			],
+		});
 	}
 }
 
