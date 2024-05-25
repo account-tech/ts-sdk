@@ -15,7 +15,7 @@ export class KrakenClient {
 
 	constructor(
 		public network: "mainnet" | "testnet" | "devnet" | "localnet",
-		public url: string | null,
+		public url: string,
 		public user: string,
 		public multisigId: string,
 	) {
@@ -43,6 +43,10 @@ export class KrakenClient {
 		});
 
 		const content = data?.content as any;
+
+		const members = content.fields.members.fields.contents.map(async (member: any) => {
+			return await this.getAccount(member);
+		});
 
 		// get proposals in multisig and each action attached to proposals
 		const proposals = content.fields.proposals.fields.contents.map(async (proposal: any) => {
@@ -74,12 +78,14 @@ export class KrakenClient {
 		return {
 			name: content.fields.name,
 			threshold: content.fields.threshold,
-			members: content.fields.members.fields.contents,
+			members,
 			proposals,
 		}
 	}
 
-	createMultisig(tx: TransactionBlock, members: string[]): TransactionResult {
+	createMultisig(tx: TransactionBlock, members: string[], accountId: string): TransactionResult {
+		
+		
 		const [multisig] = tx.moveCall({
 			target: `${PACKAGE}::multisig::new`,
 			arguments: [tx.pure("test")],
@@ -163,9 +169,9 @@ export class KrakenClient {
 	// === Account ===
 
 	// TODO: implement merge accounts
-	async getAccount(user: string = this.user): Promise<Account> {
+	async getAccount(owner: string = this.user): Promise<Account> {
 		const { data: accounts } = await this.client.getOwnedObjects({
-			owner: user,
+			owner,
 			filter: {
 				StructType: `${PACKAGE}::account::Account`
 			},
@@ -177,6 +183,7 @@ export class KrakenClient {
 		const content = accounts[0].data?.content as any;
 
 		return {
+			owner,
 			id: content.fields.id.id,
 			username: content.fields.username,
 			profilePicture: content.fields.profile_picture,

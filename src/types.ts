@@ -1,7 +1,7 @@
 export type Multisig = {
     name: string,
     threshold: number,
-    members: string[],
+    members: Account[],
     proposals: Proposal[],
 }
 
@@ -16,6 +16,7 @@ export type Proposal = {
 }
 
 export type Account = {
+    owner: string,
     id: string,
 	username: string,
 	profilePicture: string,
