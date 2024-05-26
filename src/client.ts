@@ -1,5 +1,5 @@
 import { CLOCK, FRAMEWORK } from "./constants.js";
-import { Account, Kiosk, Multisig, Proposal, TransferPolicy } from "./types.js";
+import { Account, Kiosk, Multisig, Proposal, TransferPolicy, Config } from "./types.js";
 import { SuiClient, getFullnodeUrl } from "@mysten/sui.js/client";
 import { TransactionBlock, TransactionResult } from "@mysten/sui.js/transactions";
 import { KioskClient, Network } from "@mysten/kiosk";
@@ -179,7 +179,7 @@ export class KrakenClient {
 	// === Account ===
 
 	// TODO: implement merge accounts
-	async getAccount(owner: string = this.user): Promise<Account | null> {
+	async getAccount(owner: string = this.user): Promise<Account> {
 		const { data } = await this.client.getOwnedObjects({
 			owner,
 			filter: {
@@ -190,9 +190,17 @@ export class KrakenClient {
 			}
 		});
 		
-		if (data.length == 0) { return null }
-		const content = data[0].data?.content as any;
+		if (data.length == 0) { 
+			return {
+				owner,
+				id: "",
+				username: "",
+				profilePicture: "",
+				multisigs: [],
+			}
+		}
 
+		const content = data[0].data?.content as any;
 		return {
 			owner,
 			id: content.fields.id.id,
@@ -291,11 +299,9 @@ export class KrakenClient {
 		executionTime: number,
 		expirationEpoch: number,
 		description: string,
-		name: string,
-		threshold: number,
-		toAdd: string[],
-		toRemove: string[],
+		config?: Config
 	) {
+		const { name, threshold, toAdd, toRemove } = config || {};
 		tx.moveCall({
 			target: `${this.packageId}::config::propose_modify`,
 			arguments: [
@@ -304,16 +310,16 @@ export class KrakenClient {
 				tx.pure(executionTime), 
 				tx.pure(expirationEpoch), 
 				tx.pure(description), 
-				tx.pure(name), 
-				tx.pure(threshold), 
-				tx.pure(toAdd),
-				tx.pure(toRemove), 
+				name ? tx.pure([name]) : tx.pure([]), 
+				threshold ? tx.pure([threshold]) : tx.pure([]), 
+				toAdd ? tx.pure(toAdd) : tx.pure([]),
+				toRemove ? tx.pure(toRemove) : tx.pure([]), 
 			],
 		});		
 		
 		this.approveProposal(tx, key);
 		
-		if (this.multisigData?.members.length == 1) {
+		if (this.multisigData?.threshold == 1) {
 			tx.moveCall({
 				target: `${this.packageId}::config::execute_modify`,
 				arguments: [
