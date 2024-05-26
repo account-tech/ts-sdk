@@ -1,7 +1,7 @@
 node_modules
 dist
-
-
+build
 package-lock.json
 bun.lockb
+Move.lock
 
