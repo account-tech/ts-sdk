@@ -1,8 +1,9 @@
 {
   "name": "kraken-sdk",
+  "type": "module",
   "author": "Thouny <thouny@tuta.io>",
-  "version": "0.1.0",
-  "license": "Apache-2.0",
+  "version": "0.0.0",
+  "license": "MIT",
   "description": "Kraken TypeScript SDK",
   "files": ["dist"],
   "module": "./dist/esm/index.js",
@@ -11,7 +12,6 @@
   "scripts": {
     "clean": "rm -rf dist/",
     "build": "rm -rf dist/ && tsc && tsc -p tsconfig.cjs.json",
-    "test": "vitest",
     "prettier:check": "prettier -c --ignore-unknown .",
     "prettier:fix": "prettier -w --ignore-unknown .",
     "eslint:check": "eslint .",
@@ -21,17 +21,14 @@
   },
   "dependencies": {
     "@mysten/kiosk": "^0.8.10",
-    "@mysten/sui.js": "^0.54.1"
+    "@mysten/sui.js": "^0.54.1",
+    "bun-types": "^1.0.25"
   },
   "devDependencies": {
-    "@changesets/cli": "^2.26.2",
-    "@typescript-eslint/eslint-plugin": "^6.3.0",
-    "@typescript-eslint/parser": "^6.3.0",
-    "eslint": "^8.47.0",
-    "prettier": "^3.0.1",
-    "tsup": "^7.2.0",
-    "typescript": "^5.1.6",
-    "vitest": "^0.34.1",
-    "bun-types": "^1.0.25"
+    "@types/bun": "latest",
+    "@types/node": "^20.12.12",
+    "@typescript-eslint/parser": "^6.19.1",
+    "eslint": "^8.56.0",
+    "typescript": "^5.3.3"
   }
 }

@@ -1,5 +1,5 @@
-import { PACKAGE, CLOCK, FRAMEWORK } from "./constants";
-import { Account, Kiosk, Multisig, Proposal, TransferPolicy } from "./types";
+import { CLOCK, FRAMEWORK } from "./constants.js";
+import { Account, Kiosk, Multisig, Proposal, TransferPolicy } from "./types.js";
 import { SuiClient, getFullnodeUrl } from "@mysten/sui.js/client";
 import { TransactionBlock, TransactionResult } from "@mysten/sui.js/transactions";
 import { KioskClient, Network } from "@mysten/kiosk";
@@ -10,12 +10,13 @@ export class KrakenClient {
 	 * @param client connection to fullnode
 	 */
 
-	private client: SuiClient;
-	private multisigData: Multisig | null;
+	public client: SuiClient;
+	public multisigData: Multisig | null;
 
 	constructor(
 		public network: "mainnet" | "testnet" | "devnet" | "localnet",
 		public url: string,
+		public packageId: string,
 		public user: string,
 		public multisigId: string,
 	) {
@@ -44,9 +45,9 @@ export class KrakenClient {
 
 		const content = data?.content as any;
 
-		const members = content.fields.members.fields.contents.map(async (member: any) => {
+		const members = await Promise.all(content.fields.members.fields.contents.map(async (member: any) => {
 			return await this.getAccount(member);
-		});
+		}));
 
 		// get proposals in multisig and each action attached to proposals
 		const proposals = content.fields.proposals.fields.contents.map(async (proposal: any) => {
@@ -83,17 +84,26 @@ export class KrakenClient {
 		}
 	}
 
-	createMultisig(tx: TransactionBlock, members: string[], accountId: string): TransactionResult {
-		
-		
+	createMultisig(tx: TransactionBlock, name: string, members: string[], accountId: string): TransactionResult {
 		const [multisig] = tx.moveCall({
-			target: `${PACKAGE}::multisig::new`,
-			arguments: [tx.pure("test")],
+			target: `${this.packageId}::multisig::new`,
+			arguments: [tx.pure(name)],
 		});
 
-		if (members) {
+		const [id] = tx.moveCall({
+			target: `${FRAMEWORK}::object::id`,
+			arguments: [multisig],
+			typeArguments: [`${this.packageId}::multisig::Multisig`]
+		});
+		
+		tx.moveCall({
+			target: `${this.packageId}::account::join_multisig`,
+			arguments: [tx.object(accountId), id],
+		});
+		
+		if (members.length > 0) {
 			tx.moveCall({
-				target: `${PACKAGE}::config::propose_modify`,
+				target: `${this.packageId}::config::propose_modify`,
 				arguments: [
 					multisig, 
 					tx.pure("init_members"), 
@@ -108,7 +118,7 @@ export class KrakenClient {
 			});
 			
 			tx.moveCall({
-				target: `${PACKAGE}::multisig::approve_proposal`,
+				target: `${this.packageId}::multisig::approve_proposal`,
 				arguments: [
 					multisig, 
 					tx.pure("init_members"), 
@@ -116,7 +126,7 @@ export class KrakenClient {
 			});
 			
 			tx.moveCall({
-				target: `${PACKAGE}::config::execute_modify`,
+				target: `${this.packageId}::config::execute_modify`,
 				arguments: [
 					multisig, 
 					tx.pure("init_members"), 
@@ -126,42 +136,42 @@ export class KrakenClient {
 			
 			members.forEach((member) => {
 				tx.moveCall({
-					target: `${PACKAGE}::account::send_invite`,
+					target: `${this.packageId}::account::send_invite`,
 					arguments: [multisig, tx.pure(member)],
 				});
 			});
 		}
 
 		return tx.moveCall({
-			target: `${FRAMEWORK}::transfer::share_object`,
+			target: `${this.packageId}::multisig::share`,
 			arguments: [multisig],
 		});
 	}
 
 	cleanProposals(tx: TransactionBlock): TransactionResult {
 		return tx.moveCall({
-			target: `${PACKAGE}::multisig::clean_proposals`,
+			target: `${this.packageId}::multisig::clean_proposals`,
 			arguments: [tx.object(this.multisigId)],
 		});
 	}
 
 	approveProposal(tx: TransactionBlock, key: string): TransactionResult {
 		return tx.moveCall({
-			target: `${PACKAGE}::multisig::approve_proposal`,
+			target: `${this.packageId}::multisig::approve_proposal`,
 			arguments: [tx.object(this.multisigId), tx.pure(key)],
 		});
 	}
 
 	removeApproval(tx: TransactionBlock, key: string): TransactionResult {
 		return tx.moveCall({
-			target: `${PACKAGE}::multisig::remove_approval`,
+			target: `${this.packageId}::multisig::remove_approval`,
 			arguments: [tx.object(this.multisigId), tx.pure(key)],
 		});
 	}
 
 	executeProposal(tx: TransactionBlock, key: string): TransactionResult {
 		return tx.moveCall({
-			target: `${PACKAGE}::multisig::execute_proposal`,
+			target: `${this.packageId}::multisig::execute_proposal`,
 			arguments: [tx.object(this.multisigId), tx.pure(key), tx.object(CLOCK)],
 		});
 	}
@@ -169,18 +179,19 @@ export class KrakenClient {
 	// === Account ===
 
 	// TODO: implement merge accounts
-	async getAccount(owner: string = this.user): Promise<Account> {
-		const { data: accounts } = await this.client.getOwnedObjects({
+	async getAccount(owner: string = this.user): Promise<Account | null> {
+		const { data } = await this.client.getOwnedObjects({
 			owner,
 			filter: {
-				StructType: `${PACKAGE}::account::Account`
+				StructType: `${this.packageId}::account::Account`
 			},
 			options: {
 				showContent: true
 			}
 		});
-
-		const content = accounts[0].data?.content as any;
+		
+		if (data.length == 0) { return null }
+		const content = data[0].data?.content as any;
 
 		return {
 			owner,
@@ -193,28 +204,28 @@ export class KrakenClient {
 
 	createAccount(tx: TransactionBlock, username: string, profilePicture: string): TransactionResult {
 		return tx.moveCall({
-			target: `${PACKAGE}::account::new`,
+			target: `${this.packageId}::account::new`,
 			arguments: [tx.pure(username), tx.pure(profilePicture)],
 		});
 	}
 
 	deleteAccount(tx: TransactionBlock, account: string): TransactionResult {
 		return tx.moveCall({
-			target: `${PACKAGE}::account::destroy`,
+			target: `${this.packageId}::account::destroy`,
 			arguments: [tx.object(account)],
 		});
 	}
 
 	joinMultisig(tx: TransactionBlock, account: string, multisig: string): TransactionResult {
 		return tx.moveCall({
-			target: `${PACKAGE}::account::join_multisig`,
+			target: `${this.packageId}::account::join_multisig`,
 			arguments: [tx.object(account), tx.pure(multisig)],
 		});
 	}
 
 	leaveMultisig(tx: TransactionBlock, account: string, multisig: string): TransactionResult {
 		return tx.moveCall({
-			target: `${PACKAGE}::account::leave_multisig`,
+			target: `${this.packageId}::account::leave_multisig`,
 			arguments: [tx.object(account), tx.pure(multisig)],
 		});
 	}
@@ -222,7 +233,7 @@ export class KrakenClient {
 	// member only
 	sendInvite(tx: TransactionBlock, recipient: string): TransactionResult {
 		return tx.moveCall({
-			target: `${PACKAGE}::account::send_invite`,
+			target: `${this.packageId}::account::send_invite`,
 			arguments: [tx.object(this.multisigId), tx.pure(recipient)],
 		});
 	}
@@ -230,7 +241,7 @@ export class KrakenClient {
 	// member only
 	acceptInvite(tx: TransactionBlock, account: string, invite: string): TransactionResult {
 		return tx.moveCall({
-			target: `${PACKAGE}::account::accept_invite`,
+			target: `${this.packageId}::account::accept_invite`,
 			arguments: [tx.object(account), tx.object(invite)],
 		});
 	}
@@ -238,7 +249,7 @@ export class KrakenClient {
 	// member only
 	refuseInvite(tx: TransactionBlock, account: string, invite: string): TransactionResult {
 		return tx.moveCall({
-			target: `${PACKAGE}::account::refuse_invite`,
+			target: `${this.packageId}::account::refuse_invite`,
 			arguments: [tx.object(account), tx.object(invite)],
 		});
 	}
@@ -247,7 +258,7 @@ export class KrakenClient {
 
 	mergeCoins(tx: TransactionBlock, to_keep: string, to_merge: string[], coinType: string): TransactionResult {
 		return tx.moveCall({
-			target: `${PACKAGE}::coin_operations::merge`,
+			target: `${this.packageId}::coin_operations::merge`,
 			arguments: [
 				tx.object(this.multisigId), 
 				tx.pure(to_keep),
@@ -259,7 +270,7 @@ export class KrakenClient {
 	
 	splitCoins(tx: TransactionBlock, to_keep: string, to_split: string[], coinType: string): TransactionResult {
 		return tx.moveCall({
-			target: `${PACKAGE}::coin_operations::split`,
+			target: `${this.packageId}::coin_operations::split`,
 			arguments: [
 				tx.object(this.multisigId), 
 				tx.pure(to_keep),
@@ -286,7 +297,7 @@ export class KrakenClient {
 		toRemove: string[],
 	) {
 		tx.moveCall({
-			target: `${PACKAGE}::config::propose_modify`,
+			target: `${this.packageId}::config::propose_modify`,
 			arguments: [
 				tx.object(this.multisigId), 
 				tx.pure(key), 
@@ -304,7 +315,7 @@ export class KrakenClient {
 		
 		if (this.multisigData?.members.length == 1) {
 			tx.moveCall({
-				target: `${PACKAGE}::config::execute_modify`,
+				target: `${this.packageId}::config::execute_modify`,
 				arguments: [
 					tx.object(this.multisigId), 
 					tx.pure(key), 
@@ -319,7 +330,7 @@ export class KrakenClient {
 		key: string, 
 	) {
 		tx.moveCall({
-			target: `${PACKAGE}::config::execute_modify`,
+			target: `${this.packageId}::config::execute_modify`,
 			arguments: [
 				tx.object(this.multisigId), 
 				tx.pure(key), 
