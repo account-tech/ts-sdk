@@ -1,8 +1,8 @@
-import assert from "assert";
+import { describe, it, expect } from 'vitest';
 import { getFaucetHost, requestSuiFromFaucetV0 } from "@mysten/sui.js/faucet";
 import { Ed25519Keypair } from "@mysten/sui.js/keypairs/ed25519";
 import { TransactionBlock } from "@mysten/sui.js/transactions";
-import { FRAMEWORK, KrakenClient, PACKAGE, STDLIB } from "../index.js"
+import { FRAMEWORK, KrakenClient, PACKAGE, STDLIB } from "../src/index.js"
 import { SuiTransactionBlockResponse } from "@mysten/sui.js/client";
 
 // to run on localnet:
@@ -12,25 +12,11 @@ import { SuiTransactionBlockResponse } from "@mysten/sui.js/client";
 // or use https://github.com/ChainMovers/suibase
 
 
-(async () => {
+describe("Interact with Kraken SDK on localnet" ,async () => {
     
     const keypair = Ed25519Keypair.fromSecretKey(Uint8Array.from(Buffer.from("AM06bExREdFceWiExfSacTJ+64AQtFl7SRkSiTmAqh6F", "base64")).slice(1));
-    
+    // nftIds.length determines the number of nfts to issue
     let nftIds: string[] = ["", "", ""];
-
-    // helper function
-    async function executeTx(tx: TransactionBlock): Promise<SuiTransactionBlockResponse> {
-        tx.setGasBudget(1000000000);
-        const result = await kraken.client.signAndExecuteTransactionBlock({
-            signer: keypair,
-            transactionBlock: tx,
-            options: { showEffects: true, showObjectChanges: true },
-            requestType: "WaitForLocalExecution"
-        });
-
-        assert.equal(result.effects?.status.status, "success");
-        return result;
-    }
         
     // === get SUI ===
 
@@ -41,7 +27,7 @@ import { SuiTransactionBlockResponse } from "@mysten/sui.js/client";
     const kraken = new KrakenClient("localnet", "", "", keypair.toSuiAddress(), "");
     const { execSync } = require('child_process');
 
-    // === Publish Package ===
+    // === Publish Kraken Package ===
     {
         const { modules, dependencies } = JSON.parse(execSync(
             `"/home/tmarchal/.cargo/bin/sui" move build --dump-bytecode-as-base64 --path "../kraken/package/"`, 
@@ -57,10 +43,10 @@ import { SuiTransactionBlockResponse } from "@mysten/sui.js/client";
         console.log("Package published: ", kraken.packageId);
     }
 
-    // === Issue and handle Nfts ===
+    // === Publish, issue and handle Nfts ===
     {
         const { modules, dependencies } = JSON.parse(execSync(
-            `"/home/tmarchal/.cargo/bin/sui" move build --dump-bytecode-as-base64 --path "./src/test/package/"`, 
+            `"/home/tmarchal/.cargo/bin/sui" move build --dump-bytecode-as-base64 --path "./test/package/"`, 
             { encoding: 'utf-8' }
         ));
         // publish nft package
@@ -82,8 +68,8 @@ import { SuiTransactionBlockResponse } from "@mysten/sui.js/client";
         console.log("Nfts issued and handled: ", nftIds);
     }
 
-    // === Handle Account ===
-    {    
+    // // === Handle Account ===
+    it('handles Account', async () => {    
         const existingAccount = await kraken.getAccount();
         if (existingAccount.id == "") {
             const tx = new TransactionBlock();
@@ -91,10 +77,10 @@ import { SuiTransactionBlockResponse } from "@mysten/sui.js/client";
             await executeTx(tx);
         }
         console.log("User account handled:");
-    }
+    });
     
-    // === Create Multisig ===
-    {
+    // // === Create Multisig ===
+    it('creates Multisig', async () => {
         const tx = new TransactionBlock();
         const currentAccount = await kraken.getAccount();
         console.log(currentAccount);
@@ -109,16 +95,16 @@ import { SuiTransactionBlockResponse } from "@mysten/sui.js/client";
         kraken.multisigId = multisigId;
         await kraken.fetchMultisigData();
         console.log(kraken.multisigData);
-        assert.deepEqual(kraken.multisigData, {
+        expect(kraken.multisigData).toEqual({
             name: "Main",
             threshold: "1",
             members: [account],
             proposals: []
         })
-    }
+    });
 
-    // === Modify Config ===
-    {
+    // // === Modify Config ===
+    it('modifies Config', async () => {
         const txConfig = new TransactionBlock();
         kraken.proposeModify(txConfig, "modify", 0, 0, "", { name: "Updated", toAdd: ["0x608f5242acdbe2bc779de586864dc914d0dee1adfe4654b560bd5019886daa29"] });
         await executeTx(txConfig);
@@ -127,7 +113,7 @@ import { SuiTransactionBlockResponse } from "@mysten/sui.js/client";
         const account = await kraken.getAccount();
         await kraken.fetchMultisigData();
         console.log(kraken.multisigData);
-        assert.deepEqual(kraken.multisigData, {
+        expect(kraken.multisigData).toEqual({
             name: "Updated",
             threshold: "1",
             members: [account, { 
@@ -139,7 +125,7 @@ import { SuiTransactionBlockResponse } from "@mysten/sui.js/client";
             }],
             proposals: []
         })
-    }
+    });
 
     // === Kiosk ===
 
@@ -151,5 +137,19 @@ import { SuiTransactionBlockResponse } from "@mysten/sui.js/client";
     // }
     // await executeTx(tx5);
 
-})();
+    // === Helpers ===
+
+    async function executeTx(tx: TransactionBlock): Promise<SuiTransactionBlockResponse> {
+        tx.setGasBudget(1000000000);
+        const result = await kraken.client.signAndExecuteTransactionBlock({
+            signer: keypair,
+            transactionBlock: tx,
+            options: { showEffects: true, showObjectChanges: true },
+            requestType: "WaitForLocalExecution"
+        });
+
+        expect(result.effects?.status.status).toEqual("success");
+        return result;
+    }
+});
 
