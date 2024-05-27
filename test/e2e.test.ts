@@ -48,13 +48,13 @@ describe("Interact with Kraken SDK on localnet" ,async () => {
 
     // === Generate ABI ===
     {
-        const abisDir = "./test/abis";
+        const abisDir = "./abis";
         if (fs.existsSync(abisDir)) fs.rmdirSync(abisDir, { recursive: true });
         if (!fs.existsSync(abisDir)) fs.mkdirSync(abisDir, { recursive: true });
         const abi = await kraken.client.getNormalizedMoveModulesByPackage({ package: kraken.packageId })
-        fs.writeFileSync(path.join(abisDir, kraken.packageId + '.json'), JSON.stringify(abi, null, 2))
+        fs.writeFileSync(path.join(abisDir, "kraken" + '.json'), JSON.stringify(abi, null, 2))
         
-        const typesDir = "./test/types";
+        const typesDir = "./src/types/sui";
         if (fs.existsSync(typesDir)) fs.rmdirSync(typesDir, { recursive: true });
         await codegen(abisDir, typesDir, "http://127.0.0.1:9000")
     }
@@ -71,7 +71,6 @@ describe("Interact with Kraken SDK on localnet" ,async () => {
         tx.transferObjects([upgradeCap], keypair.getPublicKey().toSuiAddress());
         const result = await executeTx(tx);
         const packageObj = result.objectChanges?.find((obj) => obj.type === "published");
-        console.log(packageObj?.packageId);
         // create and transfer as many nft as nftIds.length and save the ids
         const tx1 = new TransactionBlock();
         for (const _ of nftIds) {
@@ -105,7 +104,6 @@ describe("Interact with Kraken SDK on localnet" ,async () => {
         await executeTx(tx);
         console.log("Multisig created:");
         
-        console.log("heeeeeeeeeeere");
         const account = await kraken.getAccount();
         const multisigId = account!.multisigs[account!.multisigs.length - 1].id;
         kraken.multisigId = multisigId;

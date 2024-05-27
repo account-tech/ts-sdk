@@ -3,6 +3,8 @@ import { Account, Kiosk, Multisig, Proposal, TransferPolicy } from "./types.js";
 import { SuiClient, getFullnodeUrl } from "@mysten/sui.js/client";
 import { TransactionBlock, TransactionResult } from "@mysten/sui.js/transactions";
 import { KioskClient, Network } from "@mysten/kiosk";
+import { defaultMoveCoder } from "@typemove/sui";
+import { account } from "./types/sui/kraken.js";
 
 export class KrakenClient {
 	/**
@@ -196,6 +198,11 @@ export class KrakenClient {
 			}
 		}
 
+		console.log("yoooooooooooooooo");
+		const coder = defaultMoveCoder()
+		const res = await coder.decodedType(data[0].data?.content, account.Account.type())
+		console.log(res);
+
 		const content = data[0].data?.content as any;
 
 		const msObjs = await this.client.multiGetObjects({
@@ -208,7 +215,6 @@ export class KrakenClient {
 				name: ms.data?.content?.fields.name
 			}
 		});
-		console.log(multisigs);
 
 		return {
 			owner,
