@@ -182,12 +182,8 @@ export class KrakenClient {
 	async getAccount(owner: string = this.user): Promise<Account> {
 		const { data } = await this.client.getOwnedObjects({
 			owner,
-			filter: {
-				StructType: `${this.packageId}::account::Account`
-			},
-			options: {
-				showContent: true
-			}
+			filter: { StructType: `${this.packageId}::account::Account` },
+			options: { showContent: true }
 		});
 		
 		if (data.length == 0) { 
@@ -201,12 +197,25 @@ export class KrakenClient {
 		}
 
 		const content = data[0].data?.content as any;
+
+		const msObjs = await this.client.multiGetObjects({
+			ids: content.fields.multisigs.fields.contents,
+			options: { showContent: true }
+		});
+		const multisigs = msObjs.map((ms: any) => { 
+			return {
+				id: ms.data?.content?.fields.id.id,
+				name: ms.data?.content?.fields.name
+			}
+		});
+		console.log(multisigs);
+
 		return {
 			owner,
 			id: content.fields.id.id,
 			username: content.fields.username,
 			profilePicture: content.fields.profile_picture,
-			multisigs: content.fields.multisigs.fields.contents,
+			multisigs,
 		}
 	}
 

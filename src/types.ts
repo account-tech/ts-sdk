@@ -20,7 +20,7 @@ export type Account = {
     id: string,
 	username: string,
 	profilePicture: string,
-    multisigs: string[],
+    multisigs: {id: string, name: string}[],
 };
 
 export type Kiosk = {

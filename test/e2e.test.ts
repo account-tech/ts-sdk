@@ -49,12 +49,14 @@ describe("Interact with Kraken SDK on localnet" ,async () => {
     // === Generate ABI ===
     {
         const abisDir = "./test/abis";
-        const abi = await kraken.client.getNormalizedMoveModulesByPackage({ package: kraken.packageId })
         if (fs.existsSync(abisDir)) fs.rmdirSync(abisDir, { recursive: true });
         if (!fs.existsSync(abisDir)) fs.mkdirSync(abisDir, { recursive: true });
+        const abi = await kraken.client.getNormalizedMoveModulesByPackage({ package: kraken.packageId })
         fs.writeFileSync(path.join(abisDir, kraken.packageId + '.json'), JSON.stringify(abi, null, 2))
-
-        await codegen(abisDir, "./test/types", "http://127.0.0.1:9000")
+        
+        const typesDir = "./test/types";
+        if (fs.existsSync(typesDir)) fs.rmdirSync(typesDir, { recursive: true });
+        await codegen(abisDir, typesDir, "http://127.0.0.1:9000")
     }
 
     // === Publish, issue and handle Nfts ===
@@ -83,7 +85,7 @@ describe("Interact with Kraken SDK on localnet" ,async () => {
     }
 
     // // === Handle Account ===
-    it('handles Account', async () => {    
+    {    
         const existingAccount = await kraken.getAccount();
         if (existingAccount.id == "") {
             const tx = new TransactionBlock();
@@ -91,10 +93,10 @@ describe("Interact with Kraken SDK on localnet" ,async () => {
             await executeTx(tx);
         }
         console.log("User account handled:");
-    });
+    }
     
     // // === Create Multisig ===
-    it('creates Multisig', async () => {
+    {
         const tx = new TransactionBlock();
         const currentAccount = await kraken.getAccount();
         console.log(currentAccount);
@@ -103,9 +105,9 @@ describe("Interact with Kraken SDK on localnet" ,async () => {
         await executeTx(tx);
         console.log("Multisig created:");
         
+        console.log("heeeeeeeeeeere");
         const account = await kraken.getAccount();
-        console.log(account);
-        const multisigId = account!.multisigs[account!.multisigs.length - 1];
+        const multisigId = account!.multisigs[account!.multisigs.length - 1].id;
         kraken.multisigId = multisigId;
         await kraken.fetchMultisigData();
         console.log(kraken.multisigData);
@@ -115,7 +117,7 @@ describe("Interact with Kraken SDK on localnet" ,async () => {
             members: [account],
             proposals: []
         })
-    });
+    }
 
     // // === Modify Config ===
     it('modifies Config', async () => {
