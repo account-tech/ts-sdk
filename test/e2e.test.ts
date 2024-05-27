@@ -106,7 +106,7 @@ describe("Interact with Kraken SDK on localnet" ,async () => {
     // // === Modify Config ===
     it('modifies Config', async () => {
         const txConfig = new TransactionBlock();
-        kraken.proposeModify(txConfig, "modify", 0, 0, "", { name: "Updated", toAdd: ["0x608f5242acdbe2bc779de586864dc914d0dee1adfe4654b560bd5019886daa29"] });
+        kraken.proposeModify(txConfig, "modify", 0, 0, "", "Updated", undefined, ["0x608f5242acdbe2bc779de586864dc914d0dee1adfe4654b560bd5019886daa29"], undefined);
         await executeTx(txConfig);
         console.log("Config modified:");
 

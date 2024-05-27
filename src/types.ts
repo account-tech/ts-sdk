@@ -37,10 +37,3 @@ export type TransferPolicy = {
     isLocked: boolean,
 }
 
-export type Config = {
-    name?: string,
-    threshold?: number,
-    toAdd?: string[],
-    toRemove?: string[],
-}
-

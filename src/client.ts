@@ -299,9 +299,11 @@ export class KrakenClient {
 		executionTime: number,
 		expirationEpoch: number,
 		description: string,
-		config?: Config
+		name?: string,
+		threshold?: number,
+		toAdd?: string[],
+		toRemove?: string[],
 	) {
-		const { name, threshold, toAdd, toRemove } = config || {};
 		tx.moveCall({
 			target: `${this.packageId}::config::propose_modify`,
 			arguments: [
