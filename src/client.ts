@@ -1,5 +1,5 @@
 import { CLOCK, FRAMEWORK } from "./constants.js";
-import { Account, Kiosk, Multisig, Proposal, TransferPolicy, Config } from "./types.js";
+import { Account, Kiosk, Multisig, Proposal, TransferPolicy } from "./types.js";
 import { SuiClient, getFullnodeUrl } from "@mysten/sui.js/client";
 import { TransactionBlock, TransactionResult } from "@mysten/sui.js/transactions";
 import { KioskClient, Network } from "@mysten/kiosk";

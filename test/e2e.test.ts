@@ -1,9 +1,12 @@
 import { describe, it, expect } from 'vitest';
+import * as fs from "fs";
 import { getFaucetHost, requestSuiFromFaucetV0 } from "@mysten/sui.js/faucet";
 import { Ed25519Keypair } from "@mysten/sui.js/keypairs/ed25519";
 import { TransactionBlock } from "@mysten/sui.js/transactions";
 import { FRAMEWORK, KrakenClient, PACKAGE, STDLIB } from "../src/index.js"
 import { SuiTransactionBlockResponse } from "@mysten/sui.js/client";
+import { codegen } from '@typemove/sui/codegen';
+import path from 'path';
 
 // to run on localnet:
 // `git clone https://github.com/MystenLabs/sui`  
@@ -41,6 +44,17 @@ describe("Interact with Kraken SDK on localnet" ,async () => {
         const packageObj = result.objectChanges?.find((obj) => obj.type === "published");
         kraken.packageId = packageObj!.packageId;
         console.log("Package published: ", kraken.packageId);
+    }
+
+    // === Generate ABI ===
+    {
+        const abisDir = "./test/abis";
+        const abi = await kraken.client.getNormalizedMoveModulesByPackage({ package: kraken.packageId })
+        if (fs.existsSync(abisDir)) fs.rmdirSync(abisDir, { recursive: true });
+        if (!fs.existsSync(abisDir)) fs.mkdirSync(abisDir, { recursive: true });
+        fs.writeFileSync(path.join(abisDir, kraken.packageId + '.json'), JSON.stringify(abi, null, 2))
+
+        await codegen(abisDir, "./test/types", "http://127.0.0.1:9000")
     }
 
     // === Publish, issue and handle Nfts ===

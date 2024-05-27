@@ -18,11 +18,13 @@
     "eslint:fix": "pnpm run eslint:check --fix",
     "lint": "pnpm run eslint:check && pnpm run prettier:check",
     "lint:fix": "pnpm run eslint:fix && pnpm run prettier:fix",
-    "test": "bun run src/test/e2e.ts"
+    "test": "bun run src/test/e2e.ts",
+    "generate-abi": "bun run src/generate_abi.ts"
   },
   "dependencies": {
     "@mysten/kiosk": "^0.8.10",
     "@mysten/sui.js": "^0.54.1",
+    "@typemove/sui": "^1.6.1",
     "bun-types": "^1.0.25"
   },
   "devDependencies": {
