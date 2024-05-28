@@ -4,6 +4,7 @@ import { SuiClient, getFullnodeUrl } from "@mysten/sui.js/client";
 import { TransactionBlock, TransactionResult } from "@mysten/sui.js/transactions";
 import { KioskClient, Network } from "@mysten/kiosk";
 import { defaultMoveCoder } from "@typemove/sui";
+import { ANY_TYPE } from "@typemove/move";
 import { account, multisig } from "./types/sui/kraken.js";
 
 export class KrakenClient {
@@ -45,42 +46,46 @@ export class KrakenClient {
 			options: { showContent: true }
 		});
 
-		const content = data?.content as any;
+		const coder = defaultMoveCoder()
+		const multisigDecoded = await coder.decodedType(data?.content, multisig.Multisig.type())
+		const membersAddress = typeof(multisigDecoded!.members.contents) == "string" ? [multisigDecoded!.members.contents] : multisigDecoded!.members.contents;
 
-		const members = await Promise.all(content.fields.members.fields.contents.map(async (member: any) => {
+		const members = await Promise.all(membersAddress.map(async (member: any) => {
 			return await this.getAccount(member);
 		}));
 
+		console.log(multisigDecoded!.proposals.contents);
 		// get proposals in multisig and each action attached to proposals
-		const proposals = content.fields.proposals.fields.contents.map(async (proposal: any) => {
+		const proposals = await Promise.all(multisigDecoded!.proposals.contents.map(async (proposal) => {
 			// get the dynamic field action for each proposal
-			const parentId = proposal.fields.value.fields.id.id;
+			const parentId = proposal.value.id.id;
 			const { data } = await this.client.getDynamicFields({ parentId });
 			const df: any = await this.client.getObject({
 				id: data[0].objectId,
 				options: { showContent: true }
 			});
-
-			const content = df.data?.content?.fields.value;
+			// TODO: generate right types 
+			// + separate function for proposals
+			const approved = typeof(proposal.value.approved.contents) == "string" ? [proposal.value.approved.contents] : proposal.value.approved.contents;
 			const action = {
-				type: content.type.split("::").pop(), // The action Struct name
-				...content.fields // The action Struct fields
+				type: df.data?.content?.fields.value.type.split("::").pop(), // The action Struct name
+				...df.data?.content?.fields.value.fields // The action Struct fields
 			}
 
 			return {
 				id,
-				key: proposal.fields.key,
-				description: proposal.fields.value.fields.description,
-				executionTime: proposal.fields.value.fields.execution_time,
-				expirationEpoch: proposal.fields.value.fields.expiration_epoch,
-				approved: proposal.fields.value.fields.approved.fields.contents,
+				key: proposal.key,
+				description: proposal.value.description,
+				executionTime: proposal.value.execution_time,
+				expirationEpoch: proposal.value.expiration_epoch,
+				approved,
 				action
 			}
-		});
+		}));
 
 		return {
-			name: content.fields.name,
-			threshold: content.fields.threshold,
+			name: multisigDecoded!.name,
+			threshold: Number(multisigDecoded!.threshold),
 			members,
 			proposals,
 		}
@@ -199,25 +204,26 @@ export class KrakenClient {
 		}
 		
 		const coder = defaultMoveCoder()
-		const decAcc = await coder.decodedType(data[0].data?.content, account.Account.type())
+		const accountDecoded = await coder.decodedType(data[0].data?.content, account.Account.type())
+		const multisigIds = typeof(accountDecoded!.multisigs.contents) == "string" ? [accountDecoded!.multisigs.contents] : accountDecoded!.multisigs.contents;
 		
-		const msObjs = await this.client.multiGetObjects({
-			ids: typeof(decAcc!.multisigs.contents) == "string" ? [decAcc!.multisigs.contents] : decAcc!.multisigs.contents,
+		const multisigsObjs = await this.client.multiGetObjects({
+			ids: multisigIds,
 			options: { showContent: true }
 		});
-		const multisigs = await Promise.all(msObjs.map(async (ms: any) => { 
-			const decMs = await coder.decodedType(ms.data?.content, multisig.Multisig.type())
+		const multisigs = await Promise.all(multisigsObjs.map(async (ms: any) => { 
+			const multisigsDecoded = await coder.decodedType(ms.data?.content, multisig.Multisig.type())
 			return {
-				id: decMs!.id.id,
-				name: decMs!.name
+				id: multisigsDecoded!.id.id,
+				name: multisigsDecoded!.name
 			}
 		}));
 		
 		return {
 			owner,
-			id: decAcc!.id.id,
-			username: decAcc!.username,
-			profilePicture: decAcc!.profile_picture,
+			id: accountDecoded!.id.id,
+			username: accountDecoded!.username,
+			profilePicture: accountDecoded!.profile_picture,
 			multisigs,
 		}
 	}

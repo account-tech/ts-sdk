@@ -9,8 +9,8 @@ export type Proposal = {
     id: string,
     key: string,
     description: string,
-    executionTime: number,
-    expirationEpoch: number,
+    executionTime: bigint,
+    expirationEpoch: bigint,
     approved: string[],
     action: any,
 }

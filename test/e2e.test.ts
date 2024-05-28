@@ -72,7 +72,6 @@ describe("Interact with Kraken SDK on localnet" ,async () => {
     {
         const tx = new TransactionBlock();
         const currentAccount = await kraken.getAccount();
-        console.log("before");
         console.log(currentAccount);
         
         kraken.createMultisig(tx, "Main", [], currentAccount!.id);
@@ -89,7 +88,7 @@ describe("Interact with Kraken SDK on localnet" ,async () => {
         console.log(kraken.multisigData);
         expect(kraken.multisigData).toEqual({
             name: "Main",
-            threshold: "1",
+            threshold: 1,
             members: [account],
             proposals: []
         })
@@ -107,7 +106,7 @@ describe("Interact with Kraken SDK on localnet" ,async () => {
         console.log(kraken.multisigData);
         expect(kraken.multisigData).toEqual({
             name: "Updated",
-            threshold: "1",
+            threshold: 1,
             members: [account, { 
                 owner: "0x608f5242acdbe2bc779de586864dc914d0dee1adfe4654b560bd5019886daa29",
                 id: "",
