@@ -19,7 +19,7 @@
     "lint": "pnpm run eslint:check && pnpm run prettier:check",
     "lint:fix": "pnpm run eslint:fix && pnpm run prettier:fix",
     "test": "bun run src/test/e2e.ts",
-    "generate-abi": "bun run src/generate_abi.ts"
+    "prepare-package-abi": "bun run src/test/prepare_package_abi.ts"
   },
   "dependencies": {
     "@mysten/kiosk": "^0.8.10",

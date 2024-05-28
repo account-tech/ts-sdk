@@ -13,51 +13,25 @@ import path from 'path';
 // `cd sui`
 // launch localnet: `RUST_LOG="off,sui_node=info" cargo run --bin sui-test-validator`
 // or use https://github.com/ChainMovers/suibase
-
+// run `bun run prepare-package-abi` to publish package and create abi
 
 describe("Interact with Kraken SDK on localnet" ,async () => {
     
     const keypair = Ed25519Keypair.fromSecretKey(Uint8Array.from(Buffer.from("AM06bExREdFceWiExfSacTJ+64AQtFl7SRkSiTmAqh6F", "base64")).slice(1));
+    const { execSync } = require('child_process');
+    const abisPath = path.join(__dirname, '../abis/kraken.json');
+    const abisData = JSON.parse(fs.readFileSync(abisPath, 'utf8'));
+    const kraken = new KrakenClient("localnet", "", abisData.account.address, keypair.toSuiAddress(), "");
     // nftIds.length determines the number of nfts to issue
     let nftIds: string[] = ["", "", ""];
         
     // === get SUI ===
 
+    console.log("Get some SUI");
     await requestSuiFromFaucetV0({
         host: getFaucetHost("localnet"),
         recipient: keypair.toSuiAddress(),
     });
-    const kraken = new KrakenClient("localnet", "", "", keypair.toSuiAddress(), "");
-    const { execSync } = require('child_process');
-
-    // === Publish Kraken Package ===
-    {
-        const { modules, dependencies } = JSON.parse(execSync(
-            `"/home/tmarchal/.cargo/bin/sui" move build --dump-bytecode-as-base64 --path "../kraken/package/"`, 
-            { encoding: 'utf-8' }
-        ));
-        const tx = new TransactionBlock();
-        const [upgradeCap] = tx.publish({ modules,dependencies });
-        tx.transferObjects([upgradeCap], keypair.getPublicKey().toSuiAddress());
-        const result = await executeTx(tx);
-
-        const packageObj = result.objectChanges?.find((obj) => obj.type === "published");
-        kraken.packageId = packageObj!.packageId;
-        console.log("Package published: ", kraken.packageId);
-    }
-
-    // === Generate ABI ===
-    {
-        const abisDir = "./abis";
-        if (fs.existsSync(abisDir)) fs.rmdirSync(abisDir, { recursive: true });
-        if (!fs.existsSync(abisDir)) fs.mkdirSync(abisDir, { recursive: true });
-        const abi = await kraken.client.getNormalizedMoveModulesByPackage({ package: kraken.packageId })
-        fs.writeFileSync(path.join(abisDir, "kraken" + '.json'), JSON.stringify(abi, null, 2))
-        
-        const typesDir = "./src/types/sui";
-        if (fs.existsSync(typesDir)) fs.rmdirSync(typesDir, { recursive: true });
-        await codegen(abisDir, typesDir, "http://127.0.0.1:9000")
-    }
 
     // === Publish, issue and handle Nfts ===
     {
@@ -83,7 +57,7 @@ describe("Interact with Kraken SDK on localnet" ,async () => {
         console.log("Nfts issued and handled: ", nftIds);
     }
 
-    // // === Handle Account ===
+    // === Handle Account ===
     {    
         const existingAccount = await kraken.getAccount();
         if (existingAccount.id == "") {
@@ -98,16 +72,20 @@ describe("Interact with Kraken SDK on localnet" ,async () => {
     {
         const tx = new TransactionBlock();
         const currentAccount = await kraken.getAccount();
+        console.log("before");
         console.log(currentAccount);
         
         kraken.createMultisig(tx, "Main", [], currentAccount!.id);
         await executeTx(tx);
-        console.log("Multisig created:");
+        console.log("Multisig created");
         
         const account = await kraken.getAccount();
+        expect(account.multisigs.length).toEqual(currentAccount.multisigs.length + 1);
+        
         const multisigId = account!.multisigs[account!.multisigs.length - 1].id;
         kraken.multisigId = multisigId;
         await kraken.fetchMultisigData();
+        console.log("Multisig cached:");
         console.log(kraken.multisigData);
         expect(kraken.multisigData).toEqual({
             name: "Main",

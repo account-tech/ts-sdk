@@ -1,7 +1,7 @@
 {
   "account": {
     "fileFormatVersion": 6,
-    "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+    "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
     "name": "account",
     "friends": [],
     "structs": {
@@ -110,7 +110,7 @@
           {
             "MutableReference": {
               "Struct": {
-                "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                 "module": "account",
                 "name": "Account",
                 "typeArguments": []
@@ -119,7 +119,7 @@
           },
           {
             "Struct": {
-              "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+              "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
               "module": "account",
               "name": "Invite",
               "typeArguments": []
@@ -135,7 +135,7 @@
         "parameters": [
           {
             "Struct": {
-              "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+              "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
               "module": "account",
               "name": "Account",
               "typeArguments": []
@@ -152,7 +152,7 @@
           {
             "MutableReference": {
               "Struct": {
-                "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                 "module": "account",
                 "name": "Account",
                 "typeArguments": []
@@ -178,7 +178,7 @@
           {
             "MutableReference": {
               "Struct": {
-                "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                 "module": "account",
                 "name": "Account",
                 "typeArguments": []
@@ -204,7 +204,7 @@
           {
             "Reference": {
               "Struct": {
-                "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                 "module": "account",
                 "name": "Invite",
                 "typeArguments": []
@@ -231,7 +231,7 @@
           {
             "Reference": {
               "Struct": {
-                "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                 "module": "account",
                 "name": "Account",
                 "typeArguments": []
@@ -294,7 +294,7 @@
           {
             "Reference": {
               "Struct": {
-                "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                 "module": "account",
                 "name": "Account",
                 "typeArguments": []
@@ -320,7 +320,7 @@
         "parameters": [
           {
             "Struct": {
-              "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+              "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
               "module": "account",
               "name": "Invite",
               "typeArguments": []
@@ -337,7 +337,7 @@
           {
             "MutableReference": {
               "Struct": {
-                "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                 "module": "multisig",
                 "name": "Multisig",
                 "typeArguments": []
@@ -366,7 +366,7 @@
           {
             "Reference": {
               "Struct": {
-                "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                 "module": "account",
                 "name": "Account",
                 "typeArguments": []
@@ -389,7 +389,7 @@
   },
   "coin_operations": {
     "fileFormatVersion": 6,
-    "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+    "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
     "name": "coin_operations",
     "friends": [],
     "structs": {},
@@ -408,7 +408,7 @@
           {
             "MutableReference": {
               "Struct": {
-                "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                 "module": "multisig",
                 "name": "Multisig",
                 "typeArguments": []
@@ -486,7 +486,7 @@
           {
             "MutableReference": {
               "Struct": {
-                "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                 "module": "multisig",
                 "name": "Multisig",
                 "typeArguments": []
@@ -545,7 +545,7 @@
   },
   "config": {
     "fileFormatVersion": 6,
-    "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+    "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
     "name": "config",
     "friends": [],
     "structs": {
@@ -614,7 +614,7 @@
           {
             "MutableReference": {
               "Struct": {
-                "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                 "module": "multisig",
                 "name": "Multisig",
                 "typeArguments": []
@@ -660,7 +660,7 @@
           {
             "MutableReference": {
               "Struct": {
-                "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                 "module": "multisig",
                 "name": "Multisig",
                 "typeArguments": []
@@ -735,7 +735,7 @@
   },
   "kiosk": {
     "fileFormatVersion": 6,
-    "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+    "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
     "name": "kiosk",
     "friends": [],
     "structs": {
@@ -751,7 +751,7 @@
             "name": "borrow",
             "type": {
               "Struct": {
-                "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                 "module": "owned",
                 "name": "Borrow",
                 "typeArguments": []
@@ -791,7 +791,7 @@
             "name": "borrow",
             "type": {
               "Struct": {
-                "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                 "module": "owned",
                 "name": "Borrow",
                 "typeArguments": []
@@ -827,13 +827,13 @@
           {
             "MutableReference": {
               "Struct": {
-                "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                 "module": "multisig",
                 "name": "Action",
                 "typeArguments": [
                   {
                     "Struct": {
-                      "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                      "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                       "module": "kiosk",
                       "name": "List",
                       "typeArguments": []
@@ -846,7 +846,7 @@
           {
             "MutableReference": {
               "Struct": {
-                "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                 "module": "multisig",
                 "name": "Multisig",
                 "typeArguments": []
@@ -890,13 +890,13 @@
           {
             "MutableReference": {
               "Struct": {
-                "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                 "module": "multisig",
                 "name": "Action",
                 "typeArguments": [
                   {
                     "Struct": {
-                      "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                      "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                       "module": "kiosk",
                       "name": "Transfer",
                       "typeArguments": []
@@ -909,7 +909,7 @@
           {
             "MutableReference": {
               "Struct": {
-                "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                 "module": "multisig",
                 "name": "Multisig",
                 "typeArguments": []
@@ -952,13 +952,13 @@
         "parameters": [
           {
             "Struct": {
-              "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+              "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
               "module": "multisig",
               "name": "Action",
               "typeArguments": [
                 {
                   "Struct": {
-                    "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                    "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                     "module": "kiosk",
                     "name": "List",
                     "typeArguments": []
@@ -970,7 +970,7 @@
           {
             "MutableReference": {
               "Struct": {
-                "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                 "module": "multisig",
                 "name": "Multisig",
                 "typeArguments": []
@@ -1036,13 +1036,13 @@
         "parameters": [
           {
             "Struct": {
-              "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+              "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
               "module": "multisig",
               "name": "Action",
               "typeArguments": [
                 {
                   "Struct": {
-                    "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                    "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                     "module": "kiosk",
                     "name": "Transfer",
                     "typeArguments": []
@@ -1054,7 +1054,7 @@
           {
             "MutableReference": {
               "Struct": {
-                "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                 "module": "multisig",
                 "name": "Multisig",
                 "typeArguments": []
@@ -1087,7 +1087,7 @@
           {
             "MutableReference": {
               "Struct": {
-                "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                 "module": "multisig",
                 "name": "Multisig",
                 "typeArguments": []
@@ -1157,13 +1157,13 @@
           {
             "MutableReference": {
               "Struct": {
-                "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                 "module": "multisig",
                 "name": "Action",
                 "typeArguments": [
                   {
                     "Struct": {
-                      "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                      "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                       "module": "kiosk",
                       "name": "List",
                       "typeArguments": []
@@ -1204,7 +1204,7 @@
           {
             "MutableReference": {
               "Struct": {
-                "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                 "module": "multisig",
                 "name": "Multisig",
                 "typeArguments": []
@@ -1249,7 +1249,7 @@
           {
             "MutableReference": {
               "Struct": {
-                "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                 "module": "multisig",
                 "name": "Multisig",
                 "typeArguments": []
@@ -1316,7 +1316,7 @@
           {
             "MutableReference": {
               "Struct": {
-                "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                 "module": "multisig",
                 "name": "Multisig",
                 "typeArguments": []
@@ -1388,7 +1388,7 @@
           {
             "MutableReference": {
               "Struct": {
-                "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                 "module": "multisig",
                 "name": "Multisig",
                 "typeArguments": []
@@ -1491,13 +1491,13 @@
           {
             "MutableReference": {
               "Struct": {
-                "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                 "module": "multisig",
                 "name": "Action",
                 "typeArguments": [
                   {
                     "Struct": {
-                      "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                      "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                       "module": "kiosk",
                       "name": "Transfer",
                       "typeArguments": []
@@ -1581,7 +1581,7 @@
           {
             "MutableReference": {
               "Struct": {
-                "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                 "module": "multisig",
                 "name": "Multisig",
                 "typeArguments": []
@@ -1625,7 +1625,7 @@
   },
   "move_call": {
     "fileFormatVersion": 6,
-    "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+    "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
     "name": "move_call",
     "friends": [],
     "structs": {
@@ -1647,7 +1647,7 @@
             "name": "withdraw",
             "type": {
               "Struct": {
-                "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                 "module": "owned",
                 "name": "Withdraw",
                 "typeArguments": []
@@ -1658,7 +1658,7 @@
             "name": "borrow",
             "type": {
               "Struct": {
-                "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                 "module": "owned",
                 "name": "Borrow",
                 "typeArguments": []
@@ -1676,13 +1676,13 @@
         "parameters": [
           {
             "Struct": {
-              "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+              "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
               "module": "multisig",
               "name": "Action",
               "typeArguments": [
                 {
                   "Struct": {
-                    "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                    "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                     "module": "move_call",
                     "name": "MoveCall",
                     "typeArguments": []
@@ -1705,7 +1705,7 @@
         "return": [
           {
             "Struct": {
-              "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+              "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
               "module": "owned",
               "name": "Withdraw",
               "typeArguments": []
@@ -1713,7 +1713,7 @@
           },
           {
             "Struct": {
-              "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+              "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
               "module": "owned",
               "name": "Borrow",
               "typeArguments": []
@@ -1729,7 +1729,7 @@
           {
             "MutableReference": {
               "Struct": {
-                "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                 "module": "multisig",
                 "name": "Multisig",
                 "typeArguments": []
@@ -1794,43 +1794,43 @@
   },
   "multisig": {
     "fileFormatVersion": 6,
-    "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+    "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
     "name": "multisig",
     "friends": [
       {
-        "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+        "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
         "name": "account"
       },
       {
-        "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+        "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
         "name": "coin_operations"
       },
       {
-        "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+        "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
         "name": "config"
       },
       {
-        "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+        "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
         "name": "kiosk"
       },
       {
-        "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+        "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
         "name": "move_call"
       },
       {
-        "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+        "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
         "name": "owned"
       },
       {
-        "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+        "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
         "name": "payments"
       },
       {
-        "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+        "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
         "name": "transfers"
       },
       {
-        "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+        "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
         "name": "upgrade_policies"
       }
     ],
@@ -1939,7 +1939,7 @@
                   },
                   {
                     "Struct": {
-                      "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                      "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                       "module": "multisig",
                       "name": "Proposal",
                       "typeArguments": []
@@ -2021,7 +2021,7 @@
           {
             "MutableReference": {
               "Struct": {
-                "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                 "module": "multisig",
                 "name": "Action",
                 "typeArguments": [
@@ -2049,7 +2049,7 @@
           {
             "MutableReference": {
               "Struct": {
-                "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                 "module": "multisig",
                 "name": "Multisig",
                 "typeArguments": []
@@ -2070,7 +2070,7 @@
           {
             "Reference": {
               "Struct": {
-                "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                 "module": "multisig",
                 "name": "Multisig",
                 "typeArguments": []
@@ -2090,7 +2090,7 @@
           {
             "MutableReference": {
               "Struct": {
-                "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                 "module": "multisig",
                 "name": "Multisig",
                 "typeArguments": []
@@ -2126,7 +2126,7 @@
           {
             "Reference": {
               "Struct": {
-                "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                 "module": "multisig",
                 "name": "Proposal",
                 "typeArguments": []
@@ -2148,7 +2148,7 @@
           {
             "Reference": {
               "Struct": {
-                "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                 "module": "multisig",
                 "name": "Multisig",
                 "typeArguments": []
@@ -2176,7 +2176,7 @@
           {
             "MutableReference": {
               "Struct": {
-                "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                 "module": "multisig",
                 "name": "Multisig",
                 "typeArguments": []
@@ -2210,7 +2210,7 @@
           {
             "MutableReference": {
               "Struct": {
-                "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                 "module": "multisig",
                 "name": "Multisig",
                 "typeArguments": []
@@ -2259,7 +2259,7 @@
           {
             "MutableReference": {
               "Struct": {
-                "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                 "module": "multisig",
                 "name": "Multisig",
                 "typeArguments": []
@@ -2295,7 +2295,7 @@
           {
             "Reference": {
               "Struct": {
-                "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                 "module": "multisig",
                 "name": "Proposal",
                 "typeArguments": []
@@ -2328,7 +2328,7 @@
           {
             "MutableReference": {
               "Struct": {
-                "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                 "module": "multisig",
                 "name": "Multisig",
                 "typeArguments": []
@@ -2367,7 +2367,7 @@
         "return": [
           {
             "Struct": {
-              "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+              "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
               "module": "multisig",
               "name": "Action",
               "typeArguments": [
@@ -2387,7 +2387,7 @@
           {
             "Reference": {
               "Struct": {
-                "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                 "module": "multisig",
                 "name": "Proposal",
                 "typeArguments": []
@@ -2407,7 +2407,7 @@
           {
             "Reference": {
               "Struct": {
-                "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                 "module": "multisig",
                 "name": "Proposal",
                 "typeArguments": []
@@ -2427,7 +2427,7 @@
           {
             "Reference": {
               "Struct": {
-                "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                 "module": "multisig",
                 "name": "Multisig",
                 "typeArguments": []
@@ -2449,7 +2449,7 @@
           {
             "Reference": {
               "Struct": {
-                "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                 "module": "multisig",
                 "name": "Multisig",
                 "typeArguments": []
@@ -2495,7 +2495,7 @@
         "return": [
           {
             "Struct": {
-              "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+              "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
               "module": "multisig",
               "name": "Multisig",
               "typeArguments": []
@@ -2511,7 +2511,7 @@
           {
             "Reference": {
               "Struct": {
-                "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                 "module": "multisig",
                 "name": "Multisig",
                 "typeArguments": []
@@ -2531,7 +2531,7 @@
           {
             "Reference": {
               "Struct": {
-                "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                 "module": "multisig",
                 "name": "Multisig",
                 "typeArguments": []
@@ -2553,7 +2553,7 @@
           {
             "Reference": {
               "Struct": {
-                "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                 "module": "multisig",
                 "name": "Proposal",
                 "typeArguments": []
@@ -2570,7 +2570,7 @@
           {
             "MutableReference": {
               "Struct": {
-                "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                 "module": "multisig",
                 "name": "Multisig",
                 "typeArguments": []
@@ -2606,7 +2606,7 @@
           {
             "MutableReference": {
               "Struct": {
-                "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                 "module": "multisig",
                 "name": "Multisig",
                 "typeArguments": []
@@ -2627,7 +2627,7 @@
           {
             "MutableReference": {
               "Struct": {
-                "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                 "module": "multisig",
                 "name": "Multisig",
                 "typeArguments": []
@@ -2653,7 +2653,7 @@
           {
             "MutableReference": {
               "Struct": {
-                "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                 "module": "multisig",
                 "name": "Multisig",
                 "typeArguments": []
@@ -2671,7 +2671,7 @@
         "parameters": [
           {
             "Struct": {
-              "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+              "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
               "module": "multisig",
               "name": "Multisig",
               "typeArguments": []
@@ -2688,7 +2688,7 @@
           {
             "Reference": {
               "Struct": {
-                "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                 "module": "multisig",
                 "name": "Multisig",
                 "typeArguments": []
@@ -2708,7 +2708,7 @@
           {
             "MutableReference": {
               "Struct": {
-                "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                 "module": "multisig",
                 "name": "Multisig",
                 "typeArguments": []
@@ -2742,7 +2742,7 @@
         "parameters": [
           {
             "Struct": {
-              "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+              "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
               "module": "multisig",
               "name": "Action",
               "typeArguments": [
@@ -2763,23 +2763,23 @@
   },
   "owned": {
     "fileFormatVersion": 6,
-    "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+    "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
     "name": "owned",
     "friends": [
       {
-        "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+        "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
         "name": "kiosk"
       },
       {
-        "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+        "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
         "name": "move_call"
       },
       {
-        "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+        "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
         "name": "payments"
       },
       {
-        "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+        "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
         "name": "transfers"
       }
     ],
@@ -2796,7 +2796,7 @@
             "name": "withdraw",
             "type": {
               "Struct": {
-                "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                 "module": "owned",
                 "name": "Withdraw",
                 "typeArguments": []
@@ -2858,7 +2858,7 @@
           {
             "MutableReference": {
               "Struct": {
-                "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                 "module": "owned",
                 "name": "Borrow",
                 "typeArguments": []
@@ -2868,7 +2868,7 @@
           {
             "MutableReference": {
               "Struct": {
-                "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                 "module": "multisig",
                 "name": "Multisig",
                 "typeArguments": []
@@ -2901,7 +2901,7 @@
         "parameters": [
           {
             "Struct": {
-              "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+              "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
               "module": "owned",
               "name": "Borrow",
               "typeArguments": []
@@ -2917,7 +2917,7 @@
         "parameters": [
           {
             "Struct": {
-              "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+              "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
               "module": "owned",
               "name": "Withdraw",
               "typeArguments": []
@@ -2945,7 +2945,7 @@
         "return": [
           {
             "Struct": {
-              "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+              "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
               "module": "owned",
               "name": "Borrow",
               "typeArguments": []
@@ -2972,7 +2972,7 @@
         "return": [
           {
             "Struct": {
-              "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+              "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
               "module": "owned",
               "name": "Withdraw",
               "typeArguments": []
@@ -2995,7 +2995,7 @@
           {
             "MutableReference": {
               "Struct": {
-                "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                 "module": "owned",
                 "name": "Borrow",
                 "typeArguments": []
@@ -3005,7 +3005,7 @@
           {
             "Reference": {
               "Struct": {
-                "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                 "module": "multisig",
                 "name": "Multisig",
                 "typeArguments": []
@@ -3033,7 +3033,7 @@
           {
             "MutableReference": {
               "Struct": {
-                "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                 "module": "owned",
                 "name": "Withdraw",
                 "typeArguments": []
@@ -3043,7 +3043,7 @@
           {
             "MutableReference": {
               "Struct": {
-                "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                 "module": "multisig",
                 "name": "Multisig",
                 "typeArguments": []
@@ -3073,7 +3073,7 @@
   },
   "payments": {
     "fileFormatVersion": 6,
-    "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+    "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
     "name": "payments",
     "friends": [],
     "structs": {
@@ -3089,7 +3089,7 @@
             "name": "withdraw",
             "type": {
               "Struct": {
-                "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                 "module": "owned",
                 "name": "Withdraw",
                 "typeArguments": []
@@ -3186,7 +3186,7 @@
         "parameters": [
           {
             "Struct": {
-              "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+              "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
               "module": "payments",
               "name": "Stream",
               "typeArguments": [
@@ -3199,7 +3199,7 @@
           {
             "MutableReference": {
               "Struct": {
-                "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                 "module": "multisig",
                 "name": "Multisig",
                 "typeArguments": []
@@ -3232,7 +3232,7 @@
         "parameters": [
           {
             "Struct": {
-              "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+              "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
               "module": "payments",
               "name": "Stream",
               "typeArguments": [
@@ -3258,13 +3258,13 @@
         "parameters": [
           {
             "Struct": {
-              "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+              "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
               "module": "multisig",
               "name": "Action",
               "typeArguments": [
                 {
                   "Struct": {
-                    "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                    "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                     "module": "payments",
                     "name": "Pay",
                     "typeArguments": []
@@ -3276,7 +3276,7 @@
           {
             "MutableReference": {
               "Struct": {
-                "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                 "module": "multisig",
                 "name": "Multisig",
                 "typeArguments": []
@@ -3331,7 +3331,7 @@
           {
             "MutableReference": {
               "Struct": {
-                "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                 "module": "payments",
                 "name": "Stream",
                 "typeArguments": [
@@ -3363,7 +3363,7 @@
           {
             "MutableReference": {
               "Struct": {
-                "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                 "module": "multisig",
                 "name": "Multisig",
                 "typeArguments": []
@@ -3416,7 +3416,7 @@
   },
   "transfers": {
     "fileFormatVersion": 6,
-    "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+    "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
     "name": "transfers",
     "friends": [],
     "structs": {
@@ -3432,7 +3432,7 @@
             "name": "withdraw",
             "type": {
               "Struct": {
-                "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                 "module": "owned",
                 "name": "Withdraw",
                 "typeArguments": []
@@ -3521,7 +3521,7 @@
             "name": "withdraw",
             "type": {
               "Struct": {
-                "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                 "module": "owned",
                 "name": "Withdraw",
                 "typeArguments": []
@@ -3553,7 +3553,7 @@
           {
             "MutableReference": {
               "Struct": {
-                "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                 "module": "transfers",
                 "name": "Delivery",
                 "typeArguments": []
@@ -3563,13 +3563,13 @@
           {
             "MutableReference": {
               "Struct": {
-                "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                 "module": "multisig",
                 "name": "Action",
                 "typeArguments": [
                   {
                     "Struct": {
-                      "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                      "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                       "module": "transfers",
                       "name": "Deliver",
                       "typeArguments": []
@@ -3582,7 +3582,7 @@
           {
             "MutableReference": {
               "Struct": {
-                "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                 "module": "multisig",
                 "name": "Multisig",
                 "typeArguments": []
@@ -3612,7 +3612,7 @@
           {
             "MutableReference": {
               "Struct": {
-                "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                 "module": "multisig",
                 "name": "Multisig",
                 "typeArguments": []
@@ -3621,7 +3621,7 @@
           },
           {
             "Struct": {
-              "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+              "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
               "module": "transfers",
               "name": "Delivery",
               "typeArguments": []
@@ -3655,7 +3655,7 @@
           {
             "MutableReference": {
               "Struct": {
-                "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                 "module": "transfers",
                 "name": "Delivery",
                 "typeArguments": []
@@ -3665,7 +3665,7 @@
           {
             "Reference": {
               "Struct": {
-                "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                 "module": "transfers",
                 "name": "DeliveryCap",
                 "typeArguments": []
@@ -3686,7 +3686,7 @@
         "parameters": [
           {
             "Struct": {
-              "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+              "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
               "module": "transfers",
               "name": "Delivery",
               "typeArguments": []
@@ -3694,7 +3694,7 @@
           },
           {
             "Struct": {
-              "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+              "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
               "module": "transfers",
               "name": "DeliveryCap",
               "typeArguments": []
@@ -3710,13 +3710,13 @@
         "parameters": [
           {
             "Struct": {
-              "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+              "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
               "module": "multisig",
               "name": "Action",
               "typeArguments": [
                 {
                   "Struct": {
-                    "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                    "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                     "module": "transfers",
                     "name": "Send",
                     "typeArguments": []
@@ -3747,7 +3747,7 @@
         "return": [
           {
             "Struct": {
-              "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+              "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
               "module": "transfers",
               "name": "Delivery",
               "typeArguments": []
@@ -3762,7 +3762,7 @@
         "parameters": [
           {
             "Struct": {
-              "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+              "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
               "module": "transfers",
               "name": "Delivery",
               "typeArguments": []
@@ -3770,13 +3770,13 @@
           },
           {
             "Struct": {
-              "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+              "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
               "module": "multisig",
               "name": "Action",
               "typeArguments": [
                 {
                   "Struct": {
-                    "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                    "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                     "module": "transfers",
                     "name": "Deliver",
                     "typeArguments": []
@@ -3806,7 +3806,7 @@
           {
             "MutableReference": {
               "Struct": {
-                "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                 "module": "multisig",
                 "name": "Multisig",
                 "typeArguments": []
@@ -3863,7 +3863,7 @@
           {
             "MutableReference": {
               "Struct": {
-                "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                 "module": "multisig",
                 "name": "Multisig",
                 "typeArguments": []
@@ -3929,7 +3929,7 @@
           {
             "MutableReference": {
               "Struct": {
-                "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                 "module": "transfers",
                 "name": "Delivery",
                 "typeArguments": []
@@ -3939,7 +3939,7 @@
           {
             "Reference": {
               "Struct": {
-                "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                 "module": "multisig",
                 "name": "Multisig",
                 "typeArguments": []
@@ -3974,13 +3974,13 @@
           {
             "MutableReference": {
               "Struct": {
-                "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                 "module": "multisig",
                 "name": "Action",
                 "typeArguments": [
                   {
                     "Struct": {
-                      "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                      "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                       "module": "transfers",
                       "name": "Send",
                       "typeArguments": []
@@ -3993,7 +3993,7 @@
           {
             "MutableReference": {
               "Struct": {
-                "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                 "module": "multisig",
                 "name": "Multisig",
                 "typeArguments": []
@@ -4019,7 +4019,7 @@
   },
   "upgrade_policies": {
     "fileFormatVersion": 6,
-    "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+    "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
     "name": "upgrade_policies",
     "friends": [],
     "structs": {
@@ -4132,7 +4132,7 @@
           {
             "MutableReference": {
               "Struct": {
-                "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                 "module": "multisig",
                 "name": "Multisig",
                 "typeArguments": []
@@ -4141,7 +4141,7 @@
           },
           {
             "Struct": {
-              "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+              "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
               "module": "upgrade_policies",
               "name": "UpgradeLock",
               "typeArguments": []
@@ -4165,13 +4165,13 @@
         "parameters": [
           {
             "Struct": {
-              "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+              "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
               "module": "multisig",
               "name": "Action",
               "typeArguments": [
                 {
                   "Struct": {
-                    "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                    "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                     "module": "upgrade_policies",
                     "name": "Policy",
                     "typeArguments": []
@@ -4183,7 +4183,7 @@
           {
             "MutableReference": {
               "Struct": {
-                "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                 "module": "multisig",
                 "name": "Multisig",
                 "typeArguments": []
@@ -4198,7 +4198,7 @@
               "typeArguments": [
                 {
                   "Struct": {
-                    "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                    "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                     "module": "upgrade_policies",
                     "name": "UpgradeLock",
                     "typeArguments": []
@@ -4217,13 +4217,13 @@
         "parameters": [
           {
             "Struct": {
-              "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+              "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
               "module": "multisig",
               "name": "Action",
               "typeArguments": [
                 {
                   "Struct": {
-                    "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                    "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                     "module": "upgrade_policies",
                     "name": "Upgrade",
                     "typeArguments": []
@@ -4235,7 +4235,7 @@
           {
             "MutableReference": {
               "Struct": {
-                "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                 "module": "multisig",
                 "name": "Multisig",
                 "typeArguments": []
@@ -4250,7 +4250,7 @@
               "typeArguments": [
                 {
                   "Struct": {
-                    "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                    "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                     "module": "upgrade_policies",
                     "name": "UpgradeLock",
                     "typeArguments": []
@@ -4271,7 +4271,7 @@
           },
           {
             "Struct": {
-              "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+              "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
               "module": "upgrade_policies",
               "name": "UpgradeLock",
               "typeArguments": []
@@ -4287,7 +4287,7 @@
           {
             "MutableReference": {
               "Struct": {
-                "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                 "module": "multisig",
                 "name": "Multisig",
                 "typeArguments": []
@@ -4341,7 +4341,7 @@
           {
             "MutableReference": {
               "Struct": {
-                "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                 "module": "multisig",
                 "name": "Multisig",
                 "typeArguments": []
@@ -4375,7 +4375,7 @@
               "typeArguments": [
                 {
                   "Struct": {
-                    "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                    "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                     "module": "upgrade_policies",
                     "name": "UpgradeLock",
                     "typeArguments": []
@@ -4405,7 +4405,7 @@
           {
             "MutableReference": {
               "Struct": {
-                "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                 "module": "multisig",
                 "name": "Multisig",
                 "typeArguments": []
@@ -4440,7 +4440,7 @@
               "typeArguments": [
                 {
                   "Struct": {
-                    "address": "0x5d0541ab6ed8487053703520334de59d2dca76e69de44002eb0957ff8620470c",
+                    "address": "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
                     "module": "upgrade_policies",
                     "name": "UpgradeLock",
                     "typeArguments": []

@@ -4,7 +4,7 @@ import { SuiClient, getFullnodeUrl } from "@mysten/sui.js/client";
 import { TransactionBlock, TransactionResult } from "@mysten/sui.js/transactions";
 import { KioskClient, Network } from "@mysten/kiosk";
 import { defaultMoveCoder } from "@typemove/sui";
-import { account } from "./types/sui/kraken.js";
+import { account, multisig } from "./types/sui/kraken.js";
 
 export class KrakenClient {
 	/**
@@ -197,30 +197,27 @@ export class KrakenClient {
 				multisigs: [],
 			}
 		}
-
-		console.log("yoooooooooooooooo");
+		
 		const coder = defaultMoveCoder()
-		const res = await coder.decodedType(data[0].data?.content, account.Account.type())
-		console.log(res);
-
-		const content = data[0].data?.content as any;
-
+		const decAcc = await coder.decodedType(data[0].data?.content, account.Account.type())
+		
 		const msObjs = await this.client.multiGetObjects({
-			ids: content.fields.multisigs.fields.contents,
+			ids: typeof(decAcc!.multisigs.contents) == "string" ? [decAcc!.multisigs.contents] : decAcc!.multisigs.contents,
 			options: { showContent: true }
 		});
-		const multisigs = msObjs.map((ms: any) => { 
+		const multisigs = await Promise.all(msObjs.map(async (ms: any) => { 
+			const decMs = await coder.decodedType(ms.data?.content, multisig.Multisig.type())
 			return {
-				id: ms.data?.content?.fields.id.id,
-				name: ms.data?.content?.fields.name
+				id: decMs!.id.id,
+				name: decMs!.name
 			}
-		});
-
+		}));
+		
 		return {
 			owner,
-			id: content.fields.id.id,
-			username: content.fields.username,
-			profilePicture: content.fields.profile_picture,
+			id: decAcc!.id.id,
+			username: decAcc!.username,
+			profilePicture: decAcc!.profile_picture,
 			multisigs,
 		}
 	}
