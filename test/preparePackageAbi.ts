@@ -4,7 +4,7 @@ import { getFaucetHost, requestSuiFromFaucetV0 } from "@mysten/sui.js/faucet";
 import { Ed25519Keypair } from "@mysten/sui.js/keypairs/ed25519";
 import { TransactionBlock } from "@mysten/sui.js/transactions";
 import { codegen } from '@typemove/sui/codegen';
-import { FRAMEWORK, STDLIB } from "../constants.js";
+import { FRAMEWORK, STDLIB } from "../src/types/constants.js";
 import { getFullnodeUrl, SuiClient } from "@mysten/sui.js/client";
 
 // to run on localnet:
@@ -25,7 +25,8 @@ import { getFullnodeUrl, SuiClient } from "@mysten/sui.js/client";
         host: getFaucetHost("localnet"),
         recipient: keypair.toSuiAddress(),
     });
-    const client = new SuiClient({ url: getFullnodeUrl("localnet") });
+    const url = getFullnodeUrl("localnet");
+    const client = new SuiClient({ url });
     const { execSync } = require('child_process');
 
     // === Publish Kraken Package ===
@@ -50,21 +51,21 @@ import { getFullnodeUrl, SuiClient } from "@mysten/sui.js/client";
 
     // === Generate ABIs ===
 
-    const abisDir = "./src/test/abis";
+    const abisDir = "./test/abis";
     if (fs.existsSync(abisDir)) fs.rmdirSync(abisDir, { recursive: true });
     if (!fs.existsSync(abisDir)) fs.mkdirSync(abisDir, { recursive: true });
     
     const krakenAbi = await client.getNormalizedMoveModulesByPackage({ package: packageObj.packageId })
     fs.writeFileSync(path.join(abisDir, "kraken" + '.json'), JSON.stringify(krakenAbi, null, 2))
-    const typesDir = "./src/test/types";
+    const typesDir = "./test/types";
     if (fs.existsSync(typesDir)) fs.rmdirSync(typesDir, { recursive: true });
-    await codegen(abisDir, typesDir, getFullnodeUrl("localnet"));
+    await codegen(abisDir, typesDir, url);
 
     const stdlibAbi = await client.getNormalizedMoveModulesByPackage({ package: STDLIB })
     fs.writeFileSync(path.join(abisDir, "0x1" + '.json'), JSON.stringify(stdlibAbi, null, 2))    
-    await codegen(abisDir, typesDir, getFullnodeUrl("localnet"));
+    await codegen(abisDir, typesDir, url);
 
     const frameworkAbi = await client.getNormalizedMoveModulesByPackage({ package: FRAMEWORK })
     fs.writeFileSync(path.join(abisDir, "0x2" + '.json'), JSON.stringify(frameworkAbi, null, 2))    
-    await codegen(abisDir, typesDir, getFullnodeUrl("localnet"));
+    await codegen(abisDir, typesDir, url);
 })();

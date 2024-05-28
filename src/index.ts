@@ -1,4 +1,4 @@
 export * from "./client.js";
-export * from "./types.js";
-export * from "./constants.js";
+export * from "./types/types.js";
+export * from "./types/constants.js";
 

@@ -1,12 +1,11 @@
-import { CLOCK, FRAMEWORK } from "./constants.js";
-import { Account, Kiosk, Multisig, Proposal, TransferPolicy } from "./types.js";
+import { CLOCK, FRAMEWORK } from "./types/constants.js";
+import { Account, Kiosk, Multisig, Proposal, TransferPolicy } from "./types/types.js";
 import { SuiClient, getFullnodeUrl } from "@mysten/sui.js/client";
 import { TransactionBlock, TransactionResult } from "@mysten/sui.js/transactions";
 import { KioskClient, Network } from "@mysten/kiosk";
 import { defaultMoveCoder } from "@typemove/sui";
-import { ANY_TYPE } from "@typemove/move";
-import { account, multisig } from "../src/test/types/kraken.js";
-import { kiosk } from "../src/test/types/0x2.js";
+import { account, multisig } from "../test/types/kraken.js";
+import { kiosk } from "../test/types/0x2.js";
 
 export class KrakenClient {
 	/**
@@ -47,8 +46,7 @@ export class KrakenClient {
 			options: { showContent: true }
 		});
 
-		const coder = defaultMoveCoder()
-		const multisigDecoded = await coder.decodedType(data?.content, multisig.Multisig.type())
+		const multisigDecoded = await defaultMoveCoder().decodedType(data?.content, multisig.Multisig.type())
 		const membersAddress = typeof(multisigDecoded!.members.contents) == "string" ? [multisigDecoded!.members.contents] : multisigDecoded!.members.contents;
 
 		const members = await Promise.all(membersAddress.map(async (member: any) => {
@@ -204,8 +202,7 @@ export class KrakenClient {
 			}
 		}
 		
-		const coder = defaultMoveCoder()
-		const accountDecoded = await coder.decodedType(data[0].data?.content, account.Account.type())
+		const accountDecoded = await defaultMoveCoder().decodedType(data[0].data?.content, account.Account.type())
 		const multisigIds = typeof(accountDecoded!.multisigs.contents) == "string" ? [accountDecoded!.multisigs.contents] : accountDecoded!.multisigs.contents;
 		
 		const multisigsObjs = await this.client.multiGetObjects({
@@ -213,7 +210,7 @@ export class KrakenClient {
 			options: { showContent: true }
 		});
 		const multisigs = await Promise.all(multisigsObjs.map(async (ms: any) => { 
-			const multisigsDecoded = await coder.decodedType(ms.data?.content, multisig.Multisig.type())
+			const multisigsDecoded = await defaultMoveCoder().decodedType(ms.data?.content, multisig.Multisig.type())
 			return {
 				id: multisigsDecoded!.id.id,
 				name: multisigsDecoded!.name

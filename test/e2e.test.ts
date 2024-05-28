@@ -3,7 +3,7 @@ import * as fs from "fs";
 import { getFaucetHost, requestSuiFromFaucetV0 } from "@mysten/sui.js/faucet";
 import { Ed25519Keypair } from "@mysten/sui.js/keypairs/ed25519";
 import { TransactionBlock } from "@mysten/sui.js/transactions";
-import { FRAMEWORK, KrakenClient, PACKAGE, STDLIB } from "../src/index.js"
+import { FRAMEWORK, KrakenClient, KRAKEN, STDLIB } from "../src/index.js"
 import { SuiTransactionBlockResponse } from "@mysten/sui.js/client";
 import { codegen } from '@typemove/sui/codegen';
 import path from 'path';
@@ -19,7 +19,7 @@ describe("Interact with Kraken SDK on localnet" ,async () => {
     
     const keypair = Ed25519Keypair.fromSecretKey(Uint8Array.from(Buffer.from("AM06bExREdFceWiExfSacTJ+64AQtFl7SRkSiTmAqh6F", "base64")).slice(1));
     const { execSync } = require('child_process');
-    const abisPath = path.join(__dirname, '../src/test/abis/kraken.json');
+    const abisPath = path.join(__dirname, './abis/kraken.json');
     const abisData = JSON.parse(fs.readFileSync(abisPath, 'utf8'));
     const kraken = new KrakenClient("localnet", "", abisData.account.address, keypair.toSuiAddress(), "");
     // nftIds.length determines the number of nfts to issue

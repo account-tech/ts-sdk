@@ -19,7 +19,9 @@
     "lint": "pnpm run eslint:check && pnpm run prettier:check",
     "lint:fix": "pnpm run eslint:fix && pnpm run prettier:fix",
     "test": "bun run src/test/e2e.ts",
-    "prepare-package-abi": "bun run src/test/prepare_package_abi.ts"
+    "prepare-package-abi-for-tests": "bun run test/preparePackageAbi.ts",
+    "get-account": "bun run test/getAccount.ts",
+    "generate-abis": "bun run src/utils/generateAbis.ts"
   },
   "dependencies": {
     "@mysten/kiosk": "^0.8.10",

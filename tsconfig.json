@@ -35,6 +35,6 @@
         "experimentalDecorators": true,                     /* Enables experimental support for decorators */
         "emitDecoratorMetadata": true                       /* Enables experimental support for emitting type metadata for decorators */
     },
-        "include": ["src/**/*", "test/e2e.test.ts"],
+        "include": ["src/**/*", "test/e2e.test.ts", "test/preparePackageAbi.ts", "test/getAccount.ts"],
         "exclude": ["node_modules", "dist", "**/*.spec.ts"],
 }
