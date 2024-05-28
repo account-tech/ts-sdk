@@ -1,14 +1,16 @@
+import { Ed25519Keypair } from "@mysten/sui.js/keypairs/ed25519";
 import { KrakenClient } from "../src/client.js"
 
 (async () => {
+    const keypair = Ed25519Keypair.fromSecretKey(Uint8Array.from(Buffer.from("AM06bExREdFceWiExfSacTJ+64AQtFl7SRkSiTmAqh6F", "base64")).slice(1));
     const kraken = new KrakenClient(
         "testnet",
         "",
-        "0x06b1b13873c2a5eea9e440af1c2478a90adf6b15c95c33381d3ebb350a1e60f4",
-        "0x67fa77f2640ca7e0141648bf008e13945263efad6dc429303ad49c740e2084a9",
+        "0xa5f326dd55a1b7fa179787e279c56af1c082663685c152d89fcf519f5fbfc744",
+        keypair.toSuiAddress(),
         ""
     )
 
-    const account = await kraken.getAccount("0x67fa77f2640ca7e0141648bf008e13945263efad6dc429303ad49c740e2084a9");
+    const account = await kraken.getAccount(keypair.toSuiAddress());    
     console.log(account);
 })();

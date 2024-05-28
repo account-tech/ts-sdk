@@ -4,8 +4,8 @@ import { SuiClient, getFullnodeUrl } from "@mysten/sui.js/client";
 import { TransactionBlock, TransactionResult } from "@mysten/sui.js/transactions";
 import { KioskClient, Network } from "@mysten/kiosk";
 import { defaultMoveCoder } from "@typemove/sui";
-import { account, multisig } from "../test/types/kraken.js";
-import { kiosk } from "../test/types/0x2.js";
+import { account, multisig } from "./types/sui/0xa5f326dd55a1b7fa179787e279c56af1c082663685c152d89fcf519f5fbfc744.js";
+import { kiosk } from "./types/sui/0x2.js";
 
 export class KrakenClient {
 	/**
@@ -202,6 +202,7 @@ export class KrakenClient {
 			}
 		}
 		
+		console.log(data[0].data?.content);
 		const accountDecoded = await defaultMoveCoder().decodedType(data[0].data?.content, account.Account.type())
 		const multisigIds = typeof(accountDecoded!.multisigs.contents) == "string" ? [accountDecoded!.multisigs.contents] : accountDecoded!.multisigs.contents;
 		
