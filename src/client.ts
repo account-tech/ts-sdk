@@ -5,7 +5,8 @@ import { TransactionBlock, TransactionResult } from "@mysten/sui.js/transactions
 import { KioskClient, Network } from "@mysten/kiosk";
 import { defaultMoveCoder } from "@typemove/sui";
 import { ANY_TYPE } from "@typemove/move";
-import { account, multisig } from "./types/sui/kraken.js";
+import { account, multisig } from "../src/test/types/kraken.js";
+import { kiosk } from "../src/test/types/0x2.js";
 
 export class KrakenClient {
 	/**
@@ -367,56 +368,7 @@ export class KrakenClient {
 
 	// === Kiosk ===
 
-	async getKiosks(): Promise<Kiosk[]> {
-		let capIds: string[] = [];
-		let kioskIds: string[] = [];
-		let cursor = null;
-		let page = true;
-
-		while (page) {
-			const { data, nextCursor, hasNextPage } = await this.client.getOwnedObjects({
-				owner: this.multisigId,
-				filter: { StructType: `${FRAMEWORK}::kiosk::KioskOwnerCap` },
-				options: { showContent: true },
-				cursor
-			});
-
-			capIds = capIds.concat(data.map(cap => cap.data?.objectId!));
-			kioskIds = kioskIds.concat(data.map((cap: any) => cap.data?.content?.fields.for));
-			cursor = nextCursor;
-			page = hasNextPage;
-		}
-		
-		let kiosks: Kiosk[] = [];
-
-		for (let i = 0; i < kioskIds.length; i += 25) {
-			const ids = kioskIds.slice(i, i + 25);
-			const objects = await this.client.multiGetObjects({
-				ids,
-				options: { showContent: true }
-			});
-			kiosks = kiosks.concat(objects.map((obj: any, index) => {
-				return {
-					cap: capIds[i + index],
-					kiosk: kioskIds[i + index],
-					profits: obj.data?.content.fields.profits,
-					itemCount: obj.data?.content.fields.item_count,
-				}
-			}));
-		}
-
-		return kiosks;
-	}
-
-	// return the Kiosk (must be shared)
-	createKiosk(tx: TransactionBlock): TransactionResult {
-		return tx.moveCall({
-			target: `${this.packageId}::kiosk::new`,
-			arguments: [tx.object(this.multisigId)],
-		});
-	}	
-	
-	async getPolicy(nftType: string): Promise<TransferPolicy> {
+	initKioskClient(): KioskClient {
 		let network: Network;
 		if (this.network == "mainnet") {
 			network = Network.MAINNET;
@@ -425,11 +377,42 @@ export class KrakenClient {
 		} else {
 			network = Network.CUSTOM;
 		}
-		const kioskClient = new KioskClient({
+
+		return new KioskClient({
 			client: this.client,
 			network,
 		});
+	}
 
+	async getKiosks(): Promise<Kiosk[]> {
+		const kioskClient = this.initKioskClient();
+		const { kioskOwnerCaps } = await kioskClient.getOwnedKiosks({address: this.multisigId});
+		
+		let kiosks: Kiosk[] = [];
+
+		for (let i = 0; i < kioskOwnerCaps.length; i += 25) {
+			const ids = kioskOwnerCaps.map(cap => cap.kioskId).slice(i, i + 25);
+			const kioskObjects = await this.client.multiGetObjects({
+				ids,
+				options: { showContent: true }
+			});
+			
+			kiosks = kiosks.concat(await Promise.all(kioskObjects.map(async (obj: any, index) => {
+				const kioskDecoded = await defaultMoveCoder().decodedType(obj.data?.content, kiosk.Kiosk.type());
+				return {
+					cap: kioskOwnerCaps[i + index].objectId,
+					kiosk: kioskOwnerCaps[i + index].kioskId,
+					profits: kioskDecoded!.profits,
+					itemCount: kioskDecoded!.item_count,
+				}
+			})));
+		}
+
+		return kiosks;
+	}
+	
+	async getPolicy(nftType: string): Promise<TransferPolicy> {
+		const kioskClient = this.initKioskClient();
 		const policies = await kioskClient.getTransferPolicies({type: nftType});
 
 		return {
@@ -439,6 +422,14 @@ export class KrakenClient {
 			isLocked: policies[0].rules.find(rule => rule.includes("kiosk_lock_rule")) ? true : false,
 		};
 	}
+
+	// return the Kiosk (must be shared)
+	createKiosk(tx: TransactionBlock): TransactionResult {
+		return tx.moveCall({
+			target: `${this.packageId}::kiosk::new`,
+			arguments: [tx.object(this.multisigId)],
+		});
+	}	
 
 	// 1. create a Kiosk if the Multisig doesn't have one OR
 	// 1(bis) get the Kiosk if it already exists

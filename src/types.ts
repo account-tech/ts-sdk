@@ -26,7 +26,7 @@ export type Account = {
 export type Kiosk = {
     cap: string,
     kiosk: string,
-    profits: number,
+    profits: bigint,
     itemCount: number,
 }
 
