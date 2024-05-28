@@ -2,3 +2,5 @@
 /* tslint:disable */
 /* eslint-disable */
 export * as _kraken from './kraken.js'
+export * as _0x1 from './0x1.js'
+export * as _0x2 from './0x2.js'

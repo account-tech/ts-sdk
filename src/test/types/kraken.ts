@@ -2,7 +2,7 @@
 /* tslint:disable */
 /* eslint-disable */
 
-/* Generated types for 0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4, original address 0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4 */
+/* Generated types for 0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb, original address 0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb */
 
 import { TypeDescriptor, ANY_TYPE } from "@typemove/move";
 import { MoveCoder, TypedEventInstance } from "@typemove/sui";
@@ -39,7 +39,7 @@ export namespace account {
 
   export namespace Account {
     export const TYPE_QNAME =
-      "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::account::Account";
+      "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::account::Account";
 
     const TYPE = new TypeDescriptor<Account>(Account.TYPE_QNAME);
 
@@ -55,7 +55,7 @@ export namespace account {
 
   export namespace Invite {
     export const TYPE_QNAME =
-      "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::account::Invite";
+      "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::account::Invite";
 
     const TYPE = new TypeDescriptor<Invite>(Invite.TYPE_QNAME);
 
@@ -79,7 +79,7 @@ export namespace account {
       // @ts-ignore
       return tx.moveCall({
         target:
-          "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::account::accept_invite",
+          "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::account::accept_invite",
         arguments: _args,
       });
     }
@@ -93,7 +93,7 @@ export namespace account {
       // @ts-ignore
       return tx.moveCall({
         target:
-          "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::account::destroy",
+          "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::account::destroy",
         arguments: _args,
       });
     }
@@ -111,7 +111,7 @@ export namespace account {
       // @ts-ignore
       return tx.moveCall({
         target:
-          "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::account::join_multisig",
+          "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::account::join_multisig",
         arguments: _args,
       });
     }
@@ -129,7 +129,7 @@ export namespace account {
       // @ts-ignore
       return tx.moveCall({
         target:
-          "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::account::leave_multisig",
+          "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::account::leave_multisig",
         arguments: _args,
       });
     }
@@ -143,7 +143,7 @@ export namespace account {
       // @ts-ignore
       return tx.moveCall({
         target:
-          "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::account::multisig",
+          "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::account::multisig",
         arguments: _args,
       });
     }
@@ -157,7 +157,7 @@ export namespace account {
       // @ts-ignore
       return tx.moveCall({
         target:
-          "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::account::multisigs",
+          "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::account::multisigs",
         arguments: _args,
       });
     }
@@ -172,7 +172,7 @@ export namespace account {
       // @ts-ignore
       return tx.moveCall({
         target:
-          "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::account::new",
+          "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::account::new",
         arguments: _args,
       });
     }
@@ -186,7 +186,7 @@ export namespace account {
       // @ts-ignore
       return tx.moveCall({
         target:
-          "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::account::profile_picture",
+          "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::account::profile_picture",
         arguments: _args,
       });
     }
@@ -200,7 +200,7 @@ export namespace account {
       // @ts-ignore
       return tx.moveCall({
         target:
-          "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::account::refuse_invite",
+          "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::account::refuse_invite",
         arguments: _args,
       });
     }
@@ -218,7 +218,7 @@ export namespace account {
       // @ts-ignore
       return tx.moveCall({
         target:
-          "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::account::send_invite",
+          "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::account::send_invite",
         arguments: _args,
       });
     }
@@ -232,7 +232,7 @@ export namespace account {
       // @ts-ignore
       return tx.moveCall({
         target:
-          "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::account::username",
+          "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::account::username",
         arguments: _args,
       });
     }
@@ -438,7 +438,7 @@ export namespace coin_operations {
       // @ts-ignore
       return tx.moveCall({
         target:
-          "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::coin_operations::merge_coins",
+          "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::coin_operations::merge_coins",
         arguments: _args,
         typeArguments: [
           typeof typeArguments[0] === "string"
@@ -465,7 +465,7 @@ export namespace coin_operations {
       // @ts-ignore
       return tx.moveCall({
         target:
-          "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::coin_operations::split_coins",
+          "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::coin_operations::split_coins",
         arguments: _args,
         typeArguments: [
           typeof typeArguments[0] === "string"
@@ -529,7 +529,7 @@ export namespace config {
 
   export namespace Modify {
     export const TYPE_QNAME =
-      "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::config::Modify";
+      "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::config::Modify";
 
     const TYPE = new TypeDescriptor<Modify>(Modify.TYPE_QNAME);
 
@@ -556,7 +556,7 @@ export namespace config {
       // @ts-ignore
       return tx.moveCall({
         target:
-          "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::config::execute_modify",
+          "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::config::execute_modify",
         arguments: _args,
       });
     }
@@ -599,7 +599,7 @@ export namespace config {
       // @ts-ignore
       return tx.moveCall({
         target:
-          "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::config::propose_modify",
+          "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::config::propose_modify",
         arguments: _args,
       });
     }
@@ -661,7 +661,7 @@ export namespace kiosk {
 
   export namespace List {
     export const TYPE_QNAME =
-      "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::kiosk::List";
+      "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::kiosk::List";
 
     const TYPE = new TypeDescriptor<List>(List.TYPE_QNAME);
 
@@ -678,7 +678,7 @@ export namespace kiosk {
 
   export namespace Transfer {
     export const TYPE_QNAME =
-      "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::kiosk::Transfer";
+      "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::kiosk::Transfer";
 
     const TYPE = new TypeDescriptor<Transfer>(Transfer.TYPE_QNAME);
 
@@ -705,7 +705,7 @@ export namespace kiosk {
       // @ts-ignore
       return tx.moveCall({
         target:
-          "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::kiosk::borrow_cap_list",
+          "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::kiosk::borrow_cap_list",
         arguments: _args,
       });
     }
@@ -726,7 +726,7 @@ export namespace kiosk {
       // @ts-ignore
       return tx.moveCall({
         target:
-          "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::kiosk::borrow_cap_transfer",
+          "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::kiosk::borrow_cap_transfer",
         arguments: _args,
       });
     }
@@ -747,7 +747,7 @@ export namespace kiosk {
       // @ts-ignore
       return tx.moveCall({
         target:
-          "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::kiosk::complete_list",
+          "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::kiosk::complete_list",
         arguments: _args,
       });
     }
@@ -766,7 +766,7 @@ export namespace kiosk {
       // @ts-ignore
       return tx.moveCall({
         target:
-          "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::kiosk::complete_request",
+          "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::kiosk::complete_request",
         arguments: _args,
         typeArguments: [
           typeof typeArguments[0] === "string"
@@ -792,7 +792,7 @@ export namespace kiosk {
       // @ts-ignore
       return tx.moveCall({
         target:
-          "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::kiosk::complete_transfer_to",
+          "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::kiosk::complete_transfer_to",
         arguments: _args,
       });
     }
@@ -821,7 +821,7 @@ export namespace kiosk {
       // @ts-ignore
       return tx.moveCall({
         target:
-          "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::kiosk::delist",
+          "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::kiosk::delist",
         arguments: _args,
         typeArguments: [
           typeof typeArguments[0] === "string"
@@ -848,7 +848,7 @@ export namespace kiosk {
       // @ts-ignore
       return tx.moveCall({
         target:
-          "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::kiosk::list",
+          "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::kiosk::list",
         arguments: _args,
         typeArguments: [
           typeof typeArguments[0] === "string"
@@ -867,7 +867,7 @@ export namespace kiosk {
       // @ts-ignore
       return tx.moveCall({
         target:
-          "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::kiosk::new",
+          "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::kiosk::new",
         arguments: _args,
       });
     }
@@ -907,7 +907,7 @@ export namespace kiosk {
       // @ts-ignore
       return tx.moveCall({
         target:
-          "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::kiosk::propose_list",
+          "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::kiosk::propose_list",
         arguments: _args,
       });
     }
@@ -947,7 +947,7 @@ export namespace kiosk {
       // @ts-ignore
       return tx.moveCall({
         target:
-          "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::kiosk::propose_transfer_to",
+          "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::kiosk::propose_transfer_to",
         arguments: _args,
       });
     }
@@ -982,7 +982,7 @@ export namespace kiosk {
       // @ts-ignore
       return tx.moveCall({
         target:
-          "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::kiosk::transfer_from",
+          "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::kiosk::transfer_from",
         arguments: _args,
         typeArguments: [
           typeof typeArguments[0] === "string"
@@ -1019,7 +1019,7 @@ export namespace kiosk {
       // @ts-ignore
       return tx.moveCall({
         target:
-          "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::kiosk::transfer_to",
+          "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::kiosk::transfer_to",
         arguments: _args,
         typeArguments: [
           typeof typeArguments[0] === "string"
@@ -1045,7 +1045,7 @@ export namespace kiosk {
       // @ts-ignore
       return tx.moveCall({
         target:
-          "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::kiosk::withdraw_profits",
+          "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::kiosk::withdraw_profits",
         arguments: _args,
       });
     }
@@ -1332,7 +1332,7 @@ export namespace move_call {
 
   export namespace MoveCall {
     export const TYPE_QNAME =
-      "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::move_call::MoveCall";
+      "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::move_call::MoveCall";
 
     const TYPE = new TypeDescriptor<MoveCall>(MoveCall.TYPE_QNAME);
 
@@ -1352,7 +1352,7 @@ export namespace move_call {
       // @ts-ignore
       return tx.moveCall({
         target:
-          "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::move_call::execute_move_call",
+          "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::move_call::execute_move_call",
         arguments: _args,
       });
     }
@@ -1392,7 +1392,7 @@ export namespace move_call {
       // @ts-ignore
       return tx.moveCall({
         target:
-          "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::move_call::propose_move_call",
+          "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::move_call::propose_move_call",
         arguments: _args,
       });
     }
@@ -1447,7 +1447,7 @@ export namespace multisig {
 
   export namespace Action {
     export const TYPE_QNAME =
-      "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::multisig::Action";
+      "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::multisig::Action";
 
     const TYPE = new TypeDescriptor<Action<any>>(Action.TYPE_QNAME);
 
@@ -1464,7 +1464,7 @@ export namespace multisig {
 
   export namespace ActionKey {
     export const TYPE_QNAME =
-      "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::multisig::ActionKey";
+      "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::multisig::ActionKey";
 
     const TYPE = new TypeDescriptor<ActionKey>(ActionKey.TYPE_QNAME);
 
@@ -1488,7 +1488,7 @@ export namespace multisig {
 
   export namespace Multisig {
     export const TYPE_QNAME =
-      "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::multisig::Multisig";
+      "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::multisig::Multisig";
 
     const TYPE = new TypeDescriptor<Multisig>(Multisig.TYPE_QNAME);
 
@@ -1507,7 +1507,7 @@ export namespace multisig {
 
   export namespace Proposal {
     export const TYPE_QNAME =
-      "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::multisig::Proposal";
+      "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::multisig::Proposal";
 
     const TYPE = new TypeDescriptor<Proposal>(Proposal.TYPE_QNAME);
 
@@ -1528,7 +1528,7 @@ export namespace multisig {
       // @ts-ignore
       return tx.moveCall({
         target:
-          "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::multisig::action_mut",
+          "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::multisig::action_mut",
         arguments: _args,
         typeArguments: [
           typeof typeArguments[0] === "string"
@@ -1551,7 +1551,7 @@ export namespace multisig {
       // @ts-ignore
       return tx.moveCall({
         target:
-          "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::multisig::add_members",
+          "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::multisig::add_members",
         arguments: _args,
       });
     }
@@ -1565,7 +1565,7 @@ export namespace multisig {
       // @ts-ignore
       return tx.moveCall({
         target:
-          "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::multisig::addr",
+          "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::multisig::addr",
         arguments: _args,
       });
     }
@@ -1583,7 +1583,7 @@ export namespace multisig {
       // @ts-ignore
       return tx.moveCall({
         target:
-          "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::multisig::approve_proposal",
+          "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::multisig::approve_proposal",
         arguments: _args,
       });
     }
@@ -1597,7 +1597,7 @@ export namespace multisig {
       // @ts-ignore
       return tx.moveCall({
         target:
-          "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::multisig::approved",
+          "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::multisig::approved",
         arguments: _args,
       });
     }
@@ -1611,7 +1611,7 @@ export namespace multisig {
       // @ts-ignore
       return tx.moveCall({
         target:
-          "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::multisig::assert_is_member",
+          "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::multisig::assert_is_member",
         arguments: _args,
       });
     }
@@ -1625,7 +1625,7 @@ export namespace multisig {
       // @ts-ignore
       return tx.moveCall({
         target:
-          "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::multisig::clean_proposals",
+          "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::multisig::clean_proposals",
         arguments: _args,
       });
     }
@@ -1660,7 +1660,7 @@ export namespace multisig {
       // @ts-ignore
       return tx.moveCall({
         target:
-          "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::multisig::create_proposal",
+          "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::multisig::create_proposal",
         arguments: _args,
         typeArguments: [
           typeof typeArguments[0] === "string"
@@ -1683,7 +1683,7 @@ export namespace multisig {
       // @ts-ignore
       return tx.moveCall({
         target:
-          "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::multisig::delete_proposal",
+          "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::multisig::delete_proposal",
         arguments: _args,
       });
     }
@@ -1697,7 +1697,7 @@ export namespace multisig {
       // @ts-ignore
       return tx.moveCall({
         target:
-          "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::multisig::description",
+          "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::multisig::description",
         arguments: _args,
       });
     }
@@ -1719,7 +1719,7 @@ export namespace multisig {
       // @ts-ignore
       return tx.moveCall({
         target:
-          "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::multisig::execute_proposal",
+          "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::multisig::execute_proposal",
         arguments: _args,
         typeArguments: [
           typeof typeArguments[0] === "string"
@@ -1738,7 +1738,7 @@ export namespace multisig {
       // @ts-ignore
       return tx.moveCall({
         target:
-          "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::multisig::execution_time",
+          "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::multisig::execution_time",
         arguments: _args,
       });
     }
@@ -1752,7 +1752,7 @@ export namespace multisig {
       // @ts-ignore
       return tx.moveCall({
         target:
-          "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::multisig::expiration_epoch",
+          "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::multisig::expiration_epoch",
         arguments: _args,
       });
     }
@@ -1766,7 +1766,7 @@ export namespace multisig {
       // @ts-ignore
       return tx.moveCall({
         target:
-          "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::multisig::members",
+          "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::multisig::members",
         arguments: _args,
       });
     }
@@ -1780,7 +1780,7 @@ export namespace multisig {
       // @ts-ignore
       return tx.moveCall({
         target:
-          "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::multisig::name",
+          "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::multisig::name",
         arguments: _args,
       });
     }
@@ -1794,7 +1794,7 @@ export namespace multisig {
       // @ts-ignore
       return tx.moveCall({
         target:
-          "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::multisig::new",
+          "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::multisig::new",
         arguments: _args,
       });
     }
@@ -1808,7 +1808,7 @@ export namespace multisig {
       // @ts-ignore
       return tx.moveCall({
         target:
-          "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::multisig::num_of_proposals",
+          "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::multisig::num_of_proposals",
         arguments: _args,
       });
     }
@@ -1826,7 +1826,7 @@ export namespace multisig {
       // @ts-ignore
       return tx.moveCall({
         target:
-          "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::multisig::proposal",
+          "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::multisig::proposal",
         arguments: _args,
       });
     }
@@ -1844,7 +1844,7 @@ export namespace multisig {
       // @ts-ignore
       return tx.moveCall({
         target:
-          "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::multisig::remove_approval",
+          "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::multisig::remove_approval",
         arguments: _args,
       });
     }
@@ -1862,7 +1862,7 @@ export namespace multisig {
       // @ts-ignore
       return tx.moveCall({
         target:
-          "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::multisig::remove_members",
+          "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::multisig::remove_members",
         arguments: _args,
       });
     }
@@ -1880,7 +1880,7 @@ export namespace multisig {
       // @ts-ignore
       return tx.moveCall({
         target:
-          "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::multisig::set_name",
+          "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::multisig::set_name",
         arguments: _args,
       });
     }
@@ -1898,7 +1898,7 @@ export namespace multisig {
       // @ts-ignore
       return tx.moveCall({
         target:
-          "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::multisig::set_threshold",
+          "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::multisig::set_threshold",
         arguments: _args,
       });
     }
@@ -1912,7 +1912,7 @@ export namespace multisig {
       // @ts-ignore
       return tx.moveCall({
         target:
-          "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::multisig::share",
+          "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::multisig::share",
         arguments: _args,
       });
     }
@@ -1926,7 +1926,7 @@ export namespace multisig {
       // @ts-ignore
       return tx.moveCall({
         target:
-          "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::multisig::threshold",
+          "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::multisig::threshold",
         arguments: _args,
       });
     }
@@ -1940,7 +1940,7 @@ export namespace multisig {
       // @ts-ignore
       return tx.moveCall({
         target:
-          "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::multisig::uid_mut",
+          "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::multisig::uid_mut",
         arguments: _args,
       });
     }
@@ -1955,7 +1955,7 @@ export namespace multisig {
       // @ts-ignore
       return tx.moveCall({
         target:
-          "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::multisig::unpack_action",
+          "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::multisig::unpack_action",
         arguments: _args,
         typeArguments: [
           typeof typeArguments[0] === "string"
@@ -2406,7 +2406,7 @@ export namespace owned {
 
   export namespace Borrow {
     export const TYPE_QNAME =
-      "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::owned::Borrow";
+      "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::owned::Borrow";
 
     const TYPE = new TypeDescriptor<Borrow>(Borrow.TYPE_QNAME);
 
@@ -2421,7 +2421,7 @@ export namespace owned {
 
   export namespace Withdraw {
     export const TYPE_QNAME =
-      "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::owned::Withdraw";
+      "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::owned::Withdraw";
 
     const TYPE = new TypeDescriptor<Withdraw>(Withdraw.TYPE_QNAME);
 
@@ -2449,7 +2449,7 @@ export namespace owned {
       // @ts-ignore
       return tx.moveCall({
         target:
-          "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::owned::borrow",
+          "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::owned::borrow",
         arguments: _args,
         typeArguments: [
           typeof typeArguments[0] === "string"
@@ -2468,7 +2468,7 @@ export namespace owned {
       // @ts-ignore
       return tx.moveCall({
         target:
-          "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::owned::complete_borrow",
+          "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::owned::complete_borrow",
         arguments: _args,
       });
     }
@@ -2482,7 +2482,7 @@ export namespace owned {
       // @ts-ignore
       return tx.moveCall({
         target:
-          "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::owned::complete_withdraw",
+          "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::owned::complete_withdraw",
         arguments: _args,
       });
     }
@@ -2496,7 +2496,7 @@ export namespace owned {
       // @ts-ignore
       return tx.moveCall({
         target:
-          "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::owned::new_borrow",
+          "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::owned::new_borrow",
         arguments: _args,
       });
     }
@@ -2510,7 +2510,7 @@ export namespace owned {
       // @ts-ignore
       return tx.moveCall({
         target:
-          "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::owned::new_withdraw",
+          "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::owned::new_withdraw",
         arguments: _args,
       });
     }
@@ -2532,7 +2532,7 @@ export namespace owned {
       // @ts-ignore
       return tx.moveCall({
         target:
-          "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::owned::put_back",
+          "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::owned::put_back",
         arguments: _args,
         typeArguments: [
           typeof typeArguments[0] === "string"
@@ -2559,7 +2559,7 @@ export namespace owned {
       // @ts-ignore
       return tx.moveCall({
         target:
-          "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::owned::withdraw",
+          "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::owned::withdraw",
         arguments: _args,
         typeArguments: [
           typeof typeArguments[0] === "string"
@@ -2703,7 +2703,7 @@ export namespace payments {
 
   export namespace Pay {
     export const TYPE_QNAME =
-      "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::payments::Pay";
+      "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::payments::Pay";
 
     const TYPE = new TypeDescriptor<Pay>(Pay.TYPE_QNAME);
 
@@ -2723,7 +2723,7 @@ export namespace payments {
 
   export namespace Stream {
     export const TYPE_QNAME =
-      "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::payments::Stream";
+      "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::payments::Stream";
 
     const TYPE = new TypeDescriptor<Stream<any>>(Stream.TYPE_QNAME);
 
@@ -2750,7 +2750,7 @@ export namespace payments {
       // @ts-ignore
       return tx.moveCall({
         target:
-          "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::payments::cancel_payment",
+          "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::payments::cancel_payment",
         arguments: _args,
         typeArguments: [
           typeof typeArguments[0] === "string"
@@ -2770,7 +2770,7 @@ export namespace payments {
       // @ts-ignore
       return tx.moveCall({
         target:
-          "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::payments::complete_stream",
+          "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::payments::complete_stream",
         arguments: _args,
         typeArguments: [
           typeof typeArguments[0] === "string"
@@ -2797,7 +2797,7 @@ export namespace payments {
       // @ts-ignore
       return tx.moveCall({
         target:
-          "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::payments::create_stream",
+          "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::payments::create_stream",
         arguments: _args,
         typeArguments: [
           typeof typeArguments[0] === "string"
@@ -2817,7 +2817,7 @@ export namespace payments {
       // @ts-ignore
       return tx.moveCall({
         target:
-          "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::payments::pay",
+          "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::payments::pay",
         arguments: _args,
         typeArguments: [
           typeof typeArguments[0] === "string"
@@ -2865,7 +2865,7 @@ export namespace payments {
       // @ts-ignore
       return tx.moveCall({
         target:
-          "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::payments::propose_pay",
+          "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::payments::propose_pay",
         arguments: _args,
       });
     }
@@ -2978,7 +2978,7 @@ export namespace transfers {
 
   export namespace Deliver {
     export const TYPE_QNAME =
-      "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::transfers::Deliver";
+      "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::transfers::Deliver";
 
     const TYPE = new TypeDescriptor<Deliver>(Deliver.TYPE_QNAME);
 
@@ -2994,7 +2994,7 @@ export namespace transfers {
 
   export namespace Delivery {
     export const TYPE_QNAME =
-      "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::transfers::Delivery";
+      "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::transfers::Delivery";
 
     const TYPE = new TypeDescriptor<Delivery>(Delivery.TYPE_QNAME);
 
@@ -3010,7 +3010,7 @@ export namespace transfers {
 
   export namespace DeliveryCap {
     export const TYPE_QNAME =
-      "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::transfers::DeliveryCap";
+      "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::transfers::DeliveryCap";
 
     const TYPE = new TypeDescriptor<DeliveryCap>(DeliveryCap.TYPE_QNAME);
 
@@ -3026,7 +3026,7 @@ export namespace transfers {
 
   export namespace Send {
     export const TYPE_QNAME =
-      "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::transfers::Send";
+      "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::transfers::Send";
 
     const TYPE = new TypeDescriptor<Send>(Send.TYPE_QNAME);
 
@@ -3061,7 +3061,7 @@ export namespace transfers {
       // @ts-ignore
       return tx.moveCall({
         target:
-          "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::transfers::add_to_delivery",
+          "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::transfers::add_to_delivery",
         arguments: _args,
         typeArguments: [
           typeof typeArguments[0] === "string"
@@ -3084,7 +3084,7 @@ export namespace transfers {
       // @ts-ignore
       return tx.moveCall({
         target:
-          "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::transfers::cancel_delivery",
+          "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::transfers::cancel_delivery",
         arguments: _args,
       });
     }
@@ -3103,7 +3103,7 @@ export namespace transfers {
       // @ts-ignore
       return tx.moveCall({
         target:
-          "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::transfers::claim",
+          "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::transfers::claim",
         arguments: _args,
         typeArguments: [
           typeof typeArguments[0] === "string"
@@ -3126,7 +3126,7 @@ export namespace transfers {
       // @ts-ignore
       return tx.moveCall({
         target:
-          "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::transfers::complete_delivery",
+          "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::transfers::complete_delivery",
         arguments: _args,
       });
     }
@@ -3140,7 +3140,7 @@ export namespace transfers {
       // @ts-ignore
       return tx.moveCall({
         target:
-          "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::transfers::complete_send",
+          "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::transfers::complete_send",
         arguments: _args,
       });
     }
@@ -3153,7 +3153,7 @@ export namespace transfers {
       // @ts-ignore
       return tx.moveCall({
         target:
-          "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::transfers::create_delivery",
+          "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::transfers::create_delivery",
         arguments: _args,
       });
     }
@@ -3171,7 +3171,7 @@ export namespace transfers {
       // @ts-ignore
       return tx.moveCall({
         target:
-          "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::transfers::deliver",
+          "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::transfers::deliver",
         arguments: _args,
       });
     }
@@ -3208,7 +3208,7 @@ export namespace transfers {
       // @ts-ignore
       return tx.moveCall({
         target:
-          "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::transfers::propose_delivery",
+          "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::transfers::propose_delivery",
         arguments: _args,
       });
     }
@@ -3245,7 +3245,7 @@ export namespace transfers {
       // @ts-ignore
       return tx.moveCall({
         target:
-          "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::transfers::propose_send",
+          "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::transfers::propose_send",
         arguments: _args,
       });
     }
@@ -3264,7 +3264,7 @@ export namespace transfers {
       // @ts-ignore
       return tx.moveCall({
         target:
-          "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::transfers::retrieve",
+          "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::transfers::retrieve",
         arguments: _args,
         typeArguments: [
           typeof typeArguments[0] === "string"
@@ -3291,7 +3291,7 @@ export namespace transfers {
       // @ts-ignore
       return tx.moveCall({
         target:
-          "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::transfers::send",
+          "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::transfers::send",
         arguments: _args,
         typeArguments: [
           typeof typeArguments[0] === "string"
@@ -3522,7 +3522,7 @@ export namespace upgrade_policies {
 
   export namespace Policy {
     export const TYPE_QNAME =
-      "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::upgrade_policies::Policy";
+      "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::upgrade_policies::Policy";
 
     const TYPE = new TypeDescriptor<Policy>(Policy.TYPE_QNAME);
 
@@ -3538,7 +3538,7 @@ export namespace upgrade_policies {
 
   export namespace Upgrade {
     export const TYPE_QNAME =
-      "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::upgrade_policies::Upgrade";
+      "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::upgrade_policies::Upgrade";
 
     const TYPE = new TypeDescriptor<Upgrade>(Upgrade.TYPE_QNAME);
 
@@ -3556,7 +3556,7 @@ export namespace upgrade_policies {
 
   export namespace UpgradeLock {
     export const TYPE_QNAME =
-      "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::upgrade_policies::UpgradeLock";
+      "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::upgrade_policies::UpgradeLock";
 
     const TYPE = new TypeDescriptor<UpgradeLock>(UpgradeLock.TYPE_QNAME);
 
@@ -3583,7 +3583,7 @@ export namespace upgrade_policies {
       // @ts-ignore
       return tx.moveCall({
         target:
-          "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::upgrade_policies::complete_upgrade",
+          "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::upgrade_policies::complete_upgrade",
         arguments: _args,
       });
     }
@@ -3607,7 +3607,7 @@ export namespace upgrade_policies {
       // @ts-ignore
       return tx.moveCall({
         target:
-          "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::upgrade_policies::execute_policy",
+          "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::upgrade_policies::execute_policy",
         arguments: _args,
       });
     }
@@ -3631,7 +3631,7 @@ export namespace upgrade_policies {
       // @ts-ignore
       return tx.moveCall({
         target:
-          "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::upgrade_policies::execute_upgrade",
+          "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::upgrade_policies::execute_upgrade",
         arguments: _args,
       });
     }
@@ -3659,7 +3659,7 @@ export namespace upgrade_policies {
       // @ts-ignore
       return tx.moveCall({
         target:
-          "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::upgrade_policies::lock_cap",
+          "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::upgrade_policies::lock_cap",
         arguments: _args,
       });
     }
@@ -3699,7 +3699,7 @@ export namespace upgrade_policies {
       // @ts-ignore
       return tx.moveCall({
         target:
-          "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::upgrade_policies::propose_policy",
+          "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::upgrade_policies::propose_policy",
         arguments: _args,
       });
     }
@@ -3739,7 +3739,7 @@ export namespace upgrade_policies {
       // @ts-ignore
       return tx.moveCall({
         target:
-          "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4::upgrade_policies::propose_upgrade",
+          "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb::upgrade_policies::propose_upgrade",
         arguments: _args,
       });
     }
@@ -3888,7 +3888,7 @@ export namespace upgrade_policies {
 }
 
 const MODULES = JSON.parse(
-  '{"account":{"fileFormatVersion":6,"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","name":"account","friends":[],"structs":{"Account":{"abilities":{"abilities":["Key"]},"typeParameters":[],"fields":[{"name":"id","type":{"Struct":{"address":"0x2","module":"object","name":"UID","typeArguments":[]}}},{"name":"username","type":{"Struct":{"address":"0x1","module":"string","name":"String","typeArguments":[]}}},{"name":"profile_picture","type":{"Struct":{"address":"0x1","module":"string","name":"String","typeArguments":[]}}},{"name":"multisigs","type":{"Struct":{"address":"0x2","module":"vec_set","name":"VecSet","typeArguments":[{"Struct":{"address":"0x2","module":"object","name":"ID","typeArguments":[]}}]}}}]},"Invite":{"abilities":{"abilities":["Key"]},"typeParameters":[],"fields":[{"name":"id","type":{"Struct":{"address":"0x2","module":"object","name":"UID","typeArguments":[]}}},{"name":"multisig","type":{"Struct":{"address":"0x2","module":"object","name":"ID","typeArguments":[]}}}]}},"exposedFunctions":{"accept_invite":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"MutableReference":{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"account","name":"Account","typeArguments":[]}}},{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"account","name":"Invite","typeArguments":[]}}],"return":[]},"destroy":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"account","name":"Account","typeArguments":[]}}],"return":[]},"join_multisig":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"MutableReference":{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"account","name":"Account","typeArguments":[]}}},{"Struct":{"address":"0x2","module":"object","name":"ID","typeArguments":[]}}],"return":[]},"leave_multisig":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"MutableReference":{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"account","name":"Account","typeArguments":[]}}},{"Struct":{"address":"0x2","module":"object","name":"ID","typeArguments":[]}}],"return":[]},"multisig":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"Reference":{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"account","name":"Invite","typeArguments":[]}}}],"return":[{"Struct":{"address":"0x2","module":"object","name":"ID","typeArguments":[]}}]},"multisigs":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"Reference":{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"account","name":"Account","typeArguments":[]}}}],"return":[{"Vector":{"Struct":{"address":"0x2","module":"object","name":"ID","typeArguments":[]}}}]},"new":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"Struct":{"address":"0x1","module":"string","name":"String","typeArguments":[]}},{"Struct":{"address":"0x1","module":"string","name":"String","typeArguments":[]}},{"MutableReference":{"Struct":{"address":"0x2","module":"tx_context","name":"TxContext","typeArguments":[]}}}],"return":[]},"profile_picture":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"Reference":{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"account","name":"Account","typeArguments":[]}}}],"return":[{"Struct":{"address":"0x1","module":"string","name":"String","typeArguments":[]}}]},"refuse_invite":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"account","name":"Invite","typeArguments":[]}}],"return":[]},"send_invite":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"MutableReference":{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"multisig","name":"Multisig","typeArguments":[]}}},"Address",{"MutableReference":{"Struct":{"address":"0x2","module":"tx_context","name":"TxContext","typeArguments":[]}}}],"return":[]},"username":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"Reference":{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"account","name":"Account","typeArguments":[]}}}],"return":[{"Struct":{"address":"0x1","module":"string","name":"String","typeArguments":[]}}]}}},"coin_operations":{"fileFormatVersion":6,"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","name":"coin_operations","friends":[],"structs":{},"exposedFunctions":{"merge_coins":{"visibility":"Public","isEntry":false,"typeParameters":[{"abilities":["Drop"]}],"parameters":[{"MutableReference":{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"multisig","name":"Multisig","typeArguments":[]}}},{"Struct":{"address":"0x2","module":"transfer","name":"Receiving","typeArguments":[{"Struct":{"address":"0x2","module":"coin","name":"Coin","typeArguments":[{"TypeParameter":0}]}}]}},{"Vector":{"Struct":{"address":"0x2","module":"transfer","name":"Receiving","typeArguments":[{"Struct":{"address":"0x2","module":"coin","name":"Coin","typeArguments":[{"TypeParameter":0}]}}]}}},{"Reference":{"Struct":{"address":"0x2","module":"tx_context","name":"TxContext","typeArguments":[]}}}],"return":[]},"split_coins":{"visibility":"Public","isEntry":false,"typeParameters":[{"abilities":["Drop"]}],"parameters":[{"MutableReference":{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"multisig","name":"Multisig","typeArguments":[]}}},{"Struct":{"address":"0x2","module":"transfer","name":"Receiving","typeArguments":[{"Struct":{"address":"0x2","module":"coin","name":"Coin","typeArguments":[{"TypeParameter":0}]}}]}},{"Vector":"U64"},{"MutableReference":{"Struct":{"address":"0x2","module":"tx_context","name":"TxContext","typeArguments":[]}}}],"return":[{"Vector":{"Struct":{"address":"0x2","module":"object","name":"ID","typeArguments":[]}}}]}}},"config":{"fileFormatVersion":6,"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","name":"config","friends":[],"structs":{"Modify":{"abilities":{"abilities":["Store"]},"typeParameters":[],"fields":[{"name":"name","type":{"Struct":{"address":"0x1","module":"option","name":"Option","typeArguments":[{"Struct":{"address":"0x1","module":"string","name":"String","typeArguments":[]}}]}}},{"name":"threshold","type":{"Struct":{"address":"0x1","module":"option","name":"Option","typeArguments":["U64"]}}},{"name":"to_add","type":{"Vector":"Address"}},{"name":"to_remove","type":{"Vector":"Address"}}]}},"exposedFunctions":{"execute_modify":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"MutableReference":{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"multisig","name":"Multisig","typeArguments":[]}}},{"Struct":{"address":"0x1","module":"string","name":"String","typeArguments":[]}},{"Reference":{"Struct":{"address":"0x2","module":"clock","name":"Clock","typeArguments":[]}}},{"MutableReference":{"Struct":{"address":"0x2","module":"tx_context","name":"TxContext","typeArguments":[]}}}],"return":[]},"propose_modify":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"MutableReference":{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"multisig","name":"Multisig","typeArguments":[]}}},{"Struct":{"address":"0x1","module":"string","name":"String","typeArguments":[]}},"U64","U64",{"Struct":{"address":"0x1","module":"string","name":"String","typeArguments":[]}},{"Struct":{"address":"0x1","module":"option","name":"Option","typeArguments":[{"Struct":{"address":"0x1","module":"string","name":"String","typeArguments":[]}}]}},{"Struct":{"address":"0x1","module":"option","name":"Option","typeArguments":["U64"]}},{"Vector":"Address"},{"Vector":"Address"},{"MutableReference":{"Struct":{"address":"0x2","module":"tx_context","name":"TxContext","typeArguments":[]}}}],"return":[]}}},"kiosk":{"fileFormatVersion":6,"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","name":"kiosk","friends":[],"structs":{"List":{"abilities":{"abilities":["Store"]},"typeParameters":[],"fields":[{"name":"borrow","type":{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"owned","name":"Borrow","typeArguments":[]}}},{"name":"nfts","type":{"Vector":{"Struct":{"address":"0x2","module":"object","name":"ID","typeArguments":[]}}}},{"name":"prices","type":{"Vector":"U64"}}]},"Transfer":{"abilities":{"abilities":["Store"]},"typeParameters":[],"fields":[{"name":"borrow","type":{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"owned","name":"Borrow","typeArguments":[]}}},{"name":"nfts","type":{"Vector":{"Struct":{"address":"0x2","module":"object","name":"ID","typeArguments":[]}}}},{"name":"recipient","type":"Address"}]}},"exposedFunctions":{"borrow_cap_list":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"MutableReference":{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"multisig","name":"Action","typeArguments":[{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"kiosk","name":"List","typeArguments":[]}}]}}},{"MutableReference":{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"multisig","name":"Multisig","typeArguments":[]}}},{"Struct":{"address":"0x2","module":"transfer","name":"Receiving","typeArguments":[{"Struct":{"address":"0x2","module":"kiosk","name":"KioskOwnerCap","typeArguments":[]}}]}}],"return":[{"Struct":{"address":"0x2","module":"kiosk","name":"KioskOwnerCap","typeArguments":[]}}]},"borrow_cap_transfer":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"MutableReference":{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"multisig","name":"Action","typeArguments":[{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"kiosk","name":"Transfer","typeArguments":[]}}]}}},{"MutableReference":{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"multisig","name":"Multisig","typeArguments":[]}}},{"Struct":{"address":"0x2","module":"transfer","name":"Receiving","typeArguments":[{"Struct":{"address":"0x2","module":"kiosk","name":"KioskOwnerCap","typeArguments":[]}}]}}],"return":[{"Struct":{"address":"0x2","module":"kiosk","name":"KioskOwnerCap","typeArguments":[]}}]},"complete_list":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"multisig","name":"Action","typeArguments":[{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"kiosk","name":"List","typeArguments":[]}}]}},{"MutableReference":{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"multisig","name":"Multisig","typeArguments":[]}}},{"Struct":{"address":"0x2","module":"kiosk","name":"KioskOwnerCap","typeArguments":[]}}],"return":[]},"complete_request":{"visibility":"Public","isEntry":false,"typeParameters":[{"abilities":["Store","Key"]}],"parameters":[{"Reference":{"Struct":{"address":"0x2","module":"transfer_policy","name":"TransferPolicy","typeArguments":[{"TypeParameter":0}]}}},{"Struct":{"address":"0x2","module":"transfer_policy","name":"TransferRequest","typeArguments":[{"TypeParameter":0}]}}],"return":[]},"complete_transfer_to":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"multisig","name":"Action","typeArguments":[{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"kiosk","name":"Transfer","typeArguments":[]}}]}},{"MutableReference":{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"multisig","name":"Multisig","typeArguments":[]}}},{"Struct":{"address":"0x2","module":"kiosk","name":"KioskOwnerCap","typeArguments":[]}}],"return":[]},"delist":{"visibility":"Public","isEntry":false,"typeParameters":[{"abilities":["Store","Key"]}],"parameters":[{"MutableReference":{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"multisig","name":"Multisig","typeArguments":[]}}},{"MutableReference":{"Struct":{"address":"0x2","module":"kiosk","name":"Kiosk","typeArguments":[]}}},{"Struct":{"address":"0x2","module":"transfer","name":"Receiving","typeArguments":[{"Struct":{"address":"0x2","module":"kiosk","name":"KioskOwnerCap","typeArguments":[]}}]}},{"Struct":{"address":"0x2","module":"object","name":"ID","typeArguments":[]}},{"MutableReference":{"Struct":{"address":"0x2","module":"tx_context","name":"TxContext","typeArguments":[]}}}],"return":[]},"list":{"visibility":"Public","isEntry":false,"typeParameters":[{"abilities":["Store","Key"]}],"parameters":[{"MutableReference":{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"multisig","name":"Action","typeArguments":[{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"kiosk","name":"List","typeArguments":[]}}]}}},{"MutableReference":{"Struct":{"address":"0x2","module":"kiosk","name":"Kiosk","typeArguments":[]}}},{"Reference":{"Struct":{"address":"0x2","module":"kiosk","name":"KioskOwnerCap","typeArguments":[]}}}],"return":[]},"new":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"MutableReference":{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"multisig","name":"Multisig","typeArguments":[]}}},{"MutableReference":{"Struct":{"address":"0x2","module":"tx_context","name":"TxContext","typeArguments":[]}}}],"return":[{"Struct":{"address":"0x2","module":"kiosk","name":"Kiosk","typeArguments":[]}},{"Struct":{"address":"0x2","module":"kiosk","name":"KioskOwnerCap","typeArguments":[]}}]},"propose_list":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"MutableReference":{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"multisig","name":"Multisig","typeArguments":[]}}},{"Struct":{"address":"0x1","module":"string","name":"String","typeArguments":[]}},"U64","U64",{"Struct":{"address":"0x1","module":"string","name":"String","typeArguments":[]}},{"Struct":{"address":"0x2","module":"object","name":"ID","typeArguments":[]}},{"Vector":{"Struct":{"address":"0x2","module":"object","name":"ID","typeArguments":[]}}},{"Vector":"U64"},{"MutableReference":{"Struct":{"address":"0x2","module":"tx_context","name":"TxContext","typeArguments":[]}}}],"return":[]},"propose_transfer_to":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"MutableReference":{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"multisig","name":"Multisig","typeArguments":[]}}},{"Struct":{"address":"0x1","module":"string","name":"String","typeArguments":[]}},"U64","U64",{"Struct":{"address":"0x1","module":"string","name":"String","typeArguments":[]}},{"Struct":{"address":"0x2","module":"object","name":"ID","typeArguments":[]}},{"Vector":{"Struct":{"address":"0x2","module":"object","name":"ID","typeArguments":[]}}},"Address",{"MutableReference":{"Struct":{"address":"0x2","module":"tx_context","name":"TxContext","typeArguments":[]}}}],"return":[]},"transfer_from":{"visibility":"Public","isEntry":false,"typeParameters":[{"abilities":["Store","Key"]}],"parameters":[{"MutableReference":{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"multisig","name":"Multisig","typeArguments":[]}}},{"MutableReference":{"Struct":{"address":"0x2","module":"kiosk","name":"Kiosk","typeArguments":[]}}},{"Struct":{"address":"0x2","module":"transfer","name":"Receiving","typeArguments":[{"Struct":{"address":"0x2","module":"kiosk","name":"KioskOwnerCap","typeArguments":[]}}]}},{"MutableReference":{"Struct":{"address":"0x2","module":"kiosk","name":"Kiosk","typeArguments":[]}}},{"Reference":{"Struct":{"address":"0x2","module":"kiosk","name":"KioskOwnerCap","typeArguments":[]}}},{"Struct":{"address":"0x2","module":"object","name":"ID","typeArguments":[]}},{"MutableReference":{"Struct":{"address":"0x2","module":"tx_context","name":"TxContext","typeArguments":[]}}}],"return":[{"Struct":{"address":"0x2","module":"transfer_policy","name":"TransferRequest","typeArguments":[{"TypeParameter":0}]}}]},"transfer_to":{"visibility":"Public","isEntry":false,"typeParameters":[{"abilities":["Store","Key"]}],"parameters":[{"MutableReference":{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"multisig","name":"Action","typeArguments":[{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"kiosk","name":"Transfer","typeArguments":[]}}]}}},{"MutableReference":{"Struct":{"address":"0x2","module":"kiosk","name":"Kiosk","typeArguments":[]}}},{"Reference":{"Struct":{"address":"0x2","module":"kiosk","name":"KioskOwnerCap","typeArguments":[]}}},{"MutableReference":{"Struct":{"address":"0x2","module":"kiosk","name":"Kiosk","typeArguments":[]}}},{"Reference":{"Struct":{"address":"0x2","module":"kiosk","name":"KioskOwnerCap","typeArguments":[]}}},{"MutableReference":{"Struct":{"address":"0x2","module":"tx_context","name":"TxContext","typeArguments":[]}}}],"return":[{"Struct":{"address":"0x2","module":"transfer_policy","name":"TransferRequest","typeArguments":[{"TypeParameter":0}]}}]},"withdraw_profits":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"MutableReference":{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"multisig","name":"Multisig","typeArguments":[]}}},{"MutableReference":{"Struct":{"address":"0x2","module":"kiosk","name":"Kiosk","typeArguments":[]}}},{"Reference":{"Struct":{"address":"0x2","module":"kiosk","name":"KioskOwnerCap","typeArguments":[]}}},{"MutableReference":{"Struct":{"address":"0x2","module":"tx_context","name":"TxContext","typeArguments":[]}}}],"return":[]}}},"move_call":{"fileFormatVersion":6,"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","name":"move_call","friends":[],"structs":{"MoveCall":{"abilities":{"abilities":["Store"]},"typeParameters":[],"fields":[{"name":"digest","type":{"Vector":"U8"}},{"name":"withdraw","type":{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"owned","name":"Withdraw","typeArguments":[]}}},{"name":"borrow","type":{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"owned","name":"Borrow","typeArguments":[]}}}]}},"exposedFunctions":{"execute_move_call":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"multisig","name":"Action","typeArguments":[{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"move_call","name":"MoveCall","typeArguments":[]}}]}},{"Reference":{"Struct":{"address":"0x2","module":"tx_context","name":"TxContext","typeArguments":[]}}}],"return":[{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"owned","name":"Withdraw","typeArguments":[]}},{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"owned","name":"Borrow","typeArguments":[]}}]},"propose_move_call":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"MutableReference":{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"multisig","name":"Multisig","typeArguments":[]}}},{"Struct":{"address":"0x1","module":"string","name":"String","typeArguments":[]}},"U64","U64",{"Struct":{"address":"0x1","module":"string","name":"String","typeArguments":[]}},{"Vector":"U8"},{"Vector":{"Struct":{"address":"0x2","module":"object","name":"ID","typeArguments":[]}}},{"Vector":{"Struct":{"address":"0x2","module":"object","name":"ID","typeArguments":[]}}},{"MutableReference":{"Struct":{"address":"0x2","module":"tx_context","name":"TxContext","typeArguments":[]}}}],"return":[]}}},"multisig":{"fileFormatVersion":6,"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","name":"multisig","friends":[{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","name":"account"},{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","name":"coin_operations"},{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","name":"config"},{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","name":"kiosk"},{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","name":"move_call"},{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","name":"owned"},{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","name":"payments"},{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","name":"transfers"},{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","name":"upgrade_policies"}],"structs":{"Action":{"abilities":{"abilities":[]},"typeParameters":[{"constraints":{"abilities":["Store"]},"isPhantom":false}],"fields":[{"name":"inner","type":{"TypeParameter":0}}]},"ActionKey":{"abilities":{"abilities":["Copy","Drop","Store"]},"typeParameters":[],"fields":[{"name":"dummy_field","type":"Bool"}]},"Multisig":{"abilities":{"abilities":["Key"]},"typeParameters":[],"fields":[{"name":"id","type":{"Struct":{"address":"0x2","module":"object","name":"UID","typeArguments":[]}}},{"name":"name","type":{"Struct":{"address":"0x1","module":"string","name":"String","typeArguments":[]}}},{"name":"threshold","type":"U64"},{"name":"members","type":{"Struct":{"address":"0x2","module":"vec_set","name":"VecSet","typeArguments":["Address"]}}},{"name":"proposals","type":{"Struct":{"address":"0x2","module":"vec_map","name":"VecMap","typeArguments":[{"Struct":{"address":"0x1","module":"string","name":"String","typeArguments":[]}},{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"multisig","name":"Proposal","typeArguments":[]}}]}}}]},"Proposal":{"abilities":{"abilities":["Store","Key"]},"typeParameters":[],"fields":[{"name":"id","type":{"Struct":{"address":"0x2","module":"object","name":"UID","typeArguments":[]}}},{"name":"description","type":{"Struct":{"address":"0x1","module":"string","name":"String","typeArguments":[]}}},{"name":"expiration_epoch","type":"U64"},{"name":"execution_time","type":"U64"},{"name":"approved","type":{"Struct":{"address":"0x2","module":"vec_set","name":"VecSet","typeArguments":["Address"]}}}]}},"exposedFunctions":{"action_mut":{"visibility":"Friend","isEntry":false,"typeParameters":[{"abilities":["Store"]}],"parameters":[{"MutableReference":{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"multisig","name":"Action","typeArguments":[{"TypeParameter":0}]}}}],"return":[{"MutableReference":{"TypeParameter":0}}]},"add_members":{"visibility":"Friend","isEntry":false,"typeParameters":[],"parameters":[{"MutableReference":{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"multisig","name":"Multisig","typeArguments":[]}}},{"Vector":"Address"}],"return":[]},"addr":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"Reference":{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"multisig","name":"Multisig","typeArguments":[]}}}],"return":["Address"]},"approve_proposal":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"MutableReference":{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"multisig","name":"Multisig","typeArguments":[]}}},{"Struct":{"address":"0x1","module":"string","name":"String","typeArguments":[]}},{"MutableReference":{"Struct":{"address":"0x2","module":"tx_context","name":"TxContext","typeArguments":[]}}}],"return":[]},"approved":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"Reference":{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"multisig","name":"Proposal","typeArguments":[]}}}],"return":[{"Vector":"Address"}]},"assert_is_member":{"visibility":"Friend","isEntry":false,"typeParameters":[],"parameters":[{"Reference":{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"multisig","name":"Multisig","typeArguments":[]}}},{"Reference":{"Struct":{"address":"0x2","module":"tx_context","name":"TxContext","typeArguments":[]}}}],"return":[]},"clean_proposals":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"MutableReference":{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"multisig","name":"Multisig","typeArguments":[]}}},{"MutableReference":{"Struct":{"address":"0x2","module":"tx_context","name":"TxContext","typeArguments":[]}}}],"return":[]},"create_proposal":{"visibility":"Public","isEntry":false,"typeParameters":[{"abilities":["Store"]}],"parameters":[{"MutableReference":{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"multisig","name":"Multisig","typeArguments":[]}}},{"TypeParameter":0},{"Struct":{"address":"0x1","module":"string","name":"String","typeArguments":[]}},"U64","U64",{"Struct":{"address":"0x1","module":"string","name":"String","typeArguments":[]}},{"MutableReference":{"Struct":{"address":"0x2","module":"tx_context","name":"TxContext","typeArguments":[]}}}],"return":[]},"delete_proposal":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"MutableReference":{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"multisig","name":"Multisig","typeArguments":[]}}},{"Struct":{"address":"0x1","module":"string","name":"String","typeArguments":[]}},{"MutableReference":{"Struct":{"address":"0x2","module":"tx_context","name":"TxContext","typeArguments":[]}}}],"return":[]},"description":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"Reference":{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"multisig","name":"Proposal","typeArguments":[]}}}],"return":[{"Struct":{"address":"0x1","module":"string","name":"String","typeArguments":[]}}]},"execute_proposal":{"visibility":"Public","isEntry":false,"typeParameters":[{"abilities":["Store"]}],"parameters":[{"MutableReference":{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"multisig","name":"Multisig","typeArguments":[]}}},{"Struct":{"address":"0x1","module":"string","name":"String","typeArguments":[]}},{"Reference":{"Struct":{"address":"0x2","module":"clock","name":"Clock","typeArguments":[]}}},{"MutableReference":{"Struct":{"address":"0x2","module":"tx_context","name":"TxContext","typeArguments":[]}}}],"return":[{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"multisig","name":"Action","typeArguments":[{"TypeParameter":0}]}}]},"execution_time":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"Reference":{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"multisig","name":"Proposal","typeArguments":[]}}}],"return":["U64"]},"expiration_epoch":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"Reference":{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"multisig","name":"Proposal","typeArguments":[]}}}],"return":["U64"]},"members":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"Reference":{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"multisig","name":"Multisig","typeArguments":[]}}}],"return":[{"Vector":"Address"}]},"name":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"Reference":{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"multisig","name":"Multisig","typeArguments":[]}}}],"return":[{"Struct":{"address":"0x1","module":"string","name":"String","typeArguments":[]}}]},"new":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"Struct":{"address":"0x1","module":"string","name":"String","typeArguments":[]}},{"MutableReference":{"Struct":{"address":"0x2","module":"tx_context","name":"TxContext","typeArguments":[]}}}],"return":[{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"multisig","name":"Multisig","typeArguments":[]}}]},"num_of_proposals":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"Reference":{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"multisig","name":"Multisig","typeArguments":[]}}}],"return":["U64"]},"proposal":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"Reference":{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"multisig","name":"Multisig","typeArguments":[]}}},{"Reference":{"Struct":{"address":"0x1","module":"string","name":"String","typeArguments":[]}}}],"return":[{"Reference":{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"multisig","name":"Proposal","typeArguments":[]}}}]},"remove_approval":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"MutableReference":{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"multisig","name":"Multisig","typeArguments":[]}}},{"Struct":{"address":"0x1","module":"string","name":"String","typeArguments":[]}},{"MutableReference":{"Struct":{"address":"0x2","module":"tx_context","name":"TxContext","typeArguments":[]}}}],"return":[]},"remove_members":{"visibility":"Friend","isEntry":false,"typeParameters":[],"parameters":[{"MutableReference":{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"multisig","name":"Multisig","typeArguments":[]}}},{"Vector":"Address"}],"return":[]},"set_name":{"visibility":"Friend","isEntry":false,"typeParameters":[],"parameters":[{"MutableReference":{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"multisig","name":"Multisig","typeArguments":[]}}},{"Struct":{"address":"0x1","module":"string","name":"String","typeArguments":[]}}],"return":[]},"set_threshold":{"visibility":"Friend","isEntry":false,"typeParameters":[],"parameters":[{"MutableReference":{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"multisig","name":"Multisig","typeArguments":[]}}},"U64"],"return":[]},"share":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"multisig","name":"Multisig","typeArguments":[]}}],"return":[]},"threshold":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"Reference":{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"multisig","name":"Multisig","typeArguments":[]}}}],"return":["U64"]},"uid_mut":{"visibility":"Friend","isEntry":false,"typeParameters":[],"parameters":[{"MutableReference":{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"multisig","name":"Multisig","typeArguments":[]}}}],"return":[{"MutableReference":{"Struct":{"address":"0x2","module":"object","name":"UID","typeArguments":[]}}}]},"unpack_action":{"visibility":"Friend","isEntry":false,"typeParameters":[{"abilities":["Store"]}],"parameters":[{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"multisig","name":"Action","typeArguments":[{"TypeParameter":0}]}}],"return":[{"TypeParameter":0}]}}},"owned":{"fileFormatVersion":6,"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","name":"owned","friends":[{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","name":"kiosk"},{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","name":"move_call"},{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","name":"payments"},{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","name":"transfers"}],"structs":{"Borrow":{"abilities":{"abilities":["Store"]},"typeParameters":[],"fields":[{"name":"withdraw","type":{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"owned","name":"Withdraw","typeArguments":[]}}},{"name":"to_return","type":{"Vector":{"Struct":{"address":"0x2","module":"object","name":"ID","typeArguments":[]}}}}]},"Withdraw":{"abilities":{"abilities":["Store"]},"typeParameters":[],"fields":[{"name":"objects","type":{"Vector":{"Struct":{"address":"0x2","module":"object","name":"ID","typeArguments":[]}}}}]}},"exposedFunctions":{"borrow":{"visibility":"Friend","isEntry":false,"typeParameters":[{"abilities":["Store","Key"]}],"parameters":[{"MutableReference":{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"owned","name":"Borrow","typeArguments":[]}}},{"MutableReference":{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"multisig","name":"Multisig","typeArguments":[]}}},{"Struct":{"address":"0x2","module":"transfer","name":"Receiving","typeArguments":[{"TypeParameter":0}]}}],"return":[{"TypeParameter":0}]},"complete_borrow":{"visibility":"Friend","isEntry":false,"typeParameters":[],"parameters":[{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"owned","name":"Borrow","typeArguments":[]}}],"return":[]},"complete_withdraw":{"visibility":"Friend","isEntry":false,"typeParameters":[],"parameters":[{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"owned","name":"Withdraw","typeArguments":[]}}],"return":[]},"new_borrow":{"visibility":"Friend","isEntry":false,"typeParameters":[],"parameters":[{"Vector":{"Struct":{"address":"0x2","module":"object","name":"ID","typeArguments":[]}}}],"return":[{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"owned","name":"Borrow","typeArguments":[]}}]},"new_withdraw":{"visibility":"Friend","isEntry":false,"typeParameters":[],"parameters":[{"Vector":{"Struct":{"address":"0x2","module":"object","name":"ID","typeArguments":[]}}}],"return":[{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"owned","name":"Withdraw","typeArguments":[]}}]},"put_back":{"visibility":"Friend","isEntry":false,"typeParameters":[{"abilities":["Store","Key"]}],"parameters":[{"MutableReference":{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"owned","name":"Borrow","typeArguments":[]}}},{"Reference":{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"multisig","name":"Multisig","typeArguments":[]}}},{"TypeParameter":0}],"return":[]},"withdraw":{"visibility":"Friend","isEntry":false,"typeParameters":[{"abilities":["Store","Key"]}],"parameters":[{"MutableReference":{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"owned","name":"Withdraw","typeArguments":[]}}},{"MutableReference":{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"multisig","name":"Multisig","typeArguments":[]}}},{"Struct":{"address":"0x2","module":"transfer","name":"Receiving","typeArguments":[{"TypeParameter":0}]}}],"return":[{"TypeParameter":0}]}}},"payments":{"fileFormatVersion":6,"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","name":"payments","friends":[],"structs":{"Pay":{"abilities":{"abilities":["Store"]},"typeParameters":[],"fields":[{"name":"withdraw","type":{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"owned","name":"Withdraw","typeArguments":[]}}},{"name":"amount","type":"U64"},{"name":"interval","type":"U64"},{"name":"recipient","type":"Address"}]},"Stream":{"abilities":{"abilities":["Key"]},"typeParameters":[{"constraints":{"abilities":["Drop"]},"isPhantom":true}],"fields":[{"name":"id","type":{"Struct":{"address":"0x2","module":"object","name":"UID","typeArguments":[]}}},{"name":"balance","type":{"Struct":{"address":"0x2","module":"balance","name":"Balance","typeArguments":[{"TypeParameter":0}]}}},{"name":"amount","type":"U64"},{"name":"interval","type":"U64"},{"name":"last_epoch","type":"U64"},{"name":"recipient","type":"Address"}]}},"exposedFunctions":{"cancel_payment":{"visibility":"Public","isEntry":false,"typeParameters":[{"abilities":["Drop"]}],"parameters":[{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"payments","name":"Stream","typeArguments":[{"TypeParameter":0}]}},{"MutableReference":{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"multisig","name":"Multisig","typeArguments":[]}}},{"MutableReference":{"Struct":{"address":"0x2","module":"tx_context","name":"TxContext","typeArguments":[]}}}],"return":[]},"complete_stream":{"visibility":"Public","isEntry":false,"typeParameters":[{"abilities":["Drop"]}],"parameters":[{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"payments","name":"Stream","typeArguments":[{"TypeParameter":0}]}}],"return":[]},"create_stream":{"visibility":"Public","isEntry":false,"typeParameters":[{"abilities":["Drop"]}],"parameters":[{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"multisig","name":"Action","typeArguments":[{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"payments","name":"Pay","typeArguments":[]}}]}},{"MutableReference":{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"multisig","name":"Multisig","typeArguments":[]}}},{"Struct":{"address":"0x2","module":"transfer","name":"Receiving","typeArguments":[{"Struct":{"address":"0x2","module":"coin","name":"Coin","typeArguments":[{"TypeParameter":0}]}}]}},{"MutableReference":{"Struct":{"address":"0x2","module":"tx_context","name":"TxContext","typeArguments":[]}}}],"return":[]},"pay":{"visibility":"Public","isEntry":false,"typeParameters":[{"abilities":["Drop"]}],"parameters":[{"MutableReference":{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"payments","name":"Stream","typeArguments":[{"TypeParameter":0}]}}},{"MutableReference":{"Struct":{"address":"0x2","module":"tx_context","name":"TxContext","typeArguments":[]}}}],"return":[]},"propose_pay":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"MutableReference":{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"multisig","name":"Multisig","typeArguments":[]}}},{"Struct":{"address":"0x1","module":"string","name":"String","typeArguments":[]}},"U64","U64",{"Struct":{"address":"0x1","module":"string","name":"String","typeArguments":[]}},{"Struct":{"address":"0x2","module":"object","name":"ID","typeArguments":[]}},"U64","U64","Address",{"MutableReference":{"Struct":{"address":"0x2","module":"tx_context","name":"TxContext","typeArguments":[]}}}],"return":[]}}},"transfers":{"fileFormatVersion":6,"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","name":"transfers","friends":[],"structs":{"Deliver":{"abilities":{"abilities":["Store"]},"typeParameters":[],"fields":[{"name":"withdraw","type":{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"owned","name":"Withdraw","typeArguments":[]}}},{"name":"recipient","type":"Address"}]},"Delivery":{"abilities":{"abilities":["Key"]},"typeParameters":[],"fields":[{"name":"id","type":{"Struct":{"address":"0x2","module":"object","name":"UID","typeArguments":[]}}},{"name":"objects","type":{"Struct":{"address":"0x2","module":"bag","name":"Bag","typeArguments":[]}}}]},"DeliveryCap":{"abilities":{"abilities":["Key"]},"typeParameters":[],"fields":[{"name":"id","type":{"Struct":{"address":"0x2","module":"object","name":"UID","typeArguments":[]}}},{"name":"delivery_id","type":{"Struct":{"address":"0x2","module":"object","name":"ID","typeArguments":[]}}}]},"Send":{"abilities":{"abilities":["Store"]},"typeParameters":[],"fields":[{"name":"withdraw","type":{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"owned","name":"Withdraw","typeArguments":[]}}},{"name":"recipients","type":{"Vector":"Address"}}]}},"exposedFunctions":{"add_to_delivery":{"visibility":"Public","isEntry":false,"typeParameters":[{"abilities":["Store","Key"]}],"parameters":[{"MutableReference":{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"transfers","name":"Delivery","typeArguments":[]}}},{"MutableReference":{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"multisig","name":"Action","typeArguments":[{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"transfers","name":"Deliver","typeArguments":[]}}]}}},{"MutableReference":{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"multisig","name":"Multisig","typeArguments":[]}}},{"Struct":{"address":"0x2","module":"transfer","name":"Receiving","typeArguments":[{"TypeParameter":0}]}}],"return":[]},"cancel_delivery":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"MutableReference":{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"multisig","name":"Multisig","typeArguments":[]}}},{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"transfers","name":"Delivery","typeArguments":[]}},{"MutableReference":{"Struct":{"address":"0x2","module":"tx_context","name":"TxContext","typeArguments":[]}}}],"return":[]},"claim":{"visibility":"Public","isEntry":false,"typeParameters":[{"abilities":["Store","Key"]}],"parameters":[{"MutableReference":{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"transfers","name":"Delivery","typeArguments":[]}}},{"Reference":{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"transfers","name":"DeliveryCap","typeArguments":[]}}}],"return":[{"TypeParameter":0}]},"complete_delivery":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"transfers","name":"Delivery","typeArguments":[]}},{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"transfers","name":"DeliveryCap","typeArguments":[]}}],"return":[]},"complete_send":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"multisig","name":"Action","typeArguments":[{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"transfers","name":"Send","typeArguments":[]}}]}}],"return":[]},"create_delivery":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"MutableReference":{"Struct":{"address":"0x2","module":"tx_context","name":"TxContext","typeArguments":[]}}}],"return":[{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"transfers","name":"Delivery","typeArguments":[]}}]},"deliver":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"transfers","name":"Delivery","typeArguments":[]}},{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"multisig","name":"Action","typeArguments":[{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"transfers","name":"Deliver","typeArguments":[]}}]}},{"MutableReference":{"Struct":{"address":"0x2","module":"tx_context","name":"TxContext","typeArguments":[]}}}],"return":[]},"propose_delivery":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"MutableReference":{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"multisig","name":"Multisig","typeArguments":[]}}},{"Struct":{"address":"0x1","module":"string","name":"String","typeArguments":[]}},"U64","U64",{"Struct":{"address":"0x1","module":"string","name":"String","typeArguments":[]}},{"Vector":{"Struct":{"address":"0x2","module":"object","name":"ID","typeArguments":[]}}},"Address",{"MutableReference":{"Struct":{"address":"0x2","module":"tx_context","name":"TxContext","typeArguments":[]}}}],"return":[]},"propose_send":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"MutableReference":{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"multisig","name":"Multisig","typeArguments":[]}}},{"Struct":{"address":"0x1","module":"string","name":"String","typeArguments":[]}},"U64","U64",{"Struct":{"address":"0x1","module":"string","name":"String","typeArguments":[]}},{"Vector":{"Struct":{"address":"0x2","module":"object","name":"ID","typeArguments":[]}}},{"Vector":"Address"},{"MutableReference":{"Struct":{"address":"0x2","module":"tx_context","name":"TxContext","typeArguments":[]}}}],"return":[]},"retrieve":{"visibility":"Public","isEntry":false,"typeParameters":[{"abilities":["Store","Key"]}],"parameters":[{"MutableReference":{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"transfers","name":"Delivery","typeArguments":[]}}},{"Reference":{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"multisig","name":"Multisig","typeArguments":[]}}},{"MutableReference":{"Struct":{"address":"0x2","module":"tx_context","name":"TxContext","typeArguments":[]}}}],"return":[]},"send":{"visibility":"Public","isEntry":false,"typeParameters":[{"abilities":["Store","Key"]}],"parameters":[{"MutableReference":{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"multisig","name":"Action","typeArguments":[{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"transfers","name":"Send","typeArguments":[]}}]}}},{"MutableReference":{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"multisig","name":"Multisig","typeArguments":[]}}},{"Struct":{"address":"0x2","module":"transfer","name":"Receiving","typeArguments":[{"TypeParameter":0}]}}],"return":[]}}},"upgrade_policies":{"fileFormatVersion":6,"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","name":"upgrade_policies","friends":[],"structs":{"Policy":{"abilities":{"abilities":["Store"]},"typeParameters":[],"fields":[{"name":"policy","type":"U8"},{"name":"upgrade_lock","type":{"Struct":{"address":"0x2","module":"object","name":"ID","typeArguments":[]}}}]},"Upgrade":{"abilities":{"abilities":["Store"]},"typeParameters":[],"fields":[{"name":"digest","type":{"Vector":"U8"}},{"name":"upgrade_lock","type":{"Struct":{"address":"0x2","module":"object","name":"ID","typeArguments":[]}}}]},"UpgradeLock":{"abilities":{"abilities":["Key"]},"typeParameters":[],"fields":[{"name":"id","type":{"Struct":{"address":"0x2","module":"object","name":"UID","typeArguments":[]}}},{"name":"label","type":{"Struct":{"address":"0x1","module":"string","name":"String","typeArguments":[]}}},{"name":"time_lock","type":"U64"},{"name":"upgrade_cap","type":{"Struct":{"address":"0x2","module":"package","name":"UpgradeCap","typeArguments":[]}}}]}},"exposedFunctions":{"complete_upgrade":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"MutableReference":{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"multisig","name":"Multisig","typeArguments":[]}}},{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"upgrade_policies","name":"UpgradeLock","typeArguments":[]}},{"Struct":{"address":"0x2","module":"package","name":"UpgradeReceipt","typeArguments":[]}}],"return":[]},"execute_policy":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"multisig","name":"Action","typeArguments":[{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"upgrade_policies","name":"Policy","typeArguments":[]}}]}},{"MutableReference":{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"multisig","name":"Multisig","typeArguments":[]}}},{"Struct":{"address":"0x2","module":"transfer","name":"Receiving","typeArguments":[{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"upgrade_policies","name":"UpgradeLock","typeArguments":[]}}]}}],"return":[]},"execute_upgrade":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"multisig","name":"Action","typeArguments":[{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"upgrade_policies","name":"Upgrade","typeArguments":[]}}]}},{"MutableReference":{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"multisig","name":"Multisig","typeArguments":[]}}},{"Struct":{"address":"0x2","module":"transfer","name":"Receiving","typeArguments":[{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"upgrade_policies","name":"UpgradeLock","typeArguments":[]}}]}}],"return":[{"Struct":{"address":"0x2","module":"package","name":"UpgradeTicket","typeArguments":[]}},{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"upgrade_policies","name":"UpgradeLock","typeArguments":[]}}]},"lock_cap":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"MutableReference":{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"multisig","name":"Multisig","typeArguments":[]}}},{"Struct":{"address":"0x1","module":"string","name":"String","typeArguments":[]}},"U64",{"Struct":{"address":"0x2","module":"package","name":"UpgradeCap","typeArguments":[]}},{"MutableReference":{"Struct":{"address":"0x2","module":"tx_context","name":"TxContext","typeArguments":[]}}}],"return":[{"Struct":{"address":"0x2","module":"object","name":"ID","typeArguments":[]}}]},"propose_policy":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"MutableReference":{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"multisig","name":"Multisig","typeArguments":[]}}},{"Struct":{"address":"0x1","module":"string","name":"String","typeArguments":[]}},"U64","U64",{"Struct":{"address":"0x1","module":"string","name":"String","typeArguments":[]}},"U8",{"Struct":{"address":"0x2","module":"transfer","name":"Receiving","typeArguments":[{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"upgrade_policies","name":"UpgradeLock","typeArguments":[]}}]}},{"MutableReference":{"Struct":{"address":"0x2","module":"tx_context","name":"TxContext","typeArguments":[]}}}],"return":[]},"propose_upgrade":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"MutableReference":{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"multisig","name":"Multisig","typeArguments":[]}}},{"Struct":{"address":"0x1","module":"string","name":"String","typeArguments":[]}},"U64",{"Struct":{"address":"0x1","module":"string","name":"String","typeArguments":[]}},{"Vector":"U8"},{"Struct":{"address":"0x2","module":"transfer","name":"Receiving","typeArguments":[{"Struct":{"address":"0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4","module":"upgrade_policies","name":"UpgradeLock","typeArguments":[]}}]}},{"Reference":{"Struct":{"address":"0x2","module":"clock","name":"Clock","typeArguments":[]}}},{"MutableReference":{"Struct":{"address":"0x2","module":"tx_context","name":"TxContext","typeArguments":[]}}}],"return":[]}}}}',
+  '{"account":{"fileFormatVersion":6,"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","name":"account","friends":[],"structs":{"Account":{"abilities":{"abilities":["Key"]},"typeParameters":[],"fields":[{"name":"id","type":{"Struct":{"address":"0x2","module":"object","name":"UID","typeArguments":[]}}},{"name":"username","type":{"Struct":{"address":"0x1","module":"string","name":"String","typeArguments":[]}}},{"name":"profile_picture","type":{"Struct":{"address":"0x1","module":"string","name":"String","typeArguments":[]}}},{"name":"multisigs","type":{"Struct":{"address":"0x2","module":"vec_set","name":"VecSet","typeArguments":[{"Struct":{"address":"0x2","module":"object","name":"ID","typeArguments":[]}}]}}}]},"Invite":{"abilities":{"abilities":["Key"]},"typeParameters":[],"fields":[{"name":"id","type":{"Struct":{"address":"0x2","module":"object","name":"UID","typeArguments":[]}}},{"name":"multisig","type":{"Struct":{"address":"0x2","module":"object","name":"ID","typeArguments":[]}}}]}},"exposedFunctions":{"accept_invite":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"MutableReference":{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"account","name":"Account","typeArguments":[]}}},{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"account","name":"Invite","typeArguments":[]}}],"return":[]},"destroy":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"account","name":"Account","typeArguments":[]}}],"return":[]},"join_multisig":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"MutableReference":{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"account","name":"Account","typeArguments":[]}}},{"Struct":{"address":"0x2","module":"object","name":"ID","typeArguments":[]}}],"return":[]},"leave_multisig":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"MutableReference":{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"account","name":"Account","typeArguments":[]}}},{"Struct":{"address":"0x2","module":"object","name":"ID","typeArguments":[]}}],"return":[]},"multisig":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"Reference":{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"account","name":"Invite","typeArguments":[]}}}],"return":[{"Struct":{"address":"0x2","module":"object","name":"ID","typeArguments":[]}}]},"multisigs":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"Reference":{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"account","name":"Account","typeArguments":[]}}}],"return":[{"Vector":{"Struct":{"address":"0x2","module":"object","name":"ID","typeArguments":[]}}}]},"new":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"Struct":{"address":"0x1","module":"string","name":"String","typeArguments":[]}},{"Struct":{"address":"0x1","module":"string","name":"String","typeArguments":[]}},{"MutableReference":{"Struct":{"address":"0x2","module":"tx_context","name":"TxContext","typeArguments":[]}}}],"return":[]},"profile_picture":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"Reference":{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"account","name":"Account","typeArguments":[]}}}],"return":[{"Struct":{"address":"0x1","module":"string","name":"String","typeArguments":[]}}]},"refuse_invite":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"account","name":"Invite","typeArguments":[]}}],"return":[]},"send_invite":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"MutableReference":{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"multisig","name":"Multisig","typeArguments":[]}}},"Address",{"MutableReference":{"Struct":{"address":"0x2","module":"tx_context","name":"TxContext","typeArguments":[]}}}],"return":[]},"username":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"Reference":{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"account","name":"Account","typeArguments":[]}}}],"return":[{"Struct":{"address":"0x1","module":"string","name":"String","typeArguments":[]}}]}}},"coin_operations":{"fileFormatVersion":6,"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","name":"coin_operations","friends":[],"structs":{},"exposedFunctions":{"merge_coins":{"visibility":"Public","isEntry":false,"typeParameters":[{"abilities":["Drop"]}],"parameters":[{"MutableReference":{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"multisig","name":"Multisig","typeArguments":[]}}},{"Struct":{"address":"0x2","module":"transfer","name":"Receiving","typeArguments":[{"Struct":{"address":"0x2","module":"coin","name":"Coin","typeArguments":[{"TypeParameter":0}]}}]}},{"Vector":{"Struct":{"address":"0x2","module":"transfer","name":"Receiving","typeArguments":[{"Struct":{"address":"0x2","module":"coin","name":"Coin","typeArguments":[{"TypeParameter":0}]}}]}}},{"Reference":{"Struct":{"address":"0x2","module":"tx_context","name":"TxContext","typeArguments":[]}}}],"return":[]},"split_coins":{"visibility":"Public","isEntry":false,"typeParameters":[{"abilities":["Drop"]}],"parameters":[{"MutableReference":{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"multisig","name":"Multisig","typeArguments":[]}}},{"Struct":{"address":"0x2","module":"transfer","name":"Receiving","typeArguments":[{"Struct":{"address":"0x2","module":"coin","name":"Coin","typeArguments":[{"TypeParameter":0}]}}]}},{"Vector":"U64"},{"MutableReference":{"Struct":{"address":"0x2","module":"tx_context","name":"TxContext","typeArguments":[]}}}],"return":[{"Vector":{"Struct":{"address":"0x2","module":"object","name":"ID","typeArguments":[]}}}]}}},"config":{"fileFormatVersion":6,"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","name":"config","friends":[],"structs":{"Modify":{"abilities":{"abilities":["Store"]},"typeParameters":[],"fields":[{"name":"name","type":{"Struct":{"address":"0x1","module":"option","name":"Option","typeArguments":[{"Struct":{"address":"0x1","module":"string","name":"String","typeArguments":[]}}]}}},{"name":"threshold","type":{"Struct":{"address":"0x1","module":"option","name":"Option","typeArguments":["U64"]}}},{"name":"to_add","type":{"Vector":"Address"}},{"name":"to_remove","type":{"Vector":"Address"}}]}},"exposedFunctions":{"execute_modify":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"MutableReference":{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"multisig","name":"Multisig","typeArguments":[]}}},{"Struct":{"address":"0x1","module":"string","name":"String","typeArguments":[]}},{"Reference":{"Struct":{"address":"0x2","module":"clock","name":"Clock","typeArguments":[]}}},{"MutableReference":{"Struct":{"address":"0x2","module":"tx_context","name":"TxContext","typeArguments":[]}}}],"return":[]},"propose_modify":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"MutableReference":{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"multisig","name":"Multisig","typeArguments":[]}}},{"Struct":{"address":"0x1","module":"string","name":"String","typeArguments":[]}},"U64","U64",{"Struct":{"address":"0x1","module":"string","name":"String","typeArguments":[]}},{"Struct":{"address":"0x1","module":"option","name":"Option","typeArguments":[{"Struct":{"address":"0x1","module":"string","name":"String","typeArguments":[]}}]}},{"Struct":{"address":"0x1","module":"option","name":"Option","typeArguments":["U64"]}},{"Vector":"Address"},{"Vector":"Address"},{"MutableReference":{"Struct":{"address":"0x2","module":"tx_context","name":"TxContext","typeArguments":[]}}}],"return":[]}}},"kiosk":{"fileFormatVersion":6,"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","name":"kiosk","friends":[],"structs":{"List":{"abilities":{"abilities":["Store"]},"typeParameters":[],"fields":[{"name":"borrow","type":{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"owned","name":"Borrow","typeArguments":[]}}},{"name":"nfts","type":{"Vector":{"Struct":{"address":"0x2","module":"object","name":"ID","typeArguments":[]}}}},{"name":"prices","type":{"Vector":"U64"}}]},"Transfer":{"abilities":{"abilities":["Store"]},"typeParameters":[],"fields":[{"name":"borrow","type":{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"owned","name":"Borrow","typeArguments":[]}}},{"name":"nfts","type":{"Vector":{"Struct":{"address":"0x2","module":"object","name":"ID","typeArguments":[]}}}},{"name":"recipient","type":"Address"}]}},"exposedFunctions":{"borrow_cap_list":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"MutableReference":{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"multisig","name":"Action","typeArguments":[{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"kiosk","name":"List","typeArguments":[]}}]}}},{"MutableReference":{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"multisig","name":"Multisig","typeArguments":[]}}},{"Struct":{"address":"0x2","module":"transfer","name":"Receiving","typeArguments":[{"Struct":{"address":"0x2","module":"kiosk","name":"KioskOwnerCap","typeArguments":[]}}]}}],"return":[{"Struct":{"address":"0x2","module":"kiosk","name":"KioskOwnerCap","typeArguments":[]}}]},"borrow_cap_transfer":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"MutableReference":{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"multisig","name":"Action","typeArguments":[{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"kiosk","name":"Transfer","typeArguments":[]}}]}}},{"MutableReference":{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"multisig","name":"Multisig","typeArguments":[]}}},{"Struct":{"address":"0x2","module":"transfer","name":"Receiving","typeArguments":[{"Struct":{"address":"0x2","module":"kiosk","name":"KioskOwnerCap","typeArguments":[]}}]}}],"return":[{"Struct":{"address":"0x2","module":"kiosk","name":"KioskOwnerCap","typeArguments":[]}}]},"complete_list":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"multisig","name":"Action","typeArguments":[{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"kiosk","name":"List","typeArguments":[]}}]}},{"MutableReference":{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"multisig","name":"Multisig","typeArguments":[]}}},{"Struct":{"address":"0x2","module":"kiosk","name":"KioskOwnerCap","typeArguments":[]}}],"return":[]},"complete_request":{"visibility":"Public","isEntry":false,"typeParameters":[{"abilities":["Store","Key"]}],"parameters":[{"Reference":{"Struct":{"address":"0x2","module":"transfer_policy","name":"TransferPolicy","typeArguments":[{"TypeParameter":0}]}}},{"Struct":{"address":"0x2","module":"transfer_policy","name":"TransferRequest","typeArguments":[{"TypeParameter":0}]}}],"return":[]},"complete_transfer_to":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"multisig","name":"Action","typeArguments":[{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"kiosk","name":"Transfer","typeArguments":[]}}]}},{"MutableReference":{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"multisig","name":"Multisig","typeArguments":[]}}},{"Struct":{"address":"0x2","module":"kiosk","name":"KioskOwnerCap","typeArguments":[]}}],"return":[]},"delist":{"visibility":"Public","isEntry":false,"typeParameters":[{"abilities":["Store","Key"]}],"parameters":[{"MutableReference":{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"multisig","name":"Multisig","typeArguments":[]}}},{"MutableReference":{"Struct":{"address":"0x2","module":"kiosk","name":"Kiosk","typeArguments":[]}}},{"Struct":{"address":"0x2","module":"transfer","name":"Receiving","typeArguments":[{"Struct":{"address":"0x2","module":"kiosk","name":"KioskOwnerCap","typeArguments":[]}}]}},{"Struct":{"address":"0x2","module":"object","name":"ID","typeArguments":[]}},{"MutableReference":{"Struct":{"address":"0x2","module":"tx_context","name":"TxContext","typeArguments":[]}}}],"return":[]},"list":{"visibility":"Public","isEntry":false,"typeParameters":[{"abilities":["Store","Key"]}],"parameters":[{"MutableReference":{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"multisig","name":"Action","typeArguments":[{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"kiosk","name":"List","typeArguments":[]}}]}}},{"MutableReference":{"Struct":{"address":"0x2","module":"kiosk","name":"Kiosk","typeArguments":[]}}},{"Reference":{"Struct":{"address":"0x2","module":"kiosk","name":"KioskOwnerCap","typeArguments":[]}}}],"return":[]},"new":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"MutableReference":{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"multisig","name":"Multisig","typeArguments":[]}}},{"MutableReference":{"Struct":{"address":"0x2","module":"tx_context","name":"TxContext","typeArguments":[]}}}],"return":[{"Struct":{"address":"0x2","module":"kiosk","name":"Kiosk","typeArguments":[]}},{"Struct":{"address":"0x2","module":"kiosk","name":"KioskOwnerCap","typeArguments":[]}}]},"propose_list":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"MutableReference":{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"multisig","name":"Multisig","typeArguments":[]}}},{"Struct":{"address":"0x1","module":"string","name":"String","typeArguments":[]}},"U64","U64",{"Struct":{"address":"0x1","module":"string","name":"String","typeArguments":[]}},{"Struct":{"address":"0x2","module":"object","name":"ID","typeArguments":[]}},{"Vector":{"Struct":{"address":"0x2","module":"object","name":"ID","typeArguments":[]}}},{"Vector":"U64"},{"MutableReference":{"Struct":{"address":"0x2","module":"tx_context","name":"TxContext","typeArguments":[]}}}],"return":[]},"propose_transfer_to":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"MutableReference":{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"multisig","name":"Multisig","typeArguments":[]}}},{"Struct":{"address":"0x1","module":"string","name":"String","typeArguments":[]}},"U64","U64",{"Struct":{"address":"0x1","module":"string","name":"String","typeArguments":[]}},{"Struct":{"address":"0x2","module":"object","name":"ID","typeArguments":[]}},{"Vector":{"Struct":{"address":"0x2","module":"object","name":"ID","typeArguments":[]}}},"Address",{"MutableReference":{"Struct":{"address":"0x2","module":"tx_context","name":"TxContext","typeArguments":[]}}}],"return":[]},"transfer_from":{"visibility":"Public","isEntry":false,"typeParameters":[{"abilities":["Store","Key"]}],"parameters":[{"MutableReference":{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"multisig","name":"Multisig","typeArguments":[]}}},{"MutableReference":{"Struct":{"address":"0x2","module":"kiosk","name":"Kiosk","typeArguments":[]}}},{"Struct":{"address":"0x2","module":"transfer","name":"Receiving","typeArguments":[{"Struct":{"address":"0x2","module":"kiosk","name":"KioskOwnerCap","typeArguments":[]}}]}},{"MutableReference":{"Struct":{"address":"0x2","module":"kiosk","name":"Kiosk","typeArguments":[]}}},{"Reference":{"Struct":{"address":"0x2","module":"kiosk","name":"KioskOwnerCap","typeArguments":[]}}},{"Struct":{"address":"0x2","module":"object","name":"ID","typeArguments":[]}},{"MutableReference":{"Struct":{"address":"0x2","module":"tx_context","name":"TxContext","typeArguments":[]}}}],"return":[{"Struct":{"address":"0x2","module":"transfer_policy","name":"TransferRequest","typeArguments":[{"TypeParameter":0}]}}]},"transfer_to":{"visibility":"Public","isEntry":false,"typeParameters":[{"abilities":["Store","Key"]}],"parameters":[{"MutableReference":{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"multisig","name":"Action","typeArguments":[{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"kiosk","name":"Transfer","typeArguments":[]}}]}}},{"MutableReference":{"Struct":{"address":"0x2","module":"kiosk","name":"Kiosk","typeArguments":[]}}},{"Reference":{"Struct":{"address":"0x2","module":"kiosk","name":"KioskOwnerCap","typeArguments":[]}}},{"MutableReference":{"Struct":{"address":"0x2","module":"kiosk","name":"Kiosk","typeArguments":[]}}},{"Reference":{"Struct":{"address":"0x2","module":"kiosk","name":"KioskOwnerCap","typeArguments":[]}}},{"MutableReference":{"Struct":{"address":"0x2","module":"tx_context","name":"TxContext","typeArguments":[]}}}],"return":[{"Struct":{"address":"0x2","module":"transfer_policy","name":"TransferRequest","typeArguments":[{"TypeParameter":0}]}}]},"withdraw_profits":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"MutableReference":{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"multisig","name":"Multisig","typeArguments":[]}}},{"MutableReference":{"Struct":{"address":"0x2","module":"kiosk","name":"Kiosk","typeArguments":[]}}},{"Reference":{"Struct":{"address":"0x2","module":"kiosk","name":"KioskOwnerCap","typeArguments":[]}}},{"MutableReference":{"Struct":{"address":"0x2","module":"tx_context","name":"TxContext","typeArguments":[]}}}],"return":[]}}},"move_call":{"fileFormatVersion":6,"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","name":"move_call","friends":[],"structs":{"MoveCall":{"abilities":{"abilities":["Store"]},"typeParameters":[],"fields":[{"name":"digest","type":{"Vector":"U8"}},{"name":"withdraw","type":{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"owned","name":"Withdraw","typeArguments":[]}}},{"name":"borrow","type":{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"owned","name":"Borrow","typeArguments":[]}}}]}},"exposedFunctions":{"execute_move_call":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"multisig","name":"Action","typeArguments":[{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"move_call","name":"MoveCall","typeArguments":[]}}]}},{"Reference":{"Struct":{"address":"0x2","module":"tx_context","name":"TxContext","typeArguments":[]}}}],"return":[{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"owned","name":"Withdraw","typeArguments":[]}},{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"owned","name":"Borrow","typeArguments":[]}}]},"propose_move_call":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"MutableReference":{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"multisig","name":"Multisig","typeArguments":[]}}},{"Struct":{"address":"0x1","module":"string","name":"String","typeArguments":[]}},"U64","U64",{"Struct":{"address":"0x1","module":"string","name":"String","typeArguments":[]}},{"Vector":"U8"},{"Vector":{"Struct":{"address":"0x2","module":"object","name":"ID","typeArguments":[]}}},{"Vector":{"Struct":{"address":"0x2","module":"object","name":"ID","typeArguments":[]}}},{"MutableReference":{"Struct":{"address":"0x2","module":"tx_context","name":"TxContext","typeArguments":[]}}}],"return":[]}}},"multisig":{"fileFormatVersion":6,"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","name":"multisig","friends":[{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","name":"account"},{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","name":"coin_operations"},{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","name":"config"},{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","name":"kiosk"},{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","name":"move_call"},{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","name":"owned"},{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","name":"payments"},{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","name":"transfers"},{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","name":"upgrade_policies"}],"structs":{"Action":{"abilities":{"abilities":[]},"typeParameters":[{"constraints":{"abilities":["Store"]},"isPhantom":false}],"fields":[{"name":"inner","type":{"TypeParameter":0}}]},"ActionKey":{"abilities":{"abilities":["Copy","Drop","Store"]},"typeParameters":[],"fields":[{"name":"dummy_field","type":"Bool"}]},"Multisig":{"abilities":{"abilities":["Key"]},"typeParameters":[],"fields":[{"name":"id","type":{"Struct":{"address":"0x2","module":"object","name":"UID","typeArguments":[]}}},{"name":"name","type":{"Struct":{"address":"0x1","module":"string","name":"String","typeArguments":[]}}},{"name":"threshold","type":"U64"},{"name":"members","type":{"Struct":{"address":"0x2","module":"vec_set","name":"VecSet","typeArguments":["Address"]}}},{"name":"proposals","type":{"Struct":{"address":"0x2","module":"vec_map","name":"VecMap","typeArguments":[{"Struct":{"address":"0x1","module":"string","name":"String","typeArguments":[]}},{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"multisig","name":"Proposal","typeArguments":[]}}]}}}]},"Proposal":{"abilities":{"abilities":["Store","Key"]},"typeParameters":[],"fields":[{"name":"id","type":{"Struct":{"address":"0x2","module":"object","name":"UID","typeArguments":[]}}},{"name":"description","type":{"Struct":{"address":"0x1","module":"string","name":"String","typeArguments":[]}}},{"name":"expiration_epoch","type":"U64"},{"name":"execution_time","type":"U64"},{"name":"approved","type":{"Struct":{"address":"0x2","module":"vec_set","name":"VecSet","typeArguments":["Address"]}}}]}},"exposedFunctions":{"action_mut":{"visibility":"Friend","isEntry":false,"typeParameters":[{"abilities":["Store"]}],"parameters":[{"MutableReference":{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"multisig","name":"Action","typeArguments":[{"TypeParameter":0}]}}}],"return":[{"MutableReference":{"TypeParameter":0}}]},"add_members":{"visibility":"Friend","isEntry":false,"typeParameters":[],"parameters":[{"MutableReference":{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"multisig","name":"Multisig","typeArguments":[]}}},{"Vector":"Address"}],"return":[]},"addr":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"Reference":{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"multisig","name":"Multisig","typeArguments":[]}}}],"return":["Address"]},"approve_proposal":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"MutableReference":{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"multisig","name":"Multisig","typeArguments":[]}}},{"Struct":{"address":"0x1","module":"string","name":"String","typeArguments":[]}},{"MutableReference":{"Struct":{"address":"0x2","module":"tx_context","name":"TxContext","typeArguments":[]}}}],"return":[]},"approved":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"Reference":{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"multisig","name":"Proposal","typeArguments":[]}}}],"return":[{"Vector":"Address"}]},"assert_is_member":{"visibility":"Friend","isEntry":false,"typeParameters":[],"parameters":[{"Reference":{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"multisig","name":"Multisig","typeArguments":[]}}},{"Reference":{"Struct":{"address":"0x2","module":"tx_context","name":"TxContext","typeArguments":[]}}}],"return":[]},"clean_proposals":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"MutableReference":{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"multisig","name":"Multisig","typeArguments":[]}}},{"MutableReference":{"Struct":{"address":"0x2","module":"tx_context","name":"TxContext","typeArguments":[]}}}],"return":[]},"create_proposal":{"visibility":"Public","isEntry":false,"typeParameters":[{"abilities":["Store"]}],"parameters":[{"MutableReference":{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"multisig","name":"Multisig","typeArguments":[]}}},{"TypeParameter":0},{"Struct":{"address":"0x1","module":"string","name":"String","typeArguments":[]}},"U64","U64",{"Struct":{"address":"0x1","module":"string","name":"String","typeArguments":[]}},{"MutableReference":{"Struct":{"address":"0x2","module":"tx_context","name":"TxContext","typeArguments":[]}}}],"return":[]},"delete_proposal":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"MutableReference":{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"multisig","name":"Multisig","typeArguments":[]}}},{"Struct":{"address":"0x1","module":"string","name":"String","typeArguments":[]}},{"MutableReference":{"Struct":{"address":"0x2","module":"tx_context","name":"TxContext","typeArguments":[]}}}],"return":[]},"description":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"Reference":{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"multisig","name":"Proposal","typeArguments":[]}}}],"return":[{"Struct":{"address":"0x1","module":"string","name":"String","typeArguments":[]}}]},"execute_proposal":{"visibility":"Public","isEntry":false,"typeParameters":[{"abilities":["Store"]}],"parameters":[{"MutableReference":{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"multisig","name":"Multisig","typeArguments":[]}}},{"Struct":{"address":"0x1","module":"string","name":"String","typeArguments":[]}},{"Reference":{"Struct":{"address":"0x2","module":"clock","name":"Clock","typeArguments":[]}}},{"MutableReference":{"Struct":{"address":"0x2","module":"tx_context","name":"TxContext","typeArguments":[]}}}],"return":[{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"multisig","name":"Action","typeArguments":[{"TypeParameter":0}]}}]},"execution_time":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"Reference":{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"multisig","name":"Proposal","typeArguments":[]}}}],"return":["U64"]},"expiration_epoch":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"Reference":{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"multisig","name":"Proposal","typeArguments":[]}}}],"return":["U64"]},"members":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"Reference":{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"multisig","name":"Multisig","typeArguments":[]}}}],"return":[{"Vector":"Address"}]},"name":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"Reference":{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"multisig","name":"Multisig","typeArguments":[]}}}],"return":[{"Struct":{"address":"0x1","module":"string","name":"String","typeArguments":[]}}]},"new":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"Struct":{"address":"0x1","module":"string","name":"String","typeArguments":[]}},{"MutableReference":{"Struct":{"address":"0x2","module":"tx_context","name":"TxContext","typeArguments":[]}}}],"return":[{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"multisig","name":"Multisig","typeArguments":[]}}]},"num_of_proposals":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"Reference":{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"multisig","name":"Multisig","typeArguments":[]}}}],"return":["U64"]},"proposal":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"Reference":{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"multisig","name":"Multisig","typeArguments":[]}}},{"Reference":{"Struct":{"address":"0x1","module":"string","name":"String","typeArguments":[]}}}],"return":[{"Reference":{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"multisig","name":"Proposal","typeArguments":[]}}}]},"remove_approval":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"MutableReference":{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"multisig","name":"Multisig","typeArguments":[]}}},{"Struct":{"address":"0x1","module":"string","name":"String","typeArguments":[]}},{"MutableReference":{"Struct":{"address":"0x2","module":"tx_context","name":"TxContext","typeArguments":[]}}}],"return":[]},"remove_members":{"visibility":"Friend","isEntry":false,"typeParameters":[],"parameters":[{"MutableReference":{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"multisig","name":"Multisig","typeArguments":[]}}},{"Vector":"Address"}],"return":[]},"set_name":{"visibility":"Friend","isEntry":false,"typeParameters":[],"parameters":[{"MutableReference":{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"multisig","name":"Multisig","typeArguments":[]}}},{"Struct":{"address":"0x1","module":"string","name":"String","typeArguments":[]}}],"return":[]},"set_threshold":{"visibility":"Friend","isEntry":false,"typeParameters":[],"parameters":[{"MutableReference":{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"multisig","name":"Multisig","typeArguments":[]}}},"U64"],"return":[]},"share":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"multisig","name":"Multisig","typeArguments":[]}}],"return":[]},"threshold":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"Reference":{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"multisig","name":"Multisig","typeArguments":[]}}}],"return":["U64"]},"uid_mut":{"visibility":"Friend","isEntry":false,"typeParameters":[],"parameters":[{"MutableReference":{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"multisig","name":"Multisig","typeArguments":[]}}}],"return":[{"MutableReference":{"Struct":{"address":"0x2","module":"object","name":"UID","typeArguments":[]}}}]},"unpack_action":{"visibility":"Friend","isEntry":false,"typeParameters":[{"abilities":["Store"]}],"parameters":[{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"multisig","name":"Action","typeArguments":[{"TypeParameter":0}]}}],"return":[{"TypeParameter":0}]}}},"owned":{"fileFormatVersion":6,"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","name":"owned","friends":[{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","name":"kiosk"},{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","name":"move_call"},{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","name":"payments"},{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","name":"transfers"}],"structs":{"Borrow":{"abilities":{"abilities":["Store"]},"typeParameters":[],"fields":[{"name":"withdraw","type":{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"owned","name":"Withdraw","typeArguments":[]}}},{"name":"to_return","type":{"Vector":{"Struct":{"address":"0x2","module":"object","name":"ID","typeArguments":[]}}}}]},"Withdraw":{"abilities":{"abilities":["Store"]},"typeParameters":[],"fields":[{"name":"objects","type":{"Vector":{"Struct":{"address":"0x2","module":"object","name":"ID","typeArguments":[]}}}}]}},"exposedFunctions":{"borrow":{"visibility":"Friend","isEntry":false,"typeParameters":[{"abilities":["Store","Key"]}],"parameters":[{"MutableReference":{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"owned","name":"Borrow","typeArguments":[]}}},{"MutableReference":{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"multisig","name":"Multisig","typeArguments":[]}}},{"Struct":{"address":"0x2","module":"transfer","name":"Receiving","typeArguments":[{"TypeParameter":0}]}}],"return":[{"TypeParameter":0}]},"complete_borrow":{"visibility":"Friend","isEntry":false,"typeParameters":[],"parameters":[{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"owned","name":"Borrow","typeArguments":[]}}],"return":[]},"complete_withdraw":{"visibility":"Friend","isEntry":false,"typeParameters":[],"parameters":[{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"owned","name":"Withdraw","typeArguments":[]}}],"return":[]},"new_borrow":{"visibility":"Friend","isEntry":false,"typeParameters":[],"parameters":[{"Vector":{"Struct":{"address":"0x2","module":"object","name":"ID","typeArguments":[]}}}],"return":[{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"owned","name":"Borrow","typeArguments":[]}}]},"new_withdraw":{"visibility":"Friend","isEntry":false,"typeParameters":[],"parameters":[{"Vector":{"Struct":{"address":"0x2","module":"object","name":"ID","typeArguments":[]}}}],"return":[{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"owned","name":"Withdraw","typeArguments":[]}}]},"put_back":{"visibility":"Friend","isEntry":false,"typeParameters":[{"abilities":["Store","Key"]}],"parameters":[{"MutableReference":{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"owned","name":"Borrow","typeArguments":[]}}},{"Reference":{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"multisig","name":"Multisig","typeArguments":[]}}},{"TypeParameter":0}],"return":[]},"withdraw":{"visibility":"Friend","isEntry":false,"typeParameters":[{"abilities":["Store","Key"]}],"parameters":[{"MutableReference":{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"owned","name":"Withdraw","typeArguments":[]}}},{"MutableReference":{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"multisig","name":"Multisig","typeArguments":[]}}},{"Struct":{"address":"0x2","module":"transfer","name":"Receiving","typeArguments":[{"TypeParameter":0}]}}],"return":[{"TypeParameter":0}]}}},"payments":{"fileFormatVersion":6,"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","name":"payments","friends":[],"structs":{"Pay":{"abilities":{"abilities":["Store"]},"typeParameters":[],"fields":[{"name":"withdraw","type":{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"owned","name":"Withdraw","typeArguments":[]}}},{"name":"amount","type":"U64"},{"name":"interval","type":"U64"},{"name":"recipient","type":"Address"}]},"Stream":{"abilities":{"abilities":["Key"]},"typeParameters":[{"constraints":{"abilities":["Drop"]},"isPhantom":true}],"fields":[{"name":"id","type":{"Struct":{"address":"0x2","module":"object","name":"UID","typeArguments":[]}}},{"name":"balance","type":{"Struct":{"address":"0x2","module":"balance","name":"Balance","typeArguments":[{"TypeParameter":0}]}}},{"name":"amount","type":"U64"},{"name":"interval","type":"U64"},{"name":"last_epoch","type":"U64"},{"name":"recipient","type":"Address"}]}},"exposedFunctions":{"cancel_payment":{"visibility":"Public","isEntry":false,"typeParameters":[{"abilities":["Drop"]}],"parameters":[{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"payments","name":"Stream","typeArguments":[{"TypeParameter":0}]}},{"MutableReference":{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"multisig","name":"Multisig","typeArguments":[]}}},{"MutableReference":{"Struct":{"address":"0x2","module":"tx_context","name":"TxContext","typeArguments":[]}}}],"return":[]},"complete_stream":{"visibility":"Public","isEntry":false,"typeParameters":[{"abilities":["Drop"]}],"parameters":[{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"payments","name":"Stream","typeArguments":[{"TypeParameter":0}]}}],"return":[]},"create_stream":{"visibility":"Public","isEntry":false,"typeParameters":[{"abilities":["Drop"]}],"parameters":[{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"multisig","name":"Action","typeArguments":[{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"payments","name":"Pay","typeArguments":[]}}]}},{"MutableReference":{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"multisig","name":"Multisig","typeArguments":[]}}},{"Struct":{"address":"0x2","module":"transfer","name":"Receiving","typeArguments":[{"Struct":{"address":"0x2","module":"coin","name":"Coin","typeArguments":[{"TypeParameter":0}]}}]}},{"MutableReference":{"Struct":{"address":"0x2","module":"tx_context","name":"TxContext","typeArguments":[]}}}],"return":[]},"pay":{"visibility":"Public","isEntry":false,"typeParameters":[{"abilities":["Drop"]}],"parameters":[{"MutableReference":{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"payments","name":"Stream","typeArguments":[{"TypeParameter":0}]}}},{"MutableReference":{"Struct":{"address":"0x2","module":"tx_context","name":"TxContext","typeArguments":[]}}}],"return":[]},"propose_pay":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"MutableReference":{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"multisig","name":"Multisig","typeArguments":[]}}},{"Struct":{"address":"0x1","module":"string","name":"String","typeArguments":[]}},"U64","U64",{"Struct":{"address":"0x1","module":"string","name":"String","typeArguments":[]}},{"Struct":{"address":"0x2","module":"object","name":"ID","typeArguments":[]}},"U64","U64","Address",{"MutableReference":{"Struct":{"address":"0x2","module":"tx_context","name":"TxContext","typeArguments":[]}}}],"return":[]}}},"transfers":{"fileFormatVersion":6,"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","name":"transfers","friends":[],"structs":{"Deliver":{"abilities":{"abilities":["Store"]},"typeParameters":[],"fields":[{"name":"withdraw","type":{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"owned","name":"Withdraw","typeArguments":[]}}},{"name":"recipient","type":"Address"}]},"Delivery":{"abilities":{"abilities":["Key"]},"typeParameters":[],"fields":[{"name":"id","type":{"Struct":{"address":"0x2","module":"object","name":"UID","typeArguments":[]}}},{"name":"objects","type":{"Struct":{"address":"0x2","module":"bag","name":"Bag","typeArguments":[]}}}]},"DeliveryCap":{"abilities":{"abilities":["Key"]},"typeParameters":[],"fields":[{"name":"id","type":{"Struct":{"address":"0x2","module":"object","name":"UID","typeArguments":[]}}},{"name":"delivery_id","type":{"Struct":{"address":"0x2","module":"object","name":"ID","typeArguments":[]}}}]},"Send":{"abilities":{"abilities":["Store"]},"typeParameters":[],"fields":[{"name":"withdraw","type":{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"owned","name":"Withdraw","typeArguments":[]}}},{"name":"recipients","type":{"Vector":"Address"}}]}},"exposedFunctions":{"add_to_delivery":{"visibility":"Public","isEntry":false,"typeParameters":[{"abilities":["Store","Key"]}],"parameters":[{"MutableReference":{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"transfers","name":"Delivery","typeArguments":[]}}},{"MutableReference":{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"multisig","name":"Action","typeArguments":[{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"transfers","name":"Deliver","typeArguments":[]}}]}}},{"MutableReference":{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"multisig","name":"Multisig","typeArguments":[]}}},{"Struct":{"address":"0x2","module":"transfer","name":"Receiving","typeArguments":[{"TypeParameter":0}]}}],"return":[]},"cancel_delivery":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"MutableReference":{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"multisig","name":"Multisig","typeArguments":[]}}},{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"transfers","name":"Delivery","typeArguments":[]}},{"MutableReference":{"Struct":{"address":"0x2","module":"tx_context","name":"TxContext","typeArguments":[]}}}],"return":[]},"claim":{"visibility":"Public","isEntry":false,"typeParameters":[{"abilities":["Store","Key"]}],"parameters":[{"MutableReference":{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"transfers","name":"Delivery","typeArguments":[]}}},{"Reference":{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"transfers","name":"DeliveryCap","typeArguments":[]}}}],"return":[{"TypeParameter":0}]},"complete_delivery":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"transfers","name":"Delivery","typeArguments":[]}},{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"transfers","name":"DeliveryCap","typeArguments":[]}}],"return":[]},"complete_send":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"multisig","name":"Action","typeArguments":[{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"transfers","name":"Send","typeArguments":[]}}]}}],"return":[]},"create_delivery":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"MutableReference":{"Struct":{"address":"0x2","module":"tx_context","name":"TxContext","typeArguments":[]}}}],"return":[{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"transfers","name":"Delivery","typeArguments":[]}}]},"deliver":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"transfers","name":"Delivery","typeArguments":[]}},{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"multisig","name":"Action","typeArguments":[{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"transfers","name":"Deliver","typeArguments":[]}}]}},{"MutableReference":{"Struct":{"address":"0x2","module":"tx_context","name":"TxContext","typeArguments":[]}}}],"return":[]},"propose_delivery":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"MutableReference":{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"multisig","name":"Multisig","typeArguments":[]}}},{"Struct":{"address":"0x1","module":"string","name":"String","typeArguments":[]}},"U64","U64",{"Struct":{"address":"0x1","module":"string","name":"String","typeArguments":[]}},{"Vector":{"Struct":{"address":"0x2","module":"object","name":"ID","typeArguments":[]}}},"Address",{"MutableReference":{"Struct":{"address":"0x2","module":"tx_context","name":"TxContext","typeArguments":[]}}}],"return":[]},"propose_send":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"MutableReference":{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"multisig","name":"Multisig","typeArguments":[]}}},{"Struct":{"address":"0x1","module":"string","name":"String","typeArguments":[]}},"U64","U64",{"Struct":{"address":"0x1","module":"string","name":"String","typeArguments":[]}},{"Vector":{"Struct":{"address":"0x2","module":"object","name":"ID","typeArguments":[]}}},{"Vector":"Address"},{"MutableReference":{"Struct":{"address":"0x2","module":"tx_context","name":"TxContext","typeArguments":[]}}}],"return":[]},"retrieve":{"visibility":"Public","isEntry":false,"typeParameters":[{"abilities":["Store","Key"]}],"parameters":[{"MutableReference":{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"transfers","name":"Delivery","typeArguments":[]}}},{"Reference":{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"multisig","name":"Multisig","typeArguments":[]}}},{"MutableReference":{"Struct":{"address":"0x2","module":"tx_context","name":"TxContext","typeArguments":[]}}}],"return":[]},"send":{"visibility":"Public","isEntry":false,"typeParameters":[{"abilities":["Store","Key"]}],"parameters":[{"MutableReference":{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"multisig","name":"Action","typeArguments":[{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"transfers","name":"Send","typeArguments":[]}}]}}},{"MutableReference":{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"multisig","name":"Multisig","typeArguments":[]}}},{"Struct":{"address":"0x2","module":"transfer","name":"Receiving","typeArguments":[{"TypeParameter":0}]}}],"return":[]}}},"upgrade_policies":{"fileFormatVersion":6,"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","name":"upgrade_policies","friends":[],"structs":{"Policy":{"abilities":{"abilities":["Store"]},"typeParameters":[],"fields":[{"name":"policy","type":"U8"},{"name":"upgrade_lock","type":{"Struct":{"address":"0x2","module":"object","name":"ID","typeArguments":[]}}}]},"Upgrade":{"abilities":{"abilities":["Store"]},"typeParameters":[],"fields":[{"name":"digest","type":{"Vector":"U8"}},{"name":"upgrade_lock","type":{"Struct":{"address":"0x2","module":"object","name":"ID","typeArguments":[]}}}]},"UpgradeLock":{"abilities":{"abilities":["Key"]},"typeParameters":[],"fields":[{"name":"id","type":{"Struct":{"address":"0x2","module":"object","name":"UID","typeArguments":[]}}},{"name":"label","type":{"Struct":{"address":"0x1","module":"string","name":"String","typeArguments":[]}}},{"name":"time_lock","type":"U64"},{"name":"upgrade_cap","type":{"Struct":{"address":"0x2","module":"package","name":"UpgradeCap","typeArguments":[]}}}]}},"exposedFunctions":{"complete_upgrade":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"MutableReference":{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"multisig","name":"Multisig","typeArguments":[]}}},{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"upgrade_policies","name":"UpgradeLock","typeArguments":[]}},{"Struct":{"address":"0x2","module":"package","name":"UpgradeReceipt","typeArguments":[]}}],"return":[]},"execute_policy":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"multisig","name":"Action","typeArguments":[{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"upgrade_policies","name":"Policy","typeArguments":[]}}]}},{"MutableReference":{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"multisig","name":"Multisig","typeArguments":[]}}},{"Struct":{"address":"0x2","module":"transfer","name":"Receiving","typeArguments":[{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"upgrade_policies","name":"UpgradeLock","typeArguments":[]}}]}}],"return":[]},"execute_upgrade":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"multisig","name":"Action","typeArguments":[{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"upgrade_policies","name":"Upgrade","typeArguments":[]}}]}},{"MutableReference":{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"multisig","name":"Multisig","typeArguments":[]}}},{"Struct":{"address":"0x2","module":"transfer","name":"Receiving","typeArguments":[{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"upgrade_policies","name":"UpgradeLock","typeArguments":[]}}]}}],"return":[{"Struct":{"address":"0x2","module":"package","name":"UpgradeTicket","typeArguments":[]}},{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"upgrade_policies","name":"UpgradeLock","typeArguments":[]}}]},"lock_cap":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"MutableReference":{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"multisig","name":"Multisig","typeArguments":[]}}},{"Struct":{"address":"0x1","module":"string","name":"String","typeArguments":[]}},"U64",{"Struct":{"address":"0x2","module":"package","name":"UpgradeCap","typeArguments":[]}},{"MutableReference":{"Struct":{"address":"0x2","module":"tx_context","name":"TxContext","typeArguments":[]}}}],"return":[{"Struct":{"address":"0x2","module":"object","name":"ID","typeArguments":[]}}]},"propose_policy":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"MutableReference":{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"multisig","name":"Multisig","typeArguments":[]}}},{"Struct":{"address":"0x1","module":"string","name":"String","typeArguments":[]}},"U64","U64",{"Struct":{"address":"0x1","module":"string","name":"String","typeArguments":[]}},"U8",{"Struct":{"address":"0x2","module":"transfer","name":"Receiving","typeArguments":[{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"upgrade_policies","name":"UpgradeLock","typeArguments":[]}}]}},{"MutableReference":{"Struct":{"address":"0x2","module":"tx_context","name":"TxContext","typeArguments":[]}}}],"return":[]},"propose_upgrade":{"visibility":"Public","isEntry":false,"typeParameters":[],"parameters":[{"MutableReference":{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"multisig","name":"Multisig","typeArguments":[]}}},{"Struct":{"address":"0x1","module":"string","name":"String","typeArguments":[]}},"U64",{"Struct":{"address":"0x1","module":"string","name":"String","typeArguments":[]}},{"Vector":"U8"},{"Struct":{"address":"0x2","module":"transfer","name":"Receiving","typeArguments":[{"Struct":{"address":"0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb","module":"upgrade_policies","name":"UpgradeLock","typeArguments":[]}}]}},{"Reference":{"Struct":{"address":"0x2","module":"clock","name":"Clock","typeArguments":[]}}},{"MutableReference":{"Struct":{"address":"0x2","module":"tx_context","name":"TxContext","typeArguments":[]}}}],"return":[]}}}}',
 );
 
 export function loadAllTypes(coder: MoveCoder) {
@@ -3897,7 +3897,7 @@ export function loadAllTypes(coder: MoveCoder) {
   for (const m of Object.values(MODULES)) {
     coder.load(
       m as any,
-      "0x7af8dee737049abb4f3b26938e8f525d268b9cbc0a35ca7c1a9fac720a5bc2f4",
+      "0xad8e39308a80423c17a453e153f05ce275393d9601f1f10211c5c24283062fb",
     );
   }
 }

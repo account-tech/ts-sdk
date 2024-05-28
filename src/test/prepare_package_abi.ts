@@ -3,8 +3,9 @@ import path from 'path';
 import { getFaucetHost, requestSuiFromFaucetV0 } from "@mysten/sui.js/faucet";
 import { Ed25519Keypair } from "@mysten/sui.js/keypairs/ed25519";
 import { TransactionBlock } from "@mysten/sui.js/transactions";
-import { KrakenClient } from "../client.js"
 import { codegen } from '@typemove/sui/codegen';
+import { FRAMEWORK, STDLIB } from "../constants.js";
+import { getFullnodeUrl, SuiClient } from "@mysten/sui.js/client";
 
 // to run on localnet:
 // `git clone https://github.com/MystenLabs/sui`  
@@ -24,7 +25,7 @@ import { codegen } from '@typemove/sui/codegen';
         host: getFaucetHost("localnet"),
         recipient: keypair.toSuiAddress(),
     });
-    const kraken = new KrakenClient("localnet", "", "", keypair.toSuiAddress(), "");
+    const client = new SuiClient({ url: getFullnodeUrl("localnet") });
     const { execSync } = require('child_process');
 
     // === Publish Kraken Package ===
@@ -37,7 +38,7 @@ import { codegen } from '@typemove/sui/codegen';
     const [upgradeCap] = tx.publish({ modules,dependencies });
     tx.transferObjects([upgradeCap], keypair.getPublicKey().toSuiAddress());
     tx.setGasBudget(1000000000);
-    const result = await kraken.client.signAndExecuteTransactionBlock({
+    const result = await client.signAndExecuteTransactionBlock({
         signer: keypair,
         transactionBlock: tx,
         options: { showEffects: true, showObjectChanges: true },
@@ -47,15 +48,23 @@ import { codegen } from '@typemove/sui/codegen';
     const packageObj: any = result.objectChanges?.find((obj: any) => obj.type === "published");
     console.log("Package published: ", packageObj.packageId);
 
-    // === Generate ABI ===
+    // === Generate ABIs ===
 
-    const abisDir = "./abis";
+    const abisDir = "./src/test/abis";
     if (fs.existsSync(abisDir)) fs.rmdirSync(abisDir, { recursive: true });
     if (!fs.existsSync(abisDir)) fs.mkdirSync(abisDir, { recursive: true });
-    const abi = await kraken.client.getNormalizedMoveModulesByPackage({ package: packageObj.packageId })
-    fs.writeFileSync(path.join(abisDir, "kraken" + '.json'), JSON.stringify(abi, null, 2))
     
-    const typesDir = "./src/types/sui";
+    const krakenAbi = await client.getNormalizedMoveModulesByPackage({ package: packageObj.packageId })
+    fs.writeFileSync(path.join(abisDir, "kraken" + '.json'), JSON.stringify(krakenAbi, null, 2))
+    const typesDir = "./src/test/types";
     if (fs.existsSync(typesDir)) fs.rmdirSync(typesDir, { recursive: true });
-    await codegen(abisDir, typesDir, "http://127.0.0.1:9000");
+    await codegen(abisDir, typesDir, getFullnodeUrl("localnet"));
+
+    const stdlibAbi = await client.getNormalizedMoveModulesByPackage({ package: STDLIB })
+    fs.writeFileSync(path.join(abisDir, "0x1" + '.json'), JSON.stringify(stdlibAbi, null, 2))    
+    await codegen(abisDir, typesDir, getFullnodeUrl("localnet"));
+
+    const frameworkAbi = await client.getNormalizedMoveModulesByPackage({ package: FRAMEWORK })
+    fs.writeFileSync(path.join(abisDir, "0x2" + '.json'), JSON.stringify(frameworkAbi, null, 2))    
+    await codegen(abisDir, typesDir, getFullnodeUrl("localnet"));
 })();
