@@ -90,7 +90,7 @@ export class KrakenClient {
 		}
 	}
 
-	createMultisig(tx: TransactionBlock, name: string, members: string[], accountId: string): TransactionResult {
+	createMultisig(tx: TransactionBlock, accountId: string, name: string, threshold?: number, members?: string[]): TransactionResult {
 		const [multisig] = tx.moveCall({
 			target: `${this.packageId}::multisig::new`,
 			arguments: [tx.pure(name)],
@@ -107,7 +107,9 @@ export class KrakenClient {
 			arguments: [tx.object(accountId), id],
 		});
 		
-		if (members.length > 0) {
+		if (threshold || members) {
+			threshold ? threshold : []; // option::none if no threshold
+			members ? members : []; // empty array if no members
 			tx.moveCall({
 				target: `${this.packageId}::config::propose_modify`,
 				arguments: [
@@ -117,7 +119,7 @@ export class KrakenClient {
 					tx.pure(0), 
 					tx.pure(""), 
 					tx.pure([]), 
-					tx.pure([]), 
+					tx.pure(threshold), 
 					tx.pure(members),
 					tx.pure([]), 
 				],
@@ -140,7 +142,7 @@ export class KrakenClient {
 				],
 			});
 			
-			members.forEach((member) => {
+			members?.forEach((member) => {
 				tx.moveCall({
 					target: `${this.packageId}::account::send_invite`,
 					arguments: [multisig, tx.pure(member)],
