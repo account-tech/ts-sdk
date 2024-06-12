@@ -1,11 +1,10 @@
-export type Multisig = {
-    version: number,
-    name: string,
-    threshold: number,
-    totalWeight: number,
-    members: Account[],
-    proposals: Proposal[],
-}
+export type Member = {
+    owner: string,
+    id: string,
+    username: string,
+    profilePicture: string,
+    weight: number,
+};
 
 export type Proposal = {
     id: string,
@@ -18,14 +17,6 @@ export type Proposal = {
     approved: string[],
     actions: any[],
 }
-
-export type Account = {
-    owner: string,
-    id: string,
-	username: string,
-	profilePicture: string,
-    multisigIds: {id: string, name: string}[],
-};
 
 export type Kiosk = {
     cap: string,
