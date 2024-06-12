@@ -30,30 +30,9 @@ import { getFullnodeUrl, SuiClient } from "@mysten/sui.js/client";
     const client = new SuiClient({ url });
     const { execSync } = require('child_process');
 
-    // === Publish Kiosk Package ===
-
-    // {
-    //     const { modules, dependencies } = JSON.parse(execSync(
-    //         `"/home/tmarchal/.cargo/bin/sui" move build --dump-bytecode-as-base64 --path "./test/packages/kiosk"`, 
-    //         { encoding: 'utf-8' }
-    //     ));
-    //     const tx = new TransactionBlock();
-    //     const [upgradeCap] = tx.publish({ modules,dependencies });
-    //     tx.transferObjects([upgradeCap], keypair.getPublicKey().toSuiAddress());
-    //     tx.setGasBudget(1000000000);
-    //     const result = await client.signAndExecuteTransactionBlock({
-    //         signer: keypair,
-    //         transactionBlock: tx,
-    //         options: { showEffects: true, showObjectChanges: true },
-    //         requestType: "WaitForLocalExecution"
-    //     });
-
-    //     const packageObj: any = result.objectChanges?.find((obj: any) => obj.type === "published");
-    //     console.log("Set this package id in Kiosk manifest: ", packageObj.packageId);
-    // }
-
     // === Publish Kraken Package ===
 
+    // PUBLISH KIOSK PACKAGE BEFORE: `sui client publish ./test/packages/kiosk --gas-budget 1000000000`
     const { modules, dependencies } = JSON.parse(execSync(
         `"/home/tmarchal/.cargo/bin/sui" move build --dump-bytecode-as-base64 --path "../kraken/package/"`, 
         { encoding: 'utf-8' }

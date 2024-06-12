@@ -11,9 +11,9 @@ export class Account {
     public multisigIds?: {id: string, name: string}[];
 
 	private constructor(
+		private network: "mainnet" | "testnet" | "devnet" | "localnet" | string,
         private packageId: string,
 		private userAddr: string,
-		private network: "mainnet" | "testnet" | "devnet" | "localnet" | string,
 	) {
 		const url = (network == "mainnet" || network == "testnet" || network == "devnet" || network == "localnet") ? getFullnodeUrl(network) : network;
 		this.client = new SuiClient({ url });
@@ -25,7 +25,7 @@ export class Account {
         userAddr: string, 
     ): Promise<Account> {
 		const account = new Account(network, packageId, userAddr);
-		const accountData = await account.getUserAccount(userAddr);
+		const accountData = await account.getAccount(userAddr);
         if (accountData) {
 			account.id = accountData.id;
 			account.username = accountData.username;
@@ -34,11 +34,23 @@ export class Account {
         }
 		return account;
 	}
+	
+	async fetchAccount(user: string = this.userAddr) {
+		const accountData = await this.getAccount(user);
+		if (accountData) {
+			this.id = accountData.id;
+			this.username = accountData.username;
+			this.profilePicture = accountData.profilePicture;
+			this.multisigIds = accountData.multisigIds;
+		}
+	}
 
 	// TODO: implement merge accounts
 
     // get and decode account data from abi
 	async getAccountRaw(owner: string = this.userAddr): Promise<accountAbi.Account | undefined> {
+		console.log(owner)
+		console.log(this.packageId)
 		const { data } = await this.client.getOwnedObjects({
 			owner,
 			filter: { StructType: `${this.packageId}::account::Account` },
@@ -47,7 +59,6 @@ export class Account {
 		
 		const userAccount = data.find(acc => {
 			if (acc.data?.content?.dataType === "moveObject") {
-				console.log(acc.data?.content?.type.includes(this.packageId));
 				return acc.data?.content?.type.includes(this.packageId);
 			}
 		});
@@ -56,11 +67,11 @@ export class Account {
 	}
 
     // get and format user account data
-	async getUserAccount(
+	async getAccount(
         user: string = this.userAddr
     ): Promise<{id: string, username: string, profilePicture: string, multisigIds: {id: string, name: string}[]}> {
-		const account = await this.getAccountRaw(user);
-		if (!account) { 
+		const accountRaw = await this.getAccountRaw(user);
+		if (!accountRaw) { 
 			return {
 				id: "",
 				username: "",
@@ -70,7 +81,7 @@ export class Account {
 		}
 		
 		const multisigsObjs = await this.client.multiGetObjects({
-			ids: account!.multisig_ids.contents as string[],
+			ids: accountRaw!.multisig_ids.contents as string[],
 			options: { showContent: true }
 		});
 		const multisigIds = await Promise.all(multisigsObjs.map(async (ms: any) => { 
@@ -82,9 +93,9 @@ export class Account {
 		}));
 		
 		return {
-			id: account!.id.id,
-			username: account!.username,
-			profilePicture: account!.profile_picture,
+			id: accountRaw!.id.id,
+			username: accountRaw!.username,
+			profilePicture: accountRaw!.profile_picture,
 			multisigIds,
 		}
 	}
@@ -103,10 +114,13 @@ export class Account {
 		});
 	}
 
-	joinMultisig(tx: TransactionBlock, account: string, multisig: string): TransactionResult {
+	joinMultisig(tx: TransactionBlock, account: string, multisig: string | TransactionResult): TransactionResult {
 		return tx.moveCall({
 			target: `${this.packageId}::account::join_multisig`,
-			arguments: [tx.object(account), tx.pure(multisig)],
+			arguments: [
+				tx.object(account), 
+				typeof multisig === "string" ? tx.pure(multisig) : multisig
+			],
 		});
 	}
 

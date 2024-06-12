@@ -16,11 +16,12 @@ export class Multisig {
     public members?: Member[];
     public proposals?: Proposal[];
 
-	constructor(
+	private constructor(
 		private network: "mainnet" | "testnet" | "devnet" | "localnet" | string,
         private packageId: string,
 		private userAddr: string,
 	) {
+		console.log(network)
 		const url = (network == "mainnet" || network == "testnet" || network == "devnet" || network == "localnet") ? getFullnodeUrl(network) : network;
 		this.client = new SuiClient({ url });
 	}
@@ -31,7 +32,7 @@ export class Multisig {
         userAddr: string, 
         multisigId?: string,
     ): Promise<Multisig> {
-		const multisig = new Multisig(packageId, userAddr, network);
+		const multisig = new Multisig(network, packageId, userAddr);
         if (multisigId) {
 			const multisigData = await multisig.getMultisig(multisigId);
 			multisig.id = multisigId;
@@ -45,21 +46,35 @@ export class Multisig {
 		return multisig;
 	}
 
-	async getMultisig(
-        id: string
-    ): Promise<{version: number, name: string, threshold: number, totalWeight: number, members: Member[], proposals: Proposal[]}> {
-		// get Multisig 
+	async fetchMultisig(id: string = this.id!) {
+		const multisigData = await this.getMultisig(id);
+		this.id = id;
+		this.version = multisigData.version;
+		this.name = multisigData.name;
+		this.threshold = multisigData.threshold;
+		this.totalWeight = multisigData.totalWeight;
+		this.members = multisigData.members;
+		this.proposals = multisigData.proposals;
+	}
+
+	async getMultisigRaw(id: string): Promise<multisigAbi.Multisig | undefined> {
 		const { data } = await this.client.getObject({
 			id,
 			options: { showContent: true }
 		});
 
-		const multisigDecoded = await defaultMoveCoder().decodedType(data?.content, multisigAbi.Multisig.type())
-		const membersAddress: string[] = multisigDecoded!.members.contents.map(member => member.key);
+		return await defaultMoveCoder().decodedType(data?.content, multisigAbi.Multisig.type());
+	}
+
+	async getMultisig(
+        id: string
+    ): Promise<{version: number, name: string, threshold: number, totalWeight: number, members: Member[], proposals: Proposal[]}> {
+		const multisigRaw = await this.getMultisigRaw(id);
+		const membersAddress: string[] = multisigRaw!.members.contents.map(member => member.key);
         // get Member for all members
 		const members = await Promise.all(membersAddress.map(async member => {
-			const weight = multisigDecoded?.members.contents.find(m => m.key == member)?.value.weight;
-			const account = await Account.init(this.packageId, this.userAddr, this.network);
+			const weight = multisigRaw?.members.contents.find(m => m.key == member)?.value.weight;
+			const account = await Account.init(this.network, this.packageId, this.userAddr);
 			const accountRaw = await account.getAccountRaw(member);
 			return {
 				owner: member,
@@ -71,7 +86,7 @@ export class Multisig {
 		}));
 
 		// get proposals in multisig and each action attached to proposals
-		const proposals = await Promise.all(multisigDecoded!.proposals.contents.map(async (proposal) => {
+		const proposals = await Promise.all(multisigRaw!.proposals.contents.map(async (proposal) => {
 			// get the dynamic field action for each proposal
 			const parentId = proposal.value.id.id;
 			const { data } = await this.client.getDynamicFields({ parentId });
@@ -101,10 +116,10 @@ export class Multisig {
 		}));
 
 		return {
-			version: Number(multisigDecoded!.version),
-			name: multisigDecoded!.name,
-			threshold: Number(multisigDecoded!.threshold),
-			totalWeight: Number(multisigDecoded!.total_weight),
+			version: Number(multisigRaw!.version),
+			name: multisigRaw!.name,
+			threshold: Number(multisigRaw!.threshold),
+			totalWeight: Number(multisigRaw!.total_weight),
 			members,
 			proposals,
 		}
@@ -132,10 +147,17 @@ export class Multisig {
 		});
 	}
 
-	approveProposal(tx: TransactionBlock, key: string): TransactionResult {
+	approveProposal(
+		tx: TransactionBlock, 
+		key: string, 
+		multisig: string | TransactionResult = this.id!
+	): TransactionResult {
 		return tx.moveCall({
 			target: `${this.packageId}::multisig::approve_proposal`,
-			arguments: [tx.object(this.id), tx.pure(key)],
+			arguments: [
+				typeof(multisig) === "string" ? tx.pure(multisig) : multisig, 
+				tx.pure(key)
+			],
 		});
 	}
 
@@ -146,10 +168,18 @@ export class Multisig {
 		});
 	}
 	
-	executeProposal(tx: TransactionBlock, key: string): TransactionResult {
+	executeProposal(
+		tx: TransactionBlock, 
+		key: string, 
+		multisig: string | TransactionResult = this.id!
+	): TransactionResult {
 		return tx.moveCall({
 			target: `${this.packageId}::multisig::execute_proposal`,
-			arguments: [tx.object(this.id), tx.pure(key), tx.object(CLOCK)],
+			arguments: [
+				typeof(multisig) === "string" ? tx.pure(multisig) : multisig, 
+				tx.pure(key), 
+				tx.object(CLOCK)
+			],
 		});
 	}
 }

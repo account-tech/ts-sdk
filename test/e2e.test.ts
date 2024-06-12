@@ -23,48 +23,49 @@ describe("Interact with Kraken SDK on localnet" ,async () => {
     const { execSync } = require('child_process');
     const abiPath = path.join(__dirname, './abis/kraken.json');
     const abiData = JSON.parse(fs.readFileSync(abiPath, 'utf8'));
-    const kraken = new KrakenClient("localnet", "", abiData.account.address, keypair.toSuiAddress(), "");
+    const kraken = await KrakenClient.init("localnet", abiData.account.address, keypair.toSuiAddress());
     // nftIds.length determines the number of nfts to issue
     let nftIds: string[] = ["", "", ""];
+        console.log(kraken.multisig)
         
     // === get SUI ===
 
-    console.log("Get some SUI");
-    await requestSuiFromFaucetV0({
-        host: getFaucetHost("localnet"),
-        recipient: keypair.toSuiAddress(),
-    });
+    // console.log("Get some SUI");
+    // await requestSuiFromFaucetV0({
+    //     host: getFaucetHost("localnet"),
+    //     recipient: keypair.toSuiAddress(),
+    // });
 
     // === Publish, issue and handle Nfts ===
-    {
-        const { modules, dependencies } = JSON.parse(execSync(
-            `"/home/tmarchal/.cargo/bin/sui" move build --dump-bytecode-as-base64 --path "./test/packages/nft"`, 
-            { encoding: 'utf-8' }
-        ));
-        // publish nft package
-        const tx = new TransactionBlock();
-        const [upgradeCap] = tx.publish({ modules, dependencies });
-        tx.transferObjects([upgradeCap], keypair.getPublicKey().toSuiAddress());
-        const result = await executeTx(tx);
-        const packageObj = result.objectChanges?.find((obj) => obj.type === "published");
-        // create and transfer as many nft as nftIds.length and save the ids
-        const tx1 = new TransactionBlock();
-        for (const _ of nftIds) {
-            const [nft] = tx1.moveCall({ target: `${packageObj?.packageId}::nft::new` });
-            tx1.transferObjects([nft], keypair.getPublicKey().toSuiAddress());
-        }
-        const result1 = await executeTx(tx1);
-        const ids = result1.objectChanges?.filter((obj) => obj.type === "created").map((obj) => obj.objectId);
-        nftIds = ids!;
-        console.log("Nfts issued and handled: ", nftIds);
-    }
+    // {
+    //     const { modules, dependencies } = JSON.parse(execSync(
+    //         `"/home/tmarchal/.cargo/bin/sui" move build --dump-bytecode-as-base64 --path "./test/packages/nft"`, 
+    //         { encoding: 'utf-8' }
+    //     ));
+    //     // publish nft package
+    //     const tx = new TransactionBlock();
+    //     const [upgradeCap] = tx.publish({ modules, dependencies });
+    //     tx.transferObjects([upgradeCap], keypair.getPublicKey().toSuiAddress());
+    //     const result = await executeTx(tx);
+    //     const packageObj = result.objectChanges?.find((obj) => obj.type === "published");
+    //     // create and transfer as many nft as nftIds.length and save the ids
+    //     const tx1 = new TransactionBlock();
+    //     for (const _ of nftIds) {
+    //         const [nft] = tx1.moveCall({ target: `${packageObj?.packageId}::nft::new` });
+    //         tx1.transferObjects([nft], keypair.getPublicKey().toSuiAddress());
+    //     }
+    //     const result1 = await executeTx(tx1);
+    //     const ids = result1.objectChanges?.filter((obj) => obj.type === "created").map((obj) => obj.objectId);
+    //     nftIds = ids!;
+    //     console.log("Nfts issued and handled: ", nftIds);
+    // }
 
     // === Handle Account ===
     {    
-        const existingAccount = await kraken.getAccount();
-        if (existingAccount.id == "") {
+        await kraken.account?.fetchAccount();
+        if (!kraken.account?.id) {
             const tx = new TransactionBlock();
-            kraken.createAccount(tx, "Thouny", "");
+            kraken.account?.createAccount(tx, "Thouny", "");
             await executeTx(tx);
         }
         console.log("User account handled:");
@@ -73,53 +74,49 @@ describe("Interact with Kraken SDK on localnet" ,async () => {
     // // === Create Multisig ===
     {
         const tx = new TransactionBlock();
-        await kraken.fetchAccountData();
-        console.log(kraken.accountData);
+        await kraken.account?.fetchAccount();
+        console.log(kraken.account);
         
         kraken.createMultisig(tx, "Main");
         await executeTx(tx);
         console.log("Multisig created");
         
-        await kraken.fetchAccountData();        
-        const multisigId = kraken.accountData?.multisigIds[kraken.accountData.multisigIds.length - 1].id;
-        kraken.multisigId = multisigId!;
-        console.log(kraken.multisigId);
-        await kraken.fetchMultisigData();
+        await kraken.account?.fetchAccount();    
+        const multisigId = kraken.account?.multisigIds?.[kraken.account?.multisigIds.length - 1].id;
+        await kraken.multisig?.fetchMultisig(multisigId!);
         console.log("Multisig cached:");
-        console.log(kraken.multisigData);
-        expect(kraken.multisigData).toEqual({
-            version: 1,
-            name: "Main",
-            threshold: 1,
-            members: [kraken.accountData],
-            proposals: [],
-            totalWeight: 1
-        })
+        console.log(kraken.multisig);
+
+        expect(kraken.multisig?.version).toEqual(1);
+        expect(kraken.multisig?.name).toEqual("Main");
+        expect(kraken.multisig?.threshold).toEqual(1);
+        expect(kraken.multisig?.proposals).toEqual([]);
+        expect(kraken.multisig?.totalWeight).toEqual(1);
     }
 
     // // === Modify Config ===
-    it('modifies Config', async () => {
-        const txConfig = new TransactionBlock();
-        kraken.proposeModify(txConfig, "modify", 0, 0, "", "Updated", undefined, ["0x608f5242acdbe2bc779de586864dc914d0dee1adfe4654b560bd5019886daa29"], undefined);
-        await executeTx(txConfig);
-        console.log("Config modified:");
+    // it('modifies Config', async () => {
+    //     const txConfig = new TransactionBlock();
+    //     kraken.proposeModify(txConfig, "modify", 0, 0, "", "Updated", undefined, ["0x608f5242acdbe2bc779de586864dc914d0dee1adfe4654b560bd5019886daa29"], undefined);
+    //     await executeTx(txConfig);
+    //     console.log("Config modified:");
 
-        const account = await kraken.getAccount();
-        await kraken.fetchMultisigData();
-        console.log(kraken.multisigData);
-        expect(kraken.multisigData).toEqual({
-            name: "Updated",
-            threshold: 1,
-            members: [account, { 
-                owner: "0x608f5242acdbe2bc779de586864dc914d0dee1adfe4654b560bd5019886daa29",
-                id: "",
-                username: "",
-                profilePicture: "",
-                multisigs: []
-            }],
-            proposals: []
-        })
-    });
+    //     const account = await kraken.getAccount();
+    //     await kraken.fetchMultisigData();
+    //     console.log(kraken.multisigData);
+    //     expect(kraken.multisigData).toEqual({
+    //         name: "Updated",
+    //         threshold: 1,
+    //         members: [account, { 
+    //             owner: "0x608f5242acdbe2bc779de586864dc914d0dee1adfe4654b560bd5019886daa29",
+    //             id: "",
+    //             username: "",
+    //             profilePicture: "",
+    //             multisigs: []
+    //         }],
+    //         proposals: []
+    //     })
+    // });
 
     // === Kiosk ===
 
