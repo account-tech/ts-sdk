@@ -18,10 +18,12 @@ import path from 'path';
 describe("Interact with Kraken SDK on localnet" ,async () => {
     
     const keypair = Ed25519Keypair.fromSecretKey(Uint8Array.from(Buffer.from("AM06bExREdFceWiExfSacTJ+64AQtFl7SRkSiTmAqh6F", "base64")).slice(1));
+    console.log("Keypair address: ", keypair.toSuiAddress());
+
     const { execSync } = require('child_process');
-    const abisPath = path.join(__dirname, './abis/kraken.json');
-    const abisData = JSON.parse(fs.readFileSync(abisPath, 'utf8'));
-    const kraken = new KrakenClient("localnet", "", abisData.account.address, keypair.toSuiAddress(), "");
+    const abiPath = path.join(__dirname, './abis/kraken.json');
+    const abiData = JSON.parse(fs.readFileSync(abiPath, 'utf8'));
+    const kraken = new KrakenClient("localnet", "", abiData.account.address, keypair.toSuiAddress(), "");
     // nftIds.length determines the number of nfts to issue
     let nftIds: string[] = ["", "", ""];
         
@@ -36,7 +38,7 @@ describe("Interact with Kraken SDK on localnet" ,async () => {
     // === Publish, issue and handle Nfts ===
     {
         const { modules, dependencies } = JSON.parse(execSync(
-            `"/home/tmarchal/.cargo/bin/sui" move build --dump-bytecode-as-base64 --path "./test/package/"`, 
+            `"/home/tmarchal/.cargo/bin/sui" move build --dump-bytecode-as-base64 --path "./test/packages/nft"`, 
             { encoding: 'utf-8' }
         ));
         // publish nft package
@@ -71,26 +73,27 @@ describe("Interact with Kraken SDK on localnet" ,async () => {
     // // === Create Multisig ===
     {
         const tx = new TransactionBlock();
-        const currentAccount = await kraken.getAccount();
-        console.log(currentAccount);
+        await kraken.fetchAccountData();
+        console.log(kraken.accountData);
         
-        kraken.createMultisig(tx, "Main", [], currentAccount!.id);
+        kraken.createMultisig(tx, "Main");
         await executeTx(tx);
         console.log("Multisig created");
         
-        const account = await kraken.getAccount();
-        expect(account.multisigs.length).toEqual(currentAccount.multisigs.length + 1);
-        
-        const multisigId = account!.multisigs[account!.multisigs.length - 1].id;
-        kraken.multisigId = multisigId;
+        await kraken.fetchAccountData();        
+        const multisigId = kraken.accountData?.multisigIds[kraken.accountData.multisigIds.length - 1].id;
+        kraken.multisigId = multisigId!;
+        console.log(kraken.multisigId);
         await kraken.fetchMultisigData();
         console.log("Multisig cached:");
         console.log(kraken.multisigData);
         expect(kraken.multisigData).toEqual({
+            version: 1,
             name: "Main",
             threshold: 1,
-            members: [account],
-            proposals: []
+            members: [kraken.accountData],
+            proposals: [],
+            totalWeight: 1
         })
     }
 
@@ -138,6 +141,10 @@ describe("Interact with Kraken SDK on localnet" ,async () => {
             options: { showEffects: true, showObjectChanges: true },
             requestType: "WaitForLocalExecution"
         });
+
+        if (result.effects?.status.status != "success") {
+            console.log(result.effects?.status.error);
+        }
 
         expect(result.effects?.status.status).toEqual("success");
         return result;

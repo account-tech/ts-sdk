@@ -4,7 +4,7 @@ import { SuiClient, getFullnodeUrl } from "@mysten/sui.js/client";
 import { TransactionBlock, TransactionResult } from "@mysten/sui.js/transactions";
 import { KioskClient, Network } from "@mysten/kiosk";
 import { defaultMoveCoder } from "@typemove/sui";
-import { account, multisig } from "../test/types/kraken.js";
+import { account as moveAccount, multisig as moveMultisig } from "../test/types/kraken.js";
 import { kiosk } from "../test/types/0x2.js";
 
 export class KrakenClient {
@@ -15,177 +15,38 @@ export class KrakenClient {
 
 	public client: SuiClient;
 	public multisigData: Multisig | null;
+	public accountData: Account | null;
 
 	constructor(
 		public network: "mainnet" | "testnet" | "devnet" | "localnet",
-		public url: string,
+		public rpcUrl: string,
 		public packageId: string,
-		public user: string,
+		public userAddr: string,
 		public multisigId: string,
 	) {
-		if (!url) {
-			url = getFullnodeUrl(network);
+		if (!rpcUrl) {
+			rpcUrl = getFullnodeUrl(network);
 		}
 
-		this.client = new SuiClient({ url });
+		this.client = new SuiClient({ url: rpcUrl });
 		this.multisigData = null;
+		this.accountData = null;
 	}
 
 	async fetchMultisigData() {
 		this.multisigData = await this.getMultisig(this.multisigId);
 	}
 
+	async fetchAccountData() {
+		this.accountData = await this.getAccount(this.userAddr);
+	}
+
 	// ===== CORE =====
-
-	// === Multisig ===
-
-	async getMultisig(id: string): Promise<Multisig> {
-		// get Multisig 
-		const { data } = await this.client.getObject({
-			id,
-			options: { showContent: true }
-		});
-
-		const multisigDecoded = await defaultMoveCoder().decodedType(data?.content, multisig.Multisig.type())
-		const membersAddress = typeof(multisigDecoded!.members.contents) == "string" ? [multisigDecoded!.members.contents] : multisigDecoded!.members.contents;
-
-		const members = await Promise.all(membersAddress.map(async (member: any) => {
-			return await this.getAccount(member);
-		}));
-
-		console.log(multisigDecoded!.proposals.contents);
-		// get proposals in multisig and each action attached to proposals
-		const proposals = await Promise.all(multisigDecoded!.proposals.contents.map(async (proposal) => {
-			// get the dynamic field action for each proposal
-			const parentId = proposal.value.id.id;
-			const { data } = await this.client.getDynamicFields({ parentId });
-			const df: any = await this.client.getObject({
-				id: data[0].objectId,
-				options: { showContent: true }
-			});
-			// TODO: generate right types 
-			// + separate function for proposals
-			const approved = typeof(proposal.value.approved.contents) == "string" ? [proposal.value.approved.contents] : proposal.value.approved.contents;
-			const action = {
-				type: df.data?.content?.fields.value.type.split("::").pop(), // The action Struct name
-				...df.data?.content?.fields.value.fields // The action Struct fields
-			}
-
-			return {
-				id,
-				key: proposal.key,
-				description: proposal.value.description,
-				executionTime: proposal.value.execution_time,
-				expirationEpoch: proposal.value.expiration_epoch,
-				approved,
-				action
-			}
-		}));
-
-		return {
-			name: multisigDecoded!.name,
-			threshold: Number(multisigDecoded!.threshold),
-			members,
-			proposals,
-		}
-	}
-
-	createMultisig(tx: TransactionBlock, name: string, members: string[], accountId: string): TransactionResult {
-		const [multisig] = tx.moveCall({
-			target: `${this.packageId}::multisig::new`,
-			arguments: [tx.pure(name)],
-		});
-
-		const [id] = tx.moveCall({
-			target: `${FRAMEWORK}::object::id`,
-			arguments: [multisig],
-			typeArguments: [`${this.packageId}::multisig::Multisig`]
-		});
-		
-		tx.moveCall({
-			target: `${this.packageId}::account::join_multisig`,
-			arguments: [tx.object(accountId), id],
-		});
-		
-		if (members.length > 0) {
-			tx.moveCall({
-				target: `${this.packageId}::config::propose_modify`,
-				arguments: [
-					multisig, 
-					tx.pure("init_members"), 
-					tx.pure(0), 
-					tx.pure(0), 
-					tx.pure(""), 
-					tx.pure([]), 
-					tx.pure([]), 
-					tx.pure(members),
-					tx.pure([]), 
-				],
-			});
-			
-			tx.moveCall({
-				target: `${this.packageId}::multisig::approve_proposal`,
-				arguments: [
-					multisig, 
-					tx.pure("init_members"), 
-				],
-			});
-			
-			tx.moveCall({
-				target: `${this.packageId}::config::execute_modify`,
-				arguments: [
-					multisig, 
-					tx.pure("init_members"), 
-					tx.object(CLOCK),
-				],
-			});
-			
-			members.forEach((member) => {
-				tx.moveCall({
-					target: `${this.packageId}::account::send_invite`,
-					arguments: [multisig, tx.pure(member)],
-				});
-			});
-		}
-
-		return tx.moveCall({
-			target: `${this.packageId}::multisig::share`,
-			arguments: [multisig],
-		});
-	}
-
-	cleanProposals(tx: TransactionBlock): TransactionResult {
-		return tx.moveCall({
-			target: `${this.packageId}::multisig::clean_proposals`,
-			arguments: [tx.object(this.multisigId)],
-		});
-	}
-
-	approveProposal(tx: TransactionBlock, key: string): TransactionResult {
-		return tx.moveCall({
-			target: `${this.packageId}::multisig::approve_proposal`,
-			arguments: [tx.object(this.multisigId), tx.pure(key)],
-		});
-	}
-
-	removeApproval(tx: TransactionBlock, key: string): TransactionResult {
-		return tx.moveCall({
-			target: `${this.packageId}::multisig::remove_approval`,
-			arguments: [tx.object(this.multisigId), tx.pure(key)],
-		});
-	}
-
-	executeProposal(tx: TransactionBlock, key: string): TransactionResult {
-		return tx.moveCall({
-			target: `${this.packageId}::multisig::execute_proposal`,
-			arguments: [tx.object(this.multisigId), tx.pure(key), tx.object(CLOCK)],
-		});
-	}
 
 	// === Account ===
 
 	// TODO: implement merge accounts
-	async getAccount(owner: string = this.user): Promise<Account> {
+	async getAccount(owner: string = this.userAddr): Promise<Account> {
 		const { data } = await this.client.getOwnedObjects({
 			owner,
 			filter: { StructType: `${this.packageId}::account::Account` },
@@ -198,19 +59,25 @@ export class KrakenClient {
 				id: "",
 				username: "",
 				profilePicture: "",
-				multisigs: [],
+				multisigIds: [],
 			}
 		}
 		
-		const accountDecoded = await defaultMoveCoder().decodedType(data[0].data?.content, account.Account.type())
-		const multisigIds = typeof(accountDecoded!.multisigs.contents) == "string" ? [accountDecoded!.multisigs.contents] : accountDecoded!.multisigs.contents;
+		const userAccount = data.find(acc => {
+			if (acc.data?.content?.dataType === "moveObject") {
+				console.log(acc.data?.content?.type.includes(this.packageId));
+				return acc.data?.content?.type.includes(this.packageId);
+			}
+		});
+		const accountDecoded = await defaultMoveCoder().decodedType(userAccount?.data?.content, moveAccount.Account.type())
+		const ids = typeof(accountDecoded!.multisig_ids.contents) == "string" ? [accountDecoded!.multisig_ids.contents] : accountDecoded!.multisig_ids.contents;
 		
 		const multisigsObjs = await this.client.multiGetObjects({
-			ids: multisigIds,
+			ids,
 			options: { showContent: true }
 		});
-		const multisigs = await Promise.all(multisigsObjs.map(async (ms: any) => { 
-			const multisigsDecoded = await defaultMoveCoder().decodedType(ms.data?.content, multisig.Multisig.type())
+		const multisigIds = await Promise.all(multisigsObjs.map(async (ms: any) => { 
+			const multisigsDecoded = await defaultMoveCoder().decodedType(ms.data?.content, moveMultisig.Multisig.type())
 			return {
 				id: multisigsDecoded!.id.id,
 				name: multisigsDecoded!.name
@@ -222,7 +89,7 @@ export class KrakenClient {
 			id: accountDecoded!.id.id,
 			username: accountDecoded!.username,
 			profilePicture: accountDecoded!.profile_picture,
-			multisigs,
+			multisigIds,
 		}
 	}
 
@@ -275,6 +142,178 @@ export class KrakenClient {
 		return tx.moveCall({
 			target: `${this.packageId}::account::refuse_invite`,
 			arguments: [tx.object(account), tx.object(invite)],
+		});
+	}
+
+	// === Multisig ===
+
+	async getMultisig(id: string): Promise<Multisig> {
+		// get Multisig 
+		const { data } = await this.client.getObject({
+			id,
+			options: { showContent: true }
+		});
+
+		const multisigDecoded = await defaultMoveCoder().decodedType(data?.content, moveMultisig.Multisig.type())
+		const membersAddress = multisigDecoded!.members.contents.map((member: any) => member.key);
+
+		const members = await Promise.all(membersAddress.map(async (member: any) => {
+			return await this.getAccount(member);
+		}));
+
+		// get proposals in multisig and each action attached to proposals
+		const proposals = await Promise.all(multisigDecoded!.proposals.contents.map(async (proposal) => {
+			// get the dynamic field action for each proposal
+			const parentId = proposal.value.id.id;
+			const { data } = await this.client.getDynamicFields({ parentId });
+			const df: any = await this.client.getObject({
+				id: data[0].objectId,
+				options: { showContent: true }
+			});
+			// TODO: generate right types 
+			// + separate function for proposals
+			const approved = typeof(proposal.value.approved.contents) == "string" ? [proposal.value.approved.contents] : proposal.value.approved.contents;
+			const action = {
+				type: df.data?.content?.fields.value.type.split("::").pop(), // The action Struct name
+				...df.data?.content?.fields.value.fields // The action Struct fields
+			}
+
+			return {
+				id,
+				key: proposal.key,
+				module_witness: proposal.value.module_witness.name,
+				description: proposal.value.description,
+				executionTime: proposal.value.execution_time,
+				expirationEpoch: proposal.value.expiration_epoch,
+				approval_weight: Number(proposal.value.approval_weight),
+				approved,
+				actions: [action]
+			}
+		}));
+
+		return {
+			version: Number(multisigDecoded!.version),
+			name: multisigDecoded!.name,
+			threshold: Number(multisigDecoded!.threshold),
+			totalWeight: Number(multisigDecoded!.total_weight),
+			members,
+			proposals,
+		}
+	}
+
+	// members and weights are optional, if none are provided then only the creator is added with weight 1
+	createMultisig(
+		tx: TransactionBlock, 
+		name: string, 
+		threshold?: number, // if none then 1, minimum members.length + 1
+		members?: string[], // creator must be added with his weight
+		weights?: number[], // weight for each member
+	): TransactionResult {
+		if (!this.accountData || this.accountData.id === "") {
+			throw new Error("User doesn't have an Account or its ID is not set.");
+		}
+		
+		const [multisig] = tx.moveCall({
+			target: `${this.packageId}::multisig::new`,
+			arguments: [tx.pure(name), tx.pure(this.accountData.id)],
+		});
+		
+		const newThreshold = threshold ? [threshold] : [];
+		let toRemove: string[] = [];
+		if (members || weights) {
+			if (members?.length !== weights?.length) {
+				throw new Error("Members and weights must have the same length.");
+			}
+			// if we add members (including creator) we must remove it first 
+			toRemove = [this.userAddr];
+		} else {
+			members = [];
+			weights = [];
+		}
+
+		tx.moveCall({
+			target: `${this.packageId}::config::propose_modify`,
+			arguments: [
+				multisig, 
+				tx.pure("init_members"), 
+				tx.pure(0), 
+				tx.pure(0), 
+				tx.pure(""), 
+				tx.pure([name]), 
+				tx.pure(newThreshold), 
+				tx.pure(toRemove), 
+				tx.pure(members),
+				tx.pure(weights),
+			],
+		});
+		tx.moveCall({
+			target: `${this.packageId}::multisig::approve_proposal`,
+			arguments: [
+				multisig, 
+				tx.pure("init_members"), 
+			],
+		});
+		const [executable] = tx.moveCall({
+			target: `${this.packageId}::multisig::execute_proposal`,
+			arguments: [
+				multisig, 
+				tx.pure("init_members"), 
+				tx.object(CLOCK),
+			],
+		});
+		tx.moveCall({
+			target: `${this.packageId}::config::execute_modify`,
+			arguments: [
+				executable, 
+				multisig, 
+			],
+		});
+		
+		tx.moveCall({
+			target: `${this.packageId}::account::join_multisig`,
+			arguments: [tx.object(this.accountData.id), multisig],
+		});
+		
+		members?.forEach((member) => {
+			if (member !== this.userAddr) {
+				tx.moveCall({
+					target: `${this.packageId}::account::send_invite`,
+					arguments: [multisig, tx.pure(member)],
+				});
+			}
+		});
+
+		return tx.moveCall({
+			target: `${this.packageId}::multisig::share`,
+			arguments: [multisig],
+		});
+	}
+
+	cleanProposals(tx: TransactionBlock): TransactionResult {
+		return tx.moveCall({
+			target: `${this.packageId}::multisig::clean_proposals`,
+			arguments: [tx.object(this.multisigId)],
+		});
+	}
+
+	approveProposal(tx: TransactionBlock, key: string): TransactionResult {
+		return tx.moveCall({
+			target: `${this.packageId}::multisig::approve_proposal`,
+			arguments: [tx.object(this.multisigId), tx.pure(key)],
+		});
+	}
+
+	removeApproval(tx: TransactionBlock, key: string): TransactionResult {
+		return tx.moveCall({
+			target: `${this.packageId}::multisig::remove_approval`,
+			arguments: [tx.object(this.multisigId), tx.pure(key)],
+		});
+	}
+
+	executeProposal(tx: TransactionBlock, key: string): TransactionResult {
+		return tx.moveCall({
+			target: `${this.packageId}::multisig::execute_proposal`,
+			arguments: [tx.object(this.multisigId), tx.pure(key), tx.object(CLOCK)],
 		});
 	}
 

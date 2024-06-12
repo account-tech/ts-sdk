@@ -1,0 +1,10 @@
+[package]
+name = "Kiosk"
+version = "0.0.1"
+published-at = "0xd19ae1f6a2f0c6c6bd007e225ec646c391efb4fe3a5d4787b15681062bef37ac"
+
+[dependencies]
+Sui = { git = "https://github.com/MystenLabs/sui.git", subdir = "crates/sui-framework/packages/sui-framework", rev = "framework/testnet" }
+
+[addresses]
+kiosk = "0xd19ae1f6a2f0c6c6bd007e225ec646c391efb4fe3a5d4787b15681062bef37ac"
