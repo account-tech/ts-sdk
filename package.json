@@ -21,7 +21,7 @@
     "test": "bun run src/test/e2e.ts",
     "prepare-package-abi-for-tests": "bun run test/preparePackageAbi.ts",
     "get-account": "bun run test/getAccount.ts",
-    "create-account": "bun run test/createAccount.ts",
+    "get-multisig": "bun run test/getMultisig.ts",
     "generate-abis": "bun run src/utils/generateAbis.ts"
   },
   "dependencies": {

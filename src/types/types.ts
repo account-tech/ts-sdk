@@ -1,27 +1,22 @@
-export type Multisig = {
-    name: string,
-    threshold: number,
-    members: Account[],
-    proposals: Proposal[],
-}
+export type Member = {
+    owner: string,
+    id: string,
+    username: string,
+    profilePicture: string,
+    weight: number,
+};
 
 export type Proposal = {
     id: string,
     key: string,
+    module_witness: string,
     description: string,
-    executionTime: bigint,
     expirationEpoch: bigint,
+    executionTime: bigint,
+    approval_weight: number,
     approved: string[],
-    action: any,
+    actions: any[],
 }
-
-export type Account = {
-    owner: string,
-    id: string,
-	username: string,
-	profilePicture: string,
-    multisigs: {id: string, name: string}[],
-};
 
 export type Kiosk = {
     cap: string,
