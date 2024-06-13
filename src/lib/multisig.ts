@@ -17,9 +17,9 @@ export class Multisig {
     public proposals?: Proposal[];
 
 	private constructor(
-		private network: "mainnet" | "testnet" | "devnet" | "localnet" | string,
-        private packageId: string,
-		private userAddr: string,
+		public network: "mainnet" | "testnet" | "devnet" | "localnet" | string,
+        public packageId: string,
+		public userAddr: string,
 	) {
 		console.log(network)
 		const url = (network == "mainnet" || network == "testnet" || network == "devnet" || network == "localnet") ? getFullnodeUrl(network) : network;

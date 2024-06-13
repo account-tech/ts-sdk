@@ -5,10 +5,10 @@ import { Ed25519Keypair } from "@mysten/sui.js/keypairs/ed25519";
 import { SuiClient, SuiTransactionBlockResponse } from "@mysten/sui.js/client";
 
 export class ProposalBuilder {
-    private tx: TransactionBlock;
-    private multisig: Multisig;
-    private service: ProposalService;
-    private action: string | null = null;
+    public tx: TransactionBlock;
+    public multisig: Multisig;
+    public service: ProposalService;
+    public action: string | null = null;
 
     constructor(tx: TransactionBlock, multisig: Multisig, service: ProposalService) {
         this.tx = tx;
@@ -63,7 +63,7 @@ export class ProposalBuilder {
         } else {
             throw new Error(`Function ${this.action} does not exist`);
         }
-        
+
         return this;
     }
 

@@ -2,8 +2,8 @@
 import { TransactionBlock, TransactionResult } from "@mysten/sui.js/transactions";
 
 export class ProposalService {
-    private packageId: string;
-    private multisig?: TransactionResult | string;
+    public packageId: string;
+    public multisig?: TransactionResult | string;
     
     constructor(packageId: string, multisig?: TransactionResult | string) {
         this.packageId = packageId;

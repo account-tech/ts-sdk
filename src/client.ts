@@ -20,9 +20,9 @@ export class KrakenClient {
 	public proposalService?: ProposalService;
 
 	private constructor(
-		private network: "mainnet" | "testnet" | "devnet" | "localnet" | string,
-		private packageId: string,
-		private userAddr: string,
+		public network: "mainnet" | "testnet" | "devnet" | "localnet" | string,
+		public packageId: string,
+		public userAddr: string,
 	) {
 		const url = (network == "mainnet" || network == "testnet" || network == "devnet" || network == "localnet") ? getFullnodeUrl(network) : network;
 		this.client = new SuiClient({ url });
