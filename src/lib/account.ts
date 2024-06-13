@@ -49,8 +49,6 @@ export class Account {
 
     // get and decode account data from abi
 	async getAccountRaw(owner: string = this.userAddr): Promise<accountAbi.Account | undefined> {
-		console.log(owner)
-		console.log(this.packageId)
 		const { data } = await this.client.getOwnedObjects({
 			owner,
 			filter: { StructType: `${this.packageId}::account::Account` },
@@ -131,10 +129,13 @@ export class Account {
 		});
 	}
 
-	sendInvite(tx: TransactionBlock, multisig: string, recipient: string): TransactionResult {
+	sendInvite(tx: TransactionBlock, multisig: string | TransactionResult, recipient: string): TransactionResult {
 		return tx.moveCall({
 			target: `${this.packageId}::account::send_invite`,
-			arguments: [tx.object(multisig), tx.pure(recipient)],
+			arguments: [
+				typeof multisig === "string" ? tx.object(multisig) : multisig,
+				tx.pure(recipient)
+			],
 		});
 	}
 

@@ -8,12 +8,19 @@ import { SuiTransactionBlockResponse } from "@mysten/sui.js/client";
 import { codegen } from '@typemove/sui/codegen';
 import path from 'path';
 
-// to run on localnet:
-// `git clone https://github.com/MystenLabs/sui`  
-// `cd sui`
-// launch localnet: `RUST_LOG="off,sui_node=info" cargo run --bin sui-test-validator`
-// or use https://github.com/ChainMovers/suibase
-// run `bun run prepare-package-abi` to publish package and create abi
+/// to run on localnet:
+/// `git clone https://github.com/MystenLabs/sui`  
+/// `cd sui`
+/// launch localnet: `RUST_LOG="off,sui_node=info" cargo run --bin sui-test-validator`
+/// get gas: `sui client faucet --url http://127.0.0.1:9123/gas`
+/// publish kiosk: `sui client publish ./test/packages/kiosk --gas-budget 1000000000 --skip-dependency-verification`
+/// modify package id in /test/packages/kiosk/Move.toml
+/// change kraken's kiosk dependency to local
+/// run `bun run prepare-package-abi-for-tests` to publish package and create abi
+/// run `bun run vitest`
+///
+/// or use https://github.com/ChainMovers/suibase
+/// run `bun run prepare-package-abi` to publish package and create abi
 
 describe("Interact with Kraken SDK on localnet" ,async () => {
     
@@ -77,14 +84,17 @@ describe("Interact with Kraken SDK on localnet" ,async () => {
         await kraken.account?.fetchAccount();
         console.log(kraken.account);
         
-        kraken.createMultisig(tx, "Main");
+        kraken.createMultisig(tx, "Main", 1, ["0x67fa77f2640ca7e0141648bf008e13945263efad6dc429303ad49c740e2084a9"]);
         await executeTx(tx);
         console.log("Multisig created");
         
+        console.log("Update Account:")
         await kraken.account?.fetchAccount();    
-        const multisigId = kraken.account?.multisigIds?.[kraken.account?.multisigIds.length - 1].id;
-        await kraken.multisig?.fetchMultisig(multisigId!);
+        console.log(kraken.account);
+        
         console.log("Multisig cached:");
+        const multisigId = kraken.account?.multisigIds?.[kraken.account?.multisigIds.length - 1].id;
+        await kraken.fetch(multisigId);
         console.log(kraken.multisig);
 
         expect(kraken.multisig?.version).toEqual(1);

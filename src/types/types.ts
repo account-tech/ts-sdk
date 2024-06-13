@@ -13,7 +13,7 @@ export type Proposal = {
     description: string,
     expirationEpoch: bigint,
     executionTime: bigint,
-    approval_weight: number,
+    approvalWeight: number,
     approved: string[],
     actions: any[],
 }
