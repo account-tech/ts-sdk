@@ -8,7 +8,7 @@ import { CLOCK, FRAMEWORK } from "./types/constants.js";
 import { Kiosk, Proposal, TransferPolicy } from "./types/types.js";
 import { Account } from "./lib/account.js";
 import { Multisig } from "./lib/multisig.js";
-import { proposeModify, executeModify } from "./lib/proposals.js";
+import { ProposalService } from "./lib/proposals/proposalService.js";
 
 export class KrakenClient {
 	/**
@@ -19,6 +19,7 @@ export class KrakenClient {
 	public client: SuiClient;
 	public account?: Account;
 	public multisig?: Multisig;
+	public proposalService?: ProposalService;
 
 	private constructor(
 		private network: "mainnet" | "testnet" | "devnet" | "localnet" | string,
@@ -36,20 +37,58 @@ export class KrakenClient {
 		multisigId?: string,
     ): Promise<KrakenClient> {
 		const kraken = new KrakenClient(network, packageId, userAddr);
-		const account = await Account.init(network, packageId, userAddr);
-		const multisig = await Multisig.init(network, packageId, userAddr, multisigId);
-		kraken.account = account;
-		kraken.multisig = multisig;
+		kraken.account = await Account.init(network, packageId, userAddr);
+		kraken.multisig = await Multisig.init(network, packageId, userAddr, multisigId);
+		kraken.proposalService = new ProposalService(packageId, multisigId);
 		return kraken;
 	}
 
-	// members and weights are optional, if none are provided then only the creator is added with weight 1
+	async fetch(id: string = this.multisig?.id!) {
+		await this.account?.fetchAccount();
+		await this.multisig?.fetchMultisig(id);
+		this.proposalService?.setMultisig(id);
+	}
+
+	// creates a multisig with default weights of 1 (1 member = 1 voice)
 	createMultisig(
 		tx: TransactionBlock, 
 		name: string, 
 		threshold?: number, // if none then 1, minimum members.length + 1
-		members?: string[], // creator must be added with his weight
-		weights?: number[], // weight for each member
+		members?: string[], // creator is added by default, everyone added with weight of 1
+	): TransactionResult {
+		if (!this.account?.id) {
+			throw new Error("User doesn't have an Account or its ID is not set.");
+		}
+		if (!this.multisig) {
+			throw new Error("Multisig not initialized.");
+		}
+		
+		const [multisig] = this.multisig?.newMultisig(tx, this.account.id, name);
+		
+		// update multisig parameters if any of them are provided
+		if (threshold || members) {
+			const weights = members ? new Array(members.length).fill(1) : [];			
+			this.proposalService!.setMultisig(multisig);
+			this.proposalService!.proposeModify(tx, "init_members", 0, 0, "", threshold, undefined, members, weights, name);
+			this.multisig.approveProposal(tx, "init_members", multisig);
+			const [executable] = this.multisig.executeProposal(tx, "init_members", multisig);
+			this.proposalService!.executeModify(tx, executable);
+		}
+		// creator register the multisig in his account
+		this.account.joinMultisig(tx, this.account.id, multisig);
+		// send invites to added members
+		members?.forEach(member => { if (member !== this.userAddr) this.account?.sendInvite(tx, multisig, member) });
+		// share the multisig
+		return this.multisig?.shareMultisig(tx, multisig);
+	}
+
+	// creates a multisig with custom weights for each member, creator address and weight must be added
+	createMultisigWithWeights(
+		tx: TransactionBlock, 
+		name: string, 
+		threshold: number, // sum of required weights
+		members: string[], // creator must be added with his weight
+		weights: number[], // weight for each member
 	): TransactionResult {
 		if (!this.account?.id) {
 			throw new Error("User doesn't have an Account or its ID is not set.");
@@ -70,8 +109,10 @@ export class KrakenClient {
 		};
 		// update multisig parameters if any of them are provided
 		if (threshold || members) {
-			proposeModify(tx, multisig, this.packageId, "init_members", 0, 0, "", threshold, toRemove, members, weights, name);
-			this.approveAndMaybeExecute(tx, multisig, "init_members", executeModify, multisig, this.packageId);
+			this.proposalService?.proposeModify(tx, "init_members", 0, 0, "", threshold, toRemove, members, weights, name);
+			this.multisig.approveProposal(tx, "init_members", multisig);
+			const [executable] = this.multisig.executeProposal(tx, "init_members", multisig);
+			this.proposalService?.executeModify(tx, executable);
 		}
 		// creator register the multisig in his account
 		this.account.joinMultisig(tx, this.account.id, multisig);
@@ -81,26 +122,12 @@ export class KrakenClient {
 		return this.multisig?.shareMultisig(tx, multisig);
 	}
 
-	// approve then execute the proposal and execute the action passed if userWeight + multisigWeight >= threshold
-	approveAndMaybeExecute(
-		tx: TransactionBlock, 
-		multisig: string | TransactionResult,
-		key: string, 
-		executeFn: (tx: TransactionBlock, executable: TransactionResult, ...args: any[]) => TransactionResult, 
-		...args: any[]
-	): TransactionResult {
-		this.multisig?.approveProposal(tx, key, multisig);
-		if (this.isExecutableAfterApproval(key, this.multisig?.members?.find(m => m.owner == this.userAddr)?.weight!)) {
-			const executable = this.multisig?.executeProposal(tx, key, multisig);
-			return executeFn(tx, executable, ...args);
-		}
-	}
-
 	// multisigData must be up to date before calling this function
 	// returns if proposal reaches threshold after approval with weight
-	isExecutableAfterApproval(key: string, weight: number): boolean {
+	isExecutableAfterApproval(key: string, member: string = this.userAddr): boolean {
+		const weight = this.multisig?.members?.find(m => m.owner == member)?.weight!
 		const proposal = this.multisig?.proposals?.find(p => p.key == key);
-		return (proposal?.approval_weight! + weight >= this.multisig?.threshold!);
+		return (proposal?.approvalWeight! + weight >= this.multisig?.threshold!);
 	}
 
 	// ===== PROPOSALS =====

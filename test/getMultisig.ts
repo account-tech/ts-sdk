@@ -1,14 +1,12 @@
 import { KrakenClient } from "../src/client.js"
 
 (async () => {
-    const kraken = new KrakenClient(
+    const kraken = await KrakenClient.init(
         "localnet",
-        "",
-        "0xc38d7f0b69cc68cfb589d773952a7f3e3181c473790cb7c54ef78b8d8d256ce7",
+        "0x57c5bb70e02d527d80f75c06522a2088b3faf3c17f802b6f768808b4215c1f1f",
         "0x3c00d56434d581fdfd6e280626f7c8ee75cc9dac134d84290491e65f9b8b7161",
-        ""
+        "0x41d79e8873d60f953a8cf68956cc6c14ae29b33916e84b38111d8457e1f75dd9"
     )
 
-    const multisig = await kraken.getMultisig("0x0e16f16f875ae61c8fed57561d23d1e542cb1565a9b3f8b0c242beb8ce3c2719");
-    console.log(multisig);
+    // console.log(kraken.multisig);
 })();

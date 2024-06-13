@@ -84,37 +84,9 @@ export class Multisig {
 				weight: Number(weight),
 			}
 		}));
-
-		// get proposals in multisig and each action attached to proposals
-		const proposals = await Promise.all(multisigRaw!.proposals.contents.map(async (proposal) => {
-			// get the dynamic field action for each proposal
-			const parentId = proposal.value.id.id;
-			const { data } = await this.client.getDynamicFields({ parentId });
-			const df: any = await this.client.getObject({
-				id: data[0].objectId,
-				options: { showContent: true }
-			});
-			// TODO: generate right types 
-			// + separate function for proposals
-			// const approved = typeof(proposal.value.approved.contents) == "string" ? [proposal.value.approved.contents] : proposal.value.approved.contents;
-			const action = {
-				type: df.data?.content?.fields.value.type.split("::").pop(), // The action Struct name
-				...df.data?.content?.fields.value.fields // The action Struct fields
-			}
-
-			return {
-				id,
-				key: proposal.key,
-				module_witness: proposal.value.module_witness.name,
-				description: proposal.value.description,
-				executionTime: proposal.value.execution_time,
-				expirationEpoch: proposal.value.expiration_epoch,
-				approval_weight: Number(proposal.value.approval_weight),
-				approved: proposal.value.approved.contents as string[],
-				actions: [action]
-			}
-		}));
-
+		// get Proposals with actions
+		const proposals = await this.getProposals(multisigRaw!);
+		
 		return {
 			version: Number(multisigRaw!.version),
 			name: multisigRaw!.name,
@@ -123,6 +95,43 @@ export class Multisig {
 			members,
 			proposals,
 		}
+	}
+	
+	// get proposals in multisig and all actions in each proposal's bag in order
+	async getProposals(multisigRaw: multisigAbi.Multisig): Promise<Proposal[]> {
+		return await Promise.all(multisigRaw!.proposals.contents.map(async (proposal) => {
+			// get the actions in each proposal bag
+			const parentId = proposal.value.actions.id.id;
+			const { data } = await this.client.getDynamicFields({ parentId });
+			// sort actions by ascending order 
+			const ids = data
+				.sort((a, b) => Number(a.name.value) - Number(b.name.value))
+				.map(df => df.objectId);
+			
+			let actions: any[] = [];
+			if (data.length > 0) {
+				const actionDfs: any = await this.client.multiGetObjects({
+					ids,
+					options: { showContent: true }
+				});
+				actions = actionDfs.map((df: any) => ({
+					type: df.data?.content?.fields.value.type.split("::").pop(), // The action Struct name
+					...df.data?.content?.fields.value.fields // The action Struct fields
+				}));
+			}
+			
+			return {
+				id: proposal.value.id.id,
+				key: proposal.key,
+				module_witness: proposal.value.module_witness.name,
+				description: proposal.value.description,
+				expirationEpoch: proposal.value.expiration_epoch,
+				executionTime: proposal.value.execution_time,
+				approvalWeight: Number(proposal.value.approval_weight),
+				approved: proposal.value.approved.contents as string[],
+				actions
+			}
+		}));
 	}
 
 	// members and weights are optional, if none are provided then only the creator is added with weight 1
