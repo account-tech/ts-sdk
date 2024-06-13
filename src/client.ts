@@ -2,8 +2,6 @@ import { SuiClient, getFullnodeUrl } from "@mysten/sui.js/client";
 import { TransactionBlock, TransactionResult } from "@mysten/sui.js/transactions";
 import { KioskClient, Network } from "@mysten/kiosk";
 import { defaultMoveCoder } from "@typemove/sui";
-import { account as moveAccount, multisig as moveMultisig } from "../test/types/kraken.js";
-import { kiosk } from "../test/types/0x2.js";
 import { CLOCK, FRAMEWORK } from "./types/constants.js";
 import { Kiosk, Proposal, TransferPolicy } from "./types/types.js";
 import { Account } from "./lib/account.js";

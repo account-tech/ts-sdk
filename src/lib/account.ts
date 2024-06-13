@@ -1,7 +1,7 @@
 import { TransactionBlock, TransactionResult } from "@mysten/sui.js/transactions";
 import { SuiClient, getFullnodeUrl } from "@mysten/sui.js/client";
 import { defaultMoveCoder } from "@typemove/sui";
-import { account as accountAbi, multisig as multsisigAbi } from "../../test/types/kraken.js";
+import { account as accountAbi, multisig as multsisigAbi } from "../types/sui/0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62.js";
 
 export class Account {
 	private client: SuiClient;

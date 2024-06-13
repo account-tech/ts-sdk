@@ -1,0 +1,5874 @@
+{
+  "account": {
+    "fileFormatVersion": 6,
+    "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+    "name": "account",
+    "friends": [],
+    "structs": {
+      "Account": {
+        "abilities": {
+          "abilities": [
+            "Key"
+          ]
+        },
+        "typeParameters": [],
+        "fields": [
+          {
+            "name": "id",
+            "type": {
+              "Struct": {
+                "address": "0x2",
+                "module": "object",
+                "name": "UID",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "name": "username",
+            "type": {
+              "Struct": {
+                "address": "0x1",
+                "module": "string",
+                "name": "String",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "name": "profile_picture",
+            "type": {
+              "Struct": {
+                "address": "0x1",
+                "module": "string",
+                "name": "String",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "name": "multisig_ids",
+            "type": {
+              "Struct": {
+                "address": "0x2",
+                "module": "vec_set",
+                "name": "VecSet",
+                "typeArguments": [
+                  {
+                    "Struct": {
+                      "address": "0x2",
+                      "module": "object",
+                      "name": "ID",
+                      "typeArguments": []
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "Invite": {
+        "abilities": {
+          "abilities": [
+            "Key"
+          ]
+        },
+        "typeParameters": [],
+        "fields": [
+          {
+            "name": "id",
+            "type": {
+              "Struct": {
+                "address": "0x2",
+                "module": "object",
+                "name": "UID",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "name": "multisig_id",
+            "type": {
+              "Struct": {
+                "address": "0x2",
+                "module": "object",
+                "name": "ID",
+                "typeArguments": []
+              }
+            }
+          }
+        ]
+      }
+    },
+    "exposedFunctions": {
+      "accept_invite": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [],
+        "parameters": [
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "account",
+                "name": "Account",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Multisig",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "Struct": {
+              "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+              "module": "account",
+              "name": "Invite",
+              "typeArguments": []
+            }
+          },
+          {
+            "Reference": {
+              "Struct": {
+                "address": "0x2",
+                "module": "tx_context",
+                "name": "TxContext",
+                "typeArguments": []
+              }
+            }
+          }
+        ],
+        "return": []
+      },
+      "destroy": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [],
+        "parameters": [
+          {
+            "Struct": {
+              "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+              "module": "account",
+              "name": "Account",
+              "typeArguments": []
+            }
+          }
+        ],
+        "return": []
+      },
+      "join_multisig": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [],
+        "parameters": [
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "account",
+                "name": "Account",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Multisig",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "Reference": {
+              "Struct": {
+                "address": "0x2",
+                "module": "tx_context",
+                "name": "TxContext",
+                "typeArguments": []
+              }
+            }
+          }
+        ],
+        "return": []
+      },
+      "leave_multisig": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [],
+        "parameters": [
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "account",
+                "name": "Account",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Multisig",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "Reference": {
+              "Struct": {
+                "address": "0x2",
+                "module": "tx_context",
+                "name": "TxContext",
+                "typeArguments": []
+              }
+            }
+          }
+        ],
+        "return": []
+      },
+      "multisig_id": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [],
+        "parameters": [
+          {
+            "Reference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "account",
+                "name": "Invite",
+                "typeArguments": []
+              }
+            }
+          }
+        ],
+        "return": [
+          {
+            "Struct": {
+              "address": "0x2",
+              "module": "object",
+              "name": "ID",
+              "typeArguments": []
+            }
+          }
+        ]
+      },
+      "multisig_ids": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [],
+        "parameters": [
+          {
+            "Reference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "account",
+                "name": "Account",
+                "typeArguments": []
+              }
+            }
+          }
+        ],
+        "return": [
+          {
+            "Vector": {
+              "Struct": {
+                "address": "0x2",
+                "module": "object",
+                "name": "ID",
+                "typeArguments": []
+              }
+            }
+          }
+        ]
+      },
+      "new": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [],
+        "parameters": [
+          {
+            "Struct": {
+              "address": "0x1",
+              "module": "string",
+              "name": "String",
+              "typeArguments": []
+            }
+          },
+          {
+            "Struct": {
+              "address": "0x1",
+              "module": "string",
+              "name": "String",
+              "typeArguments": []
+            }
+          },
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x2",
+                "module": "tx_context",
+                "name": "TxContext",
+                "typeArguments": []
+              }
+            }
+          }
+        ],
+        "return": []
+      },
+      "profile_picture": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [],
+        "parameters": [
+          {
+            "Reference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "account",
+                "name": "Account",
+                "typeArguments": []
+              }
+            }
+          }
+        ],
+        "return": [
+          {
+            "Struct": {
+              "address": "0x1",
+              "module": "string",
+              "name": "String",
+              "typeArguments": []
+            }
+          }
+        ]
+      },
+      "refuse_invite": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [],
+        "parameters": [
+          {
+            "Struct": {
+              "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+              "module": "account",
+              "name": "Invite",
+              "typeArguments": []
+            }
+          }
+        ],
+        "return": []
+      },
+      "send_invite": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [],
+        "parameters": [
+          {
+            "Reference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Multisig",
+                "typeArguments": []
+              }
+            }
+          },
+          "Address",
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x2",
+                "module": "tx_context",
+                "name": "TxContext",
+                "typeArguments": []
+              }
+            }
+          }
+        ],
+        "return": []
+      },
+      "username": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [],
+        "parameters": [
+          {
+            "Reference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "account",
+                "name": "Account",
+                "typeArguments": []
+              }
+            }
+          }
+        ],
+        "return": [
+          {
+            "Struct": {
+              "address": "0x1",
+              "module": "string",
+              "name": "String",
+              "typeArguments": []
+            }
+          }
+        ]
+      }
+    }
+  },
+  "coin_operations": {
+    "fileFormatVersion": 6,
+    "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+    "name": "coin_operations",
+    "friends": [],
+    "structs": {},
+    "exposedFunctions": {
+      "merge": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [
+          {
+            "abilities": [
+              "Drop"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Multisig",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "Struct": {
+              "address": "0x2",
+              "module": "transfer",
+              "name": "Receiving",
+              "typeArguments": [
+                {
+                  "Struct": {
+                    "address": "0x2",
+                    "module": "coin",
+                    "name": "Coin",
+                    "typeArguments": [
+                      {
+                        "TypeParameter": 0
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "Vector": {
+              "Struct": {
+                "address": "0x2",
+                "module": "transfer",
+                "name": "Receiving",
+                "typeArguments": [
+                  {
+                    "Struct": {
+                      "address": "0x2",
+                      "module": "coin",
+                      "name": "Coin",
+                      "typeArguments": [
+                        {
+                          "TypeParameter": 0
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "Reference": {
+              "Struct": {
+                "address": "0x2",
+                "module": "tx_context",
+                "name": "TxContext",
+                "typeArguments": []
+              }
+            }
+          }
+        ],
+        "return": []
+      },
+      "split": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [
+          {
+            "abilities": [
+              "Drop"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Multisig",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "Struct": {
+              "address": "0x2",
+              "module": "transfer",
+              "name": "Receiving",
+              "typeArguments": [
+                {
+                  "Struct": {
+                    "address": "0x2",
+                    "module": "coin",
+                    "name": "Coin",
+                    "typeArguments": [
+                      {
+                        "TypeParameter": 0
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "Vector": "U64"
+          },
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x2",
+                "module": "tx_context",
+                "name": "TxContext",
+                "typeArguments": []
+              }
+            }
+          }
+        ],
+        "return": [
+          {
+            "Vector": {
+              "Struct": {
+                "address": "0x2",
+                "module": "object",
+                "name": "ID",
+                "typeArguments": []
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "config": {
+    "fileFormatVersion": 6,
+    "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+    "name": "config",
+    "friends": [],
+    "structs": {
+      "Migrate": {
+        "abilities": {
+          "abilities": [
+            "Store"
+          ]
+        },
+        "typeParameters": [],
+        "fields": [
+          {
+            "name": "version",
+            "type": "U64"
+          }
+        ]
+      },
+      "Modify": {
+        "abilities": {
+          "abilities": [
+            "Store"
+          ]
+        },
+        "typeParameters": [],
+        "fields": [
+          {
+            "name": "name",
+            "type": {
+              "Struct": {
+                "address": "0x1",
+                "module": "option",
+                "name": "Option",
+                "typeArguments": [
+                  {
+                    "Struct": {
+                      "address": "0x1",
+                      "module": "string",
+                      "name": "String",
+                      "typeArguments": []
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "name": "threshold",
+            "type": {
+              "Struct": {
+                "address": "0x1",
+                "module": "option",
+                "name": "Option",
+                "typeArguments": [
+                  "U64"
+                ]
+              }
+            }
+          },
+          {
+            "name": "to_remove",
+            "type": {
+              "Vector": "Address"
+            }
+          },
+          {
+            "name": "to_add",
+            "type": {
+              "Vector": "Address"
+            }
+          },
+          {
+            "name": "weights",
+            "type": {
+              "Vector": "U64"
+            }
+          }
+        ]
+      },
+      "Witness": {
+        "abilities": {
+          "abilities": [
+            "Drop"
+          ]
+        },
+        "typeParameters": [],
+        "fields": [
+          {
+            "name": "dummy_field",
+            "type": "Bool"
+          }
+        ]
+      }
+    },
+    "exposedFunctions": {
+      "destroy_migrate": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [
+          {
+            "abilities": [
+              "Drop"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Executable",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "TypeParameter": 0
+          }
+        ],
+        "return": [
+          "U64"
+        ]
+      },
+      "destroy_modify": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [
+          {
+            "abilities": [
+              "Drop"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Executable",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "TypeParameter": 0
+          }
+        ],
+        "return": [
+          {
+            "Struct": {
+              "address": "0x1",
+              "module": "option",
+              "name": "Option",
+              "typeArguments": [
+                {
+                  "Struct": {
+                    "address": "0x1",
+                    "module": "string",
+                    "name": "String",
+                    "typeArguments": []
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "Struct": {
+              "address": "0x1",
+              "module": "option",
+              "name": "Option",
+              "typeArguments": [
+                "U64"
+              ]
+            }
+          },
+          {
+            "Vector": "Address"
+          },
+          {
+            "Vector": "Address"
+          },
+          {
+            "Vector": "U64"
+          }
+        ]
+      },
+      "execute_migrate": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [],
+        "parameters": [
+          {
+            "Struct": {
+              "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+              "module": "multisig",
+              "name": "Executable",
+              "typeArguments": []
+            }
+          },
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Multisig",
+                "typeArguments": []
+              }
+            }
+          }
+        ],
+        "return": []
+      },
+      "execute_modify": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [],
+        "parameters": [
+          {
+            "Struct": {
+              "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+              "module": "multisig",
+              "name": "Executable",
+              "typeArguments": []
+            }
+          },
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Multisig",
+                "typeArguments": []
+              }
+            }
+          }
+        ],
+        "return": []
+      },
+      "migrate": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [
+          {
+            "abilities": [
+              "Drop"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Executable",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Multisig",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "TypeParameter": 0
+          },
+          "U64"
+        ],
+        "return": []
+      },
+      "modify": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [
+          {
+            "abilities": [
+              "Drop"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Executable",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Multisig",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "TypeParameter": 0
+          },
+          "U64"
+        ],
+        "return": []
+      },
+      "new_migrate": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [],
+        "parameters": [
+          "U64"
+        ],
+        "return": [
+          {
+            "Struct": {
+              "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+              "module": "config",
+              "name": "Migrate",
+              "typeArguments": []
+            }
+          }
+        ]
+      },
+      "new_modify": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [],
+        "parameters": [
+          {
+            "Reference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Multisig",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "Struct": {
+              "address": "0x1",
+              "module": "option",
+              "name": "Option",
+              "typeArguments": [
+                {
+                  "Struct": {
+                    "address": "0x1",
+                    "module": "string",
+                    "name": "String",
+                    "typeArguments": []
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "Struct": {
+              "address": "0x1",
+              "module": "option",
+              "name": "Option",
+              "typeArguments": [
+                "U64"
+              ]
+            }
+          },
+          {
+            "Vector": "Address"
+          },
+          {
+            "Vector": "Address"
+          },
+          {
+            "Vector": "U64"
+          }
+        ],
+        "return": [
+          {
+            "Struct": {
+              "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+              "module": "config",
+              "name": "Modify",
+              "typeArguments": []
+            }
+          }
+        ]
+      },
+      "propose_migrate": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [],
+        "parameters": [
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Multisig",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "Struct": {
+              "address": "0x1",
+              "module": "string",
+              "name": "String",
+              "typeArguments": []
+            }
+          },
+          "U64",
+          "U64",
+          {
+            "Struct": {
+              "address": "0x1",
+              "module": "string",
+              "name": "String",
+              "typeArguments": []
+            }
+          },
+          "U64",
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x2",
+                "module": "tx_context",
+                "name": "TxContext",
+                "typeArguments": []
+              }
+            }
+          }
+        ],
+        "return": []
+      },
+      "propose_modify": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [],
+        "parameters": [
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Multisig",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "Struct": {
+              "address": "0x1",
+              "module": "string",
+              "name": "String",
+              "typeArguments": []
+            }
+          },
+          "U64",
+          "U64",
+          {
+            "Struct": {
+              "address": "0x1",
+              "module": "string",
+              "name": "String",
+              "typeArguments": []
+            }
+          },
+          {
+            "Struct": {
+              "address": "0x1",
+              "module": "option",
+              "name": "Option",
+              "typeArguments": [
+                {
+                  "Struct": {
+                    "address": "0x1",
+                    "module": "string",
+                    "name": "String",
+                    "typeArguments": []
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "Struct": {
+              "address": "0x1",
+              "module": "option",
+              "name": "Option",
+              "typeArguments": [
+                "U64"
+              ]
+            }
+          },
+          {
+            "Vector": "Address"
+          },
+          {
+            "Vector": "Address"
+          },
+          {
+            "Vector": "U64"
+          },
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x2",
+                "module": "tx_context",
+                "name": "TxContext",
+                "typeArguments": []
+              }
+            }
+          }
+        ],
+        "return": []
+      }
+    }
+  },
+  "kiosk": {
+    "fileFormatVersion": 6,
+    "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+    "name": "kiosk",
+    "friends": [],
+    "structs": {
+      "KioskOwnerLock": {
+        "abilities": {
+          "abilities": [
+            "Key"
+          ]
+        },
+        "typeParameters": [],
+        "fields": [
+          {
+            "name": "id",
+            "type": {
+              "Struct": {
+                "address": "0x2",
+                "module": "object",
+                "name": "UID",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "name": "kiosk_owner_cap",
+            "type": {
+              "Struct": {
+                "address": "0x2",
+                "module": "kiosk",
+                "name": "KioskOwnerCap",
+                "typeArguments": []
+              }
+            }
+          }
+        ]
+      },
+      "List": {
+        "abilities": {
+          "abilities": [
+            "Store"
+          ]
+        },
+        "typeParameters": [],
+        "fields": [
+          {
+            "name": "nft_ids",
+            "type": {
+              "Vector": {
+                "Struct": {
+                  "address": "0x2",
+                  "module": "object",
+                  "name": "ID",
+                  "typeArguments": []
+                }
+              }
+            }
+          },
+          {
+            "name": "prices",
+            "type": {
+              "Vector": "U64"
+            }
+          }
+        ]
+      },
+      "Take": {
+        "abilities": {
+          "abilities": [
+            "Store"
+          ]
+        },
+        "typeParameters": [],
+        "fields": [
+          {
+            "name": "nft_ids",
+            "type": {
+              "Vector": {
+                "Struct": {
+                  "address": "0x2",
+                  "module": "object",
+                  "name": "ID",
+                  "typeArguments": []
+                }
+              }
+            }
+          },
+          {
+            "name": "recipient",
+            "type": "Address"
+          }
+        ]
+      },
+      "Witness": {
+        "abilities": {
+          "abilities": [
+            "Drop"
+          ]
+        },
+        "typeParameters": [],
+        "fields": [
+          {
+            "name": "dummy_field",
+            "type": "Bool"
+          }
+        ]
+      }
+    },
+    "exposedFunctions": {
+      "borrow_cap": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [],
+        "parameters": [
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Multisig",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "Struct": {
+              "address": "0x2",
+              "module": "transfer",
+              "name": "Receiving",
+              "typeArguments": [
+                {
+                  "Struct": {
+                    "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                    "module": "kiosk",
+                    "name": "KioskOwnerLock",
+                    "typeArguments": []
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x2",
+                "module": "tx_context",
+                "name": "TxContext",
+                "typeArguments": []
+              }
+            }
+          }
+        ],
+        "return": [
+          {
+            "Struct": {
+              "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+              "module": "kiosk",
+              "name": "KioskOwnerLock",
+              "typeArguments": []
+            }
+          }
+        ]
+      },
+      "complete_list": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [],
+        "parameters": [
+          {
+            "Struct": {
+              "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+              "module": "multisig",
+              "name": "Executable",
+              "typeArguments": []
+            }
+          }
+        ],
+        "return": []
+      },
+      "complete_take": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [],
+        "parameters": [
+          {
+            "Struct": {
+              "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+              "module": "multisig",
+              "name": "Executable",
+              "typeArguments": []
+            }
+          }
+        ],
+        "return": []
+      },
+      "delist": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [
+          {
+            "abilities": [
+              "Store",
+              "Key"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Multisig",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x2",
+                "module": "kiosk",
+                "name": "Kiosk",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "Reference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "kiosk",
+                "name": "KioskOwnerLock",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "Struct": {
+              "address": "0x2",
+              "module": "object",
+              "name": "ID",
+              "typeArguments": []
+            }
+          },
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x2",
+                "module": "tx_context",
+                "name": "TxContext",
+                "typeArguments": []
+              }
+            }
+          }
+        ],
+        "return": []
+      },
+      "destroy_list": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [],
+        "parameters": [
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Executable",
+                "typeArguments": []
+              }
+            }
+          }
+        ],
+        "return": [
+          {
+            "Vector": {
+              "Struct": {
+                "address": "0x2",
+                "module": "object",
+                "name": "ID",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "Vector": "U64"
+          }
+        ]
+      },
+      "destroy_take": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [],
+        "parameters": [
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Executable",
+                "typeArguments": []
+              }
+            }
+          }
+        ],
+        "return": [
+          {
+            "Vector": {
+              "Struct": {
+                "address": "0x2",
+                "module": "object",
+                "name": "ID",
+                "typeArguments": []
+              }
+            }
+          },
+          "Address"
+        ]
+      },
+      "execute_list": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [
+          {
+            "abilities": [
+              "Store",
+              "Key"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Executable",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x2",
+                "module": "kiosk",
+                "name": "Kiosk",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "Reference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "kiosk",
+                "name": "KioskOwnerLock",
+                "typeArguments": []
+              }
+            }
+          }
+        ],
+        "return": []
+      },
+      "execute_take": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [
+          {
+            "abilities": [
+              "Store",
+              "Key"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Executable",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x2",
+                "module": "kiosk",
+                "name": "Kiosk",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "Reference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "kiosk",
+                "name": "KioskOwnerLock",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x2",
+                "module": "kiosk",
+                "name": "Kiosk",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "Reference": {
+              "Struct": {
+                "address": "0x2",
+                "module": "kiosk",
+                "name": "KioskOwnerCap",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x2",
+                "module": "transfer_policy",
+                "name": "TransferPolicy",
+                "typeArguments": [
+                  {
+                    "TypeParameter": 0
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x2",
+                "module": "tx_context",
+                "name": "TxContext",
+                "typeArguments": []
+              }
+            }
+          }
+        ],
+        "return": []
+      },
+      "list": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [
+          {
+            "abilities": [
+              "Store",
+              "Key"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Executable",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x2",
+                "module": "kiosk",
+                "name": "Kiosk",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "Reference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "kiosk",
+                "name": "KioskOwnerLock",
+                "typeArguments": []
+              }
+            }
+          },
+          "U64"
+        ],
+        "return": []
+      },
+      "new": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [],
+        "parameters": [
+          {
+            "Reference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Multisig",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x2",
+                "module": "tx_context",
+                "name": "TxContext",
+                "typeArguments": []
+              }
+            }
+          }
+        ],
+        "return": []
+      },
+      "new_list": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [],
+        "parameters": [
+          {
+            "Vector": {
+              "Struct": {
+                "address": "0x2",
+                "module": "object",
+                "name": "ID",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "Vector": "U64"
+          }
+        ],
+        "return": [
+          {
+            "Struct": {
+              "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+              "module": "kiosk",
+              "name": "List",
+              "typeArguments": []
+            }
+          }
+        ]
+      },
+      "new_take": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [],
+        "parameters": [
+          {
+            "Vector": {
+              "Struct": {
+                "address": "0x2",
+                "module": "object",
+                "name": "ID",
+                "typeArguments": []
+              }
+            }
+          },
+          "Address"
+        ],
+        "return": [
+          {
+            "Struct": {
+              "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+              "module": "kiosk",
+              "name": "Take",
+              "typeArguments": []
+            }
+          }
+        ]
+      },
+      "place": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [
+          {
+            "abilities": [
+              "Store",
+              "Key"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Multisig",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x2",
+                "module": "kiosk",
+                "name": "Kiosk",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "Reference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "kiosk",
+                "name": "KioskOwnerLock",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x2",
+                "module": "kiosk",
+                "name": "Kiosk",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "Reference": {
+              "Struct": {
+                "address": "0x2",
+                "module": "kiosk",
+                "name": "KioskOwnerCap",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "Struct": {
+              "address": "0x2",
+              "module": "object",
+              "name": "ID",
+              "typeArguments": []
+            }
+          },
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x2",
+                "module": "transfer_policy",
+                "name": "TransferPolicy",
+                "typeArguments": [
+                  {
+                    "TypeParameter": 0
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x2",
+                "module": "tx_context",
+                "name": "TxContext",
+                "typeArguments": []
+              }
+            }
+          }
+        ],
+        "return": []
+      },
+      "propose_list": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [],
+        "parameters": [
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Multisig",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "Struct": {
+              "address": "0x1",
+              "module": "string",
+              "name": "String",
+              "typeArguments": []
+            }
+          },
+          "U64",
+          "U64",
+          {
+            "Struct": {
+              "address": "0x1",
+              "module": "string",
+              "name": "String",
+              "typeArguments": []
+            }
+          },
+          {
+            "Vector": {
+              "Struct": {
+                "address": "0x2",
+                "module": "object",
+                "name": "ID",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "Vector": "U64"
+          },
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x2",
+                "module": "tx_context",
+                "name": "TxContext",
+                "typeArguments": []
+              }
+            }
+          }
+        ],
+        "return": []
+      },
+      "propose_take": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [],
+        "parameters": [
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Multisig",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "Struct": {
+              "address": "0x1",
+              "module": "string",
+              "name": "String",
+              "typeArguments": []
+            }
+          },
+          "U64",
+          "U64",
+          {
+            "Struct": {
+              "address": "0x1",
+              "module": "string",
+              "name": "String",
+              "typeArguments": []
+            }
+          },
+          {
+            "Vector": {
+              "Struct": {
+                "address": "0x2",
+                "module": "object",
+                "name": "ID",
+                "typeArguments": []
+              }
+            }
+          },
+          "Address",
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x2",
+                "module": "tx_context",
+                "name": "TxContext",
+                "typeArguments": []
+              }
+            }
+          }
+        ],
+        "return": []
+      },
+      "put_back_cap": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [],
+        "parameters": [
+          {
+            "Reference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Multisig",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "Struct": {
+              "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+              "module": "kiosk",
+              "name": "KioskOwnerLock",
+              "typeArguments": []
+            }
+          }
+        ],
+        "return": []
+      },
+      "take": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [
+          {
+            "abilities": [
+              "Store",
+              "Key"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Executable",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x2",
+                "module": "kiosk",
+                "name": "Kiosk",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "Reference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "kiosk",
+                "name": "KioskOwnerLock",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x2",
+                "module": "kiosk",
+                "name": "Kiosk",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "Reference": {
+              "Struct": {
+                "address": "0x2",
+                "module": "kiosk",
+                "name": "KioskOwnerCap",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x2",
+                "module": "transfer_policy",
+                "name": "TransferPolicy",
+                "typeArguments": [
+                  {
+                    "TypeParameter": 0
+                  }
+                ]
+              }
+            }
+          },
+          "U64",
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x2",
+                "module": "tx_context",
+                "name": "TxContext",
+                "typeArguments": []
+              }
+            }
+          }
+        ],
+        "return": []
+      },
+      "withdraw_profits": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [],
+        "parameters": [
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Multisig",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x2",
+                "module": "kiosk",
+                "name": "Kiosk",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "Reference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "kiosk",
+                "name": "KioskOwnerLock",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x2",
+                "module": "tx_context",
+                "name": "TxContext",
+                "typeArguments": []
+              }
+            }
+          }
+        ],
+        "return": []
+      }
+    }
+  },
+  "multisig": {
+    "fileFormatVersion": 6,
+    "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+    "name": "multisig",
+    "friends": [
+      {
+        "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+        "name": "account"
+      },
+      {
+        "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+        "name": "coin_operations"
+      },
+      {
+        "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+        "name": "config"
+      },
+      {
+        "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+        "name": "kiosk"
+      },
+      {
+        "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+        "name": "owned"
+      },
+      {
+        "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+        "name": "upgrade_policies"
+      }
+    ],
+    "structs": {
+      "Executable": {
+        "abilities": {
+          "abilities": []
+        },
+        "typeParameters": [],
+        "fields": [
+          {
+            "name": "multisig_addr",
+            "type": "Address"
+          },
+          {
+            "name": "module_witness",
+            "type": {
+              "Struct": {
+                "address": "0x1",
+                "module": "type_name",
+                "name": "TypeName",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "name": "actions",
+            "type": {
+              "Struct": {
+                "address": "0x2",
+                "module": "bag",
+                "name": "Bag",
+                "typeArguments": []
+              }
+            }
+          }
+        ]
+      },
+      "Member": {
+        "abilities": {
+          "abilities": [
+            "Store"
+          ]
+        },
+        "typeParameters": [],
+        "fields": [
+          {
+            "name": "weight",
+            "type": "U64"
+          },
+          {
+            "name": "account_id",
+            "type": {
+              "Struct": {
+                "address": "0x1",
+                "module": "option",
+                "name": "Option",
+                "typeArguments": [
+                  {
+                    "Struct": {
+                      "address": "0x2",
+                      "module": "object",
+                      "name": "ID",
+                      "typeArguments": []
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "Multisig": {
+        "abilities": {
+          "abilities": [
+            "Key"
+          ]
+        },
+        "typeParameters": [],
+        "fields": [
+          {
+            "name": "id",
+            "type": {
+              "Struct": {
+                "address": "0x2",
+                "module": "object",
+                "name": "UID",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "name": "version",
+            "type": "U64"
+          },
+          {
+            "name": "name",
+            "type": {
+              "Struct": {
+                "address": "0x1",
+                "module": "string",
+                "name": "String",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "name": "threshold",
+            "type": "U64"
+          },
+          {
+            "name": "total_weight",
+            "type": "U64"
+          },
+          {
+            "name": "members",
+            "type": {
+              "Struct": {
+                "address": "0x2",
+                "module": "vec_map",
+                "name": "VecMap",
+                "typeArguments": [
+                  "Address",
+                  {
+                    "Struct": {
+                      "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                      "module": "multisig",
+                      "name": "Member",
+                      "typeArguments": []
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "name": "proposals",
+            "type": {
+              "Struct": {
+                "address": "0x2",
+                "module": "vec_map",
+                "name": "VecMap",
+                "typeArguments": [
+                  {
+                    "Struct": {
+                      "address": "0x1",
+                      "module": "string",
+                      "name": "String",
+                      "typeArguments": []
+                    }
+                  },
+                  {
+                    "Struct": {
+                      "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                      "module": "multisig",
+                      "name": "Proposal",
+                      "typeArguments": []
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "Proposal": {
+        "abilities": {
+          "abilities": [
+            "Store",
+            "Key"
+          ]
+        },
+        "typeParameters": [],
+        "fields": [
+          {
+            "name": "id",
+            "type": {
+              "Struct": {
+                "address": "0x2",
+                "module": "object",
+                "name": "UID",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "name": "module_witness",
+            "type": {
+              "Struct": {
+                "address": "0x1",
+                "module": "type_name",
+                "name": "TypeName",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "name": "description",
+            "type": {
+              "Struct": {
+                "address": "0x1",
+                "module": "string",
+                "name": "String",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "name": "expiration_epoch",
+            "type": "U64"
+          },
+          {
+            "name": "execution_time",
+            "type": "U64"
+          },
+          {
+            "name": "actions",
+            "type": {
+              "Struct": {
+                "address": "0x2",
+                "module": "bag",
+                "name": "Bag",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "name": "approval_weight",
+            "type": "U64"
+          },
+          {
+            "name": "approved",
+            "type": {
+              "Struct": {
+                "address": "0x2",
+                "module": "vec_set",
+                "name": "VecSet",
+                "typeArguments": [
+                  "Address"
+                ]
+              }
+            }
+          }
+        ]
+      }
+    },
+    "exposedFunctions": {
+      "action_mut": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [
+          {
+            "abilities": [
+              "Drop"
+            ]
+          },
+          {
+            "abilities": [
+              "Store"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Executable",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "TypeParameter": 0
+          },
+          "U64"
+        ],
+        "return": [
+          {
+            "MutableReference": {
+              "TypeParameter": 1
+            }
+          }
+        ]
+      },
+      "add_members": {
+        "visibility": "Friend",
+        "isEntry": false,
+        "typeParameters": [],
+        "parameters": [
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Multisig",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "Vector": "Address"
+          },
+          {
+            "Vector": "U64"
+          }
+        ],
+        "return": []
+      },
+      "addr": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [],
+        "parameters": [
+          {
+            "Reference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Multisig",
+                "typeArguments": []
+              }
+            }
+          }
+        ],
+        "return": [
+          "Address"
+        ]
+      },
+      "approve_proposal": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [],
+        "parameters": [
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Multisig",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "Struct": {
+              "address": "0x1",
+              "module": "string",
+              "name": "String",
+              "typeArguments": []
+            }
+          },
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x2",
+                "module": "tx_context",
+                "name": "TxContext",
+                "typeArguments": []
+              }
+            }
+          }
+        ],
+        "return": []
+      },
+      "approved": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [],
+        "parameters": [
+          {
+            "Reference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Proposal",
+                "typeArguments": []
+              }
+            }
+          }
+        ],
+        "return": [
+          {
+            "Vector": "Address"
+          }
+        ]
+      },
+      "assert_is_member": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [],
+        "parameters": [
+          {
+            "Reference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Multisig",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "Reference": {
+              "Struct": {
+                "address": "0x2",
+                "module": "tx_context",
+                "name": "TxContext",
+                "typeArguments": []
+              }
+            }
+          }
+        ],
+        "return": []
+      },
+      "assert_multisig_executed": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [],
+        "parameters": [
+          {
+            "Reference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Multisig",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "Reference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Executable",
+                "typeArguments": []
+              }
+            }
+          }
+        ],
+        "return": []
+      },
+      "assert_version": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [],
+        "parameters": [
+          {
+            "Reference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Multisig",
+                "typeArguments": []
+              }
+            }
+          }
+        ],
+        "return": []
+      },
+      "create_proposal": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [
+          {
+            "abilities": [
+              "Drop"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Multisig",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "TypeParameter": 0
+          },
+          {
+            "Struct": {
+              "address": "0x1",
+              "module": "string",
+              "name": "String",
+              "typeArguments": []
+            }
+          },
+          "U64",
+          "U64",
+          {
+            "Struct": {
+              "address": "0x1",
+              "module": "string",
+              "name": "String",
+              "typeArguments": []
+            }
+          },
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x2",
+                "module": "tx_context",
+                "name": "TxContext",
+                "typeArguments": []
+              }
+            }
+          }
+        ],
+        "return": [
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Proposal",
+                "typeArguments": []
+              }
+            }
+          }
+        ]
+      },
+      "delete_proposal": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [],
+        "parameters": [
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Multisig",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "Struct": {
+              "address": "0x1",
+              "module": "string",
+              "name": "String",
+              "typeArguments": []
+            }
+          },
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x2",
+                "module": "tx_context",
+                "name": "TxContext",
+                "typeArguments": []
+              }
+            }
+          }
+        ],
+        "return": [
+          {
+            "Struct": {
+              "address": "0x2",
+              "module": "bag",
+              "name": "Bag",
+              "typeArguments": []
+            }
+          }
+        ]
+      },
+      "description": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [],
+        "parameters": [
+          {
+            "Reference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Proposal",
+                "typeArguments": []
+              }
+            }
+          }
+        ],
+        "return": [
+          {
+            "Struct": {
+              "address": "0x1",
+              "module": "string",
+              "name": "String",
+              "typeArguments": []
+            }
+          }
+        ]
+      },
+      "destroy_executable": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [
+          {
+            "abilities": [
+              "Drop"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "Struct": {
+              "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+              "module": "multisig",
+              "name": "Executable",
+              "typeArguments": []
+            }
+          },
+          {
+            "TypeParameter": 0
+          }
+        ],
+        "return": []
+      },
+      "executable_last_action_idx": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [],
+        "parameters": [
+          {
+            "Reference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Executable",
+                "typeArguments": []
+              }
+            }
+          }
+        ],
+        "return": [
+          "U64"
+        ]
+      },
+      "executable_multisig_addr": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [],
+        "parameters": [
+          {
+            "Reference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Executable",
+                "typeArguments": []
+              }
+            }
+          }
+        ],
+        "return": [
+          "Address"
+        ]
+      },
+      "execute_proposal": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [],
+        "parameters": [
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Multisig",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "Struct": {
+              "address": "0x1",
+              "module": "string",
+              "name": "String",
+              "typeArguments": []
+            }
+          },
+          {
+            "Reference": {
+              "Struct": {
+                "address": "0x2",
+                "module": "clock",
+                "name": "Clock",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x2",
+                "module": "tx_context",
+                "name": "TxContext",
+                "typeArguments": []
+              }
+            }
+          }
+        ],
+        "return": [
+          {
+            "Struct": {
+              "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+              "module": "multisig",
+              "name": "Executable",
+              "typeArguments": []
+            }
+          }
+        ]
+      },
+      "execution_time": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [],
+        "parameters": [
+          {
+            "Reference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Proposal",
+                "typeArguments": []
+              }
+            }
+          }
+        ],
+        "return": [
+          "U64"
+        ]
+      },
+      "expiration_epoch": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [],
+        "parameters": [
+          {
+            "Reference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Proposal",
+                "typeArguments": []
+              }
+            }
+          }
+        ],
+        "return": [
+          "U64"
+        ]
+      },
+      "is_member": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [],
+        "parameters": [
+          {
+            "Reference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Multisig",
+                "typeArguments": []
+              }
+            }
+          },
+          "Address"
+        ],
+        "return": [
+          "Bool"
+        ]
+      },
+      "member_account_id": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [],
+        "parameters": [
+          {
+            "Reference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Multisig",
+                "typeArguments": []
+              }
+            }
+          },
+          "Address"
+        ],
+        "return": [
+          {
+            "Struct": {
+              "address": "0x1",
+              "module": "option",
+              "name": "Option",
+              "typeArguments": [
+                {
+                  "Struct": {
+                    "address": "0x2",
+                    "module": "object",
+                    "name": "ID",
+                    "typeArguments": []
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "member_addresses": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [],
+        "parameters": [
+          {
+            "Reference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Multisig",
+                "typeArguments": []
+              }
+            }
+          }
+        ],
+        "return": [
+          {
+            "Vector": "Address"
+          }
+        ]
+      },
+      "member_weight": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [],
+        "parameters": [
+          {
+            "Reference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Multisig",
+                "typeArguments": []
+              }
+            }
+          },
+          "Address"
+        ],
+        "return": [
+          "U64"
+        ]
+      },
+      "name": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [],
+        "parameters": [
+          {
+            "Reference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Multisig",
+                "typeArguments": []
+              }
+            }
+          }
+        ],
+        "return": [
+          {
+            "Struct": {
+              "address": "0x1",
+              "module": "string",
+              "name": "String",
+              "typeArguments": []
+            }
+          }
+        ]
+      },
+      "new": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [],
+        "parameters": [
+          {
+            "Struct": {
+              "address": "0x1",
+              "module": "string",
+              "name": "String",
+              "typeArguments": []
+            }
+          },
+          {
+            "Struct": {
+              "address": "0x2",
+              "module": "object",
+              "name": "ID",
+              "typeArguments": []
+            }
+          },
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x2",
+                "module": "tx_context",
+                "name": "TxContext",
+                "typeArguments": []
+              }
+            }
+          }
+        ],
+        "return": [
+          {
+            "Struct": {
+              "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+              "module": "multisig",
+              "name": "Multisig",
+              "typeArguments": []
+            }
+          }
+        ]
+      },
+      "num_of_proposals": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [],
+        "parameters": [
+          {
+            "Reference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Multisig",
+                "typeArguments": []
+              }
+            }
+          }
+        ],
+        "return": [
+          "U64"
+        ]
+      },
+      "pop_action": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [
+          {
+            "abilities": [
+              "Drop"
+            ]
+          },
+          {
+            "abilities": [
+              "Store"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Executable",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "TypeParameter": 0
+          }
+        ],
+        "return": [
+          {
+            "TypeParameter": 1
+          }
+        ]
+      },
+      "proposal": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [],
+        "parameters": [
+          {
+            "Reference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Multisig",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "Reference": {
+              "Struct": {
+                "address": "0x1",
+                "module": "string",
+                "name": "String",
+                "typeArguments": []
+              }
+            }
+          }
+        ],
+        "return": [
+          {
+            "Reference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Proposal",
+                "typeArguments": []
+              }
+            }
+          }
+        ]
+      },
+      "push_action": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [
+          {
+            "abilities": [
+              "Store"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Proposal",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "TypeParameter": 0
+          }
+        ],
+        "return": []
+      },
+      "register_account_id": {
+        "visibility": "Friend",
+        "isEntry": false,
+        "typeParameters": [],
+        "parameters": [
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Multisig",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "Struct": {
+              "address": "0x2",
+              "module": "object",
+              "name": "ID",
+              "typeArguments": []
+            }
+          },
+          {
+            "Reference": {
+              "Struct": {
+                "address": "0x2",
+                "module": "tx_context",
+                "name": "TxContext",
+                "typeArguments": []
+              }
+            }
+          }
+        ],
+        "return": []
+      },
+      "remove_approval": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [],
+        "parameters": [
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Multisig",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "Struct": {
+              "address": "0x1",
+              "module": "string",
+              "name": "String",
+              "typeArguments": []
+            }
+          },
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x2",
+                "module": "tx_context",
+                "name": "TxContext",
+                "typeArguments": []
+              }
+            }
+          }
+        ],
+        "return": []
+      },
+      "remove_members": {
+        "visibility": "Friend",
+        "isEntry": false,
+        "typeParameters": [],
+        "parameters": [
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Multisig",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "Vector": "Address"
+          }
+        ],
+        "return": []
+      },
+      "set_name": {
+        "visibility": "Friend",
+        "isEntry": false,
+        "typeParameters": [],
+        "parameters": [
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Multisig",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "Struct": {
+              "address": "0x1",
+              "module": "string",
+              "name": "String",
+              "typeArguments": []
+            }
+          }
+        ],
+        "return": []
+      },
+      "set_threshold": {
+        "visibility": "Friend",
+        "isEntry": false,
+        "typeParameters": [],
+        "parameters": [
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Multisig",
+                "typeArguments": []
+              }
+            }
+          },
+          "U64"
+        ],
+        "return": []
+      },
+      "set_version": {
+        "visibility": "Friend",
+        "isEntry": false,
+        "typeParameters": [],
+        "parameters": [
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Multisig",
+                "typeArguments": []
+              }
+            }
+          },
+          "U64"
+        ],
+        "return": []
+      },
+      "share": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [],
+        "parameters": [
+          {
+            "Struct": {
+              "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+              "module": "multisig",
+              "name": "Multisig",
+              "typeArguments": []
+            }
+          }
+        ],
+        "return": []
+      },
+      "threshold": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [],
+        "parameters": [
+          {
+            "Reference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Multisig",
+                "typeArguments": []
+              }
+            }
+          }
+        ],
+        "return": [
+          "U64"
+        ]
+      },
+      "total_weight": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [],
+        "parameters": [
+          {
+            "Reference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Multisig",
+                "typeArguments": []
+              }
+            }
+          }
+        ],
+        "return": [
+          "U64"
+        ]
+      },
+      "uid_mut": {
+        "visibility": "Friend",
+        "isEntry": false,
+        "typeParameters": [],
+        "parameters": [
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Multisig",
+                "typeArguments": []
+              }
+            }
+          }
+        ],
+        "return": [
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x2",
+                "module": "object",
+                "name": "UID",
+                "typeArguments": []
+              }
+            }
+          }
+        ]
+      },
+      "unregister_account_id": {
+        "visibility": "Friend",
+        "isEntry": false,
+        "typeParameters": [],
+        "parameters": [
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Multisig",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "Reference": {
+              "Struct": {
+                "address": "0x2",
+                "module": "tx_context",
+                "name": "TxContext",
+                "typeArguments": []
+              }
+            }
+          }
+        ],
+        "return": [
+          {
+            "Struct": {
+              "address": "0x2",
+              "module": "object",
+              "name": "ID",
+              "typeArguments": []
+            }
+          }
+        ]
+      }
+    }
+  },
+  "owned": {
+    "fileFormatVersion": 6,
+    "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+    "name": "owned",
+    "friends": [],
+    "structs": {
+      "Borrow": {
+        "abilities": {
+          "abilities": [
+            "Store"
+          ]
+        },
+        "typeParameters": [],
+        "fields": [
+          {
+            "name": "to_return",
+            "type": {
+              "Vector": {
+                "Struct": {
+                  "address": "0x2",
+                  "module": "object",
+                  "name": "ID",
+                  "typeArguments": []
+                }
+              }
+            }
+          }
+        ]
+      },
+      "Withdraw": {
+        "abilities": {
+          "abilities": [
+            "Store"
+          ]
+        },
+        "typeParameters": [],
+        "fields": [
+          {
+            "name": "objects",
+            "type": {
+              "Vector": {
+                "Struct": {
+                  "address": "0x2",
+                  "module": "object",
+                  "name": "ID",
+                  "typeArguments": []
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "exposedFunctions": {
+      "borrow": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [
+          {
+            "abilities": [
+              "Drop"
+            ]
+          },
+          {
+            "abilities": [
+              "Store",
+              "Key"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Executable",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Multisig",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "TypeParameter": 0
+          },
+          {
+            "Struct": {
+              "address": "0x2",
+              "module": "transfer",
+              "name": "Receiving",
+              "typeArguments": [
+                {
+                  "TypeParameter": 1
+                }
+              ]
+            }
+          },
+          "U64"
+        ],
+        "return": [
+          {
+            "TypeParameter": 1
+          }
+        ]
+      },
+      "destroy_borrow": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [
+          {
+            "abilities": [
+              "Drop"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Executable",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "TypeParameter": 0
+          }
+        ],
+        "return": []
+      },
+      "destroy_withdraw": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [
+          {
+            "abilities": [
+              "Drop"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Executable",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "TypeParameter": 0
+          }
+        ],
+        "return": []
+      },
+      "new_borrow": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [],
+        "parameters": [
+          {
+            "Vector": {
+              "Struct": {
+                "address": "0x2",
+                "module": "object",
+                "name": "ID",
+                "typeArguments": []
+              }
+            }
+          }
+        ],
+        "return": [
+          {
+            "Struct": {
+              "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+              "module": "owned",
+              "name": "Borrow",
+              "typeArguments": []
+            }
+          }
+        ]
+      },
+      "new_withdraw": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [],
+        "parameters": [
+          {
+            "Vector": {
+              "Struct": {
+                "address": "0x2",
+                "module": "object",
+                "name": "ID",
+                "typeArguments": []
+              }
+            }
+          }
+        ],
+        "return": [
+          {
+            "Struct": {
+              "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+              "module": "owned",
+              "name": "Withdraw",
+              "typeArguments": []
+            }
+          }
+        ]
+      },
+      "put_back": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [
+          {
+            "abilities": [
+              "Drop"
+            ]
+          },
+          {
+            "abilities": [
+              "Store",
+              "Key"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Executable",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "Reference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Multisig",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "TypeParameter": 0
+          },
+          {
+            "TypeParameter": 1
+          },
+          "U64"
+        ],
+        "return": []
+      },
+      "withdraw": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [
+          {
+            "abilities": [
+              "Drop"
+            ]
+          },
+          {
+            "abilities": [
+              "Store",
+              "Key"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Executable",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Multisig",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "TypeParameter": 0
+          },
+          {
+            "Struct": {
+              "address": "0x2",
+              "module": "transfer",
+              "name": "Receiving",
+              "typeArguments": [
+                {
+                  "TypeParameter": 1
+                }
+              ]
+            }
+          },
+          "U64"
+        ],
+        "return": [
+          {
+            "TypeParameter": 1
+          }
+        ]
+      }
+    }
+  },
+  "payments": {
+    "fileFormatVersion": 6,
+    "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+    "name": "payments",
+    "friends": [],
+    "structs": {
+      "Pay": {
+        "abilities": {
+          "abilities": [
+            "Store"
+          ]
+        },
+        "typeParameters": [],
+        "fields": [
+          {
+            "name": "amount",
+            "type": "U64"
+          },
+          {
+            "name": "interval",
+            "type": "U64"
+          },
+          {
+            "name": "recipient",
+            "type": "Address"
+          }
+        ]
+      },
+      "Stream": {
+        "abilities": {
+          "abilities": [
+            "Key"
+          ]
+        },
+        "typeParameters": [
+          {
+            "constraints": {
+              "abilities": [
+                "Drop"
+              ]
+            },
+            "isPhantom": true
+          }
+        ],
+        "fields": [
+          {
+            "name": "id",
+            "type": {
+              "Struct": {
+                "address": "0x2",
+                "module": "object",
+                "name": "UID",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "name": "balance",
+            "type": {
+              "Struct": {
+                "address": "0x2",
+                "module": "balance",
+                "name": "Balance",
+                "typeArguments": [
+                  {
+                    "TypeParameter": 0
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "name": "amount",
+            "type": "U64"
+          },
+          {
+            "name": "interval",
+            "type": "U64"
+          },
+          {
+            "name": "last_epoch",
+            "type": "U64"
+          },
+          {
+            "name": "recipient",
+            "type": "Address"
+          }
+        ]
+      },
+      "Witness": {
+        "abilities": {
+          "abilities": [
+            "Copy",
+            "Drop"
+          ]
+        },
+        "typeParameters": [],
+        "fields": [
+          {
+            "name": "dummy_field",
+            "type": "Bool"
+          }
+        ]
+      }
+    },
+    "exposedFunctions": {
+      "cancel_payment_stream": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [
+          {
+            "abilities": [
+              "Drop"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "Struct": {
+              "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+              "module": "payments",
+              "name": "Stream",
+              "typeArguments": [
+                {
+                  "TypeParameter": 0
+                }
+              ]
+            }
+          },
+          {
+            "Reference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Multisig",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x2",
+                "module": "tx_context",
+                "name": "TxContext",
+                "typeArguments": []
+              }
+            }
+          }
+        ],
+        "return": []
+      },
+      "destroy_empty_stream": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [
+          {
+            "abilities": [
+              "Drop"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "Struct": {
+              "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+              "module": "payments",
+              "name": "Stream",
+              "typeArguments": [
+                {
+                  "TypeParameter": 0
+                }
+              ]
+            }
+          }
+        ],
+        "return": []
+      },
+      "destroy_pay": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [
+          {
+            "abilities": [
+              "Drop"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Executable",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "TypeParameter": 0
+          }
+        ],
+        "return": [
+          "U64",
+          "U64",
+          "Address"
+        ]
+      },
+      "disburse": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [
+          {
+            "abilities": [
+              "Drop"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "payments",
+                "name": "Stream",
+                "typeArguments": [
+                  {
+                    "TypeParameter": 0
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x2",
+                "module": "tx_context",
+                "name": "TxContext",
+                "typeArguments": []
+              }
+            }
+          }
+        ],
+        "return": []
+      },
+      "execute_pay": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [
+          {
+            "abilities": [
+              "Drop"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "Struct": {
+              "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+              "module": "multisig",
+              "name": "Executable",
+              "typeArguments": []
+            }
+          },
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Multisig",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "Struct": {
+              "address": "0x2",
+              "module": "transfer",
+              "name": "Receiving",
+              "typeArguments": [
+                {
+                  "Struct": {
+                    "address": "0x2",
+                    "module": "coin",
+                    "name": "Coin",
+                    "typeArguments": [
+                      {
+                        "TypeParameter": 0
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x2",
+                "module": "tx_context",
+                "name": "TxContext",
+                "typeArguments": []
+              }
+            }
+          }
+        ],
+        "return": []
+      },
+      "new_pay": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [],
+        "parameters": [
+          "U64",
+          "U64",
+          "Address"
+        ],
+        "return": [
+          {
+            "Struct": {
+              "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+              "module": "payments",
+              "name": "Pay",
+              "typeArguments": []
+            }
+          }
+        ]
+      },
+      "pay": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [
+          {
+            "abilities": [
+              "Copy",
+              "Drop"
+            ]
+          },
+          {
+            "abilities": [
+              "Drop"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Executable",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Multisig",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "Struct": {
+              "address": "0x2",
+              "module": "transfer",
+              "name": "Receiving",
+              "typeArguments": [
+                {
+                  "Struct": {
+                    "address": "0x2",
+                    "module": "coin",
+                    "name": "Coin",
+                    "typeArguments": [
+                      {
+                        "TypeParameter": 1
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "TypeParameter": 0
+          },
+          "U64",
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x2",
+                "module": "tx_context",
+                "name": "TxContext",
+                "typeArguments": []
+              }
+            }
+          }
+        ],
+        "return": []
+      },
+      "propose_pay": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [],
+        "parameters": [
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Multisig",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "Struct": {
+              "address": "0x1",
+              "module": "string",
+              "name": "String",
+              "typeArguments": []
+            }
+          },
+          "U64",
+          "U64",
+          {
+            "Struct": {
+              "address": "0x1",
+              "module": "string",
+              "name": "String",
+              "typeArguments": []
+            }
+          },
+          {
+            "Struct": {
+              "address": "0x2",
+              "module": "object",
+              "name": "ID",
+              "typeArguments": []
+            }
+          },
+          "U64",
+          "U64",
+          "Address",
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x2",
+                "module": "tx_context",
+                "name": "TxContext",
+                "typeArguments": []
+              }
+            }
+          }
+        ],
+        "return": []
+      }
+    }
+  },
+  "transfers": {
+    "fileFormatVersion": 6,
+    "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+    "name": "transfers",
+    "friends": [],
+    "structs": {
+      "Deliver": {
+        "abilities": {
+          "abilities": [
+            "Store"
+          ]
+        },
+        "typeParameters": [],
+        "fields": [
+          {
+            "name": "recipient",
+            "type": "Address"
+          }
+        ]
+      },
+      "Delivery": {
+        "abilities": {
+          "abilities": [
+            "Key"
+          ]
+        },
+        "typeParameters": [],
+        "fields": [
+          {
+            "name": "id",
+            "type": {
+              "Struct": {
+                "address": "0x2",
+                "module": "object",
+                "name": "UID",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "name": "multisig_id",
+            "type": {
+              "Struct": {
+                "address": "0x2",
+                "module": "object",
+                "name": "ID",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "name": "objects",
+            "type": {
+              "Struct": {
+                "address": "0x2",
+                "module": "bag",
+                "name": "Bag",
+                "typeArguments": []
+              }
+            }
+          }
+        ]
+      },
+      "DeliveryCap": {
+        "abilities": {
+          "abilities": [
+            "Key"
+          ]
+        },
+        "typeParameters": [],
+        "fields": [
+          {
+            "name": "id",
+            "type": {
+              "Struct": {
+                "address": "0x2",
+                "module": "object",
+                "name": "UID",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "name": "delivery_id",
+            "type": {
+              "Struct": {
+                "address": "0x2",
+                "module": "object",
+                "name": "ID",
+                "typeArguments": []
+              }
+            }
+          }
+        ]
+      },
+      "Send": {
+        "abilities": {
+          "abilities": [
+            "Store"
+          ]
+        },
+        "typeParameters": [],
+        "fields": [
+          {
+            "name": "transfers",
+            "type": {
+              "Struct": {
+                "address": "0x2",
+                "module": "vec_map",
+                "name": "VecMap",
+                "typeArguments": [
+                  {
+                    "Struct": {
+                      "address": "0x2",
+                      "module": "object",
+                      "name": "ID",
+                      "typeArguments": []
+                    }
+                  },
+                  "Address"
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "Witness": {
+        "abilities": {
+          "abilities": [
+            "Copy",
+            "Drop"
+          ]
+        },
+        "typeParameters": [],
+        "fields": [
+          {
+            "name": "dummy_field",
+            "type": "Bool"
+          }
+        ]
+      }
+    },
+    "exposedFunctions": {
+      "cancel_delivery": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [],
+        "parameters": [
+          {
+            "Reference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Multisig",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "Struct": {
+              "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+              "module": "transfers",
+              "name": "Delivery",
+              "typeArguments": []
+            }
+          },
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x2",
+                "module": "tx_context",
+                "name": "TxContext",
+                "typeArguments": []
+              }
+            }
+          }
+        ],
+        "return": []
+      },
+      "claim": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [
+          {
+            "abilities": [
+              "Store",
+              "Key"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "transfers",
+                "name": "Delivery",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "Reference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "transfers",
+                "name": "DeliveryCap",
+                "typeArguments": []
+              }
+            }
+          }
+        ],
+        "return": [
+          {
+            "TypeParameter": 0
+          }
+        ]
+      },
+      "complete_deliver": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [],
+        "parameters": [
+          {
+            "Struct": {
+              "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+              "module": "transfers",
+              "name": "Delivery",
+              "typeArguments": []
+            }
+          },
+          {
+            "Struct": {
+              "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+              "module": "transfers",
+              "name": "DeliveryCap",
+              "typeArguments": []
+            }
+          },
+          {
+            "Struct": {
+              "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+              "module": "multisig",
+              "name": "Executable",
+              "typeArguments": []
+            }
+          }
+        ],
+        "return": []
+      },
+      "complete_send": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [],
+        "parameters": [
+          {
+            "Struct": {
+              "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+              "module": "multisig",
+              "name": "Executable",
+              "typeArguments": []
+            }
+          }
+        ],
+        "return": []
+      },
+      "confirm_delivery": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [],
+        "parameters": [
+          {
+            "Struct": {
+              "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+              "module": "transfers",
+              "name": "Delivery",
+              "typeArguments": []
+            }
+          },
+          {
+            "Struct": {
+              "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+              "module": "transfers",
+              "name": "DeliveryCap",
+              "typeArguments": []
+            }
+          }
+        ],
+        "return": []
+      },
+      "create_delivery": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [],
+        "parameters": [
+          {
+            "Reference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Multisig",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x2",
+                "module": "tx_context",
+                "name": "TxContext",
+                "typeArguments": []
+              }
+            }
+          }
+        ],
+        "return": [
+          {
+            "Struct": {
+              "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+              "module": "transfers",
+              "name": "Delivery",
+              "typeArguments": []
+            }
+          },
+          {
+            "Struct": {
+              "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+              "module": "transfers",
+              "name": "DeliveryCap",
+              "typeArguments": []
+            }
+          }
+        ]
+      },
+      "deliver": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [
+          {
+            "abilities": [
+              "Drop"
+            ]
+          },
+          {
+            "abilities": [
+              "Store",
+              "Key"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "transfers",
+                "name": "Delivery",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "Reference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "transfers",
+                "name": "DeliveryCap",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Executable",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Multisig",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "TypeParameter": 0
+          },
+          {
+            "Struct": {
+              "address": "0x2",
+              "module": "transfer",
+              "name": "Receiving",
+              "typeArguments": [
+                {
+                  "TypeParameter": 1
+                }
+              ]
+            }
+          },
+          "U64"
+        ],
+        "return": []
+      },
+      "destroy_deliver": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [
+          {
+            "abilities": [
+              "Drop"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Executable",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "TypeParameter": 0
+          }
+        ],
+        "return": [
+          "Address"
+        ]
+      },
+      "destroy_send": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [
+          {
+            "abilities": [
+              "Drop"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Executable",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "TypeParameter": 0
+          }
+        ],
+        "return": []
+      },
+      "execute_deliver": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [
+          {
+            "abilities": [
+              "Store",
+              "Key"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "transfers",
+                "name": "Delivery",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "Reference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "transfers",
+                "name": "DeliveryCap",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Executable",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Multisig",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "Struct": {
+              "address": "0x2",
+              "module": "transfer",
+              "name": "Receiving",
+              "typeArguments": [
+                {
+                  "TypeParameter": 0
+                }
+              ]
+            }
+          }
+        ],
+        "return": []
+      },
+      "execute_send": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [
+          {
+            "abilities": [
+              "Store",
+              "Key"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Executable",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Multisig",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "Struct": {
+              "address": "0x2",
+              "module": "transfer",
+              "name": "Receiving",
+              "typeArguments": [
+                {
+                  "TypeParameter": 0
+                }
+              ]
+            }
+          }
+        ],
+        "return": []
+      },
+      "new_deliver": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [],
+        "parameters": [
+          "Address"
+        ],
+        "return": [
+          {
+            "Struct": {
+              "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+              "module": "transfers",
+              "name": "Deliver",
+              "typeArguments": []
+            }
+          }
+        ]
+      },
+      "new_send": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [],
+        "parameters": [
+          {
+            "Vector": {
+              "Struct": {
+                "address": "0x2",
+                "module": "object",
+                "name": "ID",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "Vector": "Address"
+          }
+        ],
+        "return": [
+          {
+            "Struct": {
+              "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+              "module": "transfers",
+              "name": "Send",
+              "typeArguments": []
+            }
+          }
+        ]
+      },
+      "propose_delivery": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [],
+        "parameters": [
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Multisig",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "Struct": {
+              "address": "0x1",
+              "module": "string",
+              "name": "String",
+              "typeArguments": []
+            }
+          },
+          "U64",
+          "U64",
+          {
+            "Struct": {
+              "address": "0x1",
+              "module": "string",
+              "name": "String",
+              "typeArguments": []
+            }
+          },
+          {
+            "Vector": {
+              "Struct": {
+                "address": "0x2",
+                "module": "object",
+                "name": "ID",
+                "typeArguments": []
+              }
+            }
+          },
+          "Address",
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x2",
+                "module": "tx_context",
+                "name": "TxContext",
+                "typeArguments": []
+              }
+            }
+          }
+        ],
+        "return": []
+      },
+      "propose_send": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [],
+        "parameters": [
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Multisig",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "Struct": {
+              "address": "0x1",
+              "module": "string",
+              "name": "String",
+              "typeArguments": []
+            }
+          },
+          "U64",
+          "U64",
+          {
+            "Struct": {
+              "address": "0x1",
+              "module": "string",
+              "name": "String",
+              "typeArguments": []
+            }
+          },
+          {
+            "Vector": {
+              "Struct": {
+                "address": "0x2",
+                "module": "object",
+                "name": "ID",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "Vector": "Address"
+          },
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x2",
+                "module": "tx_context",
+                "name": "TxContext",
+                "typeArguments": []
+              }
+            }
+          }
+        ],
+        "return": []
+      },
+      "retrieve": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [
+          {
+            "abilities": [
+              "Store",
+              "Key"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "transfers",
+                "name": "Delivery",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "Reference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Multisig",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x2",
+                "module": "tx_context",
+                "name": "TxContext",
+                "typeArguments": []
+              }
+            }
+          }
+        ],
+        "return": []
+      },
+      "send": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [
+          {
+            "abilities": [
+              "Copy",
+              "Drop"
+            ]
+          },
+          {
+            "abilities": [
+              "Store",
+              "Key"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Executable",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Multisig",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "TypeParameter": 0
+          },
+          {
+            "Struct": {
+              "address": "0x2",
+              "module": "transfer",
+              "name": "Receiving",
+              "typeArguments": [
+                {
+                  "TypeParameter": 1
+                }
+              ]
+            }
+          },
+          "U64"
+        ],
+        "return": []
+      }
+    }
+  },
+  "upgrade_policies": {
+    "fileFormatVersion": 6,
+    "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+    "name": "upgrade_policies",
+    "friends": [],
+    "structs": {
+      "Restrict": {
+        "abilities": {
+          "abilities": [
+            "Store"
+          ]
+        },
+        "typeParameters": [],
+        "fields": [
+          {
+            "name": "policy",
+            "type": "U8"
+          },
+          {
+            "name": "lock_id",
+            "type": {
+              "Struct": {
+                "address": "0x2",
+                "module": "object",
+                "name": "ID",
+                "typeArguments": []
+              }
+            }
+          }
+        ]
+      },
+      "TimeLock": {
+        "abilities": {
+          "abilities": [
+            "Store"
+          ]
+        },
+        "typeParameters": [],
+        "fields": [
+          {
+            "name": "delay_ms",
+            "type": "U64"
+          }
+        ]
+      },
+      "Upgrade": {
+        "abilities": {
+          "abilities": [
+            "Store"
+          ]
+        },
+        "typeParameters": [],
+        "fields": [
+          {
+            "name": "digest",
+            "type": {
+              "Vector": "U8"
+            }
+          },
+          {
+            "name": "lock_id",
+            "type": {
+              "Struct": {
+                "address": "0x2",
+                "module": "object",
+                "name": "ID",
+                "typeArguments": []
+              }
+            }
+          }
+        ]
+      },
+      "UpgradeLock": {
+        "abilities": {
+          "abilities": [
+            "Key"
+          ]
+        },
+        "typeParameters": [],
+        "fields": [
+          {
+            "name": "id",
+            "type": {
+              "Struct": {
+                "address": "0x2",
+                "module": "object",
+                "name": "UID",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "name": "label",
+            "type": {
+              "Struct": {
+                "address": "0x1",
+                "module": "string",
+                "name": "String",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "name": "multisig_addr",
+            "type": "Address"
+          },
+          {
+            "name": "upgrade_cap",
+            "type": {
+              "Struct": {
+                "address": "0x2",
+                "module": "package",
+                "name": "UpgradeCap",
+                "typeArguments": []
+              }
+            }
+          }
+        ]
+      },
+      "Witness": {
+        "abilities": {
+          "abilities": [
+            "Drop"
+          ]
+        },
+        "typeParameters": [],
+        "fields": [
+          {
+            "name": "dummy_field",
+            "type": "Bool"
+          }
+        ]
+      }
+    },
+    "exposedFunctions": {
+      "add_rule": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [
+          {
+            "abilities": [
+              "Store"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "upgrade_policies",
+                "name": "UpgradeLock",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "Struct": {
+              "address": "0x1",
+              "module": "string",
+              "name": "String",
+              "typeArguments": []
+            }
+          },
+          {
+            "TypeParameter": 0
+          }
+        ],
+        "return": []
+      },
+      "borrow_cap": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [],
+        "parameters": [
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Multisig",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "Struct": {
+              "address": "0x2",
+              "module": "transfer",
+              "name": "Receiving",
+              "typeArguments": [
+                {
+                  "Struct": {
+                    "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                    "module": "upgrade_policies",
+                    "name": "UpgradeLock",
+                    "typeArguments": []
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x2",
+                "module": "tx_context",
+                "name": "TxContext",
+                "typeArguments": []
+              }
+            }
+          }
+        ],
+        "return": [
+          {
+            "Struct": {
+              "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+              "module": "upgrade_policies",
+              "name": "UpgradeLock",
+              "typeArguments": []
+            }
+          }
+        ]
+      },
+      "confirm_upgrade": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [],
+        "parameters": [
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "upgrade_policies",
+                "name": "UpgradeLock",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "Struct": {
+              "address": "0x2",
+              "module": "package",
+              "name": "UpgradeReceipt",
+              "typeArguments": []
+            }
+          }
+        ],
+        "return": []
+      },
+      "destroy_restrict": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [
+          {
+            "abilities": [
+              "Drop"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Executable",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "TypeParameter": 0
+          }
+        ],
+        "return": [
+          "U8",
+          {
+            "Struct": {
+              "address": "0x2",
+              "module": "object",
+              "name": "ID",
+              "typeArguments": []
+            }
+          }
+        ]
+      },
+      "destroy_upgrade": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [
+          {
+            "abilities": [
+              "Drop"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Executable",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "TypeParameter": 0
+          }
+        ],
+        "return": [
+          {
+            "Vector": "U8"
+          },
+          {
+            "Struct": {
+              "address": "0x2",
+              "module": "object",
+              "name": "ID",
+              "typeArguments": []
+            }
+          }
+        ]
+      },
+      "execute_restrict": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [],
+        "parameters": [
+          {
+            "Struct": {
+              "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+              "module": "multisig",
+              "name": "Executable",
+              "typeArguments": []
+            }
+          },
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Multisig",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "Struct": {
+              "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+              "module": "upgrade_policies",
+              "name": "UpgradeLock",
+              "typeArguments": []
+            }
+          }
+        ],
+        "return": []
+      },
+      "execute_upgrade": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [],
+        "parameters": [
+          {
+            "Struct": {
+              "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+              "module": "multisig",
+              "name": "Executable",
+              "typeArguments": []
+            }
+          },
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "upgrade_policies",
+                "name": "UpgradeLock",
+                "typeArguments": []
+              }
+            }
+          }
+        ],
+        "return": [
+          {
+            "Struct": {
+              "address": "0x2",
+              "module": "package",
+              "name": "UpgradeTicket",
+              "typeArguments": []
+            }
+          }
+        ]
+      },
+      "lock_cap": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [],
+        "parameters": [
+          {
+            "Reference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Multisig",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "Struct": {
+              "address": "0x1",
+              "module": "string",
+              "name": "String",
+              "typeArguments": []
+            }
+          },
+          {
+            "Struct": {
+              "address": "0x2",
+              "module": "package",
+              "name": "UpgradeCap",
+              "typeArguments": []
+            }
+          },
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x2",
+                "module": "tx_context",
+                "name": "TxContext",
+                "typeArguments": []
+              }
+            }
+          }
+        ],
+        "return": [
+          {
+            "Struct": {
+              "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+              "module": "upgrade_policies",
+              "name": "UpgradeLock",
+              "typeArguments": []
+            }
+          }
+        ]
+      },
+      "lock_cap_with_timelock": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [],
+        "parameters": [
+          {
+            "Reference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Multisig",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "Struct": {
+              "address": "0x1",
+              "module": "string",
+              "name": "String",
+              "typeArguments": []
+            }
+          },
+          "U64",
+          {
+            "Struct": {
+              "address": "0x2",
+              "module": "package",
+              "name": "UpgradeCap",
+              "typeArguments": []
+            }
+          },
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x2",
+                "module": "tx_context",
+                "name": "TxContext",
+                "typeArguments": []
+              }
+            }
+          }
+        ],
+        "return": []
+      },
+      "new_restrict": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [],
+        "parameters": [
+          "U8",
+          {
+            "Struct": {
+              "address": "0x2",
+              "module": "object",
+              "name": "ID",
+              "typeArguments": []
+            }
+          }
+        ],
+        "return": [
+          {
+            "Struct": {
+              "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+              "module": "upgrade_policies",
+              "name": "Restrict",
+              "typeArguments": []
+            }
+          }
+        ]
+      },
+      "new_upgrade": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [],
+        "parameters": [
+          {
+            "Vector": "U8"
+          },
+          {
+            "Struct": {
+              "address": "0x2",
+              "module": "object",
+              "name": "ID",
+              "typeArguments": []
+            }
+          }
+        ],
+        "return": [
+          {
+            "Struct": {
+              "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+              "module": "upgrade_policies",
+              "name": "Upgrade",
+              "typeArguments": []
+            }
+          }
+        ]
+      },
+      "propose_restrict": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [],
+        "parameters": [
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Multisig",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "Struct": {
+              "address": "0x1",
+              "module": "string",
+              "name": "String",
+              "typeArguments": []
+            }
+          },
+          "U64",
+          "U64",
+          {
+            "Struct": {
+              "address": "0x1",
+              "module": "string",
+              "name": "String",
+              "typeArguments": []
+            }
+          },
+          "U8",
+          {
+            "Reference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "upgrade_policies",
+                "name": "UpgradeLock",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x2",
+                "module": "tx_context",
+                "name": "TxContext",
+                "typeArguments": []
+              }
+            }
+          }
+        ],
+        "return": []
+      },
+      "propose_upgrade": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [],
+        "parameters": [
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Multisig",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "Struct": {
+              "address": "0x1",
+              "module": "string",
+              "name": "String",
+              "typeArguments": []
+            }
+          },
+          "U64",
+          {
+            "Struct": {
+              "address": "0x1",
+              "module": "string",
+              "name": "String",
+              "typeArguments": []
+            }
+          },
+          {
+            "Vector": "U8"
+          },
+          {
+            "Reference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "upgrade_policies",
+                "name": "UpgradeLock",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "Reference": {
+              "Struct": {
+                "address": "0x2",
+                "module": "clock",
+                "name": "Clock",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x2",
+                "module": "tx_context",
+                "name": "TxContext",
+                "typeArguments": []
+              }
+            }
+          }
+        ],
+        "return": []
+      },
+      "put_back_cap": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [],
+        "parameters": [
+          {
+            "Struct": {
+              "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+              "module": "upgrade_policies",
+              "name": "UpgradeLock",
+              "typeArguments": []
+            }
+          }
+        ],
+        "return": []
+      },
+      "restrict": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [
+          {
+            "abilities": [
+              "Drop"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Executable",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Multisig",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "Struct": {
+              "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+              "module": "upgrade_policies",
+              "name": "UpgradeLock",
+              "typeArguments": []
+            }
+          },
+          {
+            "TypeParameter": 0
+          },
+          "U64"
+        ],
+        "return": []
+      },
+      "upgrade": {
+        "visibility": "Public",
+        "isEntry": false,
+        "typeParameters": [
+          {
+            "abilities": [
+              "Drop"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "multisig",
+                "name": "Executable",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "MutableReference": {
+              "Struct": {
+                "address": "0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62",
+                "module": "upgrade_policies",
+                "name": "UpgradeLock",
+                "typeArguments": []
+              }
+            }
+          },
+          {
+            "TypeParameter": 0
+          },
+          "U64"
+        ],
+        "return": [
+          {
+            "Struct": {
+              "address": "0x2",
+              "module": "package",
+              "name": "UpgradeTicket",
+              "typeArguments": []
+            }
+          }
+        ]
+      }
+    }
+  }
+}

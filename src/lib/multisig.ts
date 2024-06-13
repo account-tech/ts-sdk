@@ -1,7 +1,7 @@
 import { TransactionBlock, TransactionResult } from "@mysten/sui.js/transactions";
 import { SuiClient, getFullnodeUrl } from "@mysten/sui.js/client";
 import { defaultMoveCoder } from "@typemove/sui";
-import { multisig as multisigAbi } from "../../test/types/kraken.js";
+import { multisig as multisigAbi } from "../types/sui/0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62.js";
 import { CLOCK } from "../types/constants.js";
 import { Proposal, Member } from "../types/types.js";
 import { Account } from "./account.js";
