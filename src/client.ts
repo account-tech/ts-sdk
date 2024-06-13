@@ -41,13 +41,43 @@ export class KrakenClient {
 		return kraken;
 	}
 
-	// members and weights are optional, if none are provided then only the creator is added with weight 1
+	// creates a multisig with default weights of 1 (1 member = 1 voice)
 	createMultisig(
 		tx: TransactionBlock, 
 		name: string, 
 		threshold?: number, // if none then 1, minimum members.length + 1
-		members?: string[], // creator must be added with his weight
-		weights?: number[], // weight for each member
+		members?: string[], // creator is added by default, everyone added with weight of 1
+	): TransactionResult {
+		if (!this.account?.id) {
+			throw new Error("User doesn't have an Account or its ID is not set.");
+		}
+		if (!this.multisig) {
+			throw new Error("Multisig not initialized.");
+		}
+		
+		const [multisig] = this.multisig?.newMultisig(tx, this.account.id, name);
+		
+		// update multisig parameters if any of them are provided
+		if (threshold || members) {
+			const weights = members ? new Array(members.length).fill(1) : [];
+			proposeModify(tx, multisig, this.packageId, "init_members", 0, 0, "", threshold, undefined, members, weights, name);
+			this.approveAndMaybeExecute(tx, multisig, "init_members", executeModify, multisig, this.packageId);
+		}
+		// creator register the multisig in his account
+		this.account.joinMultisig(tx, this.account.id, multisig);
+		// send invites to added members
+		members?.forEach(member => { if (member !== this.userAddr) this.account?.sendInvite(tx, this.multisig?.id!, member) });
+		// share the multisig
+		return this.multisig?.shareMultisig(tx, multisig);
+	}
+
+	// creates a multisig with custom weights for each member, creator address and weight must be added
+	createMultisigWithWeights(
+		tx: TransactionBlock, 
+		name: string, 
+		threshold: number, // sum of required weights
+		members: string[], // creator must be added with his weight
+		weights: number[], // weight for each member
 	): TransactionResult {
 		if (!this.account?.id) {
 			throw new Error("User doesn't have an Account or its ID is not set.");
