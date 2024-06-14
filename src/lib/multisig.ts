@@ -134,6 +134,27 @@ export class Multisig {
 		}));
 	}
 
+	getProposal(key: string): Proposal {
+		const proposal = this.proposals?.find(p => p.key == key);
+		if (!proposal) {
+			throw new Error(`Proposal with key ${key} not found.`);
+		}
+		return proposal;
+	}
+
+	getMemberWeight(addr: string): number {
+		const member = this.members?.find(m => m.owner == addr);
+		if (!member) {
+			throw new Error(`Member with address ${addr} not found.`);
+		}
+		return member.weight;
+	}
+
+	hasApproved(key: string, addr: string): boolean {
+		const proposal = this.getProposal(key);
+		return proposal.approved.includes(addr);
+	}
+
 	// members and weights are optional, if none are provided then only the creator is added with weight 1
 	newMultisig(tx: TransactionBlock, accountId: string, name: string): TransactionResult {
 		return tx.moveCall({

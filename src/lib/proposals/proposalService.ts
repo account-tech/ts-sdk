@@ -13,6 +13,11 @@ export class ProposalService {
     setMultisig(multisig: TransactionResult | string) {
         this.multisig = multisig;
     }
+
+    // withPackageId(packageId: string) {
+    //     this.packageId = packageId;
+    //     return this;
+    // }
     
     // === Config ===
     
@@ -22,12 +27,15 @@ export class ProposalService {
         executionTime: number,
         expirationEpoch: number,
         description: string,
+        name?: string,
         threshold?: number,
         toRemove?: string[],
         toAdd?: string[],
         weights?: number[],
-        name?: string,
     ) {
+        if ((toAdd || weights) && (toAdd?.length !== weights?.length)) {
+            throw new Error("The number of members to add does not match the number of weights provided.");
+        }
         tx.moveCall({
             target: `${this.packageId}::config::propose_modify`,
             arguments: [
@@ -49,6 +57,7 @@ export class ProposalService {
         tx: TransactionBlock,
         executable: TransactionResult,
     ) {
+        console.log(this)
         tx.moveCall({
             target: `${this.packageId}::config::execute_modify`,
             arguments: [
@@ -57,4 +66,35 @@ export class ProposalService {
             ],
         });
     }
+
+    // === Transfers ===
+
+    // proposeSend(
+    //     tx: TransactionBlock,
+    //     key: string,
+    //     executionTime: number,
+    //     expirationEpoch: number,
+    //     description: string,
+    //     objects: string[],
+    //     recipients: string[],
+    // ) {
+    //     if ((toAdd || weights) && (toAdd?.length !== weights?.length)) {
+    //         throw new Error("The number of members to add does not match the number of weights provided.");
+    //     }
+    //     tx.moveCall({
+    //         target: `${this.packageId}::config::propose_modify`,
+    //         arguments: [
+    //             typeof(this.multisig) === "string" ? tx.object(this.multisig) : this.multisig, 
+    //             tx.pure(key), 
+    //             tx.pure(executionTime), 
+    //             tx.pure(expirationEpoch), 
+    //             tx.pure(description), 
+    //             name ? tx.pure([name]) : tx.pure([]), 
+    //             threshold ? tx.pure([threshold]) : tx.pure([]), 
+    //             toRemove ? tx.pure(toRemove) : tx.pure([]), 
+    //             toAdd ? tx.pure(toAdd) : tx.pure([]),
+    //             weights ? tx.pure(weights) : tx.pure([]),
+    //         ],
+    //     });
+    // }
 }

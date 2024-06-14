@@ -71,6 +71,7 @@ describe("Interact with Kraken SDK on localnet" ,async () => {
     {    
         await kraken.account?.fetchAccount();
         if (!kraken.account?.id) {
+            console.log("hhehe")
             const tx = new TransactionBlock();
             kraken.account?.createAccount(tx, "Thouny", "");
             await executeTx(tx);
@@ -105,28 +106,16 @@ describe("Interact with Kraken SDK on localnet" ,async () => {
     }
 
     // // === Modify Config ===
-    // it('modifies Config', async () => {
-    //     const txConfig = new TransactionBlock();
-    //     kraken.proposeModify(txConfig, "modify", 0, 0, "", "Updated", undefined, ["0x608f5242acdbe2bc779de586864dc914d0dee1adfe4654b560bd5019886daa29"], undefined);
-    //     await executeTx(txConfig);
-    //     console.log("Config modified:");
+    it('modifies Config', async () => {
+        const tx = new TransactionBlock();
+        kraken.proposeModify(tx, "modify", 0, 0, "", "Updated");
+        await executeTx(tx);
+        console.log("Config modified:");
 
-    //     const account = await kraken.getAccount();
-    //     await kraken.fetchMultisigData();
-    //     console.log(kraken.multisigData);
-    //     expect(kraken.multisigData).toEqual({
-    //         name: "Updated",
-    //         threshold: 1,
-    //         members: [account, { 
-    //             owner: "0x608f5242acdbe2bc779de586864dc914d0dee1adfe4654b560bd5019886daa29",
-    //             id: "",
-    //             username: "",
-    //             profilePicture: "",
-    //             multisigs: []
-    //         }],
-    //         proposals: []
-    //     })
-    // });
+        await kraken.fetch();
+        console.log(kraken.multisig);
+        expect(kraken.multisig?.name).toEqual("Updated");
+    });
 
     // === Kiosk ===
 

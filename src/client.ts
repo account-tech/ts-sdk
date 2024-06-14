@@ -67,7 +67,7 @@ export class KrakenClient {
 		if (threshold || members) {
 			const weights = members ? new Array(members.length).fill(1) : [];			
 			this.proposalService!.setMultisig(multisig);
-			this.proposalService!.proposeModify(tx, "init_members", 0, 0, "", threshold, undefined, members, weights, name);
+			this.proposalService!.proposeModify(tx, "init_members", 0, 0, "", name, threshold, undefined, members, weights);
 			this.multisig.approveProposal(tx, "init_members", multisig);
 			const [executable] = this.multisig.executeProposal(tx, "init_members", multisig);
 			this.proposalService!.executeModify(tx, executable);
@@ -107,7 +107,7 @@ export class KrakenClient {
 		};
 		// update multisig parameters if any of them are provided
 		if (threshold || members) {
-			this.proposalService?.proposeModify(tx, "init_members", 0, 0, "", threshold, toRemove, members, weights, name);
+			this.proposalService?.proposeModify(tx, "init_members", 0, 0, "", name, threshold, toRemove, members, weights);
 			this.multisig.approveProposal(tx, "init_members", multisig);
 			const [executable] = this.multisig.executeProposal(tx, "init_members", multisig);
 			this.proposalService?.executeModify(tx, executable);
@@ -120,16 +120,61 @@ export class KrakenClient {
 		return this.multisig?.shareMultisig(tx, multisig);
 	}
 
-	// multisigData must be up to date before calling this function
+	// multisig must be up to date before calling this function
 	// returns if proposal reaches threshold after approval with weight
 	isExecutableAfterApproval(key: string, member: string = this.userAddr): boolean {
-		const weight = this.multisig?.members?.find(m => m.owner == member)?.weight!
+		const weight = this.multisig?.getMemberWeight(member);
 		const proposal = this.multisig?.proposals?.find(p => p.key == key);
-		return (proposal?.approvalWeight! + weight >= this.multisig?.threshold!);
+		let approvalWeight = proposal?.approvalWeight || 0;
+		return (approvalWeight + weight! >= this.multisig?.threshold!);
+	}
+
+	approveAndMaybeExecute(tx: TransactionBlock, key: string, executeFunction: any, ...args: any) {
+		const approvalResult = this.multisig?.approveProposal(tx, key, tx.object(this.multisig?.id!));
+		if (this.isExecutableAfterApproval(key)) {
+			const [executable] = this.multisig?.executeProposal(tx, key, tx.object(this.multisig?.id!));
+			return executeFunction(tx, executable);
+		} else {
+			return approvalResult;
+		}
+	}
+
+	// must be executable including caller approval
+	maybeApproveAndExecute(tx: TransactionBlock, key: string, executeFunction: any, ...args: any) {
+		if (!this.multisig?.hasApproved(key, this.userAddr)) {
+			this.multisig?.approveProposal(tx, key, this.multisig?.id!);
+		}
+		const [executable] = this.multisig?.executeProposal(tx, key, this.multisig?.id!);
+		return executeFunction(tx, executable);
 	}
 
 	// ===== PROPOSALS =====
 
+	proposeModify(
+        tx: TransactionBlock,
+        key: string, 
+        executionTime: number,
+        expirationEpoch: number,
+        description: string,
+        name?: string,
+        threshold?: number,
+        toRemove?: string[],
+        toAdd?: string[],
+        weights?: number[], // if no weights are provided, all members are added with weight of 1
+	): TransactionResult {
+		if (toAdd && !weights) { weights = new Array(toAdd.length).fill(1) }
+		this.proposalService?.proposeModify(tx, key, executionTime, expirationEpoch, description, name, threshold, toRemove, toAdd, weights);
+		// TODO FIX: return this.approveAndMaybeExecute(tx, key, this.proposalService?.executeModify);
+		this.multisig?.approveProposal(tx, key, tx.object(this.multisig?.id!));
+		const [executable] = this.multisig?.executeProposal(tx, key, tx.object(this.multisig?.id!));
+		return this.proposalService!.executeModify(tx, executable);
+	}
+
+	executeModify(tx: TransactionBlock, key: string): TransactionResult {
+		return this.maybeApproveAndExecute(tx, key, this.proposalService?.executeModify);
+	}
+
+	
 
 	// === Kiosk ===
 
