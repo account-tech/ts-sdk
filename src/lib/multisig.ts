@@ -1,13 +1,14 @@
 import { TransactionBlock, TransactionResult } from "@mysten/sui.js/transactions";
 import { SuiClient, getFullnodeUrl } from "@mysten/sui.js/client";
-import { defaultMoveCoder } from "@typemove/sui";
-import { multisig as multisigAbi } from "../types/sui/0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62.js";
+import { normalizeSuiAddress } from "@mysten/sui.js/utils";
+import { Account as AccountRaw } from "../../.gen/kraken/account/structs.js";
+import { Multisig as MultisigRaw } from "../../.gen/kraken/multisig/structs.js";
 import { CLOCK } from "../types/constants.js";
 import { Proposal, Member } from "../types/types.js";
 import { Account } from "./account.js";
 
 export class Multisig {
-	private client: SuiClient;
+	public client: SuiClient;
     public id?: string;
     public version?: number;
     public name?: string;
@@ -24,6 +25,7 @@ export class Multisig {
 		console.log(network)
 		const url = (network == "mainnet" || network == "testnet" || network == "devnet" || network == "localnet") ? getFullnodeUrl(network) : network;
 		this.client = new SuiClient({ url });
+		this.packageId = normalizeSuiAddress(packageId);
 	}
 
 	static async init(
@@ -57,30 +59,32 @@ export class Multisig {
 		this.proposals = multisigData.proposals;
 	}
 
-	async getMultisigRaw(id: string): Promise<multisigAbi.Multisig | undefined> {
+	async getMultisigRaw(id: string): Promise<MultisigRaw> {
 		const { data } = await this.client.getObject({
 			id,
 			options: { showContent: true }
 		});
 
-		return await defaultMoveCoder().decodedType(data?.content, multisigAbi.Multisig.type());
+		if (!data?.content) throw new Error(`Multisig with id ${id} not found.`);
+
+		return MultisigRaw.fromSuiParsedData(data.content);
 	}
 
 	async getMultisig(
         id: string
     ): Promise<{version: number, name: string, threshold: number, totalWeight: number, members: Member[], proposals: Proposal[]}> {
 		const multisigRaw = await this.getMultisigRaw(id);
-		const membersAddress: string[] = multisigRaw!.members.contents.map(member => member.key);
+		const membersAddress: string[] = multisigRaw!.members.contents.map((member: any) => member.key);
         // get Member for all members
 		const members = await Promise.all(membersAddress.map(async member => {
-			const weight = multisigRaw?.members.contents.find(m => m.key == member)?.value.weight;
+			const weight = multisigRaw?.members.contents.find((m: any) => m.key == member)?.value.weight;
 			const account = await Account.init(this.network, this.packageId, this.userAddr);
 			const accountRaw = await account.getAccountRaw(member);
 			return {
 				owner: member,
 				id: accountRaw?.id.id!,
 				username: accountRaw?.username!,
-				profilePicture: accountRaw?.profile_picture!,
+				profilePicture: accountRaw?.profilePicture!,
 				weight: Number(weight),
 			}
 		}));
@@ -91,15 +95,15 @@ export class Multisig {
 			version: Number(multisigRaw!.version),
 			name: multisigRaw!.name,
 			threshold: Number(multisigRaw!.threshold),
-			totalWeight: Number(multisigRaw!.total_weight),
+			totalWeight: Number(multisigRaw!.totalWeight),
 			members,
 			proposals,
 		}
 	}
 	
 	// get proposals in multisig and all actions in each proposal's bag in order
-	async getProposals(multisigRaw: multisigAbi.Multisig): Promise<Proposal[]> {
-		return await Promise.all(multisigRaw!.proposals.contents.map(async (proposal) => {
+	async getProposals(multisigRaw: MultisigRaw): Promise<Proposal[]> {
+		return await Promise.all(multisigRaw!.proposals.contents.map(async (proposal: any) => {
 			// get the actions in each proposal bag
 			const parentId = proposal.value.actions.id.id;
 			const { data } = await this.client.getDynamicFields({ parentId });
@@ -121,13 +125,13 @@ export class Multisig {
 			}
 			
 			return {
-				id: proposal.value.id.id,
+				id: proposal.value.id,
 				key: proposal.key,
-				module_witness: proposal.value.module_witness.name,
+				moduleWitness: proposal.value.moduleWitness.name,
 				description: proposal.value.description,
-				expirationEpoch: proposal.value.expiration_epoch,
-				executionTime: proposal.value.execution_time,
-				approvalWeight: Number(proposal.value.approval_weight),
+				expirationEpoch: proposal.value.expirationEpoch,
+				executionTime: proposal.value.executionTime,
+				approvalWeight: Number(proposal.value.approvalWeight),
 				approved: proposal.value.approved.contents as string[],
 				actions
 			}

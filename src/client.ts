@@ -1,7 +1,7 @@
 import { SuiClient, getFullnodeUrl } from "@mysten/sui.js/client";
 import { TransactionBlock, TransactionResult } from "@mysten/sui.js/transactions";
+import { normalizeSuiAddress } from "@mysten/sui.js/utils";
 import { KioskClient, Network } from "@mysten/kiosk";
-import { defaultMoveCoder } from "@typemove/sui";
 import { CLOCK, FRAMEWORK } from "./types/constants.js";
 import { Kiosk, Proposal, TransferPolicy } from "./types/types.js";
 import { Account } from "./lib/account.js";
@@ -26,6 +26,7 @@ export class KrakenClient {
 	) {
 		const url = (network == "mainnet" || network == "testnet" || network == "devnet" || network == "localnet") ? getFullnodeUrl(network) : network;
 		this.client = new SuiClient({ url });
+		this.packageId = normalizeSuiAddress(packageId);
 	}
 	
 	static async init(

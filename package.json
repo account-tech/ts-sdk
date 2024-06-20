@@ -18,25 +18,25 @@
     "eslint:fix": "pnpm run eslint:check --fix",
     "lint": "pnpm run eslint:check && pnpm run prettier:check",
     "lint:fix": "pnpm run eslint:fix && pnpm run prettier:fix",
-    "test": "bun run src/test/e2e.ts",
-    "prepare-package-abi-for-tests": "bun run test/preparePackageAbi.ts",
-    "generate-abis": "bun run src/utils/generateAbis.ts",
-    "get-account": "bun run test/getAccount.ts",
-    "get-multisig": "bun run test/getMultisig.ts",
-    "create-proposal": "bun run test/createProposal.ts"
+    "test": "bun run test/e2e.test.ts",
+    "create-account": "bun run test/utils/createAccount.ts",
+    "create-multisig": "bun run test/utils/createMultisig.ts",
+    "get-account": "bun run test/utils/getAccount.ts",
+    "get-multisig": "bun run test/utils/getMultisig.ts",
+    "create-proposal": "bun run test/utils/createProposal.ts"
   },
   "dependencies": {
     "@mysten/kiosk": "^0.8.10",
     "@mysten/sui.js": "^0.54.1",
-    "@typemove/sui": "^1.6.1",
     "bun-types": "^1.0.25"
   },
   "devDependencies": {
     "@types/bun": "latest",
+    "@types/chai": "^4.3.16",
     "@types/node": "^20.12.12",
     "@typescript-eslint/parser": "^6.19.1",
+    "chai": "^5.1.1",
     "eslint": "^8.56.0",
-    "typescript": "^5.3.3",
-    "vitest": "^1.6.0"
+    "typescript": "^5.3.3"
   }
 }

@@ -1,12 +1,10 @@
-import { describe, it, expect } from 'vitest';
-import * as fs from "fs";
+import { assert } from 'chai';
 import { getFaucetHost, requestSuiFromFaucetV0 } from "@mysten/sui.js/faucet";
 import { Ed25519Keypair } from "@mysten/sui.js/keypairs/ed25519";
 import { TransactionBlock } from "@mysten/sui.js/transactions";
 import { FRAMEWORK, KrakenClient, KRAKEN, STDLIB } from "../src/index.js"
 import { SuiTransactionBlockResponse } from "@mysten/sui.js/client";
-import { codegen } from '@typemove/sui/codegen';
-import path from 'path';
+import { PACKAGE_ID } from "../.gen/kraken/index.js";
 
 /// to run on localnet:
 /// `git clone https://github.com/MystenLabs/sui`  
@@ -15,33 +13,29 @@ import path from 'path';
 /// get gas: `sui client faucet --url http://127.0.0.1:9123/gas`
 /// publish kiosk: `sui client publish ./test/packages/kiosk --gas-budget 1000000000 --skip-dependency-verification`
 /// modify package id in /test/packages/kiosk/Move.toml
-/// change kraken's kiosk dependency to local
-/// run `bun run prepare-package-abi-for-tests` to publish package and create abi
-/// run `bun run vitest`
+/// publish kraken: `sui client publish ../kraken/package --gas-budget 1000000000`
+/// modify package id in ../kraken/package/Move.toml
+/// run `bun run test`
 ///
 /// or use https://github.com/ChainMovers/suibase
-/// run `bun run prepare-package-abi` to publish package and create abi
 
-describe("Interact with Kraken SDK on localnet" ,async () => {
+(async () => {
     
     const keypair = Ed25519Keypair.fromSecretKey(Uint8Array.from(Buffer.from("AM06bExREdFceWiExfSacTJ+64AQtFl7SRkSiTmAqh6F", "base64")).slice(1));
     console.log("Keypair address: ", keypair.toSuiAddress());
 
     const { execSync } = require('child_process');
-    const abiPath = path.join(__dirname, './abis/kraken.json');
-    const abiData = JSON.parse(fs.readFileSync(abiPath, 'utf8'));
-    const kraken = await KrakenClient.init("localnet", abiData.account.address, keypair.toSuiAddress());
+    const kraken = await KrakenClient.init("http://0.0.0.0:44340", PACKAGE_ID, keypair.toSuiAddress());
     // nftIds.length determines the number of nfts to issue
     let nftIds: string[] = ["", "", ""];
-        console.log(kraken.multisig)
         
     // === get SUI ===
 
-    // console.log("Get some SUI");
-    // await requestSuiFromFaucetV0({
-    //     host: getFaucetHost("localnet"),
-    //     recipient: keypair.toSuiAddress(),
-    // });
+    console.log("Get some SUI");
+    await requestSuiFromFaucetV0({
+        host: getFaucetHost("localnet"),
+        recipient: keypair.toSuiAddress(),
+    });
 
     // === Publish, issue and handle Nfts ===
     // {
@@ -71,7 +65,6 @@ describe("Interact with Kraken SDK on localnet" ,async () => {
     {    
         await kraken.account?.fetchAccount();
         if (!kraken.account?.id) {
-            console.log("hhehe")
             const tx = new TransactionBlock();
             kraken.account?.createAccount(tx, "Thouny", "");
             await executeTx(tx);
@@ -79,7 +72,7 @@ describe("Interact with Kraken SDK on localnet" ,async () => {
         console.log("User account handled:");
     }
     
-    // // === Create Multisig ===
+    // === Create Multisig ===
     {
         const tx = new TransactionBlock();
         await kraken.account?.fetchAccount();
@@ -98,15 +91,15 @@ describe("Interact with Kraken SDK on localnet" ,async () => {
         await kraken.fetch(multisigId);
         console.log(kraken.multisig);
 
-        expect(kraken.multisig?.version).toEqual(1);
-        expect(kraken.multisig?.name).toEqual("Main");
-        expect(kraken.multisig?.threshold).toEqual(1);
-        expect(kraken.multisig?.proposals).toEqual([]);
-        expect(kraken.multisig?.totalWeight).toEqual(1);
+        assert.equal(kraken.multisig?.version, 1);
+        assert.equal(kraken.multisig?.name, "Main");
+        assert.equal(kraken.multisig?.threshold, 1);
+        assert.deepEqual(kraken.multisig?.proposals, []);
+        assert.equal(kraken.multisig?.totalWeight, 2);
     }
 
-    // // === Modify Config ===
-    it('modifies Config', async () => {
+    // === Modify Config ===
+    {
         const tx = new TransactionBlock();
         kraken.proposeModify(tx, "modify", 0, 0, "", "Updated");
         await executeTx(tx);
@@ -114,8 +107,8 @@ describe("Interact with Kraken SDK on localnet" ,async () => {
 
         await kraken.fetch();
         console.log(kraken.multisig);
-        expect(kraken.multisig?.name).toEqual("Updated");
-    });
+        assert.equal(kraken.multisig?.name, "Updated");
+    };
 
     // === Kiosk ===
 
@@ -142,8 +135,8 @@ describe("Interact with Kraken SDK on localnet" ,async () => {
             console.log(result.effects?.status.error);
         }
 
-        expect(result.effects?.status.status).toEqual("success");
+        assert.equal(result.effects?.status.status, "success");
         return result;
     }
-});
+})();
 

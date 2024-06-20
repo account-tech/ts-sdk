@@ -1,10 +1,11 @@
 import { TransactionBlock, TransactionResult } from "@mysten/sui.js/transactions";
 import { SuiClient, getFullnodeUrl } from "@mysten/sui.js/client";
-import { defaultMoveCoder } from "@typemove/sui";
-import { account as accountAbi, multisig as multsisigAbi } from "../types/sui/0x9f23590424d6ee60f3ee8d8785a07917a07149ac32311527d659e59bda120d62.js";
+import { normalizeSuiAddress } from "@mysten/sui.js/utils";
+import { Account as AccountRaw } from "../../.gen/kraken/account/structs.js";
+import { Multisig as MultisigRaw } from "../../.gen/kraken/multisig/structs.js";
 
 export class Account {
-	private client: SuiClient;
+	public client: SuiClient;
     public id?: string;
 	public username?: string;
 	public profilePicture?: string;
@@ -17,6 +18,7 @@ export class Account {
 	) {
 		const url = (network == "mainnet" || network == "testnet" || network == "devnet" || network == "localnet") ? getFullnodeUrl(network) : network;
 		this.client = new SuiClient({ url });
+		this.packageId = normalizeSuiAddress(packageId);
 	}
 
 	static async init(
@@ -48,7 +50,7 @@ export class Account {
 	// TODO: implement merge accounts
 
     // get and decode account data from abi
-	async getAccountRaw(owner: string = this.userAddr): Promise<accountAbi.Account | undefined> {
+	async getAccountRaw(owner: string = this.userAddr): Promise<AccountRaw | null> {
 		const { data } = await this.client.getOwnedObjects({
 			owner,
 			filter: { StructType: `${this.packageId}::account::Account` },
@@ -60,8 +62,9 @@ export class Account {
 				return acc.data?.content?.type.includes(this.packageId);
 			}
 		});
-		const accountDecoded = await defaultMoveCoder().decodedType(userAccount?.data?.content, accountAbi.Account.type())
-		return accountDecoded;
+
+		if (!data || !userAccount) return null;
+		return AccountRaw.fromSuiParsedData(userAccount?.data?.content!);
 	}
 
     // get and format user account data
@@ -79,21 +82,21 @@ export class Account {
 		}
 		
 		const multisigsObjs = await this.client.multiGetObjects({
-			ids: accountRaw!.multisig_ids.contents as string[],
+			ids: accountRaw!.multisigIds.contents as string[],
 			options: { showContent: true }
 		});
 		const multisigIds = await Promise.all(multisigsObjs.map(async (ms: any) => { 
-			const multisigsDecoded = await defaultMoveCoder().decodedType(ms.data?.content, multsisigAbi.Multisig.type())
+			const multisigsRaw = MultisigRaw.fromSuiParsedData(ms.data?.content)
 			return {
-				id: multisigsDecoded!.id.id,
-				name: multisigsDecoded!.name
+				id: multisigsRaw!.id,
+				name: multisigsRaw!.name
 			}
 		}));
 		
 		return {
-			id: accountRaw!.id.id,
+			id: accountRaw!.id,
 			username: accountRaw!.username,
-			profilePicture: accountRaw!.profile_picture,
+			profilePicture: accountRaw!.profilePicture,
 			multisigIds,
 		}
 	}
