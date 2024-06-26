@@ -1,16 +1,16 @@
-import { TransactionBlock } from "@mysten/sui.js/transactions";
+import { Transaction } from "@mysten/sui/transactions";
 import { ProposalService } from "./proposalService.js";
 import { Multisig } from "../multisig.js";
-import { Ed25519Keypair } from "@mysten/sui.js/keypairs/ed25519";
-import { SuiClient, SuiTransactionBlockResponse } from "@mysten/sui.js/client";
+import { Ed25519Keypair } from "@mysten/sui/keypairs/ed25519";
+import { SuiClient, SuiTransactionBlockResponse } from "@mysten/sui/client";
 
 export class ProposalBuilder {
-    public tx: TransactionBlock;
+    public tx: Transaction;
     public multisig: Multisig;
     public service: ProposalService;
     public action: string | null = null;
 
-    constructor(tx: TransactionBlock, multisig: Multisig, service: ProposalService) {
+    constructor(tx: Transaction, multisig: Multisig, service: ProposalService) {
         this.tx = tx;
         this.multisig = multisig;
         this.service = service;
@@ -69,9 +69,9 @@ export class ProposalBuilder {
 
     async run(client: SuiClient, keypair: Ed25519Keypair): Promise<SuiTransactionBlockResponse> {
         this.tx.setGasBudget(1000000000);
-        const result = await client.signAndExecuteTransactionBlock({
+        const result = await client.signAndExecuteTransaction({
             signer: keypair,
-            transactionBlock: this.tx,
+            transaction: this.tx,
             options: { showEffects: true, showObjectChanges: true },
             requestType: "WaitForLocalExecution"
         });

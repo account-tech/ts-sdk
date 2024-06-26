@@ -1,9 +1,9 @@
 import { assert } from 'chai';
-import { getFaucetHost, requestSuiFromFaucetV0 } from "@mysten/sui.js/faucet";
-import { Ed25519Keypair } from "@mysten/sui.js/keypairs/ed25519";
-import { TransactionBlock } from "@mysten/sui.js/transactions";
+import { getFaucetHost, requestSuiFromFaucetV0 } from "@mysten/sui/faucet";
+import { Ed25519Keypair } from "@mysten/sui/keypairs/ed25519";
+import { Transaction } from "@mysten/sui/transactions";
 import { FRAMEWORK, KrakenClient, KRAKEN, STDLIB } from "../src/index.js"
-import { SuiTransactionBlockResponse } from "@mysten/sui.js/client";
+import { SuiTransactionBlockResponse } from "@mysten/sui/client";
 import { PACKAGE_ID } from "../.gen/kraken/index.js";
 
 /// to run on localnet:
@@ -44,13 +44,13 @@ import { PACKAGE_ID } from "../.gen/kraken/index.js";
     //         { encoding: 'utf-8' }
     //     ));
     //     // publish nft package
-    //     const tx = new TransactionBlock();
+    //     const tx = new Transaction();
     //     const [upgradeCap] = tx.publish({ modules, dependencies });
     //     tx.transferObjects([upgradeCap], keypair.getPublicKey().toSuiAddress());
     //     const result = await executeTx(tx);
     //     const packageObj = result.objectChanges?.find((obj) => obj.type === "published");
     //     // create and transfer as many nft as nftIds.length and save the ids
-    //     const tx1 = new TransactionBlock();
+    //     const tx1 = new Transaction();
     //     for (const _ of nftIds) {
     //         const [nft] = tx1.moveCall({ target: `${packageObj?.packageId}::nft::new` });
     //         tx1.transferObjects([nft], keypair.getPublicKey().toSuiAddress());
@@ -65,7 +65,7 @@ import { PACKAGE_ID } from "../.gen/kraken/index.js";
     {    
         await kraken.account?.fetchAccount();
         if (!kraken.account?.id) {
-            const tx = new TransactionBlock();
+            const tx = new Transaction();
             kraken.account?.createAccount(tx, "Thouny", "");
             await executeTx(tx);
         }
@@ -74,7 +74,7 @@ import { PACKAGE_ID } from "../.gen/kraken/index.js";
     
     // === Create Multisig ===
     {
-        const tx = new TransactionBlock();
+        const tx = new Transaction();
         await kraken.account?.fetchAccount();
         console.log(kraken.account);
         
@@ -100,7 +100,7 @@ import { PACKAGE_ID } from "../.gen/kraken/index.js";
 
     // === Modify Config ===
     {
-        const tx = new TransactionBlock();
+        const tx = new Transaction();
         kraken.proposeModify(tx, "modify", 0, 0, "", "Updated");
         await executeTx(tx);
         console.log("Config modified:");
@@ -114,7 +114,7 @@ import { PACKAGE_ID } from "../.gen/kraken/index.js";
 
     // TODO:
     // const kiosks = await kraken.getKiosks();
-    // const tx5 = new TransactionBlock();
+    // const tx5 = new Transaction();
     // if (kiosks.length == 0) {
     //     const [kiosk, cap] = kraken.createKiosk(tx5);
     // }
@@ -122,11 +122,11 @@ import { PACKAGE_ID } from "../.gen/kraken/index.js";
 
     // === Helpers ===
 
-    async function executeTx(tx: TransactionBlock): Promise<SuiTransactionBlockResponse> {
+    async function executeTx(tx: Transaction): Promise<SuiTransactionBlockResponse> {
         tx.setGasBudget(1000000000);
-        const result = await kraken.client.signAndExecuteTransactionBlock({
+        const result = await kraken.client.signAndExecuteTransaction({
             signer: keypair,
-            transactionBlock: tx,
+            transaction: tx,
             options: { showEffects: true, showObjectChanges: true },
             requestType: "WaitForLocalExecution"
         });

@@ -1,6 +1,6 @@
-import { TransactionBlock, TransactionResult } from "@mysten/sui.js/transactions";
-import { SuiClient, getFullnodeUrl } from "@mysten/sui.js/client";
-import { normalizeSuiAddress } from "@mysten/sui.js/utils";
+import { Transaction, TransactionResult } from "@mysten/sui/transactions";
+import { SuiClient, getFullnodeUrl } from "@mysten/sui/client";
+import { normalizeSuiAddress } from "@mysten/sui/utils";
 import { Account as AccountRaw } from "../../.gen/kraken/account/structs.js";
 import { Multisig as MultisigRaw } from "../../.gen/kraken/multisig/structs.js";
 import { CLOCK } from "../types/constants.js";
@@ -160,58 +160,51 @@ export class Multisig {
 	}
 
 	// members and weights are optional, if none are provided then only the creator is added with weight 1
-	newMultisig(tx: TransactionBlock, accountId: string, name: string): TransactionResult {
+	newMultisig(tx: Transaction, accountId: string, name: string): TransactionResult {
 		return tx.moveCall({
 			target: `${this.packageId}::multisig::new`,
-			arguments: [tx.pure(name), tx.pure(accountId)],
+			arguments: [tx.pure.string(name), tx.pure.id(accountId)],
 		});
 	}
 
-    shareMultisig(tx: TransactionBlock, multisig: TransactionResult): TransactionResult {
+    shareMultisig(tx: Transaction, multisig: TransactionResult): TransactionResult {
         return tx.moveCall({
             target: `${this.packageId}::multisig::share`,
             arguments: [multisig],
         });
     }
 
-	cleanProposals(tx: TransactionBlock): TransactionResult {
-		return tx.moveCall({
-			target: `${this.packageId}::multisig::clean_proposals`,
-			arguments: [tx.object(this.id)],
-		});
-	}
-
 	approveProposal(
-		tx: TransactionBlock, 
+		tx: Transaction, 
 		key: string, 
 		multisig: string | TransactionResult = this.id!
 	): TransactionResult {
 		return tx.moveCall({
 			target: `${this.packageId}::multisig::approve_proposal`,
 			arguments: [
-				typeof(multisig) === "string" ? tx.pure(multisig) : multisig, 
-				tx.pure(key)
+				typeof(multisig) === "string" ? tx.pure.id(multisig) : multisig, 
+				tx.pure.string(key)
 			],
 		});
 	}
 
-	removeApproval(tx: TransactionBlock, key: string): TransactionResult {
+	removeApproval(tx: Transaction, key: string): TransactionResult {
 		return tx.moveCall({
 			target: `${this.packageId}::multisig::remove_approval`,
-			arguments: [tx.object(this.id), tx.pure(key)],
+			arguments: [tx.object(this.id!), tx.pure.string(key)],
 		});
 	}
 	
 	executeProposal(
-		tx: TransactionBlock, 
+		tx: Transaction, 
 		key: string, 
 		multisig: string | TransactionResult = this.id!
 	): TransactionResult {
 		return tx.moveCall({
 			target: `${this.packageId}::multisig::execute_proposal`,
 			arguments: [
-				typeof(multisig) === "string" ? tx.pure(multisig) : multisig, 
-				tx.pure(key), 
+				typeof(multisig) === "string" ? tx.pure.id(multisig) : multisig, 
+				tx.pure.string(key), 
 				tx.object(CLOCK)
 			],
 		});

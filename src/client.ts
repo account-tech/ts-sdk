@@ -1,6 +1,6 @@
-import { SuiClient, getFullnodeUrl } from "@mysten/sui.js/client";
-import { TransactionBlock, TransactionResult } from "@mysten/sui.js/transactions";
-import { normalizeSuiAddress } from "@mysten/sui.js/utils";
+import { SuiClient, getFullnodeUrl } from "@mysten/sui/client";
+import { Transaction, TransactionResult } from "@mysten/sui/transactions";
+import { normalizeSuiAddress } from "@mysten/sui/utils";
 import { KioskClient, Network } from "@mysten/kiosk";
 import { CLOCK, FRAMEWORK } from "./types/constants.js";
 import { Kiosk, Proposal, TransferPolicy } from "./types/types.js";
@@ -50,7 +50,7 @@ export class KrakenClient {
 
 	// creates a multisig with default weights of 1 (1 member = 1 voice)
 	createMultisig(
-		tx: TransactionBlock, 
+		tx: Transaction, 
 		name: string, 
 		threshold?: number, // if none then 1, minimum members.length + 1
 		members?: string[], // creator is added by default, everyone added with weight of 1
@@ -62,7 +62,7 @@ export class KrakenClient {
 			throw new Error("Multisig not initialized.");
 		}
 		
-		const [multisig] = this.multisig?.newMultisig(tx, this.account.id, name);
+		const multisig = this.multisig?.newMultisig(tx, this.account.id, name);
 		
 		// update multisig parameters if any of them are provided
 		if (threshold || members) {
@@ -70,7 +70,7 @@ export class KrakenClient {
 			this.proposalService!.setMultisig(multisig);
 			this.proposalService!.proposeModify(tx, "init_members", 0, 0, "", name, threshold, undefined, members, weights);
 			this.multisig.approveProposal(tx, "init_members", multisig);
-			const [executable] = this.multisig.executeProposal(tx, "init_members", multisig);
+			const executable = this.multisig.executeProposal(tx, "init_members", multisig);
 			this.proposalService!.executeModify(tx, executable);
 		}
 		// creator register the multisig in his account
@@ -83,7 +83,7 @@ export class KrakenClient {
 
 	// creates a multisig with custom weights for each member, creator address and weight must be added
 	createMultisigWithWeights(
-		tx: TransactionBlock, 
+		tx: Transaction, 
 		name: string, 
 		threshold: number, // sum of required weights
 		members: string[], // creator must be added with his weight
@@ -96,7 +96,7 @@ export class KrakenClient {
 			throw new Error("Multisig not initialized.");
 		}
 		
-		const [multisig] = this.multisig?.newMultisig(tx, this.account.id, name);
+		const multisig = this.multisig?.newMultisig(tx, this.account.id, name);
 		
 		let toRemove: string[] = [];
 		if (members || weights) {
@@ -110,7 +110,7 @@ export class KrakenClient {
 		if (threshold || members) {
 			this.proposalService?.proposeModify(tx, "init_members", 0, 0, "", name, threshold, toRemove, members, weights);
 			this.multisig.approveProposal(tx, "init_members", multisig);
-			const [executable] = this.multisig.executeProposal(tx, "init_members", multisig);
+			const executable = this.multisig.executeProposal(tx, "init_members", multisig);
 			this.proposalService?.executeModify(tx, executable);
 		}
 		// creator register the multisig in his account
@@ -130,10 +130,10 @@ export class KrakenClient {
 		return (approvalWeight + weight! >= this.multisig?.threshold!);
 	}
 
-	approveAndMaybeExecute(tx: TransactionBlock, key: string, executeFunction: any, ...args: any) {
-		const approvalResult = this.multisig?.approveProposal(tx, key, tx.object(this.multisig?.id!));
+	approveAndMaybeExecute(tx: Transaction, key: string, executeFunction: any, ...args: any): TransactionResult {
+		const approvalResult = this.multisig!.approveProposal(tx, key, this.multisig!.id!);
 		if (this.isExecutableAfterApproval(key)) {
-			const [executable] = this.multisig?.executeProposal(tx, key, tx.object(this.multisig?.id!));
+			const executable = this.multisig!.executeProposal(tx, key, this.multisig!.id!);
 			return executeFunction(tx, executable);
 		} else {
 			return approvalResult;
@@ -141,18 +141,18 @@ export class KrakenClient {
 	}
 
 	// must be executable including caller approval
-	maybeApproveAndExecute(tx: TransactionBlock, key: string, executeFunction: any, ...args: any) {
+	maybeApproveAndExecute(tx: Transaction, key: string, executeFunction: any, ...args: any): TransactionResult {
 		if (!this.multisig?.hasApproved(key, this.userAddr)) {
 			this.multisig?.approveProposal(tx, key, this.multisig?.id!);
 		}
-		const [executable] = this.multisig?.executeProposal(tx, key, this.multisig?.id!);
+		const executable = this.multisig?.executeProposal(tx, key, this.multisig?.id!);
 		return executeFunction(tx, executable);
 	}
 
 	// ===== PROPOSALS =====
 
 	proposeModify(
-        tx: TransactionBlock,
+        tx: Transaction,
         key: string, 
         executionTime: number,
         expirationEpoch: number,
@@ -166,12 +166,12 @@ export class KrakenClient {
 		if (toAdd && !weights) { weights = new Array(toAdd.length).fill(1) }
 		this.proposalService?.proposeModify(tx, key, executionTime, expirationEpoch, description, name, threshold, toRemove, toAdd, weights);
 		// TODO FIX: return this.approveAndMaybeExecute(tx, key, this.proposalService?.executeModify);
-		this.multisig?.approveProposal(tx, key, tx.object(this.multisig?.id!));
-		const [executable] = this.multisig?.executeProposal(tx, key, tx.object(this.multisig?.id!));
+		this.multisig?.approveProposal(tx, key, this.multisig?.id!);
+		const executable = this.multisig!.executeProposal(tx, key, this.multisig?.id!);
 		return this.proposalService!.executeModify(tx, executable);
 	}
 
-	executeModify(tx: TransactionBlock, key: string): TransactionResult {
+	executeModify(tx: Transaction, key: string): TransactionResult {
 		return this.maybeApproveAndExecute(tx, key, this.proposalService?.executeModify);
 	}
 
@@ -235,7 +235,7 @@ export class KrakenClient {
 	// }
 
 	// // return the Kiosk (must be shared)
-	// createKiosk(tx: TransactionBlock): TransactionResult {
+	// createKiosk(tx: Transaction): TransactionResult {
 	// 	return tx.moveCall({
 	// 		target: `${this.packageId}::kiosk::new`,
 	// 		arguments: [tx.object(this.multisigId)],
@@ -250,7 +250,7 @@ export class KrakenClient {
 	// // (5. share the Kiosk if it has been created in this PTB)
 	// // not a proposal
 	// transferFrom(
-	// 	tx: TransactionBlock, 
+	// 	tx: Transaction, 
 	// 	policy: TransferPolicy,
 	// 	multisigKiosk: string,
 	// 	multisigCap: string,
@@ -284,7 +284,7 @@ export class KrakenClient {
 	// }
 
 	// proposeTransferTo(
-	// 	tx: TransactionBlock,
+	// 	tx: Transaction,
 	// 	key: string,
 	// 	executionTime: number,
 	// 	expirationEpoch: number,
@@ -309,7 +309,7 @@ export class KrakenClient {
 	// 	this.approveProposal(tx, key);
 	// }
 
-	// async executeTransferTo(tx: TransactionBlock, key: string, capId: string) {
+	// async executeTransferTo(tx: Transaction, key: string, capId: string) {
 	// 	const ids = this.multisigData?.proposals.filter(p => p.key == key).map(p => p.action.fields.nfts);
 	// 	if (!ids) throw new Error("Proposal is not valid");
 	// 	const nfts = await this.client.multiGetObjects({
@@ -326,7 +326,7 @@ export class KrakenClient {
 	// }
 
 	// private resolveRules(
-	// 	tx: TransactionBlock, 
+	// 	tx: Transaction, 
 	// 	policy: TransferPolicy,
 	// 	kiosk: string, 
 	// 	transferRequest: any, 
