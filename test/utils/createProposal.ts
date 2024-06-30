@@ -1,10 +1,10 @@
-import { TransactionBlock } from "@mysten/sui.js/transactions";
+import { Transaction } from "@mysten/sui/transactions";
 import { KrakenClient } from "../../src/client.js"
 import { Multisig } from "../../src/lib/multisig.js";
 import { ProposalBuilder } from "../../src/lib/proposals/proposalBuilder.js";
 import { ProposalService } from "../../src/lib/proposals/proposalService.js";
-import { Ed25519Keypair } from "@mysten/sui.js/keypairs/ed25519";
-import { getFullnodeUrl, SuiClient } from "@mysten/sui.js/client";
+import { Ed25519Keypair } from "@mysten/sui/keypairs/ed25519";
+import { getFullnodeUrl, SuiClient } from "@mysten/sui/client";
 
 (async () => {
     const network = "localnet";
@@ -22,7 +22,7 @@ import { getFullnodeUrl, SuiClient } from "@mysten/sui.js/client";
         multisigId,
     );
 
-    const tx = new TransactionBlock();
+    const tx = new Transaction();
     const service = new ProposalService(packageId, multisigId);
     const builder = new ProposalBuilder(tx, multisig, service);
 

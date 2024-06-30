@@ -1,6 +1,6 @@
-import { TransactionBlock } from "@mysten/sui.js/transactions";
+import { Transaction } from "@mysten/sui/transactions";
 import { Account } from "../../src/lib/account.js"
-import { Ed25519Keypair } from "@mysten/sui.js/keypairs/ed25519";
+import { Ed25519Keypair } from "@mysten/sui/keypairs/ed25519";
 import { PACKAGE_ID } from "../../.gen/kraken/index.js";
 
 (async () => {
@@ -11,12 +11,12 @@ import { PACKAGE_ID } from "../../.gen/kraken/index.js";
         keypair.toSuiAddress(),
     )
 
-    const tx = new TransactionBlock();
+    const tx = new Transaction();
     account.createAccount(tx, "Thouny", "");
     tx.setGasBudget(1000000000);
-    const result = await account.client.signAndExecuteTransactionBlock({
+    const result = await account.client.signAndExecuteTransaction({
         signer: keypair,
-        transactionBlock: tx,
+        transaction: tx,
         options: { showEffects: true, showObjectChanges: true },
         requestType: "WaitForLocalExecution"
     });

@@ -1,6 +1,5 @@
-import { TransactionBlock } from "@mysten/sui.js/transactions";
 import { Multisig } from "../../src/lib/multisig.js"
-import { Ed25519Keypair } from "@mysten/sui.js/keypairs/ed25519";
+import { Ed25519Keypair } from "@mysten/sui/keypairs/ed25519";
 import { PACKAGE_ID } from "../../.gen/kraken/index.js";
 
 (async () => {

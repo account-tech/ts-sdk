@@ -25,7 +25,8 @@ import { PACKAGE_ID } from "../.gen/kraken/index.js";
     console.log("Keypair address: ", keypair.toSuiAddress());
 
     const { execSync } = require('child_process');
-    const kraken = await KrakenClient.init("http://0.0.0.0:44340", PACKAGE_ID, keypair.toSuiAddress());
+    console.log(PACKAGE_ID);
+    const kraken = await KrakenClient.init("testnet", PACKAGE_ID, keypair.toSuiAddress());
     // nftIds.length determines the number of nfts to issue
     let nftIds: string[] = ["", "", ""];
         
@@ -33,7 +34,7 @@ import { PACKAGE_ID } from "../.gen/kraken/index.js";
 
     console.log("Get some SUI");
     await requestSuiFromFaucetV0({
-        host: getFaucetHost("localnet"),
+        host: getFaucetHost("testnet"),
         recipient: keypair.toSuiAddress(),
     });
 
