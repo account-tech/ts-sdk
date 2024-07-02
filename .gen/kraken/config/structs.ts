@@ -3,32 +3,33 @@ import {Option} from "../../_dependencies/source/0x1/option/structs";
 import {String} from "../../_dependencies/source/0x1/string/structs";
 import {PhantomReified, Reified, StructClass, ToField, ToTypeStr, Vector, decodeFromFields, decodeFromFieldsWithTypes, decodeFromJSONField, fieldToJSON, phantom} from "../../_framework/reified";
 import {FieldsWithTypes, composeSuiType, compressSuiType} from "../../_framework/util";
+import {PKG_V1} from "../index";
 import {bcs, fromB64, fromHEX, toHEX} from "@mysten/bcs";
-import {SuiClient, SuiParsedData} from "@mysten/sui.js/client";
+import {SuiClient, SuiParsedData} from "@mysten/sui/client";
 
 /* ============================== Witness =============================== */
 
-export function isWitness(type: string): boolean { type = compressSuiType(type); return type === "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::config::Witness"; }
+export function isWitness(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::config::Witness`; }
 
 export interface WitnessFields { dummyField: ToField<"bool"> }
 
 export type WitnessReified = Reified< Witness, WitnessFields >;
 
-export class Witness implements StructClass { static readonly $typeName = "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::config::Witness"; static readonly $numTypeParams = 0;
+export class Witness implements StructClass { static readonly $typeName = `${PKG_V1}::config::Witness`; static readonly $numTypeParams = 0;
 
  readonly $typeName = Witness.$typeName;
 
- readonly $fullTypeName: "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::config::Witness";
+ readonly $fullTypeName: `${typeof PKG_V1}::config::Witness`;
 
  readonly $typeArgs: [];
 
  readonly dummyField: ToField<"bool">
 
- private constructor(typeArgs: [], fields: WitnessFields, ) { this.$fullTypeName = composeSuiType( Witness.$typeName, ...typeArgs ) as "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::config::Witness"; this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [], fields: WitnessFields, ) { this.$fullTypeName = composeSuiType( Witness.$typeName, ...typeArgs ) as `${typeof PKG_V1}::config::Witness`; this.$typeArgs = typeArgs;
 
  this.dummyField = fields.dummyField; }
 
- static reified( ): WitnessReified { return { typeName: Witness.$typeName, fullTypeName: composeSuiType( Witness.$typeName, ...[] ) as "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::config::Witness", typeArgs: [ ] as [], reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => Witness.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => Witness.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => Witness.fromBcs( data, ), bcs: Witness.bcs, fromJSONField: (field: any) => Witness.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => Witness.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => Witness.fromSuiParsedData( content, ), fetch: async (client: SuiClient, id: string) => Witness.fetch( client, id, ), new: ( fields: WitnessFields, ) => { return new Witness( [], fields ) }, kind: "StructClassReified", } }
+ static reified( ): WitnessReified { return { typeName: Witness.$typeName, fullTypeName: composeSuiType( Witness.$typeName, ...[] ) as `${typeof PKG_V1}::config::Witness`, typeArgs: [ ] as [], reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => Witness.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => Witness.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => Witness.fromBcs( data, ), bcs: Witness.bcs, fromJSONField: (field: any) => Witness.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => Witness.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => Witness.fromSuiParsedData( content, ), fetch: async (client: SuiClient, id: string) => Witness.fetch( client, id, ), new: ( fields: WitnessFields, ) => { return new Witness( [], fields ) }, kind: "StructClassReified", } }
 
  static get r() { return Witness.reified() }
 
@@ -73,27 +74,27 @@ export class Witness implements StructClass { static readonly $typeName = "0xfc7
 
 /* ============================== Migrate =============================== */
 
-export function isMigrate(type: string): boolean { type = compressSuiType(type); return type === "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::config::Migrate"; }
+export function isMigrate(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::config::Migrate`; }
 
 export interface MigrateFields { version: ToField<"u64"> }
 
 export type MigrateReified = Reified< Migrate, MigrateFields >;
 
-export class Migrate implements StructClass { static readonly $typeName = "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::config::Migrate"; static readonly $numTypeParams = 0;
+export class Migrate implements StructClass { static readonly $typeName = `${PKG_V1}::config::Migrate`; static readonly $numTypeParams = 0;
 
  readonly $typeName = Migrate.$typeName;
 
- readonly $fullTypeName: "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::config::Migrate";
+ readonly $fullTypeName: `${typeof PKG_V1}::config::Migrate`;
 
  readonly $typeArgs: [];
 
  readonly version: ToField<"u64">
 
- private constructor(typeArgs: [], fields: MigrateFields, ) { this.$fullTypeName = composeSuiType( Migrate.$typeName, ...typeArgs ) as "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::config::Migrate"; this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [], fields: MigrateFields, ) { this.$fullTypeName = composeSuiType( Migrate.$typeName, ...typeArgs ) as `${typeof PKG_V1}::config::Migrate`; this.$typeArgs = typeArgs;
 
  this.version = fields.version; }
 
- static reified( ): MigrateReified { return { typeName: Migrate.$typeName, fullTypeName: composeSuiType( Migrate.$typeName, ...[] ) as "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::config::Migrate", typeArgs: [ ] as [], reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => Migrate.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => Migrate.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => Migrate.fromBcs( data, ), bcs: Migrate.bcs, fromJSONField: (field: any) => Migrate.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => Migrate.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => Migrate.fromSuiParsedData( content, ), fetch: async (client: SuiClient, id: string) => Migrate.fetch( client, id, ), new: ( fields: MigrateFields, ) => { return new Migrate( [], fields ) }, kind: "StructClassReified", } }
+ static reified( ): MigrateReified { return { typeName: Migrate.$typeName, fullTypeName: composeSuiType( Migrate.$typeName, ...[] ) as `${typeof PKG_V1}::config::Migrate`, typeArgs: [ ] as [], reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => Migrate.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => Migrate.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => Migrate.fromBcs( data, ), bcs: Migrate.bcs, fromJSONField: (field: any) => Migrate.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => Migrate.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => Migrate.fromSuiParsedData( content, ), fetch: async (client: SuiClient, id: string) => Migrate.fetch( client, id, ), new: ( fields: MigrateFields, ) => { return new Migrate( [], fields ) }, kind: "StructClassReified", } }
 
  static get r() { return Migrate.reified() }
 
@@ -138,27 +139,27 @@ export class Migrate implements StructClass { static readonly $typeName = "0xfc7
 
 /* ============================== Modify =============================== */
 
-export function isModify(type: string): boolean { type = compressSuiType(type); return type === "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::config::Modify"; }
+export function isModify(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::config::Modify`; }
 
 export interface ModifyFields { name: ToField<Option<String>>; threshold: ToField<Option<"u64">>; toRemove: ToField<Vector<"address">>; toAdd: ToField<Vector<"address">>; weights: ToField<Vector<"u64">> }
 
 export type ModifyReified = Reified< Modify, ModifyFields >;
 
-export class Modify implements StructClass { static readonly $typeName = "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::config::Modify"; static readonly $numTypeParams = 0;
+export class Modify implements StructClass { static readonly $typeName = `${PKG_V1}::config::Modify`; static readonly $numTypeParams = 0;
 
  readonly $typeName = Modify.$typeName;
 
- readonly $fullTypeName: "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::config::Modify";
+ readonly $fullTypeName: `${typeof PKG_V1}::config::Modify`;
 
  readonly $typeArgs: [];
 
  readonly name: ToField<Option<String>>; readonly threshold: ToField<Option<"u64">>; readonly toRemove: ToField<Vector<"address">>; readonly toAdd: ToField<Vector<"address">>; readonly weights: ToField<Vector<"u64">>
 
- private constructor(typeArgs: [], fields: ModifyFields, ) { this.$fullTypeName = composeSuiType( Modify.$typeName, ...typeArgs ) as "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::config::Modify"; this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [], fields: ModifyFields, ) { this.$fullTypeName = composeSuiType( Modify.$typeName, ...typeArgs ) as `${typeof PKG_V1}::config::Modify`; this.$typeArgs = typeArgs;
 
  this.name = fields.name;; this.threshold = fields.threshold;; this.toRemove = fields.toRemove;; this.toAdd = fields.toAdd;; this.weights = fields.weights; }
 
- static reified( ): ModifyReified { return { typeName: Modify.$typeName, fullTypeName: composeSuiType( Modify.$typeName, ...[] ) as "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::config::Modify", typeArgs: [ ] as [], reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => Modify.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => Modify.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => Modify.fromBcs( data, ), bcs: Modify.bcs, fromJSONField: (field: any) => Modify.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => Modify.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => Modify.fromSuiParsedData( content, ), fetch: async (client: SuiClient, id: string) => Modify.fetch( client, id, ), new: ( fields: ModifyFields, ) => { return new Modify( [], fields ) }, kind: "StructClassReified", } }
+ static reified( ): ModifyReified { return { typeName: Modify.$typeName, fullTypeName: composeSuiType( Modify.$typeName, ...[] ) as `${typeof PKG_V1}::config::Modify`, typeArgs: [ ] as [], reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => Modify.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => Modify.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => Modify.fromBcs( data, ), bcs: Modify.bcs, fromJSONField: (field: any) => Modify.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => Modify.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => Modify.fromSuiParsedData( content, ), fetch: async (client: SuiClient, id: string) => Modify.fetch( client, id, ), new: ( fields: ModifyFields, ) => { return new Modify( [], fields ) }, kind: "StructClassReified", } }
 
  static get r() { return Modify.reified() }
 
@@ -182,7 +183,7 @@ export class Modify implements StructClass { static readonly $typeName = "0xfc7f
 
  toJSONField() { return {
 
- name: fieldToJSON<Option<String>>(`0x1::option::Option<0x1::string::String>`, this.name),threshold: fieldToJSON<Option<"u64">>(`0x1::option::Option<u64>`, this.threshold),toRemove: fieldToJSON<Vector<"address">>(`vector<address>`, this.toRemove),toAdd: fieldToJSON<Vector<"address">>(`vector<address>`, this.toAdd),weights: fieldToJSON<Vector<"u64">>(`vector<u64>`, this.weights),
+ name: fieldToJSON<Option<String>>(`${Option.$typeName}<${String.$typeName}>`, this.name),threshold: fieldToJSON<Option<"u64">>(`${Option.$typeName}<u64>`, this.threshold),toRemove: fieldToJSON<Vector<"address">>(`vector<address>`, this.toRemove),toAdd: fieldToJSON<Vector<"address">>(`vector<address>`, this.toAdd),weights: fieldToJSON<Vector<"u64">>(`vector<u64>`, this.weights),
 
 } }
 

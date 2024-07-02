@@ -1,31 +1,32 @@
 import {PhantomReified, PhantomToTypeStr, PhantomTypeArgument, Reified, StructClass, ToField, ToPhantomTypeArgument, ToTypeStr, assertFieldsWithTypesArgsMatch, assertReifiedTypeArgsMatch, decodeFromFields, decodeFromFieldsWithTypes, decodeFromJSONField, extractType, phantom} from "../../../../_framework/reified";
 import {FieldsWithTypes, composeSuiType, compressSuiType} from "../../../../_framework/util";
+import {PKG_V1} from "../index";
 import {bcs, fromB64} from "@mysten/bcs";
-import {SuiClient, SuiParsedData} from "@mysten/sui.js/client";
+import {SuiClient, SuiParsedData} from "@mysten/sui/client";
 
 /* ============================== Rule =============================== */
 
-export function isRule(type: string): boolean { type = compressSuiType(type); return type.startsWith("0x5114c85c54a6934cd9aa6ba75b523b97641f2c1dcb883e5bfa5a2c7a75f3cf69::witness_rule::Rule<"); }
+export function isRule(type: string): boolean { type = compressSuiType(type); return type.startsWith(`${PKG_V1}::witness_rule::Rule` + '<'); }
 
 export interface RuleFields<Proof extends PhantomTypeArgument> { dummyField: ToField<"bool"> }
 
 export type RuleReified<Proof extends PhantomTypeArgument> = Reified< Rule<Proof>, RuleFields<Proof> >;
 
-export class Rule<Proof extends PhantomTypeArgument> implements StructClass { static readonly $typeName = "0x5114c85c54a6934cd9aa6ba75b523b97641f2c1dcb883e5bfa5a2c7a75f3cf69::witness_rule::Rule"; static readonly $numTypeParams = 1;
+export class Rule<Proof extends PhantomTypeArgument> implements StructClass { static readonly $typeName = `${PKG_V1}::witness_rule::Rule`; static readonly $numTypeParams = 1;
 
  readonly $typeName = Rule.$typeName;
 
- readonly $fullTypeName: `0x5114c85c54a6934cd9aa6ba75b523b97641f2c1dcb883e5bfa5a2c7a75f3cf69::witness_rule::Rule<${PhantomToTypeStr<Proof>}>`;
+ readonly $fullTypeName: `${typeof PKG_V1}::witness_rule::Rule<${PhantomToTypeStr<Proof>}>`;
 
  readonly $typeArgs: [PhantomToTypeStr<Proof>];
 
  readonly dummyField: ToField<"bool">
 
- private constructor(typeArgs: [PhantomToTypeStr<Proof>], fields: RuleFields<Proof>, ) { this.$fullTypeName = composeSuiType( Rule.$typeName, ...typeArgs ) as `0x5114c85c54a6934cd9aa6ba75b523b97641f2c1dcb883e5bfa5a2c7a75f3cf69::witness_rule::Rule<${PhantomToTypeStr<Proof>}>`; this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [PhantomToTypeStr<Proof>], fields: RuleFields<Proof>, ) { this.$fullTypeName = composeSuiType( Rule.$typeName, ...typeArgs ) as `${typeof PKG_V1}::witness_rule::Rule<${PhantomToTypeStr<Proof>}>`; this.$typeArgs = typeArgs;
 
  this.dummyField = fields.dummyField; }
 
- static reified<Proof extends PhantomReified<PhantomTypeArgument>>( Proof: Proof ): RuleReified<ToPhantomTypeArgument<Proof>> { return { typeName: Rule.$typeName, fullTypeName: composeSuiType( Rule.$typeName, ...[extractType(Proof)] ) as `0x5114c85c54a6934cd9aa6ba75b523b97641f2c1dcb883e5bfa5a2c7a75f3cf69::witness_rule::Rule<${PhantomToTypeStr<ToPhantomTypeArgument<Proof>>}>`, typeArgs: [ extractType(Proof) ] as [PhantomToTypeStr<ToPhantomTypeArgument<Proof>>], reifiedTypeArgs: [Proof], fromFields: (fields: Record<string, any>) => Rule.fromFields( Proof, fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => Rule.fromFieldsWithTypes( Proof, item, ), fromBcs: (data: Uint8Array) => Rule.fromBcs( Proof, data, ), bcs: Rule.bcs, fromJSONField: (field: any) => Rule.fromJSONField( Proof, field, ), fromJSON: (json: Record<string, any>) => Rule.fromJSON( Proof, json, ), fromSuiParsedData: (content: SuiParsedData) => Rule.fromSuiParsedData( Proof, content, ), fetch: async (client: SuiClient, id: string) => Rule.fetch( client, Proof, id, ), new: ( fields: RuleFields<ToPhantomTypeArgument<Proof>>, ) => { return new Rule( [extractType(Proof)], fields ) }, kind: "StructClassReified", } }
+ static reified<Proof extends PhantomReified<PhantomTypeArgument>>( Proof: Proof ): RuleReified<ToPhantomTypeArgument<Proof>> { return { typeName: Rule.$typeName, fullTypeName: composeSuiType( Rule.$typeName, ...[extractType(Proof)] ) as `${typeof PKG_V1}::witness_rule::Rule<${PhantomToTypeStr<ToPhantomTypeArgument<Proof>>}>`, typeArgs: [ extractType(Proof) ] as [PhantomToTypeStr<ToPhantomTypeArgument<Proof>>], reifiedTypeArgs: [Proof], fromFields: (fields: Record<string, any>) => Rule.fromFields( Proof, fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => Rule.fromFieldsWithTypes( Proof, item, ), fromBcs: (data: Uint8Array) => Rule.fromBcs( Proof, data, ), bcs: Rule.bcs, fromJSONField: (field: any) => Rule.fromJSONField( Proof, field, ), fromJSON: (json: Record<string, any>) => Rule.fromJSON( Proof, json, ), fromSuiParsedData: (content: SuiParsedData) => Rule.fromSuiParsedData( Proof, content, ), fetch: async (client: SuiClient, id: string) => Rule.fetch( client, Proof, id, ), new: ( fields: RuleFields<ToPhantomTypeArgument<Proof>>, ) => { return new Rule( [extractType(Proof)], fields ) }, kind: "StructClassReified", } }
 
  static get r() { return Rule.reified }
 

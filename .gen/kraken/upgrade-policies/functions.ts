@@ -1,71 +1,73 @@
 import {PUBLISHED_AT} from "..";
-import {GenericArg, ObjectArg, generic, obj, pure} from "../../_framework/util";
-import {TransactionArgument, TransactionBlock} from "@mysten/sui.js/transactions";
+import {String} from "../../_dependencies/source/0x1/string/structs";
+import {ID} from "../../_dependencies/source/0x2/object/structs";
+import {GenericArg, generic, obj, pure} from "../../_framework/util";
+import {Transaction, TransactionArgument, TransactionObjectInput} from "@mysten/sui/transactions";
 
-export interface RestrictArgs { executable: ObjectArg; multisig: ObjectArg; lock: ObjectArg; witness: GenericArg; idx: bigint | TransactionArgument }
+export interface RestrictArgs { executable: TransactionObjectInput; multisig: TransactionObjectInput; lock: TransactionObjectInput; witness: GenericArg; idx: bigint | TransactionArgument }
 
-export function restrict( txb: TransactionBlock, typeArg: string, args: RestrictArgs ) { return txb.moveCall({ target: `${PUBLISHED_AT}::upgrade_policies::restrict`, typeArguments: [typeArg], arguments: [ obj(txb, args.executable), obj(txb, args.multisig), obj(txb, args.lock), generic(txb, `${typeArg}`, args.witness), pure(txb, args.idx, `u64`) ], }) }
+export function restrict( tx: Transaction, typeArg: string, args: RestrictArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::upgrade_policies::restrict`, typeArguments: [typeArg], arguments: [ obj(tx, args.executable), obj(tx, args.multisig), obj(tx, args.lock), generic(tx, `${typeArg}`, args.witness), pure(tx, args.idx, `u64`) ], }) }
 
-export interface AddRuleArgs { lock: ObjectArg; key: Array<number | TransactionArgument> | TransactionArgument; rule: GenericArg }
+export interface AddRuleArgs { lock: TransactionObjectInput; key: Array<number | TransactionArgument> | TransactionArgument; rule: GenericArg }
 
-export function addRule( txb: TransactionBlock, typeArg: string, args: AddRuleArgs ) { return txb.moveCall({ target: `${PUBLISHED_AT}::upgrade_policies::add_rule`, typeArguments: [typeArg], arguments: [ obj(txb, args.lock), pure(txb, args.key, `vector<u8>`), generic(txb, `${typeArg}`, args.rule) ], }) }
+export function addRule( tx: Transaction, typeArg: string, args: AddRuleArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::upgrade_policies::add_rule`, typeArguments: [typeArg], arguments: [ obj(tx, args.lock), pure(tx, args.key, `vector<u8>`), generic(tx, `${typeArg}`, args.rule) ], }) }
 
-export interface HasRuleArgs { lock: ObjectArg; key: Array<number | TransactionArgument> | TransactionArgument }
+export interface HasRuleArgs { lock: TransactionObjectInput; key: Array<number | TransactionArgument> | TransactionArgument }
 
-export function hasRule( txb: TransactionBlock, args: HasRuleArgs ) { return txb.moveCall({ target: `${PUBLISHED_AT}::upgrade_policies::has_rule`, arguments: [ obj(txb, args.lock), pure(txb, args.key, `vector<u8>`) ], }) }
+export function hasRule( tx: Transaction, args: HasRuleArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::upgrade_policies::has_rule`, arguments: [ obj(tx, args.lock), pure(tx, args.key, `vector<u8>`) ], }) }
 
-export interface UpgradeArgs { executable: ObjectArg; lock: ObjectArg; witness: GenericArg; idx: bigint | TransactionArgument }
+export interface UpgradeArgs { executable: TransactionObjectInput; lock: TransactionObjectInput; witness: GenericArg; idx: bigint | TransactionArgument }
 
-export function upgrade( txb: TransactionBlock, typeArg: string, args: UpgradeArgs ) { return txb.moveCall({ target: `${PUBLISHED_AT}::upgrade_policies::upgrade`, typeArguments: [typeArg], arguments: [ obj(txb, args.executable), obj(txb, args.lock), generic(txb, `${typeArg}`, args.witness), pure(txb, args.idx, `u64`) ], }) }
+export function upgrade( tx: Transaction, typeArg: string, args: UpgradeArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::upgrade_policies::upgrade`, typeArguments: [typeArg], arguments: [ obj(tx, args.executable), obj(tx, args.lock), generic(tx, `${typeArg}`, args.witness), pure(tx, args.idx, `u64`) ], }) }
 
-export interface BorrowCapArgs { multisig: ObjectArg; lock: ObjectArg }
+export interface BorrowCapArgs { multisig: TransactionObjectInput; lock: TransactionObjectInput }
 
-export function borrowCap( txb: TransactionBlock, args: BorrowCapArgs ) { return txb.moveCall({ target: `${PUBLISHED_AT}::upgrade_policies::borrow_cap`, arguments: [ obj(txb, args.multisig), obj(txb, args.lock) ], }) }
+export function borrowCap( tx: Transaction, args: BorrowCapArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::upgrade_policies::borrow_cap`, arguments: [ obj(tx, args.multisig), obj(tx, args.lock) ], }) }
 
-export function putBackCap( txb: TransactionBlock, lock: ObjectArg ) { return txb.moveCall({ target: `${PUBLISHED_AT}::upgrade_policies::put_back_cap`, arguments: [ obj(txb, lock) ], }) }
+export interface LockCapArgs { multisig: TransactionObjectInput; label: string | TransactionArgument; upgradeCap: TransactionObjectInput }
 
-export interface ConfirmUpgradeArgs { upgradeLock: ObjectArg; receipt: ObjectArg }
+export function lockCap( tx: Transaction, args: LockCapArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::upgrade_policies::lock_cap`, arguments: [ obj(tx, args.multisig), pure(tx, args.label, `${String.$typeName}`), obj(tx, args.upgradeCap) ], }) }
 
-export function confirmUpgrade( txb: TransactionBlock, args: ConfirmUpgradeArgs ) { return txb.moveCall({ target: `${PUBLISHED_AT}::upgrade_policies::confirm_upgrade`, arguments: [ obj(txb, args.upgradeLock), obj(txb, args.receipt) ], }) }
+export function putBackCap( tx: Transaction, lock: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::upgrade_policies::put_back_cap`, arguments: [ obj(tx, lock) ], }) }
 
-export interface DestroyRestrictArgs { executable: ObjectArg; witness: GenericArg }
+export interface ConfirmUpgradeArgs { upgradeLock: TransactionObjectInput; receipt: TransactionObjectInput }
 
-export function destroyRestrict( txb: TransactionBlock, typeArg: string, args: DestroyRestrictArgs ) { return txb.moveCall({ target: `${PUBLISHED_AT}::upgrade_policies::destroy_restrict`, typeArguments: [typeArg], arguments: [ obj(txb, args.executable), generic(txb, `${typeArg}`, args.witness) ], }) }
+export function confirmUpgrade( tx: Transaction, args: ConfirmUpgradeArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::upgrade_policies::confirm_upgrade`, arguments: [ obj(tx, args.upgradeLock), obj(tx, args.receipt) ], }) }
 
-export interface DestroyUpgradeArgs { executable: ObjectArg; witness: GenericArg }
+export interface DestroyRestrictArgs { executable: TransactionObjectInput; witness: GenericArg }
 
-export function destroyUpgrade( txb: TransactionBlock, typeArg: string, args: DestroyUpgradeArgs ) { return txb.moveCall({ target: `${PUBLISHED_AT}::upgrade_policies::destroy_upgrade`, typeArguments: [typeArg], arguments: [ obj(txb, args.executable), generic(txb, `${typeArg}`, args.witness) ], }) }
+export function destroyRestrict( tx: Transaction, typeArg: string, args: DestroyRestrictArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::upgrade_policies::destroy_restrict`, typeArguments: [typeArg], arguments: [ obj(tx, args.executable), generic(tx, `${typeArg}`, args.witness) ], }) }
 
-export interface ExecuteRestrictArgs { executable: ObjectArg; multisig: ObjectArg; lock: ObjectArg }
+export interface DestroyUpgradeArgs { executable: TransactionObjectInput; witness: GenericArg }
 
-export function executeRestrict( txb: TransactionBlock, args: ExecuteRestrictArgs ) { return txb.moveCall({ target: `${PUBLISHED_AT}::upgrade_policies::execute_restrict`, arguments: [ obj(txb, args.executable), obj(txb, args.multisig), obj(txb, args.lock) ], }) }
+export function destroyUpgrade( tx: Transaction, typeArg: string, args: DestroyUpgradeArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::upgrade_policies::destroy_upgrade`, typeArguments: [typeArg], arguments: [ obj(tx, args.executable), generic(tx, `${typeArg}`, args.witness) ], }) }
 
-export interface ExecuteUpgradeArgs { executable: ObjectArg; lock: ObjectArg }
+export interface ExecuteRestrictArgs { executable: TransactionObjectInput; multisig: TransactionObjectInput; lock: TransactionObjectInput }
 
-export function executeUpgrade( txb: TransactionBlock, args: ExecuteUpgradeArgs ) { return txb.moveCall({ target: `${PUBLISHED_AT}::upgrade_policies::execute_upgrade`, arguments: [ obj(txb, args.executable), obj(txb, args.lock) ], }) }
+export function executeRestrict( tx: Transaction, args: ExecuteRestrictArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::upgrade_policies::execute_restrict`, arguments: [ obj(tx, args.executable), obj(tx, args.multisig), obj(tx, args.lock) ], }) }
 
-export function getTimeDelay( txb: TransactionBlock, lock: ObjectArg ) { return txb.moveCall({ target: `${PUBLISHED_AT}::upgrade_policies::get_time_delay`, arguments: [ obj(txb, lock) ], }) }
+export interface ExecuteUpgradeArgs { executable: TransactionObjectInput; lock: TransactionObjectInput }
 
-export interface LockCapArgs { multisig: ObjectArg; label: string | TransactionArgument; upgradeCap: ObjectArg }
+export function executeUpgrade( tx: Transaction, args: ExecuteUpgradeArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::upgrade_policies::execute_upgrade`, arguments: [ obj(tx, args.executable), obj(tx, args.lock) ], }) }
 
-export function lockCap( txb: TransactionBlock, args: LockCapArgs ) { return txb.moveCall({ target: `${PUBLISHED_AT}::upgrade_policies::lock_cap`, arguments: [ obj(txb, args.multisig), pure(txb, args.label, `0x1::string::String`), obj(txb, args.upgradeCap) ], }) }
+export function getTimeDelay( tx: Transaction, lock: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::upgrade_policies::get_time_delay`, arguments: [ obj(tx, lock) ], }) }
 
-export interface LockCapWithTimelockArgs { multisig: ObjectArg; label: string | TransactionArgument; delayMs: bigint | TransactionArgument; upgradeCap: ObjectArg }
+export interface LockCapWithTimelockArgs { multisig: TransactionObjectInput; label: string | TransactionArgument; delayMs: bigint | TransactionArgument; upgradeCap: TransactionObjectInput }
 
-export function lockCapWithTimelock( txb: TransactionBlock, args: LockCapWithTimelockArgs ) { return txb.moveCall({ target: `${PUBLISHED_AT}::upgrade_policies::lock_cap_with_timelock`, arguments: [ obj(txb, args.multisig), pure(txb, args.label, `0x1::string::String`), pure(txb, args.delayMs, `u64`), obj(txb, args.upgradeCap) ], }) }
+export function lockCapWithTimelock( tx: Transaction, args: LockCapWithTimelockArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::upgrade_policies::lock_cap_with_timelock`, arguments: [ obj(tx, args.multisig), pure(tx, args.label, `${String.$typeName}`), pure(tx, args.delayMs, `u64`), obj(tx, args.upgradeCap) ], }) }
 
-export interface NewRestrictArgs { proposal: ObjectArg; lock: ObjectArg; policy: number | TransactionArgument }
+export interface NewRestrictArgs { proposal: TransactionObjectInput; lock: TransactionObjectInput; policy: number | TransactionArgument }
 
-export function newRestrict( txb: TransactionBlock, args: NewRestrictArgs ) { return txb.moveCall({ target: `${PUBLISHED_AT}::upgrade_policies::new_restrict`, arguments: [ obj(txb, args.proposal), obj(txb, args.lock), pure(txb, args.policy, `u8`) ], }) }
+export function newRestrict( tx: Transaction, args: NewRestrictArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::upgrade_policies::new_restrict`, arguments: [ obj(tx, args.proposal), obj(tx, args.lock), pure(tx, args.policy, `u8`) ], }) }
 
-export interface NewUpgradeArgs { proposal: ObjectArg; digest: Array<number | TransactionArgument> | TransactionArgument; lockId: string | TransactionArgument }
+export interface NewUpgradeArgs { proposal: TransactionObjectInput; digest: Array<number | TransactionArgument> | TransactionArgument; lockId: string | TransactionArgument }
 
-export function newUpgrade( txb: TransactionBlock, args: NewUpgradeArgs ) { return txb.moveCall({ target: `${PUBLISHED_AT}::upgrade_policies::new_upgrade`, arguments: [ obj(txb, args.proposal), pure(txb, args.digest, `vector<u8>`), pure(txb, args.lockId, `0x2::object::ID`) ], }) }
+export function newUpgrade( tx: Transaction, args: NewUpgradeArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::upgrade_policies::new_upgrade`, arguments: [ obj(tx, args.proposal), pure(tx, args.digest, `vector<u8>`), pure(tx, args.lockId, `${ID.$typeName}`) ], }) }
 
-export interface ProposeRestrictArgs { multisig: ObjectArg; key: string | TransactionArgument; expirationEpoch: bigint | TransactionArgument; description: string | TransactionArgument; policy: number | TransactionArgument; lock: ObjectArg; clock: ObjectArg }
+export interface ProposeRestrictArgs { multisig: TransactionObjectInput; key: string | TransactionArgument; expirationEpoch: bigint | TransactionArgument; description: string | TransactionArgument; policy: number | TransactionArgument; lock: TransactionObjectInput; clock: TransactionObjectInput }
 
-export function proposeRestrict( txb: TransactionBlock, args: ProposeRestrictArgs ) { return txb.moveCall({ target: `${PUBLISHED_AT}::upgrade_policies::propose_restrict`, arguments: [ obj(txb, args.multisig), pure(txb, args.key, `0x1::string::String`), pure(txb, args.expirationEpoch, `u64`), pure(txb, args.description, `0x1::string::String`), pure(txb, args.policy, `u8`), obj(txb, args.lock), obj(txb, args.clock) ], }) }
+export function proposeRestrict( tx: Transaction, args: ProposeRestrictArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::upgrade_policies::propose_restrict`, arguments: [ obj(tx, args.multisig), pure(tx, args.key, `${String.$typeName}`), pure(tx, args.expirationEpoch, `u64`), pure(tx, args.description, `${String.$typeName}`), pure(tx, args.policy, `u8`), obj(tx, args.lock), obj(tx, args.clock) ], }) }
 
-export interface ProposeUpgradeArgs { multisig: ObjectArg; key: string | TransactionArgument; expirationEpoch: bigint | TransactionArgument; description: string | TransactionArgument; digest: Array<number | TransactionArgument> | TransactionArgument; lock: ObjectArg; clock: ObjectArg }
+export interface ProposeUpgradeArgs { multisig: TransactionObjectInput; key: string | TransactionArgument; expirationEpoch: bigint | TransactionArgument; description: string | TransactionArgument; digest: Array<number | TransactionArgument> | TransactionArgument; lock: TransactionObjectInput; clock: TransactionObjectInput }
 
-export function proposeUpgrade( txb: TransactionBlock, args: ProposeUpgradeArgs ) { return txb.moveCall({ target: `${PUBLISHED_AT}::upgrade_policies::propose_upgrade`, arguments: [ obj(txb, args.multisig), pure(txb, args.key, `0x1::string::String`), pure(txb, args.expirationEpoch, `u64`), pure(txb, args.description, `0x1::string::String`), pure(txb, args.digest, `vector<u8>`), obj(txb, args.lock), obj(txb, args.clock) ], }) }
+export function proposeUpgrade( tx: Transaction, args: ProposeUpgradeArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::upgrade_policies::propose_upgrade`, arguments: [ obj(tx, args.multisig), pure(tx, args.key, `${String.$typeName}`), pure(tx, args.expirationEpoch, `u64`), pure(tx, args.description, `${String.$typeName}`), pure(tx, args.digest, `vector<u8>`), obj(tx, args.lock), obj(tx, args.clock) ], }) }

@@ -7,32 +7,33 @@ import {VecMap} from "../../_dependencies/source/0x2/vec-map/structs";
 import {VecSet} from "../../_dependencies/source/0x2/vec-set/structs";
 import {PhantomReified, Reified, StructClass, ToField, ToTypeStr, decodeFromFields, decodeFromFieldsWithTypes, decodeFromJSONField, fieldToJSON, phantom} from "../../_framework/reified";
 import {FieldsWithTypes, composeSuiType, compressSuiType} from "../../_framework/util";
+import {PKG_V1} from "../index";
 import {bcs, fromB64, fromHEX, toHEX} from "@mysten/bcs";
-import {SuiClient, SuiParsedData} from "@mysten/sui.js/client";
+import {SuiClient, SuiParsedData} from "@mysten/sui/client";
 
 /* ============================== Executable =============================== */
 
-export function isExecutable(type: string): boolean { type = compressSuiType(type); return type === "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::multisig::Executable"; }
+export function isExecutable(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::multisig::Executable`; }
 
 export interface ExecutableFields { multisigAddr: ToField<"address">; moduleWitness: ToField<TypeName>; nextToDestroy: ToField<"u64">; actions: ToField<Bag> }
 
 export type ExecutableReified = Reified< Executable, ExecutableFields >;
 
-export class Executable implements StructClass { static readonly $typeName = "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::multisig::Executable"; static readonly $numTypeParams = 0;
+export class Executable implements StructClass { static readonly $typeName = `${PKG_V1}::multisig::Executable`; static readonly $numTypeParams = 0;
 
  readonly $typeName = Executable.$typeName;
 
- readonly $fullTypeName: "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::multisig::Executable";
+ readonly $fullTypeName: `${typeof PKG_V1}::multisig::Executable`;
 
  readonly $typeArgs: [];
 
  readonly multisigAddr: ToField<"address">; readonly moduleWitness: ToField<TypeName>; readonly nextToDestroy: ToField<"u64">; readonly actions: ToField<Bag>
 
- private constructor(typeArgs: [], fields: ExecutableFields, ) { this.$fullTypeName = composeSuiType( Executable.$typeName, ...typeArgs ) as "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::multisig::Executable"; this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [], fields: ExecutableFields, ) { this.$fullTypeName = composeSuiType( Executable.$typeName, ...typeArgs ) as `${typeof PKG_V1}::multisig::Executable`; this.$typeArgs = typeArgs;
 
  this.multisigAddr = fields.multisigAddr;; this.moduleWitness = fields.moduleWitness;; this.nextToDestroy = fields.nextToDestroy;; this.actions = fields.actions; }
 
- static reified( ): ExecutableReified { return { typeName: Executable.$typeName, fullTypeName: composeSuiType( Executable.$typeName, ...[] ) as "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::multisig::Executable", typeArgs: [ ] as [], reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => Executable.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => Executable.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => Executable.fromBcs( data, ), bcs: Executable.bcs, fromJSONField: (field: any) => Executable.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => Executable.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => Executable.fromSuiParsedData( content, ), fetch: async (client: SuiClient, id: string) => Executable.fetch( client, id, ), new: ( fields: ExecutableFields, ) => { return new Executable( [], fields ) }, kind: "StructClassReified", } }
+ static reified( ): ExecutableReified { return { typeName: Executable.$typeName, fullTypeName: composeSuiType( Executable.$typeName, ...[] ) as `${typeof PKG_V1}::multisig::Executable`, typeArgs: [ ] as [], reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => Executable.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => Executable.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => Executable.fromBcs( data, ), bcs: Executable.bcs, fromJSONField: (field: any) => Executable.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => Executable.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => Executable.fromSuiParsedData( content, ), fetch: async (client: SuiClient, id: string) => Executable.fetch( client, id, ), new: ( fields: ExecutableFields, ) => { return new Executable( [], fields ) }, kind: "StructClassReified", } }
 
  static get r() { return Executable.reified() }
 
@@ -77,27 +78,27 @@ export class Executable implements StructClass { static readonly $typeName = "0x
 
 /* ============================== Member =============================== */
 
-export function isMember(type: string): boolean { type = compressSuiType(type); return type === "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::multisig::Member"; }
+export function isMember(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::multisig::Member`; }
 
 export interface MemberFields { weight: ToField<"u64">; accountId: ToField<Option<ID>> }
 
 export type MemberReified = Reified< Member, MemberFields >;
 
-export class Member implements StructClass { static readonly $typeName = "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::multisig::Member"; static readonly $numTypeParams = 0;
+export class Member implements StructClass { static readonly $typeName = `${PKG_V1}::multisig::Member`; static readonly $numTypeParams = 0;
 
  readonly $typeName = Member.$typeName;
 
- readonly $fullTypeName: "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::multisig::Member";
+ readonly $fullTypeName: `${typeof PKG_V1}::multisig::Member`;
 
  readonly $typeArgs: [];
 
  readonly weight: ToField<"u64">; readonly accountId: ToField<Option<ID>>
 
- private constructor(typeArgs: [], fields: MemberFields, ) { this.$fullTypeName = composeSuiType( Member.$typeName, ...typeArgs ) as "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::multisig::Member"; this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [], fields: MemberFields, ) { this.$fullTypeName = composeSuiType( Member.$typeName, ...typeArgs ) as `${typeof PKG_V1}::multisig::Member`; this.$typeArgs = typeArgs;
 
  this.weight = fields.weight;; this.accountId = fields.accountId; }
 
- static reified( ): MemberReified { return { typeName: Member.$typeName, fullTypeName: composeSuiType( Member.$typeName, ...[] ) as "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::multisig::Member", typeArgs: [ ] as [], reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => Member.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => Member.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => Member.fromBcs( data, ), bcs: Member.bcs, fromJSONField: (field: any) => Member.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => Member.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => Member.fromSuiParsedData( content, ), fetch: async (client: SuiClient, id: string) => Member.fetch( client, id, ), new: ( fields: MemberFields, ) => { return new Member( [], fields ) }, kind: "StructClassReified", } }
+ static reified( ): MemberReified { return { typeName: Member.$typeName, fullTypeName: composeSuiType( Member.$typeName, ...[] ) as `${typeof PKG_V1}::multisig::Member`, typeArgs: [ ] as [], reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => Member.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => Member.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => Member.fromBcs( data, ), bcs: Member.bcs, fromJSONField: (field: any) => Member.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => Member.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => Member.fromSuiParsedData( content, ), fetch: async (client: SuiClient, id: string) => Member.fetch( client, id, ), new: ( fields: MemberFields, ) => { return new Member( [], fields ) }, kind: "StructClassReified", } }
 
  static get r() { return Member.reified() }
 
@@ -121,7 +122,7 @@ export class Member implements StructClass { static readonly $typeName = "0xfc7f
 
  toJSONField() { return {
 
- weight: this.weight.toString(),accountId: fieldToJSON<Option<ID>>(`0x1::option::Option<0x2::object::ID>`, this.accountId),
+ weight: this.weight.toString(),accountId: fieldToJSON<Option<ID>>(`${Option.$typeName}<${ID.$typeName}>`, this.accountId),
 
 } }
 
@@ -142,27 +143,27 @@ export class Member implements StructClass { static readonly $typeName = "0xfc7f
 
 /* ============================== Multisig =============================== */
 
-export function isMultisig(type: string): boolean { type = compressSuiType(type); return type === "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::multisig::Multisig"; }
+export function isMultisig(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::multisig::Multisig`; }
 
 export interface MultisigFields { id: ToField<UID>; version: ToField<"u64">; name: ToField<String>; threshold: ToField<"u64">; totalWeight: ToField<"u64">; members: ToField<VecMap<"address", Member>>; proposals: ToField<VecMap<String, Proposal>> }
 
 export type MultisigReified = Reified< Multisig, MultisigFields >;
 
-export class Multisig implements StructClass { static readonly $typeName = "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::multisig::Multisig"; static readonly $numTypeParams = 0;
+export class Multisig implements StructClass { static readonly $typeName = `${PKG_V1}::multisig::Multisig`; static readonly $numTypeParams = 0;
 
  readonly $typeName = Multisig.$typeName;
 
- readonly $fullTypeName: "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::multisig::Multisig";
+ readonly $fullTypeName: `${typeof PKG_V1}::multisig::Multisig`;
 
  readonly $typeArgs: [];
 
  readonly id: ToField<UID>; readonly version: ToField<"u64">; readonly name: ToField<String>; readonly threshold: ToField<"u64">; readonly totalWeight: ToField<"u64">; readonly members: ToField<VecMap<"address", Member>>; readonly proposals: ToField<VecMap<String, Proposal>>
 
- private constructor(typeArgs: [], fields: MultisigFields, ) { this.$fullTypeName = composeSuiType( Multisig.$typeName, ...typeArgs ) as "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::multisig::Multisig"; this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [], fields: MultisigFields, ) { this.$fullTypeName = composeSuiType( Multisig.$typeName, ...typeArgs ) as `${typeof PKG_V1}::multisig::Multisig`; this.$typeArgs = typeArgs;
 
  this.id = fields.id;; this.version = fields.version;; this.name = fields.name;; this.threshold = fields.threshold;; this.totalWeight = fields.totalWeight;; this.members = fields.members;; this.proposals = fields.proposals; }
 
- static reified( ): MultisigReified { return { typeName: Multisig.$typeName, fullTypeName: composeSuiType( Multisig.$typeName, ...[] ) as "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::multisig::Multisig", typeArgs: [ ] as [], reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => Multisig.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => Multisig.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => Multisig.fromBcs( data, ), bcs: Multisig.bcs, fromJSONField: (field: any) => Multisig.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => Multisig.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => Multisig.fromSuiParsedData( content, ), fetch: async (client: SuiClient, id: string) => Multisig.fetch( client, id, ), new: ( fields: MultisigFields, ) => { return new Multisig( [], fields ) }, kind: "StructClassReified", } }
+ static reified( ): MultisigReified { return { typeName: Multisig.$typeName, fullTypeName: composeSuiType( Multisig.$typeName, ...[] ) as `${typeof PKG_V1}::multisig::Multisig`, typeArgs: [ ] as [], reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => Multisig.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => Multisig.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => Multisig.fromBcs( data, ), bcs: Multisig.bcs, fromJSONField: (field: any) => Multisig.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => Multisig.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => Multisig.fromSuiParsedData( content, ), fetch: async (client: SuiClient, id: string) => Multisig.fetch( client, id, ), new: ( fields: MultisigFields, ) => { return new Multisig( [], fields ) }, kind: "StructClassReified", } }
 
  static get r() { return Multisig.reified() }
 
@@ -207,27 +208,27 @@ export class Multisig implements StructClass { static readonly $typeName = "0xfc
 
 /* ============================== Proposal =============================== */
 
-export function isProposal(type: string): boolean { type = compressSuiType(type); return type === "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::multisig::Proposal"; }
+export function isProposal(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::multisig::Proposal`; }
 
 export interface ProposalFields { id: ToField<UID>; moduleWitness: ToField<TypeName>; description: ToField<String>; expirationEpoch: ToField<"u64">; executionTime: ToField<"u64">; actions: ToField<Bag>; approvalWeight: ToField<"u64">; approved: ToField<VecSet<"address">> }
 
 export type ProposalReified = Reified< Proposal, ProposalFields >;
 
-export class Proposal implements StructClass { static readonly $typeName = "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::multisig::Proposal"; static readonly $numTypeParams = 0;
+export class Proposal implements StructClass { static readonly $typeName = `${PKG_V1}::multisig::Proposal`; static readonly $numTypeParams = 0;
 
  readonly $typeName = Proposal.$typeName;
 
- readonly $fullTypeName: "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::multisig::Proposal";
+ readonly $fullTypeName: `${typeof PKG_V1}::multisig::Proposal`;
 
  readonly $typeArgs: [];
 
  readonly id: ToField<UID>; readonly moduleWitness: ToField<TypeName>; readonly description: ToField<String>; readonly expirationEpoch: ToField<"u64">; readonly executionTime: ToField<"u64">; readonly actions: ToField<Bag>; readonly approvalWeight: ToField<"u64">; readonly approved: ToField<VecSet<"address">>
 
- private constructor(typeArgs: [], fields: ProposalFields, ) { this.$fullTypeName = composeSuiType( Proposal.$typeName, ...typeArgs ) as "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::multisig::Proposal"; this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [], fields: ProposalFields, ) { this.$fullTypeName = composeSuiType( Proposal.$typeName, ...typeArgs ) as `${typeof PKG_V1}::multisig::Proposal`; this.$typeArgs = typeArgs;
 
  this.id = fields.id;; this.moduleWitness = fields.moduleWitness;; this.description = fields.description;; this.expirationEpoch = fields.expirationEpoch;; this.executionTime = fields.executionTime;; this.actions = fields.actions;; this.approvalWeight = fields.approvalWeight;; this.approved = fields.approved; }
 
- static reified( ): ProposalReified { return { typeName: Proposal.$typeName, fullTypeName: composeSuiType( Proposal.$typeName, ...[] ) as "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::multisig::Proposal", typeArgs: [ ] as [], reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => Proposal.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => Proposal.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => Proposal.fromBcs( data, ), bcs: Proposal.bcs, fromJSONField: (field: any) => Proposal.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => Proposal.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => Proposal.fromSuiParsedData( content, ), fetch: async (client: SuiClient, id: string) => Proposal.fetch( client, id, ), new: ( fields: ProposalFields, ) => { return new Proposal( [], fields ) }, kind: "StructClassReified", } }
+ static reified( ): ProposalReified { return { typeName: Proposal.$typeName, fullTypeName: composeSuiType( Proposal.$typeName, ...[] ) as `${typeof PKG_V1}::multisig::Proposal`, typeArgs: [ ] as [], reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => Proposal.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => Proposal.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => Proposal.fromBcs( data, ), bcs: Proposal.bcs, fromJSONField: (field: any) => Proposal.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => Proposal.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => Proposal.fromSuiParsedData( content, ), fetch: async (client: SuiClient, id: string) => Proposal.fetch( client, id, ), new: ( fields: ProposalFields, ) => { return new Proposal( [], fields ) }, kind: "StructClassReified", } }
 
  static get r() { return Proposal.reified() }
 

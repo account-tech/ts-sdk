@@ -1,31 +1,32 @@
 import {PhantomReified, Reified, StructClass, ToField, ToTypeStr, decodeFromFields, decodeFromFieldsWithTypes, decodeFromJSONField, phantom} from "../../../../_framework/reified";
 import {FieldsWithTypes, composeSuiType, compressSuiType} from "../../../../_framework/util";
+import {PKG_V2} from "../index";
 import {bcs, fromB64} from "@mysten/bcs";
-import {SuiClient, SuiParsedData} from "@mysten/sui.js/client";
+import {SuiClient, SuiParsedData} from "@mysten/sui/client";
 
 /* ============================== Rule =============================== */
 
-export function isRule(type: string): boolean { type = compressSuiType(type); return type === "0x5114c85c54a6934cd9aa6ba75b523b97641f2c1dcb883e5bfa5a2c7a75f3cf69::personal_kiosk_rule::Rule"; }
+export function isRule(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V2}::personal_kiosk_rule::Rule`; }
 
 export interface RuleFields { dummyField: ToField<"bool"> }
 
 export type RuleReified = Reified< Rule, RuleFields >;
 
-export class Rule implements StructClass { static readonly $typeName = "0x5114c85c54a6934cd9aa6ba75b523b97641f2c1dcb883e5bfa5a2c7a75f3cf69::personal_kiosk_rule::Rule"; static readonly $numTypeParams = 0;
+export class Rule implements StructClass { static readonly $typeName = `${PKG_V2}::personal_kiosk_rule::Rule`; static readonly $numTypeParams = 0;
 
  readonly $typeName = Rule.$typeName;
 
- readonly $fullTypeName: "0x5114c85c54a6934cd9aa6ba75b523b97641f2c1dcb883e5bfa5a2c7a75f3cf69::personal_kiosk_rule::Rule";
+ readonly $fullTypeName: `${typeof PKG_V2}::personal_kiosk_rule::Rule`;
 
  readonly $typeArgs: [];
 
  readonly dummyField: ToField<"bool">
 
- private constructor(typeArgs: [], fields: RuleFields, ) { this.$fullTypeName = composeSuiType( Rule.$typeName, ...typeArgs ) as "0x5114c85c54a6934cd9aa6ba75b523b97641f2c1dcb883e5bfa5a2c7a75f3cf69::personal_kiosk_rule::Rule"; this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [], fields: RuleFields, ) { this.$fullTypeName = composeSuiType( Rule.$typeName, ...typeArgs ) as `${typeof PKG_V2}::personal_kiosk_rule::Rule`; this.$typeArgs = typeArgs;
 
  this.dummyField = fields.dummyField; }
 
- static reified( ): RuleReified { return { typeName: Rule.$typeName, fullTypeName: composeSuiType( Rule.$typeName, ...[] ) as "0x5114c85c54a6934cd9aa6ba75b523b97641f2c1dcb883e5bfa5a2c7a75f3cf69::personal_kiosk_rule::Rule", typeArgs: [ ] as [], reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => Rule.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => Rule.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => Rule.fromBcs( data, ), bcs: Rule.bcs, fromJSONField: (field: any) => Rule.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => Rule.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => Rule.fromSuiParsedData( content, ), fetch: async (client: SuiClient, id: string) => Rule.fetch( client, id, ), new: ( fields: RuleFields, ) => { return new Rule( [], fields ) }, kind: "StructClassReified", } }
+ static reified( ): RuleReified { return { typeName: Rule.$typeName, fullTypeName: composeSuiType( Rule.$typeName, ...[] ) as `${typeof PKG_V2}::personal_kiosk_rule::Rule`, typeArgs: [ ] as [], reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => Rule.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => Rule.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => Rule.fromBcs( data, ), bcs: Rule.bcs, fromJSONField: (field: any) => Rule.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => Rule.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => Rule.fromSuiParsedData( content, ), fetch: async (client: SuiClient, id: string) => Rule.fetch( client, id, ), new: ( fields: RuleFields, ) => { return new Rule( [], fields ) }, kind: "StructClassReified", } }
 
  static get r() { return Rule.reified() }
 

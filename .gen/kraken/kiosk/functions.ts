@@ -1,69 +1,69 @@
 import {PUBLISHED_AT} from "..";
-import {GenericArg, ObjectArg, generic, obj, pure} from "../../_framework/util";
-import {TransactionArgument, TransactionBlock} from "@mysten/sui.js/transactions";
+import {String} from "../../_dependencies/source/0x1/string/structs";
+import {ID} from "../../_dependencies/source/0x2/object/structs";
+import {GenericArg, generic, obj, pure} from "../../_framework/util";
+import {Transaction, TransactionArgument, TransactionObjectInput} from "@mysten/sui/transactions";
 
-export function new_( txb: TransactionBlock, multisig: ObjectArg ) { return txb.moveCall({ target: `${PUBLISHED_AT}::kiosk::new`, arguments: [ obj(txb, multisig) ], }) }
+export function new_( tx: Transaction, multisig: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::kiosk::new`, arguments: [ obj(tx, multisig) ], }) }
 
-export interface ListArgs { executable: ObjectArg; kiosk: ObjectArg; lock: ObjectArg; witness: GenericArg; idx: bigint | TransactionArgument }
+export interface ListArgs { executable: TransactionObjectInput; kiosk: TransactionObjectInput; lock: TransactionObjectInput; witness: GenericArg; idx: bigint | TransactionArgument }
 
-export function list( txb: TransactionBlock, typeArgs: [string, string], args: ListArgs ) { return txb.moveCall({ target: `${PUBLISHED_AT}::kiosk::list`, typeArguments: typeArgs, arguments: [ obj(txb, args.executable), obj(txb, args.kiosk), obj(txb, args.lock), generic(txb, `${typeArgs[1]}`, args.witness), pure(txb, args.idx, `u64`) ], }) }
+export function list( tx: Transaction, typeArgs: [string, string], args: ListArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::kiosk::list`, typeArguments: typeArgs, arguments: [ obj(tx, args.executable), obj(tx, args.kiosk), obj(tx, args.lock), generic(tx, `${typeArgs[1]}`, args.witness), pure(tx, args.idx, `u64`) ], }) }
 
-export interface TakeArgs { executable: ObjectArg; multisigKiosk: ObjectArg; lock: ObjectArg; recipientKiosk: ObjectArg; recipientCap: ObjectArg; policy: ObjectArg; witness: GenericArg; idx: bigint | TransactionArgument }
+export interface TakeArgs { executable: TransactionObjectInput; multisigKiosk: TransactionObjectInput; lock: TransactionObjectInput; recipientKiosk: TransactionObjectInput; recipientCap: TransactionObjectInput; policy: TransactionObjectInput; witness: GenericArg; idx: bigint | TransactionArgument }
 
-export function take( txb: TransactionBlock, typeArgs: [string, string], args: TakeArgs ) { return txb.moveCall({ target: `${PUBLISHED_AT}::kiosk::take`, typeArguments: typeArgs, arguments: [ obj(txb, args.executable), obj(txb, args.multisigKiosk), obj(txb, args.lock), obj(txb, args.recipientKiosk), obj(txb, args.recipientCap), obj(txb, args.policy), generic(txb, `${typeArgs[1]}`, args.witness), pure(txb, args.idx, `u64`) ], }) }
+export function take( tx: Transaction, typeArgs: [string, string], args: TakeArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::kiosk::take`, typeArguments: typeArgs, arguments: [ obj(tx, args.executable), obj(tx, args.multisigKiosk), obj(tx, args.lock), obj(tx, args.recipientKiosk), obj(tx, args.recipientCap), obj(tx, args.policy), generic(tx, `${typeArgs[1]}`, args.witness), pure(tx, args.idx, `u64`) ], }) }
 
-export interface DelistArgs { multisig: ObjectArg; kiosk: ObjectArg; lock: ObjectArg; nft: string | TransactionArgument }
+export interface DelistArgs { multisig: TransactionObjectInput; kiosk: TransactionObjectInput; lock: TransactionObjectInput; nft: string | TransactionArgument }
 
-export function delist( txb: TransactionBlock, typeArg: string, args: DelistArgs ) { return txb.moveCall({ target: `${PUBLISHED_AT}::kiosk::delist`, typeArguments: [typeArg], arguments: [ obj(txb, args.multisig), obj(txb, args.kiosk), obj(txb, args.lock), pure(txb, args.nft, `0x2::object::ID`) ], }) }
+export function delist( tx: Transaction, typeArg: string, args: DelistArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::kiosk::delist`, typeArguments: [typeArg], arguments: [ obj(tx, args.multisig), obj(tx, args.kiosk), obj(tx, args.lock), pure(tx, args.nft, `${ID.$typeName}`) ], }) }
 
-export interface PlaceArgs { multisig: ObjectArg; multisigKiosk: ObjectArg; lock: ObjectArg; senderKiosk: ObjectArg; senderCap: ObjectArg; nftId: string | TransactionArgument; policy: ObjectArg }
+export interface PlaceArgs { multisig: TransactionObjectInput; multisigKiosk: TransactionObjectInput; lock: TransactionObjectInput; senderKiosk: TransactionObjectInput; senderCap: TransactionObjectInput; nftId: string | TransactionArgument; policy: TransactionObjectInput }
 
-export function place( txb: TransactionBlock, typeArg: string, args: PlaceArgs ) { return txb.moveCall({ target: `${PUBLISHED_AT}::kiosk::place`, typeArguments: [typeArg], arguments: [ obj(txb, args.multisig), obj(txb, args.multisigKiosk), obj(txb, args.lock), obj(txb, args.senderKiosk), obj(txb, args.senderCap), pure(txb, args.nftId, `0x2::object::ID`), obj(txb, args.policy) ], }) }
+export function place( tx: Transaction, typeArg: string, args: PlaceArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::kiosk::place`, typeArguments: [typeArg], arguments: [ obj(tx, args.multisig), obj(tx, args.multisigKiosk), obj(tx, args.lock), obj(tx, args.senderKiosk), obj(tx, args.senderCap), pure(tx, args.nftId, `${ID.$typeName}`), obj(tx, args.policy) ], }) }
 
-export interface BorrowCapArgs { multisig: ObjectArg; kioskOwnerLock: ObjectArg }
+export interface BorrowCapArgs { multisig: TransactionObjectInput; kioskOwnerLock: TransactionObjectInput }
 
-export function borrowCap( txb: TransactionBlock, args: BorrowCapArgs ) { return txb.moveCall({ target: `${PUBLISHED_AT}::kiosk::borrow_cap`, arguments: [ obj(txb, args.multisig), obj(txb, args.kioskOwnerLock) ], }) }
+export function borrowCap( tx: Transaction, args: BorrowCapArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::kiosk::borrow_cap`, arguments: [ obj(tx, args.multisig), obj(tx, args.kioskOwnerLock) ], }) }
 
-export function completeList( txb: TransactionBlock, executable: ObjectArg ) { return txb.moveCall({ target: `${PUBLISHED_AT}::kiosk::complete_list`, arguments: [ obj(txb, executable) ], }) }
+export function putBackCap( tx: Transaction, kioskOwnerLock: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::kiosk::put_back_cap`, arguments: [ obj(tx, kioskOwnerLock) ], }) }
 
-export function completeTake( txb: TransactionBlock, executable: ObjectArg ) { return txb.moveCall({ target: `${PUBLISHED_AT}::kiosk::complete_take`, arguments: [ obj(txb, executable) ], }) }
+export function completeList( tx: Transaction, executable: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::kiosk::complete_list`, arguments: [ obj(tx, executable) ], }) }
 
-export interface DestroyListArgs { executable: ObjectArg; witness: GenericArg }
+export function completeTake( tx: Transaction, executable: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::kiosk::complete_take`, arguments: [ obj(tx, executable) ], }) }
 
-export function destroyList( txb: TransactionBlock, typeArg: string, args: DestroyListArgs ) { return txb.moveCall({ target: `${PUBLISHED_AT}::kiosk::destroy_list`, typeArguments: [typeArg], arguments: [ obj(txb, args.executable), generic(txb, `${typeArg}`, args.witness) ], }) }
+export interface DestroyListArgs { executable: TransactionObjectInput; witness: GenericArg }
 
-export interface DestroyTakeArgs { executable: ObjectArg; witness: GenericArg }
+export function destroyList( tx: Transaction, typeArg: string, args: DestroyListArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::kiosk::destroy_list`, typeArguments: [typeArg], arguments: [ obj(tx, args.executable), generic(tx, `${typeArg}`, args.witness) ], }) }
 
-export function destroyTake( txb: TransactionBlock, typeArg: string, args: DestroyTakeArgs ) { return txb.moveCall({ target: `${PUBLISHED_AT}::kiosk::destroy_take`, typeArguments: [typeArg], arguments: [ obj(txb, args.executable), generic(txb, `${typeArg}`, args.witness) ], }) }
+export interface DestroyTakeArgs { executable: TransactionObjectInput; witness: GenericArg }
 
-export interface ExecuteListArgs { executable: ObjectArg; kiosk: ObjectArg; lock: ObjectArg }
+export function destroyTake( tx: Transaction, typeArg: string, args: DestroyTakeArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::kiosk::destroy_take`, typeArguments: [typeArg], arguments: [ obj(tx, args.executable), generic(tx, `${typeArg}`, args.witness) ], }) }
 
-export function executeList( txb: TransactionBlock, typeArg: string, args: ExecuteListArgs ) { return txb.moveCall({ target: `${PUBLISHED_AT}::kiosk::execute_list`, typeArguments: [typeArg], arguments: [ obj(txb, args.executable), obj(txb, args.kiosk), obj(txb, args.lock) ], }) }
+export interface ExecuteListArgs { executable: TransactionObjectInput; kiosk: TransactionObjectInput; lock: TransactionObjectInput }
 
-export interface ExecuteTakeArgs { executable: ObjectArg; multisigKiosk: ObjectArg; lock: ObjectArg; recipientKiosk: ObjectArg; recipientCap: ObjectArg; policy: ObjectArg }
+export function executeList( tx: Transaction, typeArg: string, args: ExecuteListArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::kiosk::execute_list`, typeArguments: [typeArg], arguments: [ obj(tx, args.executable), obj(tx, args.kiosk), obj(tx, args.lock) ], }) }
 
-export function executeTake( txb: TransactionBlock, typeArg: string, args: ExecuteTakeArgs ) { return txb.moveCall({ target: `${PUBLISHED_AT}::kiosk::execute_take`, typeArguments: [typeArg], arguments: [ obj(txb, args.executable), obj(txb, args.multisigKiosk), obj(txb, args.lock), obj(txb, args.recipientKiosk), obj(txb, args.recipientCap), obj(txb, args.policy) ], }) }
+export interface ExecuteTakeArgs { executable: TransactionObjectInput; multisigKiosk: TransactionObjectInput; lock: TransactionObjectInput; recipientKiosk: TransactionObjectInput; recipientCap: TransactionObjectInput; policy: TransactionObjectInput }
 
-export interface NewListArgs { proposal: ObjectArg; nftIds: Array<string | TransactionArgument> | TransactionArgument; prices: Array<bigint | TransactionArgument> | TransactionArgument }
+export function executeTake( tx: Transaction, typeArg: string, args: ExecuteTakeArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::kiosk::execute_take`, typeArguments: [typeArg], arguments: [ obj(tx, args.executable), obj(tx, args.multisigKiosk), obj(tx, args.lock), obj(tx, args.recipientKiosk), obj(tx, args.recipientCap), obj(tx, args.policy) ], }) }
 
-export function newList( txb: TransactionBlock, args: NewListArgs ) { return txb.moveCall({ target: `${PUBLISHED_AT}::kiosk::new_list`, arguments: [ obj(txb, args.proposal), pure(txb, args.nftIds, `vector<0x2::object::ID>`), pure(txb, args.prices, `vector<u64>`) ], }) }
+export interface NewListArgs { proposal: TransactionObjectInput; nftIds: Array<string | TransactionArgument> | TransactionArgument; prices: Array<bigint | TransactionArgument> | TransactionArgument }
 
-export interface NewTakeArgs { proposal: ObjectArg; nftIds: Array<string | TransactionArgument> | TransactionArgument; recipient: string | TransactionArgument }
+export function newList( tx: Transaction, args: NewListArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::kiosk::new_list`, arguments: [ obj(tx, args.proposal), pure(tx, args.nftIds, `vector<${ID.$typeName}>`), pure(tx, args.prices, `vector<u64>`) ], }) }
 
-export function newTake( txb: TransactionBlock, args: NewTakeArgs ) { return txb.moveCall({ target: `${PUBLISHED_AT}::kiosk::new_take`, arguments: [ obj(txb, args.proposal), pure(txb, args.nftIds, `vector<0x2::object::ID>`), pure(txb, args.recipient, `address`) ], }) }
+export interface NewTakeArgs { proposal: TransactionObjectInput; nftIds: Array<string | TransactionArgument> | TransactionArgument; recipient: string | TransactionArgument }
 
-export interface ProposeListArgs { multisig: ObjectArg; key: string | TransactionArgument; executionTime: bigint | TransactionArgument; expirationEpoch: bigint | TransactionArgument; description: string | TransactionArgument; nftIds: Array<string | TransactionArgument> | TransactionArgument; prices: Array<bigint | TransactionArgument> | TransactionArgument }
+export function newTake( tx: Transaction, args: NewTakeArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::kiosk::new_take`, arguments: [ obj(tx, args.proposal), pure(tx, args.nftIds, `vector<${ID.$typeName}>`), pure(tx, args.recipient, `address`) ], }) }
 
-export function proposeList( txb: TransactionBlock, args: ProposeListArgs ) { return txb.moveCall({ target: `${PUBLISHED_AT}::kiosk::propose_list`, arguments: [ obj(txb, args.multisig), pure(txb, args.key, `0x1::string::String`), pure(txb, args.executionTime, `u64`), pure(txb, args.expirationEpoch, `u64`), pure(txb, args.description, `0x1::string::String`), pure(txb, args.nftIds, `vector<0x2::object::ID>`), pure(txb, args.prices, `vector<u64>`) ], }) }
+export interface ProposeListArgs { multisig: TransactionObjectInput; key: string | TransactionArgument; executionTime: bigint | TransactionArgument; expirationEpoch: bigint | TransactionArgument; description: string | TransactionArgument; nftIds: Array<string | TransactionArgument> | TransactionArgument; prices: Array<bigint | TransactionArgument> | TransactionArgument }
 
-export interface ProposeTakeArgs { multisig: ObjectArg; key: string | TransactionArgument; executionTime: bigint | TransactionArgument; expirationEpoch: bigint | TransactionArgument; description: string | TransactionArgument; nftIds: Array<string | TransactionArgument> | TransactionArgument; recipient: string | TransactionArgument }
+export function proposeList( tx: Transaction, args: ProposeListArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::kiosk::propose_list`, arguments: [ obj(tx, args.multisig), pure(tx, args.key, `${String.$typeName}`), pure(tx, args.executionTime, `u64`), pure(tx, args.expirationEpoch, `u64`), pure(tx, args.description, `${String.$typeName}`), pure(tx, args.nftIds, `vector<${ID.$typeName}>`), pure(tx, args.prices, `vector<u64>`) ], }) }
 
-export function proposeTake( txb: TransactionBlock, args: ProposeTakeArgs ) { return txb.moveCall({ target: `${PUBLISHED_AT}::kiosk::propose_take`, arguments: [ obj(txb, args.multisig), pure(txb, args.key, `0x1::string::String`), pure(txb, args.executionTime, `u64`), pure(txb, args.expirationEpoch, `u64`), pure(txb, args.description, `0x1::string::String`), pure(txb, args.nftIds, `vector<0x2::object::ID>`), pure(txb, args.recipient, `address`) ], }) }
+export interface ProposeTakeArgs { multisig: TransactionObjectInput; key: string | TransactionArgument; executionTime: bigint | TransactionArgument; expirationEpoch: bigint | TransactionArgument; description: string | TransactionArgument; nftIds: Array<string | TransactionArgument> | TransactionArgument; recipient: string | TransactionArgument }
 
-export interface PutBackCapArgs { multisig: ObjectArg; kioskOwnerLock: ObjectArg }
+export function proposeTake( tx: Transaction, args: ProposeTakeArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::kiosk::propose_take`, arguments: [ obj(tx, args.multisig), pure(tx, args.key, `${String.$typeName}`), pure(tx, args.executionTime, `u64`), pure(tx, args.expirationEpoch, `u64`), pure(tx, args.description, `${String.$typeName}`), pure(tx, args.nftIds, `vector<${ID.$typeName}>`), pure(tx, args.recipient, `address`) ], }) }
 
-export function putBackCap( txb: TransactionBlock, args: PutBackCapArgs ) { return txb.moveCall({ target: `${PUBLISHED_AT}::kiosk::put_back_cap`, arguments: [ obj(txb, args.multisig), obj(txb, args.kioskOwnerLock) ], }) }
+export interface WithdrawProfitsArgs { multisig: TransactionObjectInput; kiosk: TransactionObjectInput; lock: TransactionObjectInput }
 
-export interface WithdrawProfitsArgs { multisig: ObjectArg; kiosk: ObjectArg; lock: ObjectArg }
-
-export function withdrawProfits( txb: TransactionBlock, args: WithdrawProfitsArgs ) { return txb.moveCall({ target: `${PUBLISHED_AT}::kiosk::withdraw_profits`, arguments: [ obj(txb, args.multisig), obj(txb, args.kiosk), obj(txb, args.lock) ], }) }
+export function withdrawProfits( tx: Transaction, args: WithdrawProfitsArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::kiosk::withdraw_profits`, arguments: [ obj(tx, args.multisig), obj(tx, args.kiosk), obj(tx, args.lock) ], }) }

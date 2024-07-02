@@ -2,32 +2,33 @@ import {Balance} from "../../_dependencies/source/0x2/balance/structs";
 import {UID} from "../../_dependencies/source/0x2/object/structs";
 import {PhantomReified, PhantomToTypeStr, PhantomTypeArgument, Reified, StructClass, ToField, ToPhantomTypeArgument, ToTypeStr, assertFieldsWithTypesArgsMatch, assertReifiedTypeArgsMatch, decodeFromFields, decodeFromFieldsWithTypes, decodeFromJSONField, extractType, phantom} from "../../_framework/reified";
 import {FieldsWithTypes, composeSuiType, compressSuiType} from "../../_framework/util";
+import {PKG_V1} from "../index";
 import {bcs, fromB64, fromHEX, toHEX} from "@mysten/bcs";
-import {SuiClient, SuiParsedData} from "@mysten/sui.js/client";
+import {SuiClient, SuiParsedData} from "@mysten/sui/client";
 
 /* ============================== Witness =============================== */
 
-export function isWitness(type: string): boolean { type = compressSuiType(type); return type === "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::payments::Witness"; }
+export function isWitness(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::payments::Witness`; }
 
 export interface WitnessFields { dummyField: ToField<"bool"> }
 
 export type WitnessReified = Reified< Witness, WitnessFields >;
 
-export class Witness implements StructClass { static readonly $typeName = "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::payments::Witness"; static readonly $numTypeParams = 0;
+export class Witness implements StructClass { static readonly $typeName = `${PKG_V1}::payments::Witness`; static readonly $numTypeParams = 0;
 
  readonly $typeName = Witness.$typeName;
 
- readonly $fullTypeName: "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::payments::Witness";
+ readonly $fullTypeName: `${typeof PKG_V1}::payments::Witness`;
 
  readonly $typeArgs: [];
 
  readonly dummyField: ToField<"bool">
 
- private constructor(typeArgs: [], fields: WitnessFields, ) { this.$fullTypeName = composeSuiType( Witness.$typeName, ...typeArgs ) as "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::payments::Witness"; this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [], fields: WitnessFields, ) { this.$fullTypeName = composeSuiType( Witness.$typeName, ...typeArgs ) as `${typeof PKG_V1}::payments::Witness`; this.$typeArgs = typeArgs;
 
  this.dummyField = fields.dummyField; }
 
- static reified( ): WitnessReified { return { typeName: Witness.$typeName, fullTypeName: composeSuiType( Witness.$typeName, ...[] ) as "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::payments::Witness", typeArgs: [ ] as [], reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => Witness.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => Witness.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => Witness.fromBcs( data, ), bcs: Witness.bcs, fromJSONField: (field: any) => Witness.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => Witness.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => Witness.fromSuiParsedData( content, ), fetch: async (client: SuiClient, id: string) => Witness.fetch( client, id, ), new: ( fields: WitnessFields, ) => { return new Witness( [], fields ) }, kind: "StructClassReified", } }
+ static reified( ): WitnessReified { return { typeName: Witness.$typeName, fullTypeName: composeSuiType( Witness.$typeName, ...[] ) as `${typeof PKG_V1}::payments::Witness`, typeArgs: [ ] as [], reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => Witness.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => Witness.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => Witness.fromBcs( data, ), bcs: Witness.bcs, fromJSONField: (field: any) => Witness.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => Witness.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => Witness.fromSuiParsedData( content, ), fetch: async (client: SuiClient, id: string) => Witness.fetch( client, id, ), new: ( fields: WitnessFields, ) => { return new Witness( [], fields ) }, kind: "StructClassReified", } }
 
  static get r() { return Witness.reified() }
 
@@ -72,27 +73,27 @@ export class Witness implements StructClass { static readonly $typeName = "0xfc7
 
 /* ============================== Pay =============================== */
 
-export function isPay(type: string): boolean { type = compressSuiType(type); return type === "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::payments::Pay"; }
+export function isPay(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::payments::Pay`; }
 
 export interface PayFields { amount: ToField<"u64">; interval: ToField<"u64">; recipient: ToField<"address"> }
 
 export type PayReified = Reified< Pay, PayFields >;
 
-export class Pay implements StructClass { static readonly $typeName = "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::payments::Pay"; static readonly $numTypeParams = 0;
+export class Pay implements StructClass { static readonly $typeName = `${PKG_V1}::payments::Pay`; static readonly $numTypeParams = 0;
 
  readonly $typeName = Pay.$typeName;
 
- readonly $fullTypeName: "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::payments::Pay";
+ readonly $fullTypeName: `${typeof PKG_V1}::payments::Pay`;
 
  readonly $typeArgs: [];
 
  readonly amount: ToField<"u64">; readonly interval: ToField<"u64">; readonly recipient: ToField<"address">
 
- private constructor(typeArgs: [], fields: PayFields, ) { this.$fullTypeName = composeSuiType( Pay.$typeName, ...typeArgs ) as "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::payments::Pay"; this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [], fields: PayFields, ) { this.$fullTypeName = composeSuiType( Pay.$typeName, ...typeArgs ) as `${typeof PKG_V1}::payments::Pay`; this.$typeArgs = typeArgs;
 
  this.amount = fields.amount;; this.interval = fields.interval;; this.recipient = fields.recipient; }
 
- static reified( ): PayReified { return { typeName: Pay.$typeName, fullTypeName: composeSuiType( Pay.$typeName, ...[] ) as "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::payments::Pay", typeArgs: [ ] as [], reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => Pay.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => Pay.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => Pay.fromBcs( data, ), bcs: Pay.bcs, fromJSONField: (field: any) => Pay.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => Pay.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => Pay.fromSuiParsedData( content, ), fetch: async (client: SuiClient, id: string) => Pay.fetch( client, id, ), new: ( fields: PayFields, ) => { return new Pay( [], fields ) }, kind: "StructClassReified", } }
+ static reified( ): PayReified { return { typeName: Pay.$typeName, fullTypeName: composeSuiType( Pay.$typeName, ...[] ) as `${typeof PKG_V1}::payments::Pay`, typeArgs: [ ] as [], reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => Pay.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => Pay.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => Pay.fromBcs( data, ), bcs: Pay.bcs, fromJSONField: (field: any) => Pay.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => Pay.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => Pay.fromSuiParsedData( content, ), fetch: async (client: SuiClient, id: string) => Pay.fetch( client, id, ), new: ( fields: PayFields, ) => { return new Pay( [], fields ) }, kind: "StructClassReified", } }
 
  static get r() { return Pay.reified() }
 
@@ -137,27 +138,27 @@ export class Pay implements StructClass { static readonly $typeName = "0xfc7fe30
 
 /* ============================== Stream =============================== */
 
-export function isStream(type: string): boolean { type = compressSuiType(type); return type.startsWith("0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::payments::Stream<"); }
+export function isStream(type: string): boolean { type = compressSuiType(type); return type.startsWith(`${PKG_V1}::payments::Stream` + '<'); }
 
 export interface StreamFields<C extends PhantomTypeArgument> { id: ToField<UID>; balance: ToField<Balance<C>>; amount: ToField<"u64">; interval: ToField<"u64">; lastEpoch: ToField<"u64">; recipient: ToField<"address"> }
 
 export type StreamReified<C extends PhantomTypeArgument> = Reified< Stream<C>, StreamFields<C> >;
 
-export class Stream<C extends PhantomTypeArgument> implements StructClass { static readonly $typeName = "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::payments::Stream"; static readonly $numTypeParams = 1;
+export class Stream<C extends PhantomTypeArgument> implements StructClass { static readonly $typeName = `${PKG_V1}::payments::Stream`; static readonly $numTypeParams = 1;
 
  readonly $typeName = Stream.$typeName;
 
- readonly $fullTypeName: `0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::payments::Stream<${PhantomToTypeStr<C>}>`;
+ readonly $fullTypeName: `${typeof PKG_V1}::payments::Stream<${PhantomToTypeStr<C>}>`;
 
  readonly $typeArgs: [PhantomToTypeStr<C>];
 
  readonly id: ToField<UID>; readonly balance: ToField<Balance<C>>; readonly amount: ToField<"u64">; readonly interval: ToField<"u64">; readonly lastEpoch: ToField<"u64">; readonly recipient: ToField<"address">
 
- private constructor(typeArgs: [PhantomToTypeStr<C>], fields: StreamFields<C>, ) { this.$fullTypeName = composeSuiType( Stream.$typeName, ...typeArgs ) as `0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::payments::Stream<${PhantomToTypeStr<C>}>`; this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [PhantomToTypeStr<C>], fields: StreamFields<C>, ) { this.$fullTypeName = composeSuiType( Stream.$typeName, ...typeArgs ) as `${typeof PKG_V1}::payments::Stream<${PhantomToTypeStr<C>}>`; this.$typeArgs = typeArgs;
 
  this.id = fields.id;; this.balance = fields.balance;; this.amount = fields.amount;; this.interval = fields.interval;; this.lastEpoch = fields.lastEpoch;; this.recipient = fields.recipient; }
 
- static reified<C extends PhantomReified<PhantomTypeArgument>>( C: C ): StreamReified<ToPhantomTypeArgument<C>> { return { typeName: Stream.$typeName, fullTypeName: composeSuiType( Stream.$typeName, ...[extractType(C)] ) as `0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::payments::Stream<${PhantomToTypeStr<ToPhantomTypeArgument<C>>}>`, typeArgs: [ extractType(C) ] as [PhantomToTypeStr<ToPhantomTypeArgument<C>>], reifiedTypeArgs: [C], fromFields: (fields: Record<string, any>) => Stream.fromFields( C, fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => Stream.fromFieldsWithTypes( C, item, ), fromBcs: (data: Uint8Array) => Stream.fromBcs( C, data, ), bcs: Stream.bcs, fromJSONField: (field: any) => Stream.fromJSONField( C, field, ), fromJSON: (json: Record<string, any>) => Stream.fromJSON( C, json, ), fromSuiParsedData: (content: SuiParsedData) => Stream.fromSuiParsedData( C, content, ), fetch: async (client: SuiClient, id: string) => Stream.fetch( client, C, id, ), new: ( fields: StreamFields<ToPhantomTypeArgument<C>>, ) => { return new Stream( [extractType(C)], fields ) }, kind: "StructClassReified", } }
+ static reified<C extends PhantomReified<PhantomTypeArgument>>( C: C ): StreamReified<ToPhantomTypeArgument<C>> { return { typeName: Stream.$typeName, fullTypeName: composeSuiType( Stream.$typeName, ...[extractType(C)] ) as `${typeof PKG_V1}::payments::Stream<${PhantomToTypeStr<ToPhantomTypeArgument<C>>}>`, typeArgs: [ extractType(C) ] as [PhantomToTypeStr<ToPhantomTypeArgument<C>>], reifiedTypeArgs: [C], fromFields: (fields: Record<string, any>) => Stream.fromFields( C, fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => Stream.fromFieldsWithTypes( C, item, ), fromBcs: (data: Uint8Array) => Stream.fromBcs( C, data, ), bcs: Stream.bcs, fromJSONField: (field: any) => Stream.fromJSONField( C, field, ), fromJSON: (json: Record<string, any>) => Stream.fromJSON( C, json, ), fromSuiParsedData: (content: SuiParsedData) => Stream.fromSuiParsedData( C, content, ), fetch: async (client: SuiClient, id: string) => Stream.fetch( client, C, id, ), new: ( fields: StreamFields<ToPhantomTypeArgument<C>>, ) => { return new Stream( [extractType(C)], fields ) }, kind: "StructClassReified", } }
 
  static get r() { return Stream.reified }
 

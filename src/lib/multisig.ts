@@ -1,4 +1,4 @@
-import { Transaction, TransactionResult } from "@mysten/sui/transactions";
+import { Transaction, TransactionArgument, TransactionResult } from "@mysten/sui/transactions";
 import { SuiClient, getFullnodeUrl } from "@mysten/sui/client";
 import { normalizeSuiAddress } from "@mysten/sui/utils";
 import { Account as AccountRaw } from "../../.gen/kraken/account/structs.js";
@@ -6,6 +6,7 @@ import { Multisig as MultisigRaw } from "../../.gen/kraken/multisig/structs.js";
 import { CLOCK } from "../types/constants.js";
 import { Proposal, Member } from "../types/types.js";
 import { Account } from "./account.js";
+import { new_, share, approveProposal, removeApproval, executeProposal } from "../../.gen/kraken/multisig/functions.js";
 
 export class Multisig {
 	public client: SuiClient;
@@ -161,53 +162,31 @@ export class Multisig {
 
 	// members and weights are optional, if none are provided then only the creator is added with weight 1
 	newMultisig(tx: Transaction, accountId: string, name: string): TransactionResult {
-		return tx.moveCall({
-			target: `${this.packageId}::multisig::new`,
-			arguments: [tx.pure.string(name), tx.pure.id(accountId)],
-		});
+		return new_(tx, { name, accountId });
 	}
 
-    shareMultisig(tx: Transaction, multisig: TransactionResult): TransactionResult {
-        return tx.moveCall({
-            target: `${this.packageId}::multisig::share`,
-            arguments: [multisig],
-        });
+    shareMultisig(tx: Transaction, multisig: TransactionArgument): TransactionResult {
+        return share(tx, multisig);
     }
 
 	approveProposal(
 		tx: Transaction, 
 		key: string, 
-		multisig: string | TransactionResult = this.id!
+		multisig: string | TransactionArgument = this.id!
 	): TransactionResult {
-		return tx.moveCall({
-			target: `${this.packageId}::multisig::approve_proposal`,
-			arguments: [
-				typeof(multisig) === "string" ? tx.pure.id(multisig) : multisig, 
-				tx.pure.string(key)
-			],
-		});
+		return approveProposal(tx, { multisig, key });
 	}
 
-	removeApproval(tx: Transaction, key: string): TransactionResult {
-		return tx.moveCall({
-			target: `${this.packageId}::multisig::remove_approval`,
-			arguments: [tx.object(this.id!), tx.pure.string(key)],
-		});
+	removeApproval(tx: Transaction, multisig: string, key: string): TransactionResult {
+		return removeApproval(tx, { multisig, key });
 	}
 	
 	executeProposal(
 		tx: Transaction, 
 		key: string, 
-		multisig: string | TransactionResult = this.id!
+		multisig: string | TransactionArgument = this.id!
 	): TransactionResult {
-		return tx.moveCall({
-			target: `${this.packageId}::multisig::execute_proposal`,
-			arguments: [
-				typeof(multisig) === "string" ? tx.pure.id(multisig) : multisig, 
-				tx.pure.string(key), 
-				tx.object(CLOCK)
-			],
-		});
+		return executeProposal(tx, { multisig, key, clock: CLOCK });
 	}
 }
 

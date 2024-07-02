@@ -45,7 +45,7 @@ export class KrakenClient {
 	async fetch(id: string = this.multisig?.id!) {
 		await this.account?.fetchAccount();
 		await this.multisig?.fetchMultisig(id);
-		this.proposalService?.setMultisig(id);
+		this.proposalService?.withMultisig(id);
 	}
 
 	// creates a multisig with default weights of 1 (1 member = 1 voice)
@@ -67,8 +67,7 @@ export class KrakenClient {
 		// update multisig parameters if any of them are provided
 		if (threshold || members) {
 			const weights = members ? new Array(members.length).fill(1) : [];			
-			this.proposalService!.setMultisig(multisig);
-			this.proposalService!.proposeModify(tx, "init_members", 0, 0, "", name, threshold, undefined, members, weights);
+			this.proposalService!.withMultisig(multisig).proposeModify(tx, "init_members", 0, 0, "", name, threshold, undefined, members, weights);
 			this.multisig.approveProposal(tx, "init_members", multisig);
 			const executable = this.multisig.executeProposal(tx, "init_members", multisig);
 			this.proposalService!.executeModify(tx, executable);

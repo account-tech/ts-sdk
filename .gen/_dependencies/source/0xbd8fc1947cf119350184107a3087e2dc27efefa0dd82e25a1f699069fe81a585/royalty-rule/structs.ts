@@ -1,31 +1,32 @@
 import {PhantomReified, Reified, StructClass, ToField, ToTypeStr, decodeFromFields, decodeFromFieldsWithTypes, decodeFromJSONField, phantom} from "../../../../_framework/reified";
 import {FieldsWithTypes, composeSuiType, compressSuiType} from "../../../../_framework/util";
+import {PKG_V1} from "../index";
 import {bcs, fromB64} from "@mysten/bcs";
-import {SuiClient, SuiParsedData} from "@mysten/sui.js/client";
+import {SuiClient, SuiParsedData} from "@mysten/sui/client";
 
 /* ============================== Rule =============================== */
 
-export function isRule(type: string): boolean { type = compressSuiType(type); return type === "0x5114c85c54a6934cd9aa6ba75b523b97641f2c1dcb883e5bfa5a2c7a75f3cf69::kiosk_lock_rule::Rule"; }
+export function isRule(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::royalty_rule::Rule`; }
 
 export interface RuleFields { dummyField: ToField<"bool"> }
 
 export type RuleReified = Reified< Rule, RuleFields >;
 
-export class Rule implements StructClass { static readonly $typeName = "0x5114c85c54a6934cd9aa6ba75b523b97641f2c1dcb883e5bfa5a2c7a75f3cf69::kiosk_lock_rule::Rule"; static readonly $numTypeParams = 0;
+export class Rule implements StructClass { static readonly $typeName = `${PKG_V1}::royalty_rule::Rule`; static readonly $numTypeParams = 0;
 
  readonly $typeName = Rule.$typeName;
 
- readonly $fullTypeName: "0x5114c85c54a6934cd9aa6ba75b523b97641f2c1dcb883e5bfa5a2c7a75f3cf69::kiosk_lock_rule::Rule";
+ readonly $fullTypeName: `${typeof PKG_V1}::royalty_rule::Rule`;
 
  readonly $typeArgs: [];
 
  readonly dummyField: ToField<"bool">
 
- private constructor(typeArgs: [], fields: RuleFields, ) { this.$fullTypeName = composeSuiType( Rule.$typeName, ...typeArgs ) as "0x5114c85c54a6934cd9aa6ba75b523b97641f2c1dcb883e5bfa5a2c7a75f3cf69::kiosk_lock_rule::Rule"; this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [], fields: RuleFields, ) { this.$fullTypeName = composeSuiType( Rule.$typeName, ...typeArgs ) as `${typeof PKG_V1}::royalty_rule::Rule`; this.$typeArgs = typeArgs;
 
  this.dummyField = fields.dummyField; }
 
- static reified( ): RuleReified { return { typeName: Rule.$typeName, fullTypeName: composeSuiType( Rule.$typeName, ...[] ) as "0x5114c85c54a6934cd9aa6ba75b523b97641f2c1dcb883e5bfa5a2c7a75f3cf69::kiosk_lock_rule::Rule", typeArgs: [ ] as [], reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => Rule.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => Rule.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => Rule.fromBcs( data, ), bcs: Rule.bcs, fromJSONField: (field: any) => Rule.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => Rule.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => Rule.fromSuiParsedData( content, ), fetch: async (client: SuiClient, id: string) => Rule.fetch( client, id, ), new: ( fields: RuleFields, ) => { return new Rule( [], fields ) }, kind: "StructClassReified", } }
+ static reified( ): RuleReified { return { typeName: Rule.$typeName, fullTypeName: composeSuiType( Rule.$typeName, ...[] ) as `${typeof PKG_V1}::royalty_rule::Rule`, typeArgs: [ ] as [], reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => Rule.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => Rule.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => Rule.fromBcs( data, ), bcs: Rule.bcs, fromJSONField: (field: any) => Rule.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => Rule.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => Rule.fromSuiParsedData( content, ), fetch: async (client: SuiClient, id: string) => Rule.fetch( client, id, ), new: ( fields: RuleFields, ) => { return new Rule( [], fields ) }, kind: "StructClassReified", } }
 
  static get r() { return Rule.reified() }
 
@@ -70,27 +71,27 @@ export class Rule implements StructClass { static readonly $typeName = "0x5114c8
 
 /* ============================== Config =============================== */
 
-export function isConfig(type: string): boolean { type = compressSuiType(type); return type === "0x5114c85c54a6934cd9aa6ba75b523b97641f2c1dcb883e5bfa5a2c7a75f3cf69::kiosk_lock_rule::Config"; }
+export function isConfig(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::royalty_rule::Config`; }
 
-export interface ConfigFields { dummyField: ToField<"bool"> }
+export interface ConfigFields { amountBp: ToField<"u16">; minAmount: ToField<"u64"> }
 
 export type ConfigReified = Reified< Config, ConfigFields >;
 
-export class Config implements StructClass { static readonly $typeName = "0x5114c85c54a6934cd9aa6ba75b523b97641f2c1dcb883e5bfa5a2c7a75f3cf69::kiosk_lock_rule::Config"; static readonly $numTypeParams = 0;
+export class Config implements StructClass { static readonly $typeName = `${PKG_V1}::royalty_rule::Config`; static readonly $numTypeParams = 0;
 
  readonly $typeName = Config.$typeName;
 
- readonly $fullTypeName: "0x5114c85c54a6934cd9aa6ba75b523b97641f2c1dcb883e5bfa5a2c7a75f3cf69::kiosk_lock_rule::Config";
+ readonly $fullTypeName: `${typeof PKG_V1}::royalty_rule::Config`;
 
  readonly $typeArgs: [];
 
- readonly dummyField: ToField<"bool">
+ readonly amountBp: ToField<"u16">; readonly minAmount: ToField<"u64">
 
- private constructor(typeArgs: [], fields: ConfigFields, ) { this.$fullTypeName = composeSuiType( Config.$typeName, ...typeArgs ) as "0x5114c85c54a6934cd9aa6ba75b523b97641f2c1dcb883e5bfa5a2c7a75f3cf69::kiosk_lock_rule::Config"; this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [], fields: ConfigFields, ) { this.$fullTypeName = composeSuiType( Config.$typeName, ...typeArgs ) as `${typeof PKG_V1}::royalty_rule::Config`; this.$typeArgs = typeArgs;
 
- this.dummyField = fields.dummyField; }
+ this.amountBp = fields.amountBp;; this.minAmount = fields.minAmount; }
 
- static reified( ): ConfigReified { return { typeName: Config.$typeName, fullTypeName: composeSuiType( Config.$typeName, ...[] ) as "0x5114c85c54a6934cd9aa6ba75b523b97641f2c1dcb883e5bfa5a2c7a75f3cf69::kiosk_lock_rule::Config", typeArgs: [ ] as [], reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => Config.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => Config.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => Config.fromBcs( data, ), bcs: Config.bcs, fromJSONField: (field: any) => Config.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => Config.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => Config.fromSuiParsedData( content, ), fetch: async (client: SuiClient, id: string) => Config.fetch( client, id, ), new: ( fields: ConfigFields, ) => { return new Config( [], fields ) }, kind: "StructClassReified", } }
+ static reified( ): ConfigReified { return { typeName: Config.$typeName, fullTypeName: composeSuiType( Config.$typeName, ...[] ) as `${typeof PKG_V1}::royalty_rule::Config`, typeArgs: [ ] as [], reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => Config.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => Config.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => Config.fromBcs( data, ), bcs: Config.bcs, fromJSONField: (field: any) => Config.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => Config.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => Config.fromSuiParsedData( content, ), fetch: async (client: SuiClient, id: string) => Config.fetch( client, id, ), new: ( fields: ConfigFields, ) => { return new Config( [], fields ) }, kind: "StructClassReified", } }
 
  static get r() { return Config.reified() }
 
@@ -98,29 +99,29 @@ export class Config implements StructClass { static readonly $typeName = "0x5114
 
  static get bcs() { return bcs.struct("Config", {
 
- dummy_field: bcs.bool()
+ amount_bp: bcs.u16(), min_amount: bcs.u64()
 
 }) };
 
- static fromFields( fields: Record<string, any> ): Config { return Config.reified( ).new( { dummyField: decodeFromFields("bool", fields.dummy_field) } ) }
+ static fromFields( fields: Record<string, any> ): Config { return Config.reified( ).new( { amountBp: decodeFromFields("u16", fields.amount_bp), minAmount: decodeFromFields("u64", fields.min_amount) } ) }
 
  static fromFieldsWithTypes( item: FieldsWithTypes ): Config { if (!isConfig(item.type)) { throw new Error("not a Config type");
 
  }
 
- return Config.reified( ).new( { dummyField: decodeFromFieldsWithTypes("bool", item.fields.dummy_field) } ) }
+ return Config.reified( ).new( { amountBp: decodeFromFieldsWithTypes("u16", item.fields.amount_bp), minAmount: decodeFromFieldsWithTypes("u64", item.fields.min_amount) } ) }
 
  static fromBcs( data: Uint8Array ): Config { return Config.fromFields( Config.bcs.parse(data) ) }
 
  toJSONField() { return {
 
- dummyField: this.dummyField,
+ amountBp: this.amountBp,minAmount: this.minAmount.toString(),
 
 } }
 
  toJSON() { return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() } }
 
- static fromJSONField( field: any ): Config { return Config.reified( ).new( { dummyField: decodeFromJSONField("bool", field.dummyField) } ) }
+ static fromJSONField( field: any ): Config { return Config.reified( ).new( { amountBp: decodeFromJSONField("u16", field.amountBp), minAmount: decodeFromJSONField("u64", field.minAmount) } ) }
 
  static fromJSON( json: Record<string, any> ): Config { if (json.$typeName !== Config.$typeName) { throw new Error("not a WithTwoGenerics json object") };
 

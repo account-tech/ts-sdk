@@ -3,32 +3,33 @@ import {KioskOwnerCap} from "../../_dependencies/source/0x2/kiosk/structs";
 import {ID, UID} from "../../_dependencies/source/0x2/object/structs";
 import {PhantomReified, Reified, StructClass, ToField, ToTypeStr, Vector, decodeFromFields, decodeFromFieldsWithTypes, decodeFromJSONField, fieldToJSON, phantom} from "../../_framework/reified";
 import {FieldsWithTypes, composeSuiType, compressSuiType} from "../../_framework/util";
+import {PKG_V1} from "../index";
 import {bcs, fromB64, fromHEX, toHEX} from "@mysten/bcs";
-import {SuiClient, SuiParsedData} from "@mysten/sui.js/client";
+import {SuiClient, SuiParsedData} from "@mysten/sui/client";
 
 /* ============================== Witness =============================== */
 
-export function isWitness(type: string): boolean { type = compressSuiType(type); return type === "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::kiosk::Witness"; }
+export function isWitness(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::kiosk::Witness`; }
 
 export interface WitnessFields { dummyField: ToField<"bool"> }
 
 export type WitnessReified = Reified< Witness, WitnessFields >;
 
-export class Witness implements StructClass { static readonly $typeName = "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::kiosk::Witness"; static readonly $numTypeParams = 0;
+export class Witness implements StructClass { static readonly $typeName = `${PKG_V1}::kiosk::Witness`; static readonly $numTypeParams = 0;
 
  readonly $typeName = Witness.$typeName;
 
- readonly $fullTypeName: "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::kiosk::Witness";
+ readonly $fullTypeName: `${typeof PKG_V1}::kiosk::Witness`;
 
  readonly $typeArgs: [];
 
  readonly dummyField: ToField<"bool">
 
- private constructor(typeArgs: [], fields: WitnessFields, ) { this.$fullTypeName = composeSuiType( Witness.$typeName, ...typeArgs ) as "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::kiosk::Witness"; this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [], fields: WitnessFields, ) { this.$fullTypeName = composeSuiType( Witness.$typeName, ...typeArgs ) as `${typeof PKG_V1}::kiosk::Witness`; this.$typeArgs = typeArgs;
 
  this.dummyField = fields.dummyField; }
 
- static reified( ): WitnessReified { return { typeName: Witness.$typeName, fullTypeName: composeSuiType( Witness.$typeName, ...[] ) as "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::kiosk::Witness", typeArgs: [ ] as [], reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => Witness.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => Witness.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => Witness.fromBcs( data, ), bcs: Witness.bcs, fromJSONField: (field: any) => Witness.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => Witness.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => Witness.fromSuiParsedData( content, ), fetch: async (client: SuiClient, id: string) => Witness.fetch( client, id, ), new: ( fields: WitnessFields, ) => { return new Witness( [], fields ) }, kind: "StructClassReified", } }
+ static reified( ): WitnessReified { return { typeName: Witness.$typeName, fullTypeName: composeSuiType( Witness.$typeName, ...[] ) as `${typeof PKG_V1}::kiosk::Witness`, typeArgs: [ ] as [], reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => Witness.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => Witness.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => Witness.fromBcs( data, ), bcs: Witness.bcs, fromJSONField: (field: any) => Witness.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => Witness.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => Witness.fromSuiParsedData( content, ), fetch: async (client: SuiClient, id: string) => Witness.fetch( client, id, ), new: ( fields: WitnessFields, ) => { return new Witness( [], fields ) }, kind: "StructClassReified", } }
 
  static get r() { return Witness.reified() }
 
@@ -73,27 +74,27 @@ export class Witness implements StructClass { static readonly $typeName = "0xfc7
 
 /* ============================== KioskOwnerLock =============================== */
 
-export function isKioskOwnerLock(type: string): boolean { type = compressSuiType(type); return type === "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::kiosk::KioskOwnerLock"; }
+export function isKioskOwnerLock(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::kiosk::KioskOwnerLock`; }
 
-export interface KioskOwnerLockFields { id: ToField<UID>; kioskOwnerCap: ToField<KioskOwnerCap> }
+export interface KioskOwnerLockFields { id: ToField<UID>; multisigAddr: ToField<"address">; kioskOwnerCap: ToField<KioskOwnerCap> }
 
 export type KioskOwnerLockReified = Reified< KioskOwnerLock, KioskOwnerLockFields >;
 
-export class KioskOwnerLock implements StructClass { static readonly $typeName = "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::kiosk::KioskOwnerLock"; static readonly $numTypeParams = 0;
+export class KioskOwnerLock implements StructClass { static readonly $typeName = `${PKG_V1}::kiosk::KioskOwnerLock`; static readonly $numTypeParams = 0;
 
  readonly $typeName = KioskOwnerLock.$typeName;
 
- readonly $fullTypeName: "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::kiosk::KioskOwnerLock";
+ readonly $fullTypeName: `${typeof PKG_V1}::kiosk::KioskOwnerLock`;
 
  readonly $typeArgs: [];
 
- readonly id: ToField<UID>; readonly kioskOwnerCap: ToField<KioskOwnerCap>
+ readonly id: ToField<UID>; readonly multisigAddr: ToField<"address">; readonly kioskOwnerCap: ToField<KioskOwnerCap>
 
- private constructor(typeArgs: [], fields: KioskOwnerLockFields, ) { this.$fullTypeName = composeSuiType( KioskOwnerLock.$typeName, ...typeArgs ) as "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::kiosk::KioskOwnerLock"; this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [], fields: KioskOwnerLockFields, ) { this.$fullTypeName = composeSuiType( KioskOwnerLock.$typeName, ...typeArgs ) as `${typeof PKG_V1}::kiosk::KioskOwnerLock`; this.$typeArgs = typeArgs;
 
- this.id = fields.id;; this.kioskOwnerCap = fields.kioskOwnerCap; }
+ this.id = fields.id;; this.multisigAddr = fields.multisigAddr;; this.kioskOwnerCap = fields.kioskOwnerCap; }
 
- static reified( ): KioskOwnerLockReified { return { typeName: KioskOwnerLock.$typeName, fullTypeName: composeSuiType( KioskOwnerLock.$typeName, ...[] ) as "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::kiosk::KioskOwnerLock", typeArgs: [ ] as [], reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => KioskOwnerLock.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => KioskOwnerLock.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => KioskOwnerLock.fromBcs( data, ), bcs: KioskOwnerLock.bcs, fromJSONField: (field: any) => KioskOwnerLock.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => KioskOwnerLock.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => KioskOwnerLock.fromSuiParsedData( content, ), fetch: async (client: SuiClient, id: string) => KioskOwnerLock.fetch( client, id, ), new: ( fields: KioskOwnerLockFields, ) => { return new KioskOwnerLock( [], fields ) }, kind: "StructClassReified", } }
+ static reified( ): KioskOwnerLockReified { return { typeName: KioskOwnerLock.$typeName, fullTypeName: composeSuiType( KioskOwnerLock.$typeName, ...[] ) as `${typeof PKG_V1}::kiosk::KioskOwnerLock`, typeArgs: [ ] as [], reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => KioskOwnerLock.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => KioskOwnerLock.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => KioskOwnerLock.fromBcs( data, ), bcs: KioskOwnerLock.bcs, fromJSONField: (field: any) => KioskOwnerLock.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => KioskOwnerLock.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => KioskOwnerLock.fromSuiParsedData( content, ), fetch: async (client: SuiClient, id: string) => KioskOwnerLock.fetch( client, id, ), new: ( fields: KioskOwnerLockFields, ) => { return new KioskOwnerLock( [], fields ) }, kind: "StructClassReified", } }
 
  static get r() { return KioskOwnerLock.reified() }
 
@@ -101,29 +102,29 @@ export class KioskOwnerLock implements StructClass { static readonly $typeName =
 
  static get bcs() { return bcs.struct("KioskOwnerLock", {
 
- id: UID.bcs, kiosk_owner_cap: KioskOwnerCap.bcs
+ id: UID.bcs, multisig_addr: bcs.bytes(32).transform({ input: (val: string) => fromHEX(val), output: (val: Uint8Array) => toHEX(val), }), kiosk_owner_cap: KioskOwnerCap.bcs
 
 }) };
 
- static fromFields( fields: Record<string, any> ): KioskOwnerLock { return KioskOwnerLock.reified( ).new( { id: decodeFromFields(UID.reified(), fields.id), kioskOwnerCap: decodeFromFields(KioskOwnerCap.reified(), fields.kiosk_owner_cap) } ) }
+ static fromFields( fields: Record<string, any> ): KioskOwnerLock { return KioskOwnerLock.reified( ).new( { id: decodeFromFields(UID.reified(), fields.id), multisigAddr: decodeFromFields("address", fields.multisig_addr), kioskOwnerCap: decodeFromFields(KioskOwnerCap.reified(), fields.kiosk_owner_cap) } ) }
 
  static fromFieldsWithTypes( item: FieldsWithTypes ): KioskOwnerLock { if (!isKioskOwnerLock(item.type)) { throw new Error("not a KioskOwnerLock type");
 
  }
 
- return KioskOwnerLock.reified( ).new( { id: decodeFromFieldsWithTypes(UID.reified(), item.fields.id), kioskOwnerCap: decodeFromFieldsWithTypes(KioskOwnerCap.reified(), item.fields.kiosk_owner_cap) } ) }
+ return KioskOwnerLock.reified( ).new( { id: decodeFromFieldsWithTypes(UID.reified(), item.fields.id), multisigAddr: decodeFromFieldsWithTypes("address", item.fields.multisig_addr), kioskOwnerCap: decodeFromFieldsWithTypes(KioskOwnerCap.reified(), item.fields.kiosk_owner_cap) } ) }
 
  static fromBcs( data: Uint8Array ): KioskOwnerLock { return KioskOwnerLock.fromFields( KioskOwnerLock.bcs.parse(data) ) }
 
  toJSONField() { return {
 
- id: this.id,kioskOwnerCap: this.kioskOwnerCap.toJSONField(),
+ id: this.id,multisigAddr: this.multisigAddr,kioskOwnerCap: this.kioskOwnerCap.toJSONField(),
 
 } }
 
  toJSON() { return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() } }
 
- static fromJSONField( field: any ): KioskOwnerLock { return KioskOwnerLock.reified( ).new( { id: decodeFromJSONField(UID.reified(), field.id), kioskOwnerCap: decodeFromJSONField(KioskOwnerCap.reified(), field.kioskOwnerCap) } ) }
+ static fromJSONField( field: any ): KioskOwnerLock { return KioskOwnerLock.reified( ).new( { id: decodeFromJSONField(UID.reified(), field.id), multisigAddr: decodeFromJSONField("address", field.multisigAddr), kioskOwnerCap: decodeFromJSONField(KioskOwnerCap.reified(), field.kioskOwnerCap) } ) }
 
  static fromJSON( json: Record<string, any> ): KioskOwnerLock { if (json.$typeName !== KioskOwnerLock.$typeName) { throw new Error("not a WithTwoGenerics json object") };
 
@@ -138,27 +139,27 @@ export class KioskOwnerLock implements StructClass { static readonly $typeName =
 
 /* ============================== List =============================== */
 
-export function isList(type: string): boolean { type = compressSuiType(type); return type === "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::kiosk::List"; }
+export function isList(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::kiosk::List`; }
 
 export interface ListFields { nftIds: ToField<Vector<ID>>; prices: ToField<Vector<"u64">> }
 
 export type ListReified = Reified< List, ListFields >;
 
-export class List implements StructClass { static readonly $typeName = "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::kiosk::List"; static readonly $numTypeParams = 0;
+export class List implements StructClass { static readonly $typeName = `${PKG_V1}::kiosk::List`; static readonly $numTypeParams = 0;
 
  readonly $typeName = List.$typeName;
 
- readonly $fullTypeName: "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::kiosk::List";
+ readonly $fullTypeName: `${typeof PKG_V1}::kiosk::List`;
 
  readonly $typeArgs: [];
 
  readonly nftIds: ToField<Vector<ID>>; readonly prices: ToField<Vector<"u64">>
 
- private constructor(typeArgs: [], fields: ListFields, ) { this.$fullTypeName = composeSuiType( List.$typeName, ...typeArgs ) as "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::kiosk::List"; this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [], fields: ListFields, ) { this.$fullTypeName = composeSuiType( List.$typeName, ...typeArgs ) as `${typeof PKG_V1}::kiosk::List`; this.$typeArgs = typeArgs;
 
  this.nftIds = fields.nftIds;; this.prices = fields.prices; }
 
- static reified( ): ListReified { return { typeName: List.$typeName, fullTypeName: composeSuiType( List.$typeName, ...[] ) as "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::kiosk::List", typeArgs: [ ] as [], reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => List.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => List.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => List.fromBcs( data, ), bcs: List.bcs, fromJSONField: (field: any) => List.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => List.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => List.fromSuiParsedData( content, ), fetch: async (client: SuiClient, id: string) => List.fetch( client, id, ), new: ( fields: ListFields, ) => { return new List( [], fields ) }, kind: "StructClassReified", } }
+ static reified( ): ListReified { return { typeName: List.$typeName, fullTypeName: composeSuiType( List.$typeName, ...[] ) as `${typeof PKG_V1}::kiosk::List`, typeArgs: [ ] as [], reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => List.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => List.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => List.fromBcs( data, ), bcs: List.bcs, fromJSONField: (field: any) => List.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => List.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => List.fromSuiParsedData( content, ), fetch: async (client: SuiClient, id: string) => List.fetch( client, id, ), new: ( fields: ListFields, ) => { return new List( [], fields ) }, kind: "StructClassReified", } }
 
  static get r() { return List.reified() }
 
@@ -182,7 +183,7 @@ export class List implements StructClass { static readonly $typeName = "0xfc7fe3
 
  toJSONField() { return {
 
- nftIds: fieldToJSON<Vector<ID>>(`vector<0x2::object::ID>`, this.nftIds),prices: fieldToJSON<Vector<"u64">>(`vector<u64>`, this.prices),
+ nftIds: fieldToJSON<Vector<ID>>(`vector<${ID.$typeName}>`, this.nftIds),prices: fieldToJSON<Vector<"u64">>(`vector<u64>`, this.prices),
 
 } }
 
@@ -203,27 +204,27 @@ export class List implements StructClass { static readonly $typeName = "0xfc7fe3
 
 /* ============================== Take =============================== */
 
-export function isTake(type: string): boolean { type = compressSuiType(type); return type === "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::kiosk::Take"; }
+export function isTake(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::kiosk::Take`; }
 
 export interface TakeFields { nftIds: ToField<Vector<ID>>; recipient: ToField<"address"> }
 
 export type TakeReified = Reified< Take, TakeFields >;
 
-export class Take implements StructClass { static readonly $typeName = "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::kiosk::Take"; static readonly $numTypeParams = 0;
+export class Take implements StructClass { static readonly $typeName = `${PKG_V1}::kiosk::Take`; static readonly $numTypeParams = 0;
 
  readonly $typeName = Take.$typeName;
 
- readonly $fullTypeName: "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::kiosk::Take";
+ readonly $fullTypeName: `${typeof PKG_V1}::kiosk::Take`;
 
  readonly $typeArgs: [];
 
  readonly nftIds: ToField<Vector<ID>>; readonly recipient: ToField<"address">
 
- private constructor(typeArgs: [], fields: TakeFields, ) { this.$fullTypeName = composeSuiType( Take.$typeName, ...typeArgs ) as "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::kiosk::Take"; this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [], fields: TakeFields, ) { this.$fullTypeName = composeSuiType( Take.$typeName, ...typeArgs ) as `${typeof PKG_V1}::kiosk::Take`; this.$typeArgs = typeArgs;
 
  this.nftIds = fields.nftIds;; this.recipient = fields.recipient; }
 
- static reified( ): TakeReified { return { typeName: Take.$typeName, fullTypeName: composeSuiType( Take.$typeName, ...[] ) as "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::kiosk::Take", typeArgs: [ ] as [], reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => Take.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => Take.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => Take.fromBcs( data, ), bcs: Take.bcs, fromJSONField: (field: any) => Take.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => Take.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => Take.fromSuiParsedData( content, ), fetch: async (client: SuiClient, id: string) => Take.fetch( client, id, ), new: ( fields: TakeFields, ) => { return new Take( [], fields ) }, kind: "StructClassReified", } }
+ static reified( ): TakeReified { return { typeName: Take.$typeName, fullTypeName: composeSuiType( Take.$typeName, ...[] ) as `${typeof PKG_V1}::kiosk::Take`, typeArgs: [ ] as [], reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => Take.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => Take.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => Take.fromBcs( data, ), bcs: Take.bcs, fromJSONField: (field: any) => Take.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => Take.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => Take.fromSuiParsedData( content, ), fetch: async (client: SuiClient, id: string) => Take.fetch( client, id, ), new: ( fields: TakeFields, ) => { return new Take( [], fields ) }, kind: "StructClassReified", } }
 
  static get r() { return Take.reified() }
 
@@ -247,7 +248,7 @@ export class Take implements StructClass { static readonly $typeName = "0xfc7fe3
 
  toJSONField() { return {
 
- nftIds: fieldToJSON<Vector<ID>>(`vector<0x2::object::ID>`, this.nftIds),recipient: this.recipient,
+ nftIds: fieldToJSON<Vector<ID>>(`vector<${ID.$typeName}>`, this.nftIds),recipient: this.recipient,
 
 } }
 

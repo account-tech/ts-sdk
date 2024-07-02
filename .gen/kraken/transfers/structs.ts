@@ -4,32 +4,33 @@ import {ID, UID} from "../../_dependencies/source/0x2/object/structs";
 import {VecMap} from "../../_dependencies/source/0x2/vec-map/structs";
 import {PhantomReified, Reified, StructClass, ToField, ToTypeStr, Vector, decodeFromFields, decodeFromFieldsWithTypes, decodeFromJSONField, fieldToJSON, phantom} from "../../_framework/reified";
 import {FieldsWithTypes, composeSuiType, compressSuiType} from "../../_framework/util";
+import {PKG_V1} from "../index";
 import {bcs, fromB64, fromHEX, toHEX} from "@mysten/bcs";
-import {SuiClient, SuiParsedData} from "@mysten/sui.js/client";
+import {SuiClient, SuiParsedData} from "@mysten/sui/client";
 
 /* ============================== Witness =============================== */
 
-export function isWitness(type: string): boolean { type = compressSuiType(type); return type === "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::transfers::Witness"; }
+export function isWitness(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::transfers::Witness`; }
 
 export interface WitnessFields { dummyField: ToField<"bool"> }
 
 export type WitnessReified = Reified< Witness, WitnessFields >;
 
-export class Witness implements StructClass { static readonly $typeName = "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::transfers::Witness"; static readonly $numTypeParams = 0;
+export class Witness implements StructClass { static readonly $typeName = `${PKG_V1}::transfers::Witness`; static readonly $numTypeParams = 0;
 
  readonly $typeName = Witness.$typeName;
 
- readonly $fullTypeName: "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::transfers::Witness";
+ readonly $fullTypeName: `${typeof PKG_V1}::transfers::Witness`;
 
  readonly $typeArgs: [];
 
  readonly dummyField: ToField<"bool">
 
- private constructor(typeArgs: [], fields: WitnessFields, ) { this.$fullTypeName = composeSuiType( Witness.$typeName, ...typeArgs ) as "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::transfers::Witness"; this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [], fields: WitnessFields, ) { this.$fullTypeName = composeSuiType( Witness.$typeName, ...typeArgs ) as `${typeof PKG_V1}::transfers::Witness`; this.$typeArgs = typeArgs;
 
  this.dummyField = fields.dummyField; }
 
- static reified( ): WitnessReified { return { typeName: Witness.$typeName, fullTypeName: composeSuiType( Witness.$typeName, ...[] ) as "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::transfers::Witness", typeArgs: [ ] as [], reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => Witness.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => Witness.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => Witness.fromBcs( data, ), bcs: Witness.bcs, fromJSONField: (field: any) => Witness.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => Witness.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => Witness.fromSuiParsedData( content, ), fetch: async (client: SuiClient, id: string) => Witness.fetch( client, id, ), new: ( fields: WitnessFields, ) => { return new Witness( [], fields ) }, kind: "StructClassReified", } }
+ static reified( ): WitnessReified { return { typeName: Witness.$typeName, fullTypeName: composeSuiType( Witness.$typeName, ...[] ) as `${typeof PKG_V1}::transfers::Witness`, typeArgs: [ ] as [], reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => Witness.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => Witness.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => Witness.fromBcs( data, ), bcs: Witness.bcs, fromJSONField: (field: any) => Witness.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => Witness.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => Witness.fromSuiParsedData( content, ), fetch: async (client: SuiClient, id: string) => Witness.fetch( client, id, ), new: ( fields: WitnessFields, ) => { return new Witness( [], fields ) }, kind: "StructClassReified", } }
 
  static get r() { return Witness.reified() }
 
@@ -74,27 +75,27 @@ export class Witness implements StructClass { static readonly $typeName = "0xfc7
 
 /* ============================== Deliver =============================== */
 
-export function isDeliver(type: string): boolean { type = compressSuiType(type); return type === "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::transfers::Deliver"; }
+export function isDeliver(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::transfers::Deliver`; }
 
 export interface DeliverFields { toDeposit: ToField<Vector<ID>>; recipient: ToField<"address"> }
 
 export type DeliverReified = Reified< Deliver, DeliverFields >;
 
-export class Deliver implements StructClass { static readonly $typeName = "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::transfers::Deliver"; static readonly $numTypeParams = 0;
+export class Deliver implements StructClass { static readonly $typeName = `${PKG_V1}::transfers::Deliver`; static readonly $numTypeParams = 0;
 
  readonly $typeName = Deliver.$typeName;
 
- readonly $fullTypeName: "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::transfers::Deliver";
+ readonly $fullTypeName: `${typeof PKG_V1}::transfers::Deliver`;
 
  readonly $typeArgs: [];
 
  readonly toDeposit: ToField<Vector<ID>>; readonly recipient: ToField<"address">
 
- private constructor(typeArgs: [], fields: DeliverFields, ) { this.$fullTypeName = composeSuiType( Deliver.$typeName, ...typeArgs ) as "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::transfers::Deliver"; this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [], fields: DeliverFields, ) { this.$fullTypeName = composeSuiType( Deliver.$typeName, ...typeArgs ) as `${typeof PKG_V1}::transfers::Deliver`; this.$typeArgs = typeArgs;
 
  this.toDeposit = fields.toDeposit;; this.recipient = fields.recipient; }
 
- static reified( ): DeliverReified { return { typeName: Deliver.$typeName, fullTypeName: composeSuiType( Deliver.$typeName, ...[] ) as "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::transfers::Deliver", typeArgs: [ ] as [], reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => Deliver.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => Deliver.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => Deliver.fromBcs( data, ), bcs: Deliver.bcs, fromJSONField: (field: any) => Deliver.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => Deliver.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => Deliver.fromSuiParsedData( content, ), fetch: async (client: SuiClient, id: string) => Deliver.fetch( client, id, ), new: ( fields: DeliverFields, ) => { return new Deliver( [], fields ) }, kind: "StructClassReified", } }
+ static reified( ): DeliverReified { return { typeName: Deliver.$typeName, fullTypeName: composeSuiType( Deliver.$typeName, ...[] ) as `${typeof PKG_V1}::transfers::Deliver`, typeArgs: [ ] as [], reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => Deliver.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => Deliver.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => Deliver.fromBcs( data, ), bcs: Deliver.bcs, fromJSONField: (field: any) => Deliver.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => Deliver.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => Deliver.fromSuiParsedData( content, ), fetch: async (client: SuiClient, id: string) => Deliver.fetch( client, id, ), new: ( fields: DeliverFields, ) => { return new Deliver( [], fields ) }, kind: "StructClassReified", } }
 
  static get r() { return Deliver.reified() }
 
@@ -118,7 +119,7 @@ export class Deliver implements StructClass { static readonly $typeName = "0xfc7
 
  toJSONField() { return {
 
- toDeposit: fieldToJSON<Vector<ID>>(`vector<0x2::object::ID>`, this.toDeposit),recipient: this.recipient,
+ toDeposit: fieldToJSON<Vector<ID>>(`vector<${ID.$typeName}>`, this.toDeposit),recipient: this.recipient,
 
 } }
 
@@ -139,27 +140,27 @@ export class Deliver implements StructClass { static readonly $typeName = "0xfc7
 
 /* ============================== Delivery =============================== */
 
-export function isDelivery(type: string): boolean { type = compressSuiType(type); return type === "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::transfers::Delivery"; }
+export function isDelivery(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::transfers::Delivery`; }
 
 export interface DeliveryFields { id: ToField<UID>; multisigId: ToField<ID>; objects: ToField<Bag> }
 
 export type DeliveryReified = Reified< Delivery, DeliveryFields >;
 
-export class Delivery implements StructClass { static readonly $typeName = "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::transfers::Delivery"; static readonly $numTypeParams = 0;
+export class Delivery implements StructClass { static readonly $typeName = `${PKG_V1}::transfers::Delivery`; static readonly $numTypeParams = 0;
 
  readonly $typeName = Delivery.$typeName;
 
- readonly $fullTypeName: "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::transfers::Delivery";
+ readonly $fullTypeName: `${typeof PKG_V1}::transfers::Delivery`;
 
  readonly $typeArgs: [];
 
  readonly id: ToField<UID>; readonly multisigId: ToField<ID>; readonly objects: ToField<Bag>
 
- private constructor(typeArgs: [], fields: DeliveryFields, ) { this.$fullTypeName = composeSuiType( Delivery.$typeName, ...typeArgs ) as "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::transfers::Delivery"; this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [], fields: DeliveryFields, ) { this.$fullTypeName = composeSuiType( Delivery.$typeName, ...typeArgs ) as `${typeof PKG_V1}::transfers::Delivery`; this.$typeArgs = typeArgs;
 
  this.id = fields.id;; this.multisigId = fields.multisigId;; this.objects = fields.objects; }
 
- static reified( ): DeliveryReified { return { typeName: Delivery.$typeName, fullTypeName: composeSuiType( Delivery.$typeName, ...[] ) as "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::transfers::Delivery", typeArgs: [ ] as [], reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => Delivery.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => Delivery.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => Delivery.fromBcs( data, ), bcs: Delivery.bcs, fromJSONField: (field: any) => Delivery.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => Delivery.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => Delivery.fromSuiParsedData( content, ), fetch: async (client: SuiClient, id: string) => Delivery.fetch( client, id, ), new: ( fields: DeliveryFields, ) => { return new Delivery( [], fields ) }, kind: "StructClassReified", } }
+ static reified( ): DeliveryReified { return { typeName: Delivery.$typeName, fullTypeName: composeSuiType( Delivery.$typeName, ...[] ) as `${typeof PKG_V1}::transfers::Delivery`, typeArgs: [ ] as [], reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => Delivery.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => Delivery.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => Delivery.fromBcs( data, ), bcs: Delivery.bcs, fromJSONField: (field: any) => Delivery.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => Delivery.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => Delivery.fromSuiParsedData( content, ), fetch: async (client: SuiClient, id: string) => Delivery.fetch( client, id, ), new: ( fields: DeliveryFields, ) => { return new Delivery( [], fields ) }, kind: "StructClassReified", } }
 
  static get r() { return Delivery.reified() }
 
@@ -204,27 +205,27 @@ export class Delivery implements StructClass { static readonly $typeName = "0xfc
 
 /* ============================== DeliveryCap =============================== */
 
-export function isDeliveryCap(type: string): boolean { type = compressSuiType(type); return type === "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::transfers::DeliveryCap"; }
+export function isDeliveryCap(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::transfers::DeliveryCap`; }
 
 export interface DeliveryCapFields { id: ToField<UID>; deliveryId: ToField<ID> }
 
 export type DeliveryCapReified = Reified< DeliveryCap, DeliveryCapFields >;
 
-export class DeliveryCap implements StructClass { static readonly $typeName = "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::transfers::DeliveryCap"; static readonly $numTypeParams = 0;
+export class DeliveryCap implements StructClass { static readonly $typeName = `${PKG_V1}::transfers::DeliveryCap`; static readonly $numTypeParams = 0;
 
  readonly $typeName = DeliveryCap.$typeName;
 
- readonly $fullTypeName: "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::transfers::DeliveryCap";
+ readonly $fullTypeName: `${typeof PKG_V1}::transfers::DeliveryCap`;
 
  readonly $typeArgs: [];
 
  readonly id: ToField<UID>; readonly deliveryId: ToField<ID>
 
- private constructor(typeArgs: [], fields: DeliveryCapFields, ) { this.$fullTypeName = composeSuiType( DeliveryCap.$typeName, ...typeArgs ) as "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::transfers::DeliveryCap"; this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [], fields: DeliveryCapFields, ) { this.$fullTypeName = composeSuiType( DeliveryCap.$typeName, ...typeArgs ) as `${typeof PKG_V1}::transfers::DeliveryCap`; this.$typeArgs = typeArgs;
 
  this.id = fields.id;; this.deliveryId = fields.deliveryId; }
 
- static reified( ): DeliveryCapReified { return { typeName: DeliveryCap.$typeName, fullTypeName: composeSuiType( DeliveryCap.$typeName, ...[] ) as "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::transfers::DeliveryCap", typeArgs: [ ] as [], reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => DeliveryCap.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => DeliveryCap.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => DeliveryCap.fromBcs( data, ), bcs: DeliveryCap.bcs, fromJSONField: (field: any) => DeliveryCap.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => DeliveryCap.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => DeliveryCap.fromSuiParsedData( content, ), fetch: async (client: SuiClient, id: string) => DeliveryCap.fetch( client, id, ), new: ( fields: DeliveryCapFields, ) => { return new DeliveryCap( [], fields ) }, kind: "StructClassReified", } }
+ static reified( ): DeliveryCapReified { return { typeName: DeliveryCap.$typeName, fullTypeName: composeSuiType( DeliveryCap.$typeName, ...[] ) as `${typeof PKG_V1}::transfers::DeliveryCap`, typeArgs: [ ] as [], reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => DeliveryCap.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => DeliveryCap.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => DeliveryCap.fromBcs( data, ), bcs: DeliveryCap.bcs, fromJSONField: (field: any) => DeliveryCap.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => DeliveryCap.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => DeliveryCap.fromSuiParsedData( content, ), fetch: async (client: SuiClient, id: string) => DeliveryCap.fetch( client, id, ), new: ( fields: DeliveryCapFields, ) => { return new DeliveryCap( [], fields ) }, kind: "StructClassReified", } }
 
  static get r() { return DeliveryCap.reified() }
 
@@ -269,27 +270,27 @@ export class DeliveryCap implements StructClass { static readonly $typeName = "0
 
 /* ============================== Send =============================== */
 
-export function isSend(type: string): boolean { type = compressSuiType(type); return type === "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::transfers::Send"; }
+export function isSend(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::transfers::Send`; }
 
 export interface SendFields { transfers: ToField<VecMap<ID, "address">> }
 
 export type SendReified = Reified< Send, SendFields >;
 
-export class Send implements StructClass { static readonly $typeName = "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::transfers::Send"; static readonly $numTypeParams = 0;
+export class Send implements StructClass { static readonly $typeName = `${PKG_V1}::transfers::Send`; static readonly $numTypeParams = 0;
 
  readonly $typeName = Send.$typeName;
 
- readonly $fullTypeName: "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::transfers::Send";
+ readonly $fullTypeName: `${typeof PKG_V1}::transfers::Send`;
 
  readonly $typeArgs: [];
 
  readonly transfers: ToField<VecMap<ID, "address">>
 
- private constructor(typeArgs: [], fields: SendFields, ) { this.$fullTypeName = composeSuiType( Send.$typeName, ...typeArgs ) as "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::transfers::Send"; this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [], fields: SendFields, ) { this.$fullTypeName = composeSuiType( Send.$typeName, ...typeArgs ) as `${typeof PKG_V1}::transfers::Send`; this.$typeArgs = typeArgs;
 
  this.transfers = fields.transfers; }
 
- static reified( ): SendReified { return { typeName: Send.$typeName, fullTypeName: composeSuiType( Send.$typeName, ...[] ) as "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::transfers::Send", typeArgs: [ ] as [], reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => Send.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => Send.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => Send.fromBcs( data, ), bcs: Send.bcs, fromJSONField: (field: any) => Send.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => Send.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => Send.fromSuiParsedData( content, ), fetch: async (client: SuiClient, id: string) => Send.fetch( client, id, ), new: ( fields: SendFields, ) => { return new Send( [], fields ) }, kind: "StructClassReified", } }
+ static reified( ): SendReified { return { typeName: Send.$typeName, fullTypeName: composeSuiType( Send.$typeName, ...[] ) as `${typeof PKG_V1}::transfers::Send`, typeArgs: [ ] as [], reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => Send.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => Send.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => Send.fromBcs( data, ), bcs: Send.bcs, fromJSONField: (field: any) => Send.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => Send.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => Send.fromSuiParsedData( content, ), fetch: async (client: SuiClient, id: string) => Send.fetch( client, id, ), new: ( fields: SendFields, ) => { return new Send( [], fields ) }, kind: "StructClassReified", } }
 
  static get r() { return Send.reified() }
 

@@ -1,31 +1,32 @@
 import {PUBLISHED_AT} from "..";
-import {GenericArg, ObjectArg, generic, obj, pure} from "../../_framework/util";
-import {TransactionArgument, TransactionBlock} from "@mysten/sui.js/transactions";
+import {ID} from "../../_dependencies/source/0x2/object/structs";
+import {GenericArg, generic, obj, pure} from "../../_framework/util";
+import {Transaction, TransactionArgument, TransactionObjectInput} from "@mysten/sui/transactions";
 
-export interface BorrowArgs { executable: ObjectArg; multisig: ObjectArg; receiving: ObjectArg; witness: GenericArg; idx: bigint | TransactionArgument }
+export interface BorrowArgs { executable: TransactionObjectInput; multisig: TransactionObjectInput; receiving: TransactionObjectInput; witness: GenericArg; idx: bigint | TransactionArgument }
 
-export function borrow( txb: TransactionBlock, typeArgs: [string, string], args: BorrowArgs ) { return txb.moveCall({ target: `${PUBLISHED_AT}::owned::borrow`, typeArguments: typeArgs, arguments: [ obj(txb, args.executable), obj(txb, args.multisig), obj(txb, args.receiving), generic(txb, `${typeArgs[1]}`, args.witness), pure(txb, args.idx, `u64`) ], }) }
+export function borrow( tx: Transaction, typeArgs: [string, string], args: BorrowArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::owned::borrow`, typeArguments: typeArgs, arguments: [ obj(tx, args.executable), obj(tx, args.multisig), obj(tx, args.receiving), generic(tx, `${typeArgs[1]}`, args.witness), pure(tx, args.idx, `u64`) ], }) }
 
-export interface PutBackArgs { executable: ObjectArg; multisig: ObjectArg; returned: GenericArg; witness: GenericArg; idx: bigint | TransactionArgument }
+export interface PutBackArgs { executable: TransactionObjectInput; multisig: TransactionObjectInput; returned: GenericArg; witness: GenericArg; idx: bigint | TransactionArgument }
 
-export function putBack( txb: TransactionBlock, typeArgs: [string, string], args: PutBackArgs ) { return txb.moveCall({ target: `${PUBLISHED_AT}::owned::put_back`, typeArguments: typeArgs, arguments: [ obj(txb, args.executable), obj(txb, args.multisig), generic(txb, `${typeArgs[0]}`, args.returned), generic(txb, `${typeArgs[1]}`, args.witness), pure(txb, args.idx, `u64`) ], }) }
+export function putBack( tx: Transaction, typeArgs: [string, string], args: PutBackArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::owned::put_back`, typeArguments: typeArgs, arguments: [ obj(tx, args.executable), obj(tx, args.multisig), generic(tx, `${typeArgs[0]}`, args.returned), generic(tx, `${typeArgs[1]}`, args.witness), pure(tx, args.idx, `u64`) ], }) }
 
-export interface WithdrawArgs { executable: ObjectArg; multisig: ObjectArg; receiving: ObjectArg; witness: GenericArg; idx: bigint | TransactionArgument }
+export interface WithdrawArgs { executable: TransactionObjectInput; multisig: TransactionObjectInput; receiving: TransactionObjectInput; witness: GenericArg; idx: bigint | TransactionArgument }
 
-export function withdraw( txb: TransactionBlock, typeArgs: [string, string], args: WithdrawArgs ) { return txb.moveCall({ target: `${PUBLISHED_AT}::owned::withdraw`, typeArguments: typeArgs, arguments: [ obj(txb, args.executable), obj(txb, args.multisig), obj(txb, args.receiving), generic(txb, `${typeArgs[1]}`, args.witness), pure(txb, args.idx, `u64`) ], }) }
+export function withdraw( tx: Transaction, typeArgs: [string, string], args: WithdrawArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::owned::withdraw`, typeArguments: typeArgs, arguments: [ obj(tx, args.executable), obj(tx, args.multisig), obj(tx, args.receiving), generic(tx, `${typeArgs[1]}`, args.witness), pure(tx, args.idx, `u64`) ], }) }
 
-export interface DestroyBorrowArgs { executable: ObjectArg; witness: GenericArg }
+export interface DestroyBorrowArgs { executable: TransactionObjectInput; witness: GenericArg }
 
-export function destroyBorrow( txb: TransactionBlock, typeArg: string, args: DestroyBorrowArgs ) { return txb.moveCall({ target: `${PUBLISHED_AT}::owned::destroy_borrow`, typeArguments: [typeArg], arguments: [ obj(txb, args.executable), generic(txb, `${typeArg}`, args.witness) ], }) }
+export function destroyBorrow( tx: Transaction, typeArg: string, args: DestroyBorrowArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::owned::destroy_borrow`, typeArguments: [typeArg], arguments: [ obj(tx, args.executable), generic(tx, `${typeArg}`, args.witness) ], }) }
 
-export interface DestroyWithdrawArgs { executable: ObjectArg; witness: GenericArg }
+export interface DestroyWithdrawArgs { executable: TransactionObjectInput; witness: GenericArg }
 
-export function destroyWithdraw( txb: TransactionBlock, typeArg: string, args: DestroyWithdrawArgs ) { return txb.moveCall({ target: `${PUBLISHED_AT}::owned::destroy_withdraw`, typeArguments: [typeArg], arguments: [ obj(txb, args.executable), generic(txb, `${typeArg}`, args.witness) ], }) }
+export function destroyWithdraw( tx: Transaction, typeArg: string, args: DestroyWithdrawArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::owned::destroy_withdraw`, typeArguments: [typeArg], arguments: [ obj(tx, args.executable), generic(tx, `${typeArg}`, args.witness) ], }) }
 
-export interface NewBorrowArgs { proposal: ObjectArg; objects: Array<string | TransactionArgument> | TransactionArgument }
+export interface NewBorrowArgs { proposal: TransactionObjectInput; objects: Array<string | TransactionArgument> | TransactionArgument }
 
-export function newBorrow( txb: TransactionBlock, args: NewBorrowArgs ) { return txb.moveCall({ target: `${PUBLISHED_AT}::owned::new_borrow`, arguments: [ obj(txb, args.proposal), pure(txb, args.objects, `vector<0x2::object::ID>`) ], }) }
+export function newBorrow( tx: Transaction, args: NewBorrowArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::owned::new_borrow`, arguments: [ obj(tx, args.proposal), pure(tx, args.objects, `vector<${ID.$typeName}>`) ], }) }
 
-export interface NewWithdrawArgs { proposal: ObjectArg; objects: Array<string | TransactionArgument> | TransactionArgument }
+export interface NewWithdrawArgs { proposal: TransactionObjectInput; objects: Array<string | TransactionArgument> | TransactionArgument }
 
-export function newWithdraw( txb: TransactionBlock, args: NewWithdrawArgs ) { return txb.moveCall({ target: `${PUBLISHED_AT}::owned::new_withdraw`, arguments: [ obj(txb, args.proposal), pure(txb, args.objects, `vector<0x2::object::ID>`) ], }) }
+export function newWithdraw( tx: Transaction, args: NewWithdrawArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::owned::new_withdraw`, arguments: [ obj(tx, args.proposal), pure(tx, args.objects, `vector<${ID.$typeName}>`) ], }) }

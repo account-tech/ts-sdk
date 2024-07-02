@@ -2,32 +2,33 @@ import * as reified from "../../_framework/reified";
 import {ID} from "../../_dependencies/source/0x2/object/structs";
 import {PhantomReified, Reified, StructClass, ToField, ToTypeStr, Vector, decodeFromFields, decodeFromFieldsWithTypes, decodeFromJSONField, fieldToJSON, phantom} from "../../_framework/reified";
 import {FieldsWithTypes, composeSuiType, compressSuiType} from "../../_framework/util";
+import {PKG_V1} from "../index";
 import {bcs, fromB64} from "@mysten/bcs";
-import {SuiClient, SuiParsedData} from "@mysten/sui.js/client";
+import {SuiClient, SuiParsedData} from "@mysten/sui/client";
 
 /* ============================== Return =============================== */
 
-export function isReturn(type: string): boolean { type = compressSuiType(type); return type === "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::owned::Return"; }
+export function isReturn(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::owned::Return`; }
 
 export interface ReturnFields { toReturn: ToField<Vector<ID>> }
 
 export type ReturnReified = Reified< Return, ReturnFields >;
 
-export class Return implements StructClass { static readonly $typeName = "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::owned::Return"; static readonly $numTypeParams = 0;
+export class Return implements StructClass { static readonly $typeName = `${PKG_V1}::owned::Return`; static readonly $numTypeParams = 0;
 
  readonly $typeName = Return.$typeName;
 
- readonly $fullTypeName: "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::owned::Return";
+ readonly $fullTypeName: `${typeof PKG_V1}::owned::Return`;
 
  readonly $typeArgs: [];
 
  readonly toReturn: ToField<Vector<ID>>
 
- private constructor(typeArgs: [], fields: ReturnFields, ) { this.$fullTypeName = composeSuiType( Return.$typeName, ...typeArgs ) as "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::owned::Return"; this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [], fields: ReturnFields, ) { this.$fullTypeName = composeSuiType( Return.$typeName, ...typeArgs ) as `${typeof PKG_V1}::owned::Return`; this.$typeArgs = typeArgs;
 
  this.toReturn = fields.toReturn; }
 
- static reified( ): ReturnReified { return { typeName: Return.$typeName, fullTypeName: composeSuiType( Return.$typeName, ...[] ) as "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::owned::Return", typeArgs: [ ] as [], reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => Return.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => Return.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => Return.fromBcs( data, ), bcs: Return.bcs, fromJSONField: (field: any) => Return.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => Return.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => Return.fromSuiParsedData( content, ), fetch: async (client: SuiClient, id: string) => Return.fetch( client, id, ), new: ( fields: ReturnFields, ) => { return new Return( [], fields ) }, kind: "StructClassReified", } }
+ static reified( ): ReturnReified { return { typeName: Return.$typeName, fullTypeName: composeSuiType( Return.$typeName, ...[] ) as `${typeof PKG_V1}::owned::Return`, typeArgs: [ ] as [], reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => Return.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => Return.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => Return.fromBcs( data, ), bcs: Return.bcs, fromJSONField: (field: any) => Return.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => Return.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => Return.fromSuiParsedData( content, ), fetch: async (client: SuiClient, id: string) => Return.fetch( client, id, ), new: ( fields: ReturnFields, ) => { return new Return( [], fields ) }, kind: "StructClassReified", } }
 
  static get r() { return Return.reified() }
 
@@ -51,7 +52,7 @@ export class Return implements StructClass { static readonly $typeName = "0xfc7f
 
  toJSONField() { return {
 
- toReturn: fieldToJSON<Vector<ID>>(`vector<0x2::object::ID>`, this.toReturn),
+ toReturn: fieldToJSON<Vector<ID>>(`vector<${ID.$typeName}>`, this.toReturn),
 
 } }
 
@@ -72,27 +73,27 @@ export class Return implements StructClass { static readonly $typeName = "0xfc7f
 
 /* ============================== Withdraw =============================== */
 
-export function isWithdraw(type: string): boolean { type = compressSuiType(type); return type === "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::owned::Withdraw"; }
+export function isWithdraw(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::owned::Withdraw`; }
 
 export interface WithdrawFields { objects: ToField<Vector<ID>> }
 
 export type WithdrawReified = Reified< Withdraw, WithdrawFields >;
 
-export class Withdraw implements StructClass { static readonly $typeName = "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::owned::Withdraw"; static readonly $numTypeParams = 0;
+export class Withdraw implements StructClass { static readonly $typeName = `${PKG_V1}::owned::Withdraw`; static readonly $numTypeParams = 0;
 
  readonly $typeName = Withdraw.$typeName;
 
- readonly $fullTypeName: "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::owned::Withdraw";
+ readonly $fullTypeName: `${typeof PKG_V1}::owned::Withdraw`;
 
  readonly $typeArgs: [];
 
  readonly objects: ToField<Vector<ID>>
 
- private constructor(typeArgs: [], fields: WithdrawFields, ) { this.$fullTypeName = composeSuiType( Withdraw.$typeName, ...typeArgs ) as "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::owned::Withdraw"; this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [], fields: WithdrawFields, ) { this.$fullTypeName = composeSuiType( Withdraw.$typeName, ...typeArgs ) as `${typeof PKG_V1}::owned::Withdraw`; this.$typeArgs = typeArgs;
 
  this.objects = fields.objects; }
 
- static reified( ): WithdrawReified { return { typeName: Withdraw.$typeName, fullTypeName: composeSuiType( Withdraw.$typeName, ...[] ) as "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::owned::Withdraw", typeArgs: [ ] as [], reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => Withdraw.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => Withdraw.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => Withdraw.fromBcs( data, ), bcs: Withdraw.bcs, fromJSONField: (field: any) => Withdraw.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => Withdraw.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => Withdraw.fromSuiParsedData( content, ), fetch: async (client: SuiClient, id: string) => Withdraw.fetch( client, id, ), new: ( fields: WithdrawFields, ) => { return new Withdraw( [], fields ) }, kind: "StructClassReified", } }
+ static reified( ): WithdrawReified { return { typeName: Withdraw.$typeName, fullTypeName: composeSuiType( Withdraw.$typeName, ...[] ) as `${typeof PKG_V1}::owned::Withdraw`, typeArgs: [ ] as [], reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => Withdraw.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => Withdraw.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => Withdraw.fromBcs( data, ), bcs: Withdraw.bcs, fromJSONField: (field: any) => Withdraw.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => Withdraw.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => Withdraw.fromSuiParsedData( content, ), fetch: async (client: SuiClient, id: string) => Withdraw.fetch( client, id, ), new: ( fields: WithdrawFields, ) => { return new Withdraw( [], fields ) }, kind: "StructClassReified", } }
 
  static get r() { return Withdraw.reified() }
 
@@ -116,7 +117,7 @@ export class Withdraw implements StructClass { static readonly $typeName = "0xfc
 
  toJSONField() { return {
 
- objects: fieldToJSON<Vector<ID>>(`vector<0x2::object::ID>`, this.objects),
+ objects: fieldToJSON<Vector<ID>>(`vector<${ID.$typeName}>`, this.objects),
 
 } }
 

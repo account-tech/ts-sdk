@@ -1,67 +1,69 @@
 import {PUBLISHED_AT} from "..";
-import {GenericArg, ObjectArg, generic, obj, pure} from "../../_framework/util";
-import {TransactionArgument, TransactionBlock} from "@mysten/sui.js/transactions";
+import {String} from "../../_dependencies/source/0x1/string/structs";
+import {ID} from "../../_dependencies/source/0x2/object/structs";
+import {GenericArg, generic, obj, pure} from "../../_framework/util";
+import {Transaction, TransactionArgument, TransactionObjectInput} from "@mysten/sui/transactions";
 
-export interface ClaimArgs { delivery: ObjectArg; cap: ObjectArg }
+export interface ClaimArgs { delivery: TransactionObjectInput; cap: TransactionObjectInput }
 
-export function claim( txb: TransactionBlock, typeArg: string, args: ClaimArgs ) { return txb.moveCall({ target: `${PUBLISHED_AT}::transfers::claim`, typeArguments: [typeArg], arguments: [ obj(txb, args.delivery), obj(txb, args.cap) ], }) }
+export function claim( tx: Transaction, typeArg: string, args: ClaimArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::transfers::claim`, typeArguments: [typeArg], arguments: [ obj(tx, args.delivery), obj(tx, args.cap) ], }) }
 
-export interface CancelDeliveryArgs { multisig: ObjectArg; delivery: ObjectArg }
+export interface CancelDeliveryArgs { multisig: TransactionObjectInput; delivery: TransactionObjectInput }
 
-export function cancelDelivery( txb: TransactionBlock, args: CancelDeliveryArgs ) { return txb.moveCall({ target: `${PUBLISHED_AT}::transfers::cancel_delivery`, arguments: [ obj(txb, args.multisig), obj(txb, args.delivery) ], }) }
+export function cancelDelivery( tx: Transaction, args: CancelDeliveryArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::transfers::cancel_delivery`, arguments: [ obj(tx, args.multisig), obj(tx, args.delivery) ], }) }
 
-export interface CompleteDeliverArgs { delivery: ObjectArg; cap: ObjectArg; executable: ObjectArg }
+export interface CompleteDeliverArgs { delivery: TransactionObjectInput; cap: TransactionObjectInput; executable: TransactionObjectInput }
 
-export function completeDeliver( txb: TransactionBlock, args: CompleteDeliverArgs ) { return txb.moveCall({ target: `${PUBLISHED_AT}::transfers::complete_deliver`, arguments: [ obj(txb, args.delivery), obj(txb, args.cap), obj(txb, args.executable) ], }) }
+export function completeDeliver( tx: Transaction, args: CompleteDeliverArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::transfers::complete_deliver`, arguments: [ obj(tx, args.delivery), obj(tx, args.cap), obj(tx, args.executable) ], }) }
 
-export function completeSend( txb: TransactionBlock, executable: ObjectArg ) { return txb.moveCall({ target: `${PUBLISHED_AT}::transfers::complete_send`, arguments: [ obj(txb, executable) ], }) }
+export function completeSend( tx: Transaction, executable: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::transfers::complete_send`, arguments: [ obj(tx, executable) ], }) }
 
-export interface ConfirmDeliveryArgs { delivery: ObjectArg; cap: ObjectArg }
+export interface ConfirmDeliveryArgs { delivery: TransactionObjectInput; cap: TransactionObjectInput }
 
-export function confirmDelivery( txb: TransactionBlock, args: ConfirmDeliveryArgs ) { return txb.moveCall({ target: `${PUBLISHED_AT}::transfers::confirm_delivery`, arguments: [ obj(txb, args.delivery), obj(txb, args.cap) ], }) }
+export function confirmDelivery( tx: Transaction, args: ConfirmDeliveryArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::transfers::confirm_delivery`, arguments: [ obj(tx, args.delivery), obj(tx, args.cap) ], }) }
 
-export function createDelivery( txb: TransactionBlock, multisig: ObjectArg ) { return txb.moveCall({ target: `${PUBLISHED_AT}::transfers::create_delivery`, arguments: [ obj(txb, multisig) ], }) }
+export function createDelivery( tx: Transaction, multisig: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::transfers::create_delivery`, arguments: [ obj(tx, multisig) ], }) }
 
-export interface DeliverArgs { delivery: ObjectArg; cap: ObjectArg; executable: ObjectArg; multisig: ObjectArg; receiving: ObjectArg; witness: GenericArg; idx: bigint | TransactionArgument }
+export interface DeliverArgs { delivery: TransactionObjectInput; cap: TransactionObjectInput; executable: TransactionObjectInput; multisig: TransactionObjectInput; receiving: TransactionObjectInput; witness: GenericArg; idx: bigint | TransactionArgument }
 
-export function deliver( txb: TransactionBlock, typeArgs: [string, string], args: DeliverArgs ) { return txb.moveCall({ target: `${PUBLISHED_AT}::transfers::deliver`, typeArguments: typeArgs, arguments: [ obj(txb, args.delivery), obj(txb, args.cap), obj(txb, args.executable), obj(txb, args.multisig), obj(txb, args.receiving), generic(txb, `${typeArgs[1]}`, args.witness), pure(txb, args.idx, `u64`) ], }) }
+export function deliver( tx: Transaction, typeArgs: [string, string], args: DeliverArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::transfers::deliver`, typeArguments: typeArgs, arguments: [ obj(tx, args.delivery), obj(tx, args.cap), obj(tx, args.executable), obj(tx, args.multisig), obj(tx, args.receiving), generic(tx, `${typeArgs[1]}`, args.witness), pure(tx, args.idx, `u64`) ], }) }
 
-export interface DestroyDeliverArgs { executable: ObjectArg; witness: GenericArg }
+export interface DestroyDeliverArgs { executable: TransactionObjectInput; witness: GenericArg }
 
-export function destroyDeliver( txb: TransactionBlock, typeArg: string, args: DestroyDeliverArgs ) { return txb.moveCall({ target: `${PUBLISHED_AT}::transfers::destroy_deliver`, typeArguments: [typeArg], arguments: [ obj(txb, args.executable), generic(txb, `${typeArg}`, args.witness) ], }) }
+export function destroyDeliver( tx: Transaction, typeArg: string, args: DestroyDeliverArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::transfers::destroy_deliver`, typeArguments: [typeArg], arguments: [ obj(tx, args.executable), generic(tx, `${typeArg}`, args.witness) ], }) }
 
-export interface DestroySendArgs { executable: ObjectArg; witness: GenericArg }
+export interface DestroySendArgs { executable: TransactionObjectInput; witness: GenericArg }
 
-export function destroySend( txb: TransactionBlock, typeArg: string, args: DestroySendArgs ) { return txb.moveCall({ target: `${PUBLISHED_AT}::transfers::destroy_send`, typeArguments: [typeArg], arguments: [ obj(txb, args.executable), generic(txb, `${typeArg}`, args.witness) ], }) }
+export function destroySend( tx: Transaction, typeArg: string, args: DestroySendArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::transfers::destroy_send`, typeArguments: [typeArg], arguments: [ obj(tx, args.executable), generic(tx, `${typeArg}`, args.witness) ], }) }
 
-export interface ExecuteDeliverArgs { delivery: ObjectArg; cap: ObjectArg; executable: ObjectArg; multisig: ObjectArg; receiving: ObjectArg }
+export interface ExecuteDeliverArgs { delivery: TransactionObjectInput; cap: TransactionObjectInput; executable: TransactionObjectInput; multisig: TransactionObjectInput; receiving: TransactionObjectInput }
 
-export function executeDeliver( txb: TransactionBlock, typeArg: string, args: ExecuteDeliverArgs ) { return txb.moveCall({ target: `${PUBLISHED_AT}::transfers::execute_deliver`, typeArguments: [typeArg], arguments: [ obj(txb, args.delivery), obj(txb, args.cap), obj(txb, args.executable), obj(txb, args.multisig), obj(txb, args.receiving) ], }) }
+export function executeDeliver( tx: Transaction, typeArg: string, args: ExecuteDeliverArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::transfers::execute_deliver`, typeArguments: [typeArg], arguments: [ obj(tx, args.delivery), obj(tx, args.cap), obj(tx, args.executable), obj(tx, args.multisig), obj(tx, args.receiving) ], }) }
 
-export interface ExecuteSendArgs { executable: ObjectArg; multisig: ObjectArg; receiving: ObjectArg }
+export interface ExecuteSendArgs { executable: TransactionObjectInput; multisig: TransactionObjectInput; receiving: TransactionObjectInput }
 
-export function executeSend( txb: TransactionBlock, typeArg: string, args: ExecuteSendArgs ) { return txb.moveCall({ target: `${PUBLISHED_AT}::transfers::execute_send`, typeArguments: [typeArg], arguments: [ obj(txb, args.executable), obj(txb, args.multisig), obj(txb, args.receiving) ], }) }
+export function executeSend( tx: Transaction, typeArg: string, args: ExecuteSendArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::transfers::execute_send`, typeArguments: [typeArg], arguments: [ obj(tx, args.executable), obj(tx, args.multisig), obj(tx, args.receiving) ], }) }
 
-export interface NewDeliverArgs { proposal: ObjectArg; objects: Array<string | TransactionArgument> | TransactionArgument; recipient: string | TransactionArgument }
+export interface NewDeliverArgs { proposal: TransactionObjectInput; objects: Array<string | TransactionArgument> | TransactionArgument; recipient: string | TransactionArgument }
 
-export function newDeliver( txb: TransactionBlock, args: NewDeliverArgs ) { return txb.moveCall({ target: `${PUBLISHED_AT}::transfers::new_deliver`, arguments: [ obj(txb, args.proposal), pure(txb, args.objects, `vector<0x2::object::ID>`), pure(txb, args.recipient, `address`) ], }) }
+export function newDeliver( tx: Transaction, args: NewDeliverArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::transfers::new_deliver`, arguments: [ obj(tx, args.proposal), pure(tx, args.objects, `vector<${ID.$typeName}>`), pure(tx, args.recipient, `address`) ], }) }
 
-export interface NewSendArgs { proposal: ObjectArg; objects: Array<string | TransactionArgument> | TransactionArgument; recipients: Array<string | TransactionArgument> | TransactionArgument }
+export interface NewSendArgs { proposal: TransactionObjectInput; objects: Array<string | TransactionArgument> | TransactionArgument; recipients: Array<string | TransactionArgument> | TransactionArgument }
 
-export function newSend( txb: TransactionBlock, args: NewSendArgs ) { return txb.moveCall({ target: `${PUBLISHED_AT}::transfers::new_send`, arguments: [ obj(txb, args.proposal), pure(txb, args.objects, `vector<0x2::object::ID>`), pure(txb, args.recipients, `vector<address>`) ], }) }
+export function newSend( tx: Transaction, args: NewSendArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::transfers::new_send`, arguments: [ obj(tx, args.proposal), pure(tx, args.objects, `vector<${ID.$typeName}>`), pure(tx, args.recipients, `vector<address>`) ], }) }
 
-export interface ProposeDeliveryArgs { multisig: ObjectArg; key: string | TransactionArgument; executionTime: bigint | TransactionArgument; expirationEpoch: bigint | TransactionArgument; description: string | TransactionArgument; objects: Array<string | TransactionArgument> | TransactionArgument; recipient: string | TransactionArgument }
+export interface ProposeDeliveryArgs { multisig: TransactionObjectInput; key: string | TransactionArgument; executionTime: bigint | TransactionArgument; expirationEpoch: bigint | TransactionArgument; description: string | TransactionArgument; objects: Array<string | TransactionArgument> | TransactionArgument; recipient: string | TransactionArgument }
 
-export function proposeDelivery( txb: TransactionBlock, args: ProposeDeliveryArgs ) { return txb.moveCall({ target: `${PUBLISHED_AT}::transfers::propose_delivery`, arguments: [ obj(txb, args.multisig), pure(txb, args.key, `0x1::string::String`), pure(txb, args.executionTime, `u64`), pure(txb, args.expirationEpoch, `u64`), pure(txb, args.description, `0x1::string::String`), pure(txb, args.objects, `vector<0x2::object::ID>`), pure(txb, args.recipient, `address`) ], }) }
+export function proposeDelivery( tx: Transaction, args: ProposeDeliveryArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::transfers::propose_delivery`, arguments: [ obj(tx, args.multisig), pure(tx, args.key, `${String.$typeName}`), pure(tx, args.executionTime, `u64`), pure(tx, args.expirationEpoch, `u64`), pure(tx, args.description, `${String.$typeName}`), pure(tx, args.objects, `vector<${ID.$typeName}>`), pure(tx, args.recipient, `address`) ], }) }
 
-export interface ProposeSendArgs { multisig: ObjectArg; key: string | TransactionArgument; executionTime: bigint | TransactionArgument; expirationEpoch: bigint | TransactionArgument; description: string | TransactionArgument; objects: Array<string | TransactionArgument> | TransactionArgument; recipients: Array<string | TransactionArgument> | TransactionArgument }
+export interface ProposeSendArgs { multisig: TransactionObjectInput; key: string | TransactionArgument; executionTime: bigint | TransactionArgument; expirationEpoch: bigint | TransactionArgument; description: string | TransactionArgument; objects: Array<string | TransactionArgument> | TransactionArgument; recipients: Array<string | TransactionArgument> | TransactionArgument }
 
-export function proposeSend( txb: TransactionBlock, args: ProposeSendArgs ) { return txb.moveCall({ target: `${PUBLISHED_AT}::transfers::propose_send`, arguments: [ obj(txb, args.multisig), pure(txb, args.key, `0x1::string::String`), pure(txb, args.executionTime, `u64`), pure(txb, args.expirationEpoch, `u64`), pure(txb, args.description, `0x1::string::String`), pure(txb, args.objects, `vector<0x2::object::ID>`), pure(txb, args.recipients, `vector<address>`) ], }) }
+export function proposeSend( tx: Transaction, args: ProposeSendArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::transfers::propose_send`, arguments: [ obj(tx, args.multisig), pure(tx, args.key, `${String.$typeName}`), pure(tx, args.executionTime, `u64`), pure(tx, args.expirationEpoch, `u64`), pure(tx, args.description, `${String.$typeName}`), pure(tx, args.objects, `vector<${ID.$typeName}>`), pure(tx, args.recipients, `vector<address>`) ], }) }
 
-export interface RetrieveArgs { delivery: ObjectArg; multisig: ObjectArg }
+export interface RetrieveArgs { delivery: TransactionObjectInput; multisig: TransactionObjectInput }
 
-export function retrieve( txb: TransactionBlock, typeArg: string, args: RetrieveArgs ) { return txb.moveCall({ target: `${PUBLISHED_AT}::transfers::retrieve`, typeArguments: [typeArg], arguments: [ obj(txb, args.delivery), obj(txb, args.multisig) ], }) }
+export function retrieve( tx: Transaction, typeArg: string, args: RetrieveArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::transfers::retrieve`, typeArguments: [typeArg], arguments: [ obj(tx, args.delivery), obj(tx, args.multisig) ], }) }
 
-export interface SendArgs { executable: ObjectArg; multisig: ObjectArg; receiving: ObjectArg; witness: GenericArg; idx: bigint | TransactionArgument }
+export interface SendArgs { executable: TransactionObjectInput; multisig: TransactionObjectInput; receiving: TransactionObjectInput; witness: GenericArg; idx: bigint | TransactionArgument }
 
-export function send( txb: TransactionBlock, typeArgs: [string, string], args: SendArgs ) { return txb.moveCall({ target: `${PUBLISHED_AT}::transfers::send`, typeArguments: typeArgs, arguments: [ obj(txb, args.executable), obj(txb, args.multisig), obj(txb, args.receiving), generic(txb, `${typeArgs[1]}`, args.witness), pure(txb, args.idx, `u64`) ], }) }
+export function send( tx: Transaction, typeArgs: [string, string], args: SendArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::transfers::send`, typeArguments: typeArgs, arguments: [ obj(tx, args.executable), obj(tx, args.multisig), obj(tx, args.receiving), generic(tx, `${typeArgs[1]}`, args.witness), pure(tx, args.idx, `u64`) ], }) }

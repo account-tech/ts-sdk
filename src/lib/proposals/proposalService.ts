@@ -1,24 +1,25 @@
 
 import { bcs } from "@mysten/sui/bcs";
-import { Transaction, TransactionResult } from "@mysten/sui/transactions";
+import { Transaction, TransactionResult, TransactionArgument } from "@mysten/sui/transactions";
+import { proposeModify, executeModify } from "../../../.gen/kraken/config/functions.js";
 
 export class ProposalService {
     public packageId: string;
-    public multisig?: TransactionResult | string;
+    public multisig?: string | TransactionArgument;
     
-    constructor(packageId: string, multisig?: TransactionResult | string) {
+    constructor(packageId: string, multisig?: string) {
         this.packageId = packageId;
         this.multisig = multisig;
     }
 
-    setMultisig(multisig: TransactionResult | string) {
-        this.multisig = multisig;
-    }
-
-    // withPackageId(packageId: string) {
-    //     this.packageId = packageId;
-    //     return this;
+    // setMultisig(multisigId: string) {
+    //     this.multisigId = multisigId;
     // }
+
+    withMultisig(multisig: string | TransactionArgument): this {
+        this.multisig = multisig;
+        return this;
+    }
     
     // === Config ===
     
@@ -37,35 +38,35 @@ export class ProposalService {
         if ((toAdd || weights) && (toAdd?.length !== weights?.length)) {
             throw new Error("The number of members to add does not match the number of weights provided.");
         }
-        return tx.moveCall({
-            target: `${this.packageId}::config::propose_modify`,
-            arguments: [
-                typeof(this.multisig) === "string" ? tx.object(this.multisig) : this.multisig!, 
-                tx.pure.string(key), 
-                tx.pure.u64(executionTime), 
-                tx.pure.u64(expirationEpoch), 
-                tx.pure.string(description), 
-                name ? tx.pure(bcs.vector(bcs.String).serialize([name])) : tx.pure(bcs.vector(bcs.String).serialize([])), 
-                threshold ? tx.pure(bcs.vector(bcs.U64).serialize([threshold])) : tx.pure(bcs.vector(bcs.U64).serialize([])), 
-                toRemove ? tx.pure(bcs.vector(bcs.Address).serialize(toRemove)) : tx.pure(bcs.vector(bcs.Address).serialize([])), 
-                toAdd ? tx.pure(bcs.vector(bcs.Address).serialize(toAdd)) : tx.pure(bcs.vector(bcs.Address).serialize([])),
-                weights ? tx.pure(bcs.vector(bcs.U64).serialize(weights)) : tx.pure(bcs.vector(bcs.U64).serialize([])),
-            ],
-        });	
+
+        return proposeModify(
+            tx,
+            {
+                multisig: this.multisig!, 
+                key,
+                executionTime: BigInt(executionTime),
+                expirationEpoch: BigInt(expirationEpoch),
+                description,
+                name: name ?? null,
+                threshold: threshold ? BigInt(threshold) : null, 
+                toRemove: toRemove ?? [],
+                toAdd: toAdd ?? [],
+                weights: weights ? weights.map(BigInt) : [],
+            }
+        )
     }
     
     executeModify(
         tx: Transaction,
         executable: TransactionResult,
     ): TransactionResult {
-        console.log(this)
-        return tx.moveCall({
-            target: `${this.packageId}::config::execute_modify`,
-            arguments: [
-                executable, 
-                typeof(this.multisig) === "string" ? tx.object(this.multisig) : this.multisig!, 
-            ],
-        });
+        return executeModify(
+            tx,
+            {
+                executable,
+                multisig: this.multisig!,
+            }
+        )
     }
 
     // === Transfers ===

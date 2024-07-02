@@ -4,32 +4,33 @@ import {ID, UID} from "../../_dependencies/source/0x2/object/structs";
 import {UpgradeCap} from "../../_dependencies/source/0x2/package/structs";
 import {PhantomReified, Reified, StructClass, ToField, ToTypeStr, Vector, decodeFromFields, decodeFromFieldsWithTypes, decodeFromJSONField, fieldToJSON, phantom} from "../../_framework/reified";
 import {FieldsWithTypes, composeSuiType, compressSuiType} from "../../_framework/util";
+import {PKG_V1} from "../index";
 import {bcs, fromB64, fromHEX, toHEX} from "@mysten/bcs";
-import {SuiClient, SuiParsedData} from "@mysten/sui.js/client";
+import {SuiClient, SuiParsedData} from "@mysten/sui/client";
 
 /* ============================== Witness =============================== */
 
-export function isWitness(type: string): boolean { type = compressSuiType(type); return type === "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::upgrade_policies::Witness"; }
+export function isWitness(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::upgrade_policies::Witness`; }
 
 export interface WitnessFields { dummyField: ToField<"bool"> }
 
 export type WitnessReified = Reified< Witness, WitnessFields >;
 
-export class Witness implements StructClass { static readonly $typeName = "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::upgrade_policies::Witness"; static readonly $numTypeParams = 0;
+export class Witness implements StructClass { static readonly $typeName = `${PKG_V1}::upgrade_policies::Witness`; static readonly $numTypeParams = 0;
 
  readonly $typeName = Witness.$typeName;
 
- readonly $fullTypeName: "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::upgrade_policies::Witness";
+ readonly $fullTypeName: `${typeof PKG_V1}::upgrade_policies::Witness`;
 
  readonly $typeArgs: [];
 
  readonly dummyField: ToField<"bool">
 
- private constructor(typeArgs: [], fields: WitnessFields, ) { this.$fullTypeName = composeSuiType( Witness.$typeName, ...typeArgs ) as "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::upgrade_policies::Witness"; this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [], fields: WitnessFields, ) { this.$fullTypeName = composeSuiType( Witness.$typeName, ...typeArgs ) as `${typeof PKG_V1}::upgrade_policies::Witness`; this.$typeArgs = typeArgs;
 
  this.dummyField = fields.dummyField; }
 
- static reified( ): WitnessReified { return { typeName: Witness.$typeName, fullTypeName: composeSuiType( Witness.$typeName, ...[] ) as "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::upgrade_policies::Witness", typeArgs: [ ] as [], reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => Witness.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => Witness.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => Witness.fromBcs( data, ), bcs: Witness.bcs, fromJSONField: (field: any) => Witness.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => Witness.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => Witness.fromSuiParsedData( content, ), fetch: async (client: SuiClient, id: string) => Witness.fetch( client, id, ), new: ( fields: WitnessFields, ) => { return new Witness( [], fields ) }, kind: "StructClassReified", } }
+ static reified( ): WitnessReified { return { typeName: Witness.$typeName, fullTypeName: composeSuiType( Witness.$typeName, ...[] ) as `${typeof PKG_V1}::upgrade_policies::Witness`, typeArgs: [ ] as [], reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => Witness.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => Witness.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => Witness.fromBcs( data, ), bcs: Witness.bcs, fromJSONField: (field: any) => Witness.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => Witness.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => Witness.fromSuiParsedData( content, ), fetch: async (client: SuiClient, id: string) => Witness.fetch( client, id, ), new: ( fields: WitnessFields, ) => { return new Witness( [], fields ) }, kind: "StructClassReified", } }
 
  static get r() { return Witness.reified() }
 
@@ -74,27 +75,27 @@ export class Witness implements StructClass { static readonly $typeName = "0xfc7
 
 /* ============================== Restrict =============================== */
 
-export function isRestrict(type: string): boolean { type = compressSuiType(type); return type === "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::upgrade_policies::Restrict"; }
+export function isRestrict(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::upgrade_policies::Restrict`; }
 
 export interface RestrictFields { policy: ToField<"u8">; lockId: ToField<ID> }
 
 export type RestrictReified = Reified< Restrict, RestrictFields >;
 
-export class Restrict implements StructClass { static readonly $typeName = "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::upgrade_policies::Restrict"; static readonly $numTypeParams = 0;
+export class Restrict implements StructClass { static readonly $typeName = `${PKG_V1}::upgrade_policies::Restrict`; static readonly $numTypeParams = 0;
 
  readonly $typeName = Restrict.$typeName;
 
- readonly $fullTypeName: "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::upgrade_policies::Restrict";
+ readonly $fullTypeName: `${typeof PKG_V1}::upgrade_policies::Restrict`;
 
  readonly $typeArgs: [];
 
  readonly policy: ToField<"u8">; readonly lockId: ToField<ID>
 
- private constructor(typeArgs: [], fields: RestrictFields, ) { this.$fullTypeName = composeSuiType( Restrict.$typeName, ...typeArgs ) as "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::upgrade_policies::Restrict"; this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [], fields: RestrictFields, ) { this.$fullTypeName = composeSuiType( Restrict.$typeName, ...typeArgs ) as `${typeof PKG_V1}::upgrade_policies::Restrict`; this.$typeArgs = typeArgs;
 
  this.policy = fields.policy;; this.lockId = fields.lockId; }
 
- static reified( ): RestrictReified { return { typeName: Restrict.$typeName, fullTypeName: composeSuiType( Restrict.$typeName, ...[] ) as "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::upgrade_policies::Restrict", typeArgs: [ ] as [], reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => Restrict.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => Restrict.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => Restrict.fromBcs( data, ), bcs: Restrict.bcs, fromJSONField: (field: any) => Restrict.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => Restrict.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => Restrict.fromSuiParsedData( content, ), fetch: async (client: SuiClient, id: string) => Restrict.fetch( client, id, ), new: ( fields: RestrictFields, ) => { return new Restrict( [], fields ) }, kind: "StructClassReified", } }
+ static reified( ): RestrictReified { return { typeName: Restrict.$typeName, fullTypeName: composeSuiType( Restrict.$typeName, ...[] ) as `${typeof PKG_V1}::upgrade_policies::Restrict`, typeArgs: [ ] as [], reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => Restrict.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => Restrict.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => Restrict.fromBcs( data, ), bcs: Restrict.bcs, fromJSONField: (field: any) => Restrict.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => Restrict.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => Restrict.fromSuiParsedData( content, ), fetch: async (client: SuiClient, id: string) => Restrict.fetch( client, id, ), new: ( fields: RestrictFields, ) => { return new Restrict( [], fields ) }, kind: "StructClassReified", } }
 
  static get r() { return Restrict.reified() }
 
@@ -139,27 +140,27 @@ export class Restrict implements StructClass { static readonly $typeName = "0xfc
 
 /* ============================== TimeLock =============================== */
 
-export function isTimeLock(type: string): boolean { type = compressSuiType(type); return type === "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::upgrade_policies::TimeLock"; }
+export function isTimeLock(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::upgrade_policies::TimeLock`; }
 
 export interface TimeLockFields { delayMs: ToField<"u64"> }
 
 export type TimeLockReified = Reified< TimeLock, TimeLockFields >;
 
-export class TimeLock implements StructClass { static readonly $typeName = "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::upgrade_policies::TimeLock"; static readonly $numTypeParams = 0;
+export class TimeLock implements StructClass { static readonly $typeName = `${PKG_V1}::upgrade_policies::TimeLock`; static readonly $numTypeParams = 0;
 
  readonly $typeName = TimeLock.$typeName;
 
- readonly $fullTypeName: "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::upgrade_policies::TimeLock";
+ readonly $fullTypeName: `${typeof PKG_V1}::upgrade_policies::TimeLock`;
 
  readonly $typeArgs: [];
 
  readonly delayMs: ToField<"u64">
 
- private constructor(typeArgs: [], fields: TimeLockFields, ) { this.$fullTypeName = composeSuiType( TimeLock.$typeName, ...typeArgs ) as "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::upgrade_policies::TimeLock"; this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [], fields: TimeLockFields, ) { this.$fullTypeName = composeSuiType( TimeLock.$typeName, ...typeArgs ) as `${typeof PKG_V1}::upgrade_policies::TimeLock`; this.$typeArgs = typeArgs;
 
  this.delayMs = fields.delayMs; }
 
- static reified( ): TimeLockReified { return { typeName: TimeLock.$typeName, fullTypeName: composeSuiType( TimeLock.$typeName, ...[] ) as "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::upgrade_policies::TimeLock", typeArgs: [ ] as [], reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => TimeLock.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => TimeLock.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => TimeLock.fromBcs( data, ), bcs: TimeLock.bcs, fromJSONField: (field: any) => TimeLock.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => TimeLock.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => TimeLock.fromSuiParsedData( content, ), fetch: async (client: SuiClient, id: string) => TimeLock.fetch( client, id, ), new: ( fields: TimeLockFields, ) => { return new TimeLock( [], fields ) }, kind: "StructClassReified", } }
+ static reified( ): TimeLockReified { return { typeName: TimeLock.$typeName, fullTypeName: composeSuiType( TimeLock.$typeName, ...[] ) as `${typeof PKG_V1}::upgrade_policies::TimeLock`, typeArgs: [ ] as [], reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => TimeLock.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => TimeLock.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => TimeLock.fromBcs( data, ), bcs: TimeLock.bcs, fromJSONField: (field: any) => TimeLock.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => TimeLock.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => TimeLock.fromSuiParsedData( content, ), fetch: async (client: SuiClient, id: string) => TimeLock.fetch( client, id, ), new: ( fields: TimeLockFields, ) => { return new TimeLock( [], fields ) }, kind: "StructClassReified", } }
 
  static get r() { return TimeLock.reified() }
 
@@ -204,27 +205,27 @@ export class TimeLock implements StructClass { static readonly $typeName = "0xfc
 
 /* ============================== Upgrade =============================== */
 
-export function isUpgrade(type: string): boolean { type = compressSuiType(type); return type === "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::upgrade_policies::Upgrade"; }
+export function isUpgrade(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::upgrade_policies::Upgrade`; }
 
 export interface UpgradeFields { digest: ToField<Vector<"u8">>; lockId: ToField<ID> }
 
 export type UpgradeReified = Reified< Upgrade, UpgradeFields >;
 
-export class Upgrade implements StructClass { static readonly $typeName = "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::upgrade_policies::Upgrade"; static readonly $numTypeParams = 0;
+export class Upgrade implements StructClass { static readonly $typeName = `${PKG_V1}::upgrade_policies::Upgrade`; static readonly $numTypeParams = 0;
 
  readonly $typeName = Upgrade.$typeName;
 
- readonly $fullTypeName: "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::upgrade_policies::Upgrade";
+ readonly $fullTypeName: `${typeof PKG_V1}::upgrade_policies::Upgrade`;
 
  readonly $typeArgs: [];
 
  readonly digest: ToField<Vector<"u8">>; readonly lockId: ToField<ID>
 
- private constructor(typeArgs: [], fields: UpgradeFields, ) { this.$fullTypeName = composeSuiType( Upgrade.$typeName, ...typeArgs ) as "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::upgrade_policies::Upgrade"; this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [], fields: UpgradeFields, ) { this.$fullTypeName = composeSuiType( Upgrade.$typeName, ...typeArgs ) as `${typeof PKG_V1}::upgrade_policies::Upgrade`; this.$typeArgs = typeArgs;
 
  this.digest = fields.digest;; this.lockId = fields.lockId; }
 
- static reified( ): UpgradeReified { return { typeName: Upgrade.$typeName, fullTypeName: composeSuiType( Upgrade.$typeName, ...[] ) as "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::upgrade_policies::Upgrade", typeArgs: [ ] as [], reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => Upgrade.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => Upgrade.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => Upgrade.fromBcs( data, ), bcs: Upgrade.bcs, fromJSONField: (field: any) => Upgrade.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => Upgrade.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => Upgrade.fromSuiParsedData( content, ), fetch: async (client: SuiClient, id: string) => Upgrade.fetch( client, id, ), new: ( fields: UpgradeFields, ) => { return new Upgrade( [], fields ) }, kind: "StructClassReified", } }
+ static reified( ): UpgradeReified { return { typeName: Upgrade.$typeName, fullTypeName: composeSuiType( Upgrade.$typeName, ...[] ) as `${typeof PKG_V1}::upgrade_policies::Upgrade`, typeArgs: [ ] as [], reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => Upgrade.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => Upgrade.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => Upgrade.fromBcs( data, ), bcs: Upgrade.bcs, fromJSONField: (field: any) => Upgrade.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => Upgrade.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => Upgrade.fromSuiParsedData( content, ), fetch: async (client: SuiClient, id: string) => Upgrade.fetch( client, id, ), new: ( fields: UpgradeFields, ) => { return new Upgrade( [], fields ) }, kind: "StructClassReified", } }
 
  static get r() { return Upgrade.reified() }
 
@@ -269,27 +270,27 @@ export class Upgrade implements StructClass { static readonly $typeName = "0xfc7
 
 /* ============================== UpgradeLock =============================== */
 
-export function isUpgradeLock(type: string): boolean { type = compressSuiType(type); return type === "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::upgrade_policies::UpgradeLock"; }
+export function isUpgradeLock(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::upgrade_policies::UpgradeLock`; }
 
 export interface UpgradeLockFields { id: ToField<UID>; label: ToField<String>; multisigAddr: ToField<"address">; upgradeCap: ToField<UpgradeCap> }
 
 export type UpgradeLockReified = Reified< UpgradeLock, UpgradeLockFields >;
 
-export class UpgradeLock implements StructClass { static readonly $typeName = "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::upgrade_policies::UpgradeLock"; static readonly $numTypeParams = 0;
+export class UpgradeLock implements StructClass { static readonly $typeName = `${PKG_V1}::upgrade_policies::UpgradeLock`; static readonly $numTypeParams = 0;
 
  readonly $typeName = UpgradeLock.$typeName;
 
- readonly $fullTypeName: "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::upgrade_policies::UpgradeLock";
+ readonly $fullTypeName: `${typeof PKG_V1}::upgrade_policies::UpgradeLock`;
 
  readonly $typeArgs: [];
 
  readonly id: ToField<UID>; readonly label: ToField<String>; readonly multisigAddr: ToField<"address">; readonly upgradeCap: ToField<UpgradeCap>
 
- private constructor(typeArgs: [], fields: UpgradeLockFields, ) { this.$fullTypeName = composeSuiType( UpgradeLock.$typeName, ...typeArgs ) as "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::upgrade_policies::UpgradeLock"; this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [], fields: UpgradeLockFields, ) { this.$fullTypeName = composeSuiType( UpgradeLock.$typeName, ...typeArgs ) as `${typeof PKG_V1}::upgrade_policies::UpgradeLock`; this.$typeArgs = typeArgs;
 
  this.id = fields.id;; this.label = fields.label;; this.multisigAddr = fields.multisigAddr;; this.upgradeCap = fields.upgradeCap; }
 
- static reified( ): UpgradeLockReified { return { typeName: UpgradeLock.$typeName, fullTypeName: composeSuiType( UpgradeLock.$typeName, ...[] ) as "0xfc7fe302a04f775d0142bb5ef8843530bf53fc61b14262a7d22a0a2620973c6::upgrade_policies::UpgradeLock", typeArgs: [ ] as [], reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => UpgradeLock.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => UpgradeLock.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => UpgradeLock.fromBcs( data, ), bcs: UpgradeLock.bcs, fromJSONField: (field: any) => UpgradeLock.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => UpgradeLock.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => UpgradeLock.fromSuiParsedData( content, ), fetch: async (client: SuiClient, id: string) => UpgradeLock.fetch( client, id, ), new: ( fields: UpgradeLockFields, ) => { return new UpgradeLock( [], fields ) }, kind: "StructClassReified", } }
+ static reified( ): UpgradeLockReified { return { typeName: UpgradeLock.$typeName, fullTypeName: composeSuiType( UpgradeLock.$typeName, ...[] ) as `${typeof PKG_V1}::upgrade_policies::UpgradeLock`, typeArgs: [ ] as [], reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => UpgradeLock.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => UpgradeLock.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => UpgradeLock.fromBcs( data, ), bcs: UpgradeLock.bcs, fromJSONField: (field: any) => UpgradeLock.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => UpgradeLock.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => UpgradeLock.fromSuiParsedData( content, ), fetch: async (client: SuiClient, id: string) => UpgradeLock.fetch( client, id, ), new: ( fields: UpgradeLockFields, ) => { return new UpgradeLock( [], fields ) }, kind: "StructClassReified", } }
 
  static get r() { return UpgradeLock.reified() }
 

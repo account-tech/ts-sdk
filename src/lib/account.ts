@@ -1,8 +1,9 @@
-import { Transaction, TransactionResult } from "@mysten/sui/transactions";
+import { Transaction, TransactionArgument, TransactionResult } from "@mysten/sui/transactions";
 import { SuiClient, getFullnodeUrl } from "@mysten/sui/client";
 import { normalizeSuiAddress } from "@mysten/sui/utils";
 import { Account as AccountRaw } from "../../.gen/kraken/account/structs.js";
 import { Multisig as MultisigRaw } from "../../.gen/kraken/multisig/structs.js";
+import { new_, destroy, joinMultisig, leaveMultisig, sendInvite, acceptInvite, refuseInvite } from "../../.gen/kraken/account/functions.js";
 
 export class Account {
 	public client: SuiClient;
@@ -102,58 +103,31 @@ export class Account {
 	}
 
 	createAccount(tx: Transaction, username: string, profilePicture: string): TransactionResult {
-		return tx.moveCall({
-			target: `${this.packageId}::account::new`,
-			arguments: [tx.pure.string(username), tx.pure.string(profilePicture)],
-		});
+		return new_(tx, { username, profilePicture });
 	}
 
 	deleteAccount(tx: Transaction, account: string): TransactionResult {
-		return tx.moveCall({
-			target: `${this.packageId}::account::destroy`,
-			arguments: [tx.object(account)],
-		});
+		return destroy(tx, account);
 	}
 
-	joinMultisig(tx: Transaction, account: string, multisig: string | TransactionResult): TransactionResult {
-		return tx.moveCall({
-			target: `${this.packageId}::account::join_multisig`,
-			arguments: [
-				tx.object(account), 
-				typeof multisig === "string" ? tx.pure.id(multisig) : multisig
-			],
-		});
+	joinMultisig(tx: Transaction, account: string, multisig: string | TransactionArgument): TransactionResult {
+		return joinMultisig(tx, { account, multisig });
 	}
 
 	leaveMultisig(tx: Transaction, account: string, multisig: string): TransactionResult {
-		return tx.moveCall({
-			target: `${this.packageId}::account::leave_multisig`,
-			arguments: [tx.object(account), tx.pure.id(multisig)],
-		});
+		return leaveMultisig(tx, { account, multisig });
 	}
 
-	sendInvite(tx: Transaction, multisig: string | TransactionResult, recipient: string): TransactionResult {
-		return tx.moveCall({
-			target: `${this.packageId}::account::send_invite`,
-			arguments: [
-				typeof multisig === "string" ? tx.object(multisig) : multisig,
-				tx.pure.address(recipient)
-			],
-		});
+	sendInvite(tx: Transaction, multisig: string | TransactionArgument, recipient: string): TransactionResult {
+		return sendInvite(tx, { multisig, recipient });
 	}
 
-	acceptInvite(tx: Transaction, account: string, invite: string): TransactionResult {
-		return tx.moveCall({
-			target: `${this.packageId}::account::accept_invite`,
-			arguments: [tx.object(account), tx.object(invite)],
-		});
+	acceptInvite(tx: Transaction, account: string, multisig: string, invite: string): TransactionResult {
+		return acceptInvite(tx, { account, multisig, invite });
 	}
 
-	refuseInvite(tx: Transaction, account: string, invite: string): TransactionResult {
-        return tx.moveCall({
-			target: `${this.packageId}::account::refuse_invite`,
-			arguments: [tx.object(account), tx.object(invite)],
-		});
+	refuseInvite(tx: Transaction, invite: string): TransactionResult {
+		return refuseInvite(tx, invite);
 	}
 }
 

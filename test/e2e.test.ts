@@ -2,7 +2,7 @@ import { assert } from 'chai';
 import { getFaucetHost, requestSuiFromFaucetV0 } from "@mysten/sui/faucet";
 import { Ed25519Keypair } from "@mysten/sui/keypairs/ed25519";
 import { Transaction } from "@mysten/sui/transactions";
-import { FRAMEWORK, KrakenClient, KRAKEN, STDLIB } from "../src/index.js"
+import { FRAMEWORK, KrakenClient, STDLIB } from "../src/index.js"
 import { SuiTransactionBlockResponse } from "@mysten/sui/client";
 import { PACKAGE_ID } from "../.gen/kraken/index.js";
 
@@ -67,6 +67,7 @@ import { PACKAGE_ID } from "../.gen/kraken/index.js";
         await kraken.account?.fetchAccount();
         if (!kraken.account?.id) {
             const tx = new Transaction();
+            console.log(kraken)
             kraken.account?.createAccount(tx, "Thouny", "");
             await executeTx(tx);
         }
