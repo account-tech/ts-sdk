@@ -1,15 +1,13 @@
-import { Ed25519Keypair } from "@mysten/sui/keypairs/ed25519";
 import { Account } from "../../src/lib/account.js"
-import { PACKAGE_ID } from "../../.gen/kraken/index.js";
+import { PACKAGE_ID } from "../../.gen/kraken-multisig/index.js";
 
 (async () => {
-    const keypair = Ed25519Keypair.fromSecretKey(Uint8Array.from(Buffer.from("AM06bExREdFceWiExfSacTJ+64AQtFl7SRkSiTmAqh6F", "base64")).slice(1));
     const account = await Account.init(
-        "localnet",
+        "testnet",
         PACKAGE_ID,
-        keypair.toSuiAddress(),
+        "0x67fa77f2640ca7e0141648bf008e13945263efad6dc429303ad49c740e2084a9",
     )
 
-    const acc = await account.getAccount(keypair.toSuiAddress());    
+    const acc = await account.getAccount("0x67fa77f2640ca7e0141648bf008e13945263efad6dc429303ad49c740e2084a9");    
     console.log(acc);
 })();

@@ -1,18 +1,18 @@
 import { Transaction } from "@mysten/sui/transactions";
 import { Multisig } from "../../src/lib/multisig.js"
 import { Ed25519Keypair } from "@mysten/sui/keypairs/ed25519";
-import { PACKAGE_ID } from "../../.gen/kraken/index.js";
+import { PACKAGE_ID } from "../../.gen/kraken-multisig/index.js";
 
 (async () => {
-    const keypair = Ed25519Keypair.fromSecretKey(Uint8Array.from(Buffer.from("AM06bExREdFceWiExfSacTJ+64AQtFl7SRkSiTmAqh6F", "base64")).slice(1));
+    const keypair = Ed25519Keypair.fromSecretKey(Uint8Array.from(Buffer.from("ADaEvt8+CcmH2akiXRP4dmDJ00q4wrTmYt7OVaf/dpso", "base64")).slice(1));
     const multisig = await Multisig.init(
-        "localnet",
+        "testnet",
         PACKAGE_ID,
         keypair.toSuiAddress(),
     )
 
     const tx = new Transaction();
-    const ms = multisig.newMultisig(tx, "0x16de126ee5233e74ace738447f5c871d46e4f48a14605d547ee3c9b68da93d8d", "Main");
+    const ms = multisig.newMultisig(tx, "0xe1a59c0bb21730b8fcb31e5d0f62122dbcc9db9a0f666c5342b5634b7cbf0da3", "Main");
     multisig.shareMultisig(tx, ms);
     tx.setGasBudget(1000000000);
     const result = await multisig.client.signAndExecuteTransaction({

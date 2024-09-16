@@ -1,9 +1,9 @@
 import { Transaction, TransactionArgument, TransactionResult } from "@mysten/sui/transactions";
 import { SuiClient, getFullnodeUrl } from "@mysten/sui/client";
 import { normalizeSuiAddress } from "@mysten/sui/utils";
-import { Account as AccountRaw } from "../../.gen/kraken/account/structs.js";
-import { Multisig as MultisigRaw } from "../../.gen/kraken/multisig/structs.js";
-import { new_, destroy, joinMultisig, leaveMultisig, sendInvite, acceptInvite, refuseInvite } from "../../.gen/kraken/account/functions.js";
+import { Account as AccountRaw } from "../../.gen/kraken-multisig/account/structs.js";
+import { Multisig as MultisigRaw } from "../../.gen/kraken-multisig/multisig/structs.js";
+import { new_, destroy, joinMultisig, leaveMultisig, sendInvite, acceptInvite, refuseInvite } from "../../.gen/kraken-multisig/account/functions.js";
 
 export class Account {
 	public client: SuiClient;
@@ -50,7 +50,7 @@ export class Account {
 
 	// TODO: implement merge accounts
 
-    // get and decode account data from abi
+    // get and decode account data using sui-client-gen
 	async getAccountRaw(owner: string = this.userAddr): Promise<AccountRaw | null> {
 		const { data } = await this.client.getOwnedObjects({
 			owner,

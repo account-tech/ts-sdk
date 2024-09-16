@@ -1,9 +1,26 @@
+export type Extension = {
+    name: string,
+    history: { package: string, version: number }[],
+}
+
+export type Dep = {
+    name: string,
+    package: string,
+    version: number,
+}
+
+export type Role = {
+    threshold: number,
+    totalWeight: number,
+}
+
 export type Member = {
-    owner: string,
-    id: string,
+    address: string,
+    accountId: string,
     username: string,
     profilePicture: string,
     weight: number,
+    roles: string[],
 };
 
 export type Proposal = {

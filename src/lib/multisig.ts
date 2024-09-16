@@ -1,20 +1,18 @@
 import { Transaction, TransactionArgument, TransactionResult } from "@mysten/sui/transactions";
 import { SuiClient, getFullnodeUrl } from "@mysten/sui/client";
 import { normalizeSuiAddress } from "@mysten/sui/utils";
-import { Account as AccountRaw } from "../../.gen/kraken/account/structs.js";
-import { Multisig as MultisigRaw } from "../../.gen/kraken/multisig/structs.js";
+import { Multisig as MultisigRaw } from "../../.gen/kraken-multisig/multisig/structs.js";
+import { new_, share, approveProposal, removeApproval, executeProposal } from "../../.gen/kraken-multisig/multisig/functions.js";
 import { CLOCK } from "../types/constants.js";
-import { Proposal, Member } from "../types/types.js";
+import { Proposal, Member, Dep, Role } from "../types/types.js";
 import { Account } from "./account.js";
-import { new_, share, approveProposal, removeApproval, executeProposal } from "../../.gen/kraken/multisig/functions.js";
 
 export class Multisig {
 	public client: SuiClient;
     public id?: string;
-    public version?: number;
     public name?: string;
-    public threshold?: number;
-    public totalWeight?: number;
+    public deps: Dep[];
+    public roles: Map<string, Role>;
     public members?: Member[];
     public proposals?: Proposal[];
 
@@ -161,7 +159,11 @@ export class Multisig {
 	}
 
 	// members and weights are optional, if none are provided then only the creator is added with weight 1
-	newMultisig(tx: Transaction, accountId: string, name: string): TransactionResult {
+	newMultisig(
+		tx: Transaction, 
+		accountId: string, 
+		name: string
+	): TransactionResult {
 		return new_(tx, { name, accountId });
 	}
 
