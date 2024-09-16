@@ -1,7 +1,7 @@
 
 import { bcs } from "@mysten/sui/bcs";
 import { Transaction, TransactionResult, TransactionArgument } from "@mysten/sui/transactions";
-import { proposeModify, executeModify } from "../../../.gen/kraken/config/functions.js";
+import { proposeModify, executeModify } from "../../.gen/kraken/config/functions.js";
 
 export class ProposalService {
     public packageId: string;

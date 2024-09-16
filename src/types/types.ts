@@ -1,8 +1,3 @@
-export type Extension = {
-    name: string,
-    history: { package: string, version: number }[],
-}
-
 export type Dep = {
     name: string,
     package: string,
@@ -24,15 +19,15 @@ export type Member = {
 };
 
 export type Proposal = {
-    id: string,
-    key: string,
-    module_witness: string,
+    auth: { issuer: string, name: string },
+    name: string,
     description: string,
     expirationEpoch: bigint,
     executionTime: bigint,
-    approvalWeight: number,
-    approved: string[],
     actions: any[],
+    totalWeight: number,
+    roleWeight: number,
+    approved: string[],
 }
 
 export type Kiosk = {

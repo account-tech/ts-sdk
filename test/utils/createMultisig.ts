@@ -1,7 +1,7 @@
 import { Transaction } from "@mysten/sui/transactions";
 import { Multisig } from "../../src/lib/multisig.js"
 import { Ed25519Keypair } from "@mysten/sui/keypairs/ed25519";
-import { PACKAGE_ID } from "../../.gen/kraken-multisig/index.js";
+import { PACKAGE_ID } from "../../src/.gen/kraken-multisig/index.js";
 
 (async () => {
     const keypair = Ed25519Keypair.fromSecretKey(Uint8Array.from(Buffer.from("ADaEvt8+CcmH2akiXRP4dmDJ00q4wrTmYt7OVaf/dpso", "base64")).slice(1));

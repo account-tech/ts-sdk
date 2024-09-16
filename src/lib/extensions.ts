@@ -1,7 +1,11 @@
 import { SuiClient, getFullnodeUrl } from '@mysten/sui/client';
-import { ExtensionFields, Extensions as ExtensionsRaw, History } from '../../.gen/kraken-extensions/extensions/structs.js';
-import { Extension } from '../types/types.js';
-import { EXTENSIONS } from '../types/constants.js';
+import { ExtensionFields, Extensions as ExtensionsRaw, History } from '../.gen/kraken-extensions/extensions/structs';
+import { EXTENSIONS } from '../types/constants';
+
+export interface Extension {
+    name: string;
+    history: { package: string, version: number }[];
+}
 
 export class Extensions {
     public client: SuiClient;
@@ -46,8 +50,8 @@ export class Extensions {
         const extensions: Extension[] = extensionsRaw.inner.map((extension: ExtensionFields) => {
             const history = extension.history.map((entry: History) => {
                 return {
-                    id: entry.package,
-                    version: entry.version,
+                    package: entry.package,
+                    version: Number(entry.version),
                 }
             });
             

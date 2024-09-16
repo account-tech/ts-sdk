@@ -1,59 +1,58 @@
-import { Transaction, TransactionArgument, TransactionResult } from "@mysten/sui/transactions";
-import { SuiClient, getFullnodeUrl } from "@mysten/sui/client";
-import { normalizeSuiAddress } from "@mysten/sui/utils";
-import { Multisig as MultisigRaw } from "../../.gen/kraken-multisig/multisig/structs.js";
-import { new_, share, approveProposal, removeApproval, executeProposal } from "../../.gen/kraken-multisig/multisig/functions.js";
-import { CLOCK } from "../types/constants.js";
-import { Proposal, Member, Dep, Role } from "../types/types.js";
-import { Account } from "./account.js";
+import { Transaction, TransactionArgument, TransactionResult } from '@mysten/sui/transactions';
+import { SuiClient, getFullnodeUrl } from '@mysten/sui/client';
+import { Multisig as MultisigRaw } from '../.gen/kraken-multisig/multisig/structs';
+import { new_, share, approveProposal, removeApproval, executeProposal } from '../.gen/kraken-multisig/multisig/functions';
+import { DepFields } from 'src/.gen/kraken-multisig/deps/structs';
+import { MemberFields } from 'src/.gen/kraken-multisig/members/structs';
+import { RoleFields } from 'src/.gen/kraken-multisig/thresholds/structs';
+import { ProposalFields } from 'src/.gen/kraken-multisig/proposals/structs';
+import { CLOCK, EXTENSIONS } from '../types/constants';
+import { Proposal, Member, Dep, Role } from '../types/types';
+import { Account } from './account';
+
+export interface MultisigData {
+	id: string;
+    name: string;
+    deps: Dep[];
+    roles: Map<string, Role>;
+    members: Member[];
+    proposals: Proposal[];
+}
 
 export class Multisig {
 	public client: SuiClient;
-    public id?: string;
-    public name?: string;
-    public deps: Dep[];
-    public roles: Map<string, Role>;
-    public members?: Member[];
-    public proposals?: Proposal[];
+    public id: string = '';
+    public name: string = '';
+    public deps: Dep[] = [];
+    public roles: Map<string, Role> = new Map();
+    public members: Member[] = [];
+    public proposals: Proposal[] = [];
 
 	private constructor(
-		public network: "mainnet" | "testnet" | "devnet" | "localnet" | string,
-        public packageId: string,
+		public network: 'mainnet' | 'testnet' | 'devnet' | 'localnet' | string,
 		public userAddr: string,
 	) {
 		console.log(network)
-		const url = (network == "mainnet" || network == "testnet" || network == "devnet" || network == "localnet") ? getFullnodeUrl(network) : network;
+		const url = (network == 'mainnet' || network == 'testnet' || network == 'devnet' || network == 'localnet') ? getFullnodeUrl(network) : network;
 		this.client = new SuiClient({ url });
-		this.packageId = normalizeSuiAddress(packageId);
 	}
 
 	static async init(
-        network: "mainnet" | "testnet" | "devnet" | "localnet" | string,
-        packageId: string, 
+        network: 'mainnet' | 'testnet' | 'devnet' | 'localnet' | string,
         userAddr: string, 
         multisigId?: string,
     ): Promise<Multisig> {
-		const multisig = new Multisig(network, packageId, userAddr);
-        if (multisigId) {
-			const multisigData = await multisig.getMultisig(multisigId);
-			multisig.id = multisigId;
-            multisig.version = multisigData.version;
-            multisig.name = multisigData.name;
-            multisig.threshold = multisigData.threshold;
-            multisig.totalWeight = multisigData.totalWeight;
-            multisig.members = multisigData.members;
-            multisig.proposals = multisigData.proposals;
-        }
+		const multisig = new Multisig(network, userAddr);
+        multisigId && multisig.fetchMultisig(multisigId);
 		return multisig;
 	}
 
 	async fetchMultisig(id: string = this.id!) {
 		const multisigData = await this.getMultisig(id);
 		this.id = id;
-		this.version = multisigData.version;
 		this.name = multisigData.name;
-		this.threshold = multisigData.threshold;
-		this.totalWeight = multisigData.totalWeight;
+		this.deps = multisigData.deps;
+		this.roles = multisigData.roles;
 		this.members = multisigData.members;
 		this.proposals = multisigData.proposals;
 	}
@@ -69,32 +68,56 @@ export class Multisig {
 		return MultisigRaw.fromSuiParsedData(data.content);
 	}
 
-	async getMultisig(
-        id: string
-    ): Promise<{version: number, name: string, threshold: number, totalWeight: number, members: Member[], proposals: Proposal[]}> {
+	async getMultisig(id: string): Promise<MultisigData> {
 		const multisigRaw = await this.getMultisigRaw(id);
-		const membersAddress: string[] = multisigRaw!.members.contents.map((member: any) => member.key);
-        // get Member for all members
-		const members = await Promise.all(membersAddress.map(async member => {
-			const weight = multisigRaw?.members.contents.find((m: any) => m.key == member)?.value.weight;
-			const account = await Account.init(this.network, this.packageId, this.userAddr);
-			const accountRaw = await account.getAccountRaw(member);
+
+		// get deps
+		const deps: Dep[] = multisigRaw.deps.inner.map((dep: DepFields) => {
+			return { name: dep.name, package: dep.package, version: Number(dep.version) };
+		});
+
+        // get all members' data (from account and member)
+		const membersAddress: string[] = multisigRaw.members.inner.map((member: MemberFields) => member.addr);
+		const members = await Promise.all(membersAddress.map(async memberAddr => {
+			const weight = multisigRaw.members.inner.find((m: MemberFields) => m.addr == memberAddr)?.weight;
+			const roles = multisigRaw.members.inner.find((m: MemberFields) => m.addr == memberAddr)?.roles.contents;
+			const account = await Account.init(this.network, this.userAddr);
+			const accountRaw = await account.getAccountRaw(memberAddr);
 			return {
-				owner: member,
-				id: accountRaw?.id.id!,
+				address: memberAddr,
+				accountId: accountRaw?.id!,
 				username: accountRaw?.username!,
 				profilePicture: accountRaw?.profilePicture!,
-				weight: Number(weight),
+				weight: Number(weight)!,
+				roles: roles!
 			}
 		}));
+
+		// calculate total weights
+		const globalWeight = members.reduce((acc, member) => acc + member.weight, 0);
+		// Calculate total weights for each role
+		const roleWeights = new Map<string, number>();
+		members.forEach(member => {
+			member.roles.forEach(role => {
+				const currentWeight = roleWeights.get(role) || 0;
+				roleWeights.set(role, currentWeight + member.weight);
+			});
+		});
+		// get thresholds
+		const roles = new Map<string, Role>();
+		roles.set('global', { threshold: Number(multisigRaw.thresholds.global), totalWeight: globalWeight });
+		multisigRaw.thresholds.roles.forEach((role: RoleFields) => {
+			roles.set(role.name, { threshold: Number(role.threshold), totalWeight: roleWeights.get(role.name) || 0 });
+		});
+
 		// get Proposals with actions
-		const proposals = await this.getProposals(multisigRaw!);
+		const proposals = await this.getProposals(multisigRaw);
 		
 		return {
-			version: Number(multisigRaw!.version),
-			name: multisigRaw!.name,
-			threshold: Number(multisigRaw!.threshold),
-			totalWeight: Number(multisigRaw!.totalWeight),
+			id: multisigRaw.id,
+			name: multisigRaw.name,
+			deps,
+			roles,
 			members,
 			proposals,
 		}
@@ -102,9 +125,9 @@ export class Multisig {
 	
 	// get proposals in multisig and all actions in each proposal's bag in order
 	async getProposals(multisigRaw: MultisigRaw): Promise<Proposal[]> {
-		return await Promise.all(multisigRaw!.proposals.contents.map(async (proposal: any) => {
+		return await Promise.all(multisigRaw!.proposals.inner.map(async (proposal: ProposalFields) => {
 			// get the actions in each proposal bag
-			const parentId = proposal.value.actions.id.id;
+			const parentId = proposal.actions.id;
 			const { data } = await this.client.getDynamicFields({ parentId });
 			// sort actions by ascending order 
 			const ids = data
@@ -118,35 +141,35 @@ export class Multisig {
 					options: { showContent: true }
 				});
 				actions = actionDfs.map((df: any) => ({
-					type: df.data?.content?.fields.value.type.split("::").pop(), // The action Struct name
+					type: df.data?.content?.fields.value.type.split('::').pop(), // The action Struct name
 					...df.data?.content?.fields.value.fields // The action Struct fields
 				}));
 			}
 			
 			return {
-				id: proposal.value.id,
-				key: proposal.key,
-				moduleWitness: proposal.value.moduleWitness.name,
-				description: proposal.value.description,
-				expirationEpoch: proposal.value.expirationEpoch,
-				executionTime: proposal.value.executionTime,
-				approvalWeight: Number(proposal.value.approvalWeight),
-				approved: proposal.value.approved.contents as string[],
-				actions
+				auth: { issuer: proposal.auth.issuer.name, name: proposal.auth.name },
+				name: proposal.name,
+				description: proposal.description,
+				expirationEpoch: proposal.expirationEpoch,
+				executionTime: proposal.executionTime,
+				actions,
+				totalWeight: Number(proposal.totalWeight),
+				roleWeight: Number(proposal.roleWeight),
+				approved: proposal.approved.contents,
 			}
 		}));
 	}
 
-	getProposal(key: string): Proposal {
-		const proposal = this.proposals?.find(p => p.key == key);
+	getProposal(name: string): Proposal {
+		const proposal = this.proposals?.find(p => p.name == name);
 		if (!proposal) {
-			throw new Error(`Proposal with key ${key} not found.`);
+			throw new Error(`Proposal with name ${name} not found.`);
 		}
 		return proposal;
 	}
 
 	getMemberWeight(addr: string): number {
-		const member = this.members?.find(m => m.owner == addr);
+		const member = this.members?.find(m => m.address == addr);
 		if (!member) {
 			throw new Error(`Member with address ${addr} not found.`);
 		}
@@ -158,13 +181,26 @@ export class Multisig {
 		return proposal.approved.includes(addr);
 	}
 
-	// members and weights are optional, if none are provided then only the creator is added with weight 1
 	newMultisig(
 		tx: Transaction, 
+		name: string,
 		accountId: string, 
-		name: string
+		deps: Dep[],
 	): TransactionResult {
-		return new_(tx, { name, accountId });
+		let depNames: string[] = [];
+		let depPackages: string[] = [];
+		let depVersions: bigint[] = [];
+
+		deps.forEach(dep => {
+			depNames.push(dep.name);
+			depPackages.push(dep.package);
+			depVersions.push(BigInt(dep.version));
+		});
+
+		return new_(
+			tx, 
+			{ extensions: EXTENSIONS, name, accountId, depNames, depPackages, depVersions }
+		);
 	}
 
     shareMultisig(tx: Transaction, multisig: TransactionArgument): TransactionResult {

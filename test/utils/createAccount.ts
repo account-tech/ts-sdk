@@ -1,7 +1,7 @@
 import { Transaction } from "@mysten/sui/transactions";
 import { Account } from "../../src/lib/account.js"
 import { Ed25519Keypair } from "@mysten/sui/keypairs/ed25519";
-import { PACKAGE_ID } from "../../.gen/kraken-multisig/index.js";
+import { PACKAGE_ID } from "../../src/.gen/kraken-multisig/index.js";
 
 (async () => {
     
