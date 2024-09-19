@@ -8,13 +8,13 @@ export interface NewArgs { multisig: TransactionObjectInput; name: string | Tran
 
 export function new_( tx: Transaction, args: NewArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::kiosk::new`, arguments: [ obj(tx, args.multisig), pure(tx, args.name, `${String.$typeName}`) ], }) }
 
-export interface ListArgs { executable: TransactionObjectInput; multisig: TransactionObjectInput; kiosk: TransactionObjectInput; issuer: GenericArg }
+export interface ListArgs { executable: TransactionObjectInput; multisig: TransactionObjectInput; kiosk: TransactionObjectInput; witness: GenericArg }
 
-export function list( tx: Transaction, typeArgs: [string, string], args: ListArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::kiosk::list`, typeArguments: typeArgs, arguments: [ obj(tx, args.executable), obj(tx, args.multisig), obj(tx, args.kiosk), generic(tx, `${typeArgs[1]}`, args.issuer) ], }) }
+export function list( tx: Transaction, typeArgs: [string, string], args: ListArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::kiosk::list`, typeArguments: typeArgs, arguments: [ obj(tx, args.executable), obj(tx, args.multisig), obj(tx, args.kiosk), generic(tx, `${typeArgs[1]}`, args.witness) ], }) }
 
-export interface TakeArgs { executable: TransactionObjectInput; multisig: TransactionObjectInput; multisigKiosk: TransactionObjectInput; recipientKiosk: TransactionObjectInput; recipientCap: TransactionObjectInput; policy: TransactionObjectInput; issuer: GenericArg }
+export interface TakeArgs { executable: TransactionObjectInput; multisig: TransactionObjectInput; multisigKiosk: TransactionObjectInput; recipientKiosk: TransactionObjectInput; recipientCap: TransactionObjectInput; policy: TransactionObjectInput; witness: GenericArg }
 
-export function take( tx: Transaction, typeArgs: [string, string], args: TakeArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::kiosk::take`, typeArguments: typeArgs, arguments: [ obj(tx, args.executable), obj(tx, args.multisig), obj(tx, args.multisigKiosk), obj(tx, args.recipientKiosk), obj(tx, args.recipientCap), obj(tx, args.policy), generic(tx, `${typeArgs[1]}`, args.issuer) ], }) }
+export function take( tx: Transaction, typeArgs: [string, string], args: TakeArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::kiosk::take`, typeArguments: typeArgs, arguments: [ obj(tx, args.executable), obj(tx, args.multisig), obj(tx, args.multisigKiosk), obj(tx, args.recipientKiosk), obj(tx, args.recipientCap), obj(tx, args.policy), generic(tx, `${typeArgs[1]}`, args.witness) ], }) }
 
 export interface DelistArgs { multisig: TransactionObjectInput; kiosk: TransactionObjectInput; name: string | TransactionArgument; nft: string | TransactionArgument }
 
@@ -36,13 +36,13 @@ export function completeList( tx: Transaction, executable: TransactionObjectInpu
 
 export function completeTake( tx: Transaction, executable: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::kiosk::complete_take`, arguments: [ obj(tx, executable) ], }) }
 
-export interface DestroyListArgs { executable: TransactionObjectInput; issuer: GenericArg }
+export interface DestroyListArgs { executable: TransactionObjectInput; witness: GenericArg }
 
-export function destroyList( tx: Transaction, typeArg: string, args: DestroyListArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::kiosk::destroy_list`, typeArguments: [typeArg], arguments: [ obj(tx, args.executable), generic(tx, `${typeArg}`, args.issuer) ], }) }
+export function destroyList( tx: Transaction, typeArg: string, args: DestroyListArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::kiosk::destroy_list`, typeArguments: [typeArg], arguments: [ obj(tx, args.executable), generic(tx, `${typeArg}`, args.witness) ], }) }
 
-export interface DestroyTakeArgs { executable: TransactionObjectInput; issuer: GenericArg }
+export interface DestroyTakeArgs { executable: TransactionObjectInput; witness: GenericArg }
 
-export function destroyTake( tx: Transaction, typeArg: string, args: DestroyTakeArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::kiosk::destroy_take`, typeArguments: [typeArg], arguments: [ obj(tx, args.executable), generic(tx, `${typeArg}`, args.issuer) ], }) }
+export function destroyTake( tx: Transaction, typeArg: string, args: DestroyTakeArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::kiosk::destroy_take`, typeArguments: [typeArg], arguments: [ obj(tx, args.executable), generic(tx, `${typeArg}`, args.witness) ], }) }
 
 export interface ExecuteListArgs { executable: TransactionObjectInput; multisig: TransactionObjectInput; kiosk: TransactionObjectInput }
 

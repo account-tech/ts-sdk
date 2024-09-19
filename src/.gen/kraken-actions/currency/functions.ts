@@ -7,35 +7,33 @@ import {Transaction, TransactionArgument, TransactionObjectInput} from "@mysten/
 
 export function supply( tx: Transaction, typeArg: string, lock: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::currency::supply`, typeArguments: [typeArg], arguments: [ obj(tx, lock) ], }) }
 
-export interface UpdateArgs { executable: TransactionObjectInput; multisig: TransactionObjectInput; metadata: TransactionObjectInput; issuer: GenericArg }
+export interface UpdateArgs { executable: TransactionObjectInput; multisig: TransactionObjectInput; metadata: TransactionObjectInput; witness: GenericArg }
 
-export function update( tx: Transaction, typeArgs: [string, string], args: UpdateArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::currency::update`, typeArguments: typeArgs, arguments: [ obj(tx, args.executable), obj(tx, args.multisig), obj(tx, args.metadata), generic(tx, `${typeArgs[1]}`, args.issuer) ], }) }
+export function update( tx: Transaction, typeArgs: [string, string], args: UpdateArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::currency::update`, typeArguments: typeArgs, arguments: [ obj(tx, args.executable), obj(tx, args.multisig), obj(tx, args.metadata), generic(tx, `${typeArgs[1]}`, args.witness) ], }) }
 
-export interface BurnArgs { executable: TransactionObjectInput; multisig: TransactionObjectInput; coin: TransactionObjectInput; issuer: GenericArg }
+export interface BurnArgs { executable: TransactionObjectInput; multisig: TransactionObjectInput; coin: TransactionObjectInput; witness: GenericArg }
 
-export function burn( tx: Transaction, typeArgs: [string, string], args: BurnArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::currency::burn`, typeArguments: typeArgs, arguments: [ obj(tx, args.executable), obj(tx, args.multisig), obj(tx, args.coin), generic(tx, `${typeArgs[1]}`, args.issuer) ], }) }
+export function burn( tx: Transaction, typeArgs: [string, string], args: BurnArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::currency::burn`, typeArguments: typeArgs, arguments: [ obj(tx, args.executable), obj(tx, args.multisig), obj(tx, args.coin), generic(tx, `${typeArgs[1]}`, args.witness) ], }) }
 
-export interface MintArgs { executable: TransactionObjectInput; multisig: TransactionObjectInput; issuer: GenericArg }
+export interface MintArgs { executable: TransactionObjectInput; multisig: TransactionObjectInput; witness: GenericArg }
 
-export function mint( tx: Transaction, typeArgs: [string, string], args: MintArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::currency::mint`, typeArguments: typeArgs, arguments: [ obj(tx, args.executable), obj(tx, args.multisig), generic(tx, `${typeArgs[1]}`, args.issuer) ], }) }
+export function mint( tx: Transaction, typeArgs: [string, string], args: MintArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::currency::mint`, typeArguments: typeArgs, arguments: [ obj(tx, args.executable), obj(tx, args.multisig), generic(tx, `${typeArgs[1]}`, args.witness) ], }) }
 
 export function borrowLock( tx: Transaction, typeArg: string, multisig: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::currency::borrow_lock`, typeArguments: [typeArg], arguments: [ obj(tx, multisig) ], }) }
 
 export function borrowLockMut( tx: Transaction, typeArg: string, multisig: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::currency::borrow_lock_mut`, typeArguments: [typeArg], arguments: [ obj(tx, multisig) ], }) }
 
-export function completeUpdate( tx: Transaction, executable: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::currency::complete_update`, arguments: [ obj(tx, executable) ], }) }
+export interface DestroyBurnArgs { executable: TransactionObjectInput; witness: GenericArg }
 
-export interface DestroyBurnArgs { executable: TransactionObjectInput; issuer: GenericArg }
+export function destroyBurn( tx: Transaction, typeArgs: [string, string], args: DestroyBurnArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::currency::destroy_burn`, typeArguments: typeArgs, arguments: [ obj(tx, args.executable), generic(tx, `${typeArgs[1]}`, args.witness) ], }) }
 
-export function destroyBurn( tx: Transaction, typeArgs: [string, string], args: DestroyBurnArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::currency::destroy_burn`, typeArguments: typeArgs, arguments: [ obj(tx, args.executable), generic(tx, `${typeArgs[1]}`, args.issuer) ], }) }
+export interface DestroyMintArgs { executable: TransactionObjectInput; witness: GenericArg }
 
-export interface DestroyMintArgs { executable: TransactionObjectInput; issuer: GenericArg }
+export function destroyMint( tx: Transaction, typeArgs: [string, string], args: DestroyMintArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::currency::destroy_mint`, typeArguments: typeArgs, arguments: [ obj(tx, args.executable), generic(tx, `${typeArgs[1]}`, args.witness) ], }) }
 
-export function destroyMint( tx: Transaction, typeArgs: [string, string], args: DestroyMintArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::currency::destroy_mint`, typeArguments: typeArgs, arguments: [ obj(tx, args.executable), generic(tx, `${typeArgs[1]}`, args.issuer) ], }) }
+export interface DestroyUpdateArgs { executable: TransactionObjectInput; witness: GenericArg }
 
-export interface DestroyUpdateArgs { executable: TransactionObjectInput; issuer: GenericArg }
-
-export function destroyUpdate( tx: Transaction, typeArg: string, args: DestroyUpdateArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::currency::destroy_update`, typeArguments: [typeArg], arguments: [ obj(tx, args.executable), generic(tx, `${typeArg}`, args.issuer) ], }) }
+export function destroyUpdate( tx: Transaction, typeArgs: [string, string], args: DestroyUpdateArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::currency::destroy_update`, typeArguments: typeArgs, arguments: [ obj(tx, args.executable), generic(tx, `${typeArgs[1]}`, args.witness) ], }) }
 
 export interface ExecuteBurnArgs { executable: TransactionObjectInput; multisig: TransactionObjectInput; receiving: TransactionObjectInput }
 

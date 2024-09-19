@@ -16,13 +16,13 @@ export interface ClaimArgs { stream: TransactionObjectInput; cap: TransactionObj
 
 export function claim( tx: Transaction, typeArg: string, args: ClaimArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::payments::claim`, typeArguments: [typeArg], arguments: [ obj(tx, args.stream), obj(tx, args.cap) ], }) }
 
-export interface PayArgs { executable: TransactionObjectInput; multisig: TransactionObjectInput; coin: TransactionObjectInput; issuer: GenericArg }
+export interface PayArgs { executable: TransactionObjectInput; multisig: TransactionObjectInput; coin: TransactionObjectInput; witness: GenericArg }
 
-export function pay( tx: Transaction, typeArgs: [string, string], args: PayArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::payments::pay`, typeArguments: typeArgs, arguments: [ obj(tx, args.executable), obj(tx, args.multisig), obj(tx, args.coin), generic(tx, `${typeArgs[1]}`, args.issuer) ], }) }
+export function pay( tx: Transaction, typeArgs: [string, string], args: PayArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::payments::pay`, typeArguments: typeArgs, arguments: [ obj(tx, args.executable), obj(tx, args.multisig), obj(tx, args.coin), generic(tx, `${typeArgs[1]}`, args.witness) ], }) }
 
-export interface AccessCoinArgs { executable: TransactionObjectInput; multisig: TransactionObjectInput; receiving: (TransactionObjectInput | TransactionArgument | null); issuer: GenericArg }
+export interface AccessCoinArgs { executable: TransactionObjectInput; multisig: TransactionObjectInput; receiving: (TransactionObjectInput | TransactionArgument | null); witness: GenericArg }
 
-export function accessCoin( tx: Transaction, typeArgs: [string, string], args: AccessCoinArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::payments::access_coin`, typeArguments: typeArgs, arguments: [ obj(tx, args.executable), obj(tx, args.multisig), option(tx, `${Receiving.$typeName}<${Coin.$typeName}<${typeArgs[0]}>>`, args.receiving), generic(tx, `${typeArgs[1]}`, args.issuer) ], }) }
+export function accessCoin( tx: Transaction, typeArgs: [string, string], args: AccessCoinArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::payments::access_coin`, typeArguments: typeArgs, arguments: [ obj(tx, args.executable), obj(tx, args.multisig), option(tx, `${Receiving.$typeName}<${Coin.$typeName}<${typeArgs[0]}>>`, args.receiving), generic(tx, `${typeArgs[1]}`, args.witness) ], }) }
 
 export interface CancelPaymentStreamArgs { stream: TransactionObjectInput; multisig: TransactionObjectInput }
 
@@ -30,9 +30,9 @@ export function cancelPaymentStream( tx: Transaction, typeArg: string, args: Can
 
 export function destroyEmptyStream( tx: Transaction, typeArg: string, stream: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::payments::destroy_empty_stream`, typeArguments: [typeArg], arguments: [ obj(tx, stream) ], }) }
 
-export interface DestroyPayArgs { executable: TransactionObjectInput; issuer: GenericArg }
+export interface DestroyPayArgs { executable: TransactionObjectInput; witness: GenericArg }
 
-export function destroyPay( tx: Transaction, typeArgs: [string, string], args: DestroyPayArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::payments::destroy_pay`, typeArguments: typeArgs, arguments: [ obj(tx, args.executable), generic(tx, `${typeArgs[1]}`, args.issuer) ], }) }
+export function destroyPay( tx: Transaction, typeArgs: [string, string], args: DestroyPayArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::payments::destroy_pay`, typeArguments: typeArgs, arguments: [ obj(tx, args.executable), generic(tx, `${typeArgs[1]}`, args.witness) ], }) }
 
 export function disburse( tx: Transaction, typeArg: string, stream: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::payments::disburse`, typeArguments: [typeArg], arguments: [ obj(tx, stream) ], }) }
 

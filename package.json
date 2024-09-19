@@ -14,12 +14,6 @@
   "scripts": {
     "clean": "rm -rf dist/",
     "build": "rm -rf dist/ && tsc && tsc -p tsconfig.cjs.json",
-    "prettier:check": "prettier -c --ignore-unknown .",
-    "prettier:fix": "prettier -w --ignore-unknown .",
-    "eslint:check": "eslint .",
-    "eslint:fix": "pnpm run eslint:check --fix",
-    "lint": "pnpm run eslint:check && pnpm run prettier:check",
-    "lint:fix": "pnpm run eslint:fix && pnpm run prettier:fix",
     "test": "bun run test/e2e.test.ts"
   },
   "dependencies": {
@@ -31,10 +25,8 @@
     "@types/bun": "latest",
     "@types/chai": "^4.3.16",
     "@types/node": "^20.12.12",
-    "@typescript-eslint/parser": "^6.19.1",
     "chai": "^5.1.1",
     "changeset": "^0.2.6",
-    "eslint": "^8.56.0",
     "typescript": "^5.3.3"
   }
 }

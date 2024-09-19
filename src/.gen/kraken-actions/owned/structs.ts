@@ -8,47 +8,47 @@ import {bcs} from "@mysten/sui/bcs";
 import {SuiClient, SuiObjectData, SuiParsedData} from "@mysten/sui/client";
 import {fromB64} from "@mysten/sui/utils";
 
-/* ============================== Return =============================== */
+/* ============================== ReturnAction =============================== */
 
-export function isReturn(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::owned::Return`; }
+export function isReturnAction(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::owned::ReturnAction`; }
 
-export interface ReturnFields { toReturn: ToField<Vector<ID>> }
+export interface ReturnActionFields { toReturn: ToField<Vector<ID>> }
 
-export type ReturnReified = Reified< Return, ReturnFields >;
+export type ReturnActionReified = Reified< ReturnAction, ReturnActionFields >;
 
-export class Return implements StructClass { __StructClass = true as const;
+export class ReturnAction implements StructClass { __StructClass = true as const;
 
- static readonly $typeName = `${PKG_V1}::owned::Return`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
+ static readonly $typeName = `${PKG_V1}::owned::ReturnAction`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
 
- readonly $typeName = Return.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::owned::Return`; readonly $typeArgs: []; readonly $isPhantom = Return.$isPhantom;
+ readonly $typeName = ReturnAction.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::owned::ReturnAction`; readonly $typeArgs: []; readonly $isPhantom = ReturnAction.$isPhantom;
 
  readonly toReturn: ToField<Vector<ID>>
 
- private constructor(typeArgs: [], fields: ReturnFields, ) { this.$fullTypeName = composeSuiType( Return.$typeName, ...typeArgs ) as `${typeof PKG_V1}::owned::Return`; this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [], fields: ReturnActionFields, ) { this.$fullTypeName = composeSuiType( ReturnAction.$typeName, ...typeArgs ) as `${typeof PKG_V1}::owned::ReturnAction`; this.$typeArgs = typeArgs;
 
  this.toReturn = fields.toReturn; }
 
- static reified( ): ReturnReified { return { typeName: Return.$typeName, fullTypeName: composeSuiType( Return.$typeName, ...[] ) as `${typeof PKG_V1}::owned::Return`, typeArgs: [ ] as [], isPhantom: Return.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => Return.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => Return.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => Return.fromBcs( data, ), bcs: Return.bcs, fromJSONField: (field: any) => Return.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => Return.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => Return.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => Return.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => Return.fetch( client, id, ), new: ( fields: ReturnFields, ) => { return new Return( [], fields ) }, kind: "StructClassReified", } }
+ static reified( ): ReturnActionReified { return { typeName: ReturnAction.$typeName, fullTypeName: composeSuiType( ReturnAction.$typeName, ...[] ) as `${typeof PKG_V1}::owned::ReturnAction`, typeArgs: [ ] as [], isPhantom: ReturnAction.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => ReturnAction.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => ReturnAction.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => ReturnAction.fromBcs( data, ), bcs: ReturnAction.bcs, fromJSONField: (field: any) => ReturnAction.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => ReturnAction.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => ReturnAction.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => ReturnAction.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => ReturnAction.fetch( client, id, ), new: ( fields: ReturnActionFields, ) => { return new ReturnAction( [], fields ) }, kind: "StructClassReified", } }
 
- static get r() { return Return.reified() }
+ static get r() { return ReturnAction.reified() }
 
- static phantom( ): PhantomReified<ToTypeStr<Return>> { return phantom(Return.reified( )); } static get p() { return Return.phantom() }
+ static phantom( ): PhantomReified<ToTypeStr<ReturnAction>> { return phantom(ReturnAction.reified( )); } static get p() { return ReturnAction.phantom() }
 
- static get bcs() { return bcs.struct("Return", {
+ static get bcs() { return bcs.struct("ReturnAction", {
 
  to_return: bcs.vector(ID.bcs)
 
 }) };
 
- static fromFields( fields: Record<string, any> ): Return { return Return.reified( ).new( { toReturn: decodeFromFields(reified.vector(ID.reified()), fields.to_return) } ) }
+ static fromFields( fields: Record<string, any> ): ReturnAction { return ReturnAction.reified( ).new( { toReturn: decodeFromFields(reified.vector(ID.reified()), fields.to_return) } ) }
 
- static fromFieldsWithTypes( item: FieldsWithTypes ): Return { if (!isReturn(item.type)) { throw new Error("not a Return type");
+ static fromFieldsWithTypes( item: FieldsWithTypes ): ReturnAction { if (!isReturnAction(item.type)) { throw new Error("not a ReturnAction type");
 
  }
 
- return Return.reified( ).new( { toReturn: decodeFromFieldsWithTypes(reified.vector(ID.reified()), item.fields.to_return) } ) }
+ return ReturnAction.reified( ).new( { toReturn: decodeFromFieldsWithTypes(reified.vector(ID.reified()), item.fields.to_return) } ) }
 
- static fromBcs( data: Uint8Array ): Return { return Return.fromFields( Return.bcs.parse(data) ) }
+ static fromBcs( data: Uint8Array ): ReturnAction { return ReturnAction.fromFields( ReturnAction.bcs.parse(data) ) }
 
  toJSONField() { return {
 
@@ -58,65 +58,65 @@ export class Return implements StructClass { __StructClass = true as const;
 
  toJSON() { return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() } }
 
- static fromJSONField( field: any ): Return { return Return.reified( ).new( { toReturn: decodeFromJSONField(reified.vector(ID.reified()), field.toReturn) } ) }
+ static fromJSONField( field: any ): ReturnAction { return ReturnAction.reified( ).new( { toReturn: decodeFromJSONField(reified.vector(ID.reified()), field.toReturn) } ) }
 
- static fromJSON( json: Record<string, any> ): Return { if (json.$typeName !== Return.$typeName) { throw new Error("not a WithTwoGenerics json object") };
+ static fromJSON( json: Record<string, any> ): ReturnAction { if (json.$typeName !== ReturnAction.$typeName) { throw new Error("not a WithTwoGenerics json object") };
 
- return Return.fromJSONField( json, ) }
+ return ReturnAction.fromJSONField( json, ) }
 
- static fromSuiParsedData( content: SuiParsedData ): Return { if (content.dataType !== "moveObject") { throw new Error("not an object"); } if (!isReturn(content.type)) { throw new Error(`object at ${(content.fields as any).id} is not a Return object`); } return Return.fromFieldsWithTypes( content ); }
+ static fromSuiParsedData( content: SuiParsedData ): ReturnAction { if (content.dataType !== "moveObject") { throw new Error("not an object"); } if (!isReturnAction(content.type)) { throw new Error(`object at ${(content.fields as any).id} is not a ReturnAction object`); } return ReturnAction.fromFieldsWithTypes( content ); }
 
- static fromSuiObjectData( data: SuiObjectData ): Return { if (data.bcs) { if (data.bcs.dataType !== "moveObject" || !isReturn(data.bcs.type)) { throw new Error(`object at is not a Return object`); }
+ static fromSuiObjectData( data: SuiObjectData ): ReturnAction { if (data.bcs) { if (data.bcs.dataType !== "moveObject" || !isReturnAction(data.bcs.type)) { throw new Error(`object at is not a ReturnAction object`); }
 
- return Return.fromBcs( fromB64(data.bcs.bcsBytes) ); } if (data.content) { return Return.fromSuiParsedData( data.content ) } throw new Error( "Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request." ); }
+ return ReturnAction.fromBcs( fromB64(data.bcs.bcsBytes) ); } if (data.content) { return ReturnAction.fromSuiParsedData( data.content ) } throw new Error( "Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request." ); }
 
- static async fetch( client: SuiClient, id: string ): Promise<Return> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching Return object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isReturn(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a Return object`); }
+ static async fetch( client: SuiClient, id: string ): Promise<ReturnAction> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching ReturnAction object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isReturnAction(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a ReturnAction object`); }
 
- return Return.fromSuiObjectData( res.data ); }
+ return ReturnAction.fromSuiObjectData( res.data ); }
 
  }
 
-/* ============================== Withdraw =============================== */
+/* ============================== WithdrawAction =============================== */
 
-export function isWithdraw(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::owned::Withdraw`; }
+export function isWithdrawAction(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::owned::WithdrawAction`; }
 
-export interface WithdrawFields { objects: ToField<Vector<ID>> }
+export interface WithdrawActionFields { objects: ToField<Vector<ID>> }
 
-export type WithdrawReified = Reified< Withdraw, WithdrawFields >;
+export type WithdrawActionReified = Reified< WithdrawAction, WithdrawActionFields >;
 
-export class Withdraw implements StructClass { __StructClass = true as const;
+export class WithdrawAction implements StructClass { __StructClass = true as const;
 
- static readonly $typeName = `${PKG_V1}::owned::Withdraw`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
+ static readonly $typeName = `${PKG_V1}::owned::WithdrawAction`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
 
- readonly $typeName = Withdraw.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::owned::Withdraw`; readonly $typeArgs: []; readonly $isPhantom = Withdraw.$isPhantom;
+ readonly $typeName = WithdrawAction.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::owned::WithdrawAction`; readonly $typeArgs: []; readonly $isPhantom = WithdrawAction.$isPhantom;
 
  readonly objects: ToField<Vector<ID>>
 
- private constructor(typeArgs: [], fields: WithdrawFields, ) { this.$fullTypeName = composeSuiType( Withdraw.$typeName, ...typeArgs ) as `${typeof PKG_V1}::owned::Withdraw`; this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [], fields: WithdrawActionFields, ) { this.$fullTypeName = composeSuiType( WithdrawAction.$typeName, ...typeArgs ) as `${typeof PKG_V1}::owned::WithdrawAction`; this.$typeArgs = typeArgs;
 
  this.objects = fields.objects; }
 
- static reified( ): WithdrawReified { return { typeName: Withdraw.$typeName, fullTypeName: composeSuiType( Withdraw.$typeName, ...[] ) as `${typeof PKG_V1}::owned::Withdraw`, typeArgs: [ ] as [], isPhantom: Withdraw.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => Withdraw.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => Withdraw.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => Withdraw.fromBcs( data, ), bcs: Withdraw.bcs, fromJSONField: (field: any) => Withdraw.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => Withdraw.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => Withdraw.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => Withdraw.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => Withdraw.fetch( client, id, ), new: ( fields: WithdrawFields, ) => { return new Withdraw( [], fields ) }, kind: "StructClassReified", } }
+ static reified( ): WithdrawActionReified { return { typeName: WithdrawAction.$typeName, fullTypeName: composeSuiType( WithdrawAction.$typeName, ...[] ) as `${typeof PKG_V1}::owned::WithdrawAction`, typeArgs: [ ] as [], isPhantom: WithdrawAction.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => WithdrawAction.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => WithdrawAction.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => WithdrawAction.fromBcs( data, ), bcs: WithdrawAction.bcs, fromJSONField: (field: any) => WithdrawAction.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => WithdrawAction.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => WithdrawAction.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => WithdrawAction.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => WithdrawAction.fetch( client, id, ), new: ( fields: WithdrawActionFields, ) => { return new WithdrawAction( [], fields ) }, kind: "StructClassReified", } }
 
- static get r() { return Withdraw.reified() }
+ static get r() { return WithdrawAction.reified() }
 
- static phantom( ): PhantomReified<ToTypeStr<Withdraw>> { return phantom(Withdraw.reified( )); } static get p() { return Withdraw.phantom() }
+ static phantom( ): PhantomReified<ToTypeStr<WithdrawAction>> { return phantom(WithdrawAction.reified( )); } static get p() { return WithdrawAction.phantom() }
 
- static get bcs() { return bcs.struct("Withdraw", {
+ static get bcs() { return bcs.struct("WithdrawAction", {
 
  objects: bcs.vector(ID.bcs)
 
 }) };
 
- static fromFields( fields: Record<string, any> ): Withdraw { return Withdraw.reified( ).new( { objects: decodeFromFields(reified.vector(ID.reified()), fields.objects) } ) }
+ static fromFields( fields: Record<string, any> ): WithdrawAction { return WithdrawAction.reified( ).new( { objects: decodeFromFields(reified.vector(ID.reified()), fields.objects) } ) }
 
- static fromFieldsWithTypes( item: FieldsWithTypes ): Withdraw { if (!isWithdraw(item.type)) { throw new Error("not a Withdraw type");
+ static fromFieldsWithTypes( item: FieldsWithTypes ): WithdrawAction { if (!isWithdrawAction(item.type)) { throw new Error("not a WithdrawAction type");
 
  }
 
- return Withdraw.reified( ).new( { objects: decodeFromFieldsWithTypes(reified.vector(ID.reified()), item.fields.objects) } ) }
+ return WithdrawAction.reified( ).new( { objects: decodeFromFieldsWithTypes(reified.vector(ID.reified()), item.fields.objects) } ) }
 
- static fromBcs( data: Uint8Array ): Withdraw { return Withdraw.fromFields( Withdraw.bcs.parse(data) ) }
+ static fromBcs( data: Uint8Array ): WithdrawAction { return WithdrawAction.fromFields( WithdrawAction.bcs.parse(data) ) }
 
  toJSONField() { return {
 
@@ -126,20 +126,20 @@ export class Withdraw implements StructClass { __StructClass = true as const;
 
  toJSON() { return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() } }
 
- static fromJSONField( field: any ): Withdraw { return Withdraw.reified( ).new( { objects: decodeFromJSONField(reified.vector(ID.reified()), field.objects) } ) }
+ static fromJSONField( field: any ): WithdrawAction { return WithdrawAction.reified( ).new( { objects: decodeFromJSONField(reified.vector(ID.reified()), field.objects) } ) }
 
- static fromJSON( json: Record<string, any> ): Withdraw { if (json.$typeName !== Withdraw.$typeName) { throw new Error("not a WithTwoGenerics json object") };
+ static fromJSON( json: Record<string, any> ): WithdrawAction { if (json.$typeName !== WithdrawAction.$typeName) { throw new Error("not a WithTwoGenerics json object") };
 
- return Withdraw.fromJSONField( json, ) }
+ return WithdrawAction.fromJSONField( json, ) }
 
- static fromSuiParsedData( content: SuiParsedData ): Withdraw { if (content.dataType !== "moveObject") { throw new Error("not an object"); } if (!isWithdraw(content.type)) { throw new Error(`object at ${(content.fields as any).id} is not a Withdraw object`); } return Withdraw.fromFieldsWithTypes( content ); }
+ static fromSuiParsedData( content: SuiParsedData ): WithdrawAction { if (content.dataType !== "moveObject") { throw new Error("not an object"); } if (!isWithdrawAction(content.type)) { throw new Error(`object at ${(content.fields as any).id} is not a WithdrawAction object`); } return WithdrawAction.fromFieldsWithTypes( content ); }
 
- static fromSuiObjectData( data: SuiObjectData ): Withdraw { if (data.bcs) { if (data.bcs.dataType !== "moveObject" || !isWithdraw(data.bcs.type)) { throw new Error(`object at is not a Withdraw object`); }
+ static fromSuiObjectData( data: SuiObjectData ): WithdrawAction { if (data.bcs) { if (data.bcs.dataType !== "moveObject" || !isWithdrawAction(data.bcs.type)) { throw new Error(`object at is not a WithdrawAction object`); }
 
- return Withdraw.fromBcs( fromB64(data.bcs.bcsBytes) ); } if (data.content) { return Withdraw.fromSuiParsedData( data.content ) } throw new Error( "Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request." ); }
+ return WithdrawAction.fromBcs( fromB64(data.bcs.bcsBytes) ); } if (data.content) { return WithdrawAction.fromSuiParsedData( data.content ) } throw new Error( "Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request." ); }
 
- static async fetch( client: SuiClient, id: string ): Promise<Withdraw> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching Withdraw object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isWithdraw(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a Withdraw object`); }
+ static async fetch( client: SuiClient, id: string ): Promise<WithdrawAction> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching WithdrawAction object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isWithdrawAction(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a WithdrawAction object`); }
 
- return Withdraw.fromSuiObjectData( res.data ); }
+ return WithdrawAction.fromSuiObjectData( res.data ); }
 
  }

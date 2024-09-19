@@ -7,7 +7,13 @@ export interface NewArgs { username: string | TransactionArgument; profilePictur
 
 export function new_( tx: Transaction, args: NewArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::account::new`, arguments: [ pure(tx, args.username, `${String.$typeName}`), pure(tx, args.profilePicture, `${String.$typeName}`) ], }) }
 
+export interface TransferArgs { registry: TransactionObjectInput; account: TransactionObjectInput; recipient: string | TransactionArgument }
+
+export function transfer( tx: Transaction, args: TransferArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::account::transfer`, arguments: [ obj(tx, args.registry), obj(tx, args.account), pure(tx, args.recipient, `address`) ], }) }
+
 export function destroy( tx: Transaction, account: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::account::destroy`, arguments: [ obj(tx, account) ], }) }
+
+export function init( tx: Transaction, ) { return tx.moveCall({ target: `${PUBLISHED_AT}::account::init`, arguments: [ ], }) }
 
 export interface AcceptInviteArgs { account: TransactionObjectInput; multisig: TransactionObjectInput; invite: TransactionObjectInput }
 

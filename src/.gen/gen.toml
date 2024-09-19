@@ -6,6 +6,6 @@ rpc = "https://fullnode.testnet.sui.io:443"
 # KrakenExtensions = { git = "https://github.com/gmove-io/kraken.git", subdir = "packages/extensions", rev = "testnet" }
 # KrakenMultisig = { git = "https://github.com/gmove-io/kraken.git", subdir = "packages/multisig", rev = "testnet" }
 # KrakenActions = { git = "https://github.com/gmove-io/kraken.git", subdir = "packages/actions", rev = "testnet" }
-KrakenExtensions = { local = "../../kraken/packages/extensions" }
-KrakenMultisig = { local = "../../kraken/packages/multisig" }
-KrakenActions = { local = "../../kraken/packages/actions" }
+KrakenExtensions = { local = "../../../kraken/packages/extensions" }
+KrakenMultisig = { local = "../../../kraken/packages/multisig" }
+KrakenActions = { local = "../../../kraken/packages/actions" }

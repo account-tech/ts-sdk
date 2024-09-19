@@ -3,9 +3,9 @@ import {String} from "../../_dependencies/source/0x1/string/structs";
 import {GenericArg, generic, obj, pure} from "../../_framework/util";
 import {Transaction, TransactionArgument, TransactionObjectInput} from "@mysten/sui/transactions";
 
-export interface RestrictArgs { executable: TransactionObjectInput; multisig: TransactionObjectInput; issuer: GenericArg }
+export interface RestrictArgs { executable: TransactionObjectInput; multisig: TransactionObjectInput; witness: GenericArg }
 
-export function restrict( tx: Transaction, typeArg: string, args: RestrictArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::upgrade_policies::restrict`, typeArguments: [typeArg], arguments: [ obj(tx, args.executable), obj(tx, args.multisig), generic(tx, `${typeArg}`, args.issuer) ], }) }
+export function restrict( tx: Transaction, typeArg: string, args: RestrictArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::upgrade_policies::restrict`, typeArguments: [typeArg], arguments: [ obj(tx, args.executable), obj(tx, args.multisig), generic(tx, `${typeArg}`, args.witness) ], }) }
 
 export interface AddRuleArgs { lock: TransactionObjectInput; key: GenericArg; rule: GenericArg }
 
@@ -15,9 +15,9 @@ export interface HasRuleArgs { lock: TransactionObjectInput; key: GenericArg }
 
 export function hasRule( tx: Transaction, typeArg: string, args: HasRuleArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::upgrade_policies::has_rule`, typeArguments: [typeArg], arguments: [ obj(tx, args.lock), generic(tx, `${typeArg}`, args.key) ], }) }
 
-export interface UpgradeArgs { executable: TransactionObjectInput; multisig: TransactionObjectInput; issuer: GenericArg }
+export interface UpgradeArgs { executable: TransactionObjectInput; multisig: TransactionObjectInput; witness: GenericArg }
 
-export function upgrade( tx: Transaction, typeArg: string, args: UpgradeArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::upgrade_policies::upgrade`, typeArguments: [typeArg], arguments: [ obj(tx, args.executable), obj(tx, args.multisig), generic(tx, `${typeArg}`, args.issuer) ], }) }
+export function upgrade( tx: Transaction, typeArg: string, args: UpgradeArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::upgrade_policies::upgrade`, typeArguments: [typeArg], arguments: [ obj(tx, args.executable), obj(tx, args.multisig), generic(tx, `${typeArg}`, args.witness) ], }) }
 
 export interface BorrowLockArgs { multisig: TransactionObjectInput; name: string | TransactionArgument }
 
@@ -35,13 +35,13 @@ export interface ConfirmUpgradeArgs { executable: TransactionObjectInput; multis
 
 export function confirmUpgrade( tx: Transaction, args: ConfirmUpgradeArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::upgrade_policies::confirm_upgrade`, arguments: [ obj(tx, args.executable), obj(tx, args.multisig), obj(tx, args.receipt) ], }) }
 
-export interface DestroyRestrictArgs { executable: TransactionObjectInput; issuer: GenericArg }
+export interface DestroyRestrictArgs { executable: TransactionObjectInput; witness: GenericArg }
 
-export function destroyRestrict( tx: Transaction, typeArg: string, args: DestroyRestrictArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::upgrade_policies::destroy_restrict`, typeArguments: [typeArg], arguments: [ obj(tx, args.executable), generic(tx, `${typeArg}`, args.issuer) ], }) }
+export function destroyRestrict( tx: Transaction, typeArg: string, args: DestroyRestrictArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::upgrade_policies::destroy_restrict`, typeArguments: [typeArg], arguments: [ obj(tx, args.executable), generic(tx, `${typeArg}`, args.witness) ], }) }
 
-export interface DestroyUpgradeArgs { executable: TransactionObjectInput; issuer: GenericArg }
+export interface DestroyUpgradeArgs { executable: TransactionObjectInput; witness: GenericArg }
 
-export function destroyUpgrade( tx: Transaction, typeArg: string, args: DestroyUpgradeArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::upgrade_policies::destroy_upgrade`, typeArguments: [typeArg], arguments: [ obj(tx, args.executable), generic(tx, `${typeArg}`, args.issuer) ], }) }
+export function destroyUpgrade( tx: Transaction, typeArg: string, args: DestroyUpgradeArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::upgrade_policies::destroy_upgrade`, typeArguments: [typeArg], arguments: [ obj(tx, args.executable), generic(tx, `${typeArg}`, args.witness) ], }) }
 
 export interface ExecuteRestrictArgs { executable: TransactionObjectInput; multisig: TransactionObjectInput }
 

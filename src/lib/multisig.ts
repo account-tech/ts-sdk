@@ -1,63 +1,64 @@
-import { Transaction, TransactionArgument, TransactionResult } from '@mysten/sui/transactions';
-import { SuiClient, getFullnodeUrl } from '@mysten/sui/client';
-import { Multisig as MultisigRaw } from '../.gen/kraken-multisig/multisig/structs';
-import { new_, share, approveProposal, removeApproval, executeProposal } from '../.gen/kraken-multisig/multisig/functions';
-import { DepFields } from 'src/.gen/kraken-multisig/deps/structs';
-import { MemberFields } from 'src/.gen/kraken-multisig/members/structs';
-import { RoleFields } from 'src/.gen/kraken-multisig/thresholds/structs';
-import { ProposalFields } from 'src/.gen/kraken-multisig/proposals/structs';
-import { CLOCK, EXTENSIONS } from '../types/constants';
-import { Proposal, Member, Dep, Role } from '../types/types';
-import { Account } from './account';
+import { Transaction, TransactionArgument, TransactionObjectInput, TransactionResult } from "@mysten/sui/transactions";
+import { SuiClient } from "@mysten/sui/client";
+import { Multisig as MultisigRaw } from "../.gen/kraken-multisig/multisig/structs";
+import { new_, share } from "../.gen/kraken-multisig/multisig/functions";
+import * as config from "../.gen/kraken-actions/config/functions";
+import * as currency from "../.gen/kraken-actions/currency/functions";
+import * as kiosk from "../.gen/kraken-actions/kiosk/functions";
+import { approveProposal, removeApproval, executeProposal } from "../.gen/kraken-multisig/multisig/functions"
+import { DepFields } from "../.gen/kraken-multisig/deps/structs";
+import { MemberFields } from "../.gen/kraken-multisig/members/structs";
+import { RoleFields } from "../.gen/kraken-multisig/thresholds/structs";
+import { ProposalFields } from "../.gen/kraken-multisig/proposals/structs";
+import { CLOCK, EXTENSIONS, KRAKEN_ACTIONS } from "../types/constants";
+import { getCurrentEpoch } from "./utils";
+import { Account } from "./account";
+import { Proposal } from "./proposal/proposal";
+import { ConfigNameProposal } from "./proposal/proposals/config";
+import { Dep, Role, MemberAccount } from "../types/multisigTypes";
+import { BurnFields, ConfigDepsFields, ConfigNameFields, ConfigRulesFields, MintFields, ProposalArgs, UpdateFields } from "../types/proposalTypes";
+import { TransactionPureInput } from "src/types/helperTypes";
 
 export interface MultisigData {
 	id: string;
     name: string;
     deps: Dep[];
     roles: Map<string, Role>;
-    members: Member[];
+    members: MemberAccount[];
     proposals: Proposal[];
 }
 
-export class Multisig {
-	public client: SuiClient;
-    public id: string = '';
-    public name: string = '';
-    public deps: Dep[] = [];
-    public roles: Map<string, Role> = new Map();
-    public members: Member[] = [];
-    public proposals: Proposal[] = [];
+export class Multisig implements MultisigData {
+	epoch: number = 0;
+    id: string = "";
+    name: string = "";
+    deps: Dep[] = [];
+    roles: Map<string, Role> = new Map();
+    members: MemberAccount[] = [];
+    proposals: Proposal[] = [];
 
-	private constructor(
-		public network: 'mainnet' | 'testnet' | 'devnet' | 'localnet' | string,
+	constructor(
+		public client: SuiClient,
 		public userAddr: string,
 	) {
-		console.log(network)
-		const url = (network == 'mainnet' || network == 'testnet' || network == 'devnet' || network == 'localnet') ? getFullnodeUrl(network) : network;
-		this.client = new SuiClient({ url });
+		this.client = client;
 	}
 
 	static async init(
-        network: 'mainnet' | 'testnet' | 'devnet' | 'localnet' | string,
+        client: SuiClient,
         userAddr: string, 
         multisigId?: string,
     ): Promise<Multisig> {
-		const multisig = new Multisig(network, userAddr);
-        multisigId && multisig.fetchMultisig(multisigId);
+		const multisig = new Multisig(client, userAddr);
+		multisig.epoch = await getCurrentEpoch(multisig.client);
+        if (multisigId) {
+			multisig.id = multisigId;
+			multisig.setMultisig(await multisig.fetchMultisig(multisigId));
+		}
 		return multisig;
-	}
-
-	async fetchMultisig(id: string = this.id!) {
-		const multisigData = await this.getMultisig(id);
-		this.id = id;
-		this.name = multisigData.name;
-		this.deps = multisigData.deps;
-		this.roles = multisigData.roles;
-		this.members = multisigData.members;
-		this.proposals = multisigData.proposals;
-	}
-
-	async getMultisigRaw(id: string): Promise<MultisigRaw> {
+	}    
+	
+	async fetchMultisig(id: string): Promise<MultisigData> {
 		const { data } = await this.client.getObject({
 			id,
 			options: { showContent: true }
@@ -65,24 +66,20 @@ export class Multisig {
 
 		if (!data?.content) throw new Error(`Multisig with id ${id} not found.`);
 
-		return MultisigRaw.fromSuiParsedData(data.content);
-	}
-
-	async getMultisig(id: string): Promise<MultisigData> {
-		const multisigRaw = await this.getMultisigRaw(id);
+		const multisigRaw = MultisigRaw.fromSuiParsedData(data.content);
 
 		// get deps
 		const deps: Dep[] = multisigRaw.deps.inner.map((dep: DepFields) => {
 			return { name: dep.name, package: dep.package, version: Number(dep.version) };
 		});
 
-        // get all members' data (from account and member)
+		// get all members" data (from account and member)
 		const membersAddress: string[] = multisigRaw.members.inner.map((member: MemberFields) => member.addr);
 		const members = await Promise.all(membersAddress.map(async memberAddr => {
 			const weight = multisigRaw.members.inner.find((m: MemberFields) => m.addr == memberAddr)?.weight;
 			const roles = multisigRaw.members.inner.find((m: MemberFields) => m.addr == memberAddr)?.roles.contents;
-			const account = await Account.init(this.network, this.userAddr);
-			const accountRaw = await account.getAccountRaw(memberAddr);
+			const account = await Account.init(this.client, this.userAddr);
+			const accountRaw = await account.fetchAccountRaw(memberAddr);
 			return {
 				address: memberAddr,
 				accountId: accountRaw?.id!,
@@ -105,13 +102,14 @@ export class Multisig {
 		});
 		// get thresholds
 		const roles = new Map<string, Role>();
-		roles.set('global', { threshold: Number(multisigRaw.thresholds.global), totalWeight: globalWeight });
+		roles.set("global", { threshold: Number(multisigRaw.thresholds.global), totalWeight: globalWeight });
 		multisigRaw.thresholds.roles.forEach((role: RoleFields) => {
 			roles.set(role.name, { threshold: Number(role.threshold), totalWeight: roleWeights.get(role.name) || 0 });
 		});
-
 		// get Proposals with actions
-		const proposals = await this.getProposals(multisigRaw);
+		const proposals = await Promise.all(multisigRaw!.proposals.inner.map(async (proposal: ProposalFields) => {
+			return await this.initProposalWithActions(this.client, proposal);
+		}));
 		
 		return {
 			id: multisigRaw.id,
@@ -122,48 +120,31 @@ export class Multisig {
 			proposals,
 		}
 	}
-	
-	// get proposals in multisig and all actions in each proposal's bag in order
-	async getProposals(multisigRaw: MultisigRaw): Promise<Proposal[]> {
-		return await Promise.all(multisigRaw!.proposals.inner.map(async (proposal: ProposalFields) => {
-			// get the actions in each proposal bag
-			const parentId = proposal.actions.id;
-			const { data } = await this.client.getDynamicFields({ parentId });
-			// sort actions by ascending order 
-			const ids = data
-				.sort((a, b) => Number(a.name.value) - Number(b.name.value))
-				.map(df => df.objectId);
-			
-			let actions: any[] = [];
-			if (data.length > 0) {
-				const actionDfs: any = await this.client.multiGetObjects({
-					ids,
-					options: { showContent: true }
-				});
-				actions = actionDfs.map((df: any) => ({
-					type: df.data?.content?.fields.value.type.split('::').pop(), // The action Struct name
-					...df.data?.content?.fields.value.fields // The action Struct fields
-				}));
-			}
-			
-			return {
-				auth: { issuer: proposal.auth.issuer.name, name: proposal.auth.name },
-				name: proposal.name,
-				description: proposal.description,
-				expirationEpoch: proposal.expirationEpoch,
-				executionTime: proposal.executionTime,
-				actions,
-				totalWeight: Number(proposal.totalWeight),
-				roleWeight: Number(proposal.roleWeight),
-				approved: proposal.approved.contents,
-			}
-		}));
+
+	setMultisig(multisig: MultisigData) {
+		this.id = multisig.id;
+		this.name = multisig.name;
+		this.deps = multisig.deps;
+		this.roles = multisig.roles;
+		this.members = multisig.members;
+		this.proposals = multisig.proposals;
 	}
 
-	getProposal(name: string): Proposal {
-		const proposal = this.proposals?.find(p => p.name == name);
+	getMultisig(): MultisigData {
+		return {
+			id: this.id,
+			name: this.name,
+			deps: this.deps,
+			roles: this.roles,
+			members: this.members,
+			proposals: this.proposals,
+		}
+	}
+
+	getProposal(key: string): Proposal {
+		const proposal = this.proposals?.find(p => p.key == key);
 		if (!proposal) {
-			throw new Error(`Proposal with name ${name} not found.`);
+			throw new Error(`Proposal with key ${key} not found.`);
 		}
 		return proposal;
 	}
@@ -176,55 +157,305 @@ export class Multisig {
 		return member.weight;
 	}
 
-	hasApproved(key: string, addr: string): boolean {
-		const proposal = this.getProposal(key);
-		return proposal.approved.includes(addr);
-	}
-
 	newMultisig(
 		tx: Transaction, 
 		name: string,
-		accountId: string, 
-		deps: Dep[],
+		accountId: TransactionPureInput, 
 	): TransactionResult {
-		let depNames: string[] = [];
-		let depPackages: string[] = [];
-		let depVersions: bigint[] = [];
-
-		deps.forEach(dep => {
-			depNames.push(dep.name);
-			depPackages.push(dep.package);
-			depVersions.push(BigInt(dep.version));
-		});
-
 		return new_(
 			tx, 
-			{ extensions: EXTENSIONS, name, accountId, depNames, depPackages, depVersions }
+			{ extensions: EXTENSIONS, name, accountId }
 		);
 	}
 
     shareMultisig(tx: Transaction, multisig: TransactionArgument): TransactionResult {
         return share(tx, multisig);
-    }
+	}
 
 	approveProposal(
-		tx: Transaction, 
-		key: string, 
-		multisig: string | TransactionArgument = this.id!
+		tx: Transaction,
+		key: string,
+		multisig: TransactionObjectInput = this.id,
 	): TransactionResult {
 		return approveProposal(tx, { multisig, key });
 	}
-
-	removeApproval(tx: Transaction, multisig: string, key: string): TransactionResult {
+	
+	removeApproval(
+		tx: Transaction, 
+		key: string,
+		multisig: TransactionObjectInput = this.id,
+	): TransactionResult {
 		return removeApproval(tx, { multisig, key });
 	}
-	
+
 	executeProposal(
-		tx: Transaction, 
-		key: string, 
-		multisig: string | TransactionArgument = this.id!
+		tx: Transaction,
+		key: string,
+		multisig: TransactionObjectInput = this.id,
 	): TransactionResult {
 		return executeProposal(tx, { multisig, key, clock: CLOCK });
+	}
+
+	// === Atomic Proposals ===
+
+	configName(
+		tx: Transaction,
+		proposalArgs: ProposalArgs,
+		actionsArgs: ConfigNameFields,
+	): TransactionResult {
+		this.assertMultisig();
+		this.assertKey(proposalArgs);
+
+		config.proposeConfigName(
+			tx,
+			{
+				multisig: this.id,
+				key: proposalArgs.key,
+				description: proposalArgs.description ? proposalArgs.description : "",
+				executionTime: BigInt(proposalArgs.executionTime ? proposalArgs.executionTime : 0),
+				expirationEpoch: BigInt(proposalArgs.expirationEpoch ? proposalArgs.expirationEpoch : this.epoch + 7),
+				name: actionsArgs.name,
+			}
+		);
+
+		this.approveProposal(tx, proposalArgs.key);
+		const executable = this.executeProposal(tx, proposalArgs.key);
+
+		return config.executeConfigName(tx, { executable, multisig: this.id });
+	}
+
+	configRules(
+		tx: Transaction,
+		proposalArgs: ProposalArgs,
+		actionsArgs: ConfigRulesFields,
+		multisig: TransactionObjectInput = this.id, // need for adding members upon creation
+	): TransactionResult {
+		this.assertMultisig();
+		this.assertKey(proposalArgs);
+
+		let addresses: string[] = [];
+		let weights: bigint[] = [];
+		let roles: string[][] = [];
+		if (actionsArgs.members) {
+			actionsArgs.members.forEach((member) => {
+				addresses.push(member.address);
+				weights.push(BigInt(member.weight));
+				roles.push(member.roles);
+			});
+		}
+
+		let global = 0n;
+		let roleNames: string[] = [];
+		let roleThresholds: bigint[] = [];
+		if (actionsArgs.thresholds) {
+			global = BigInt(actionsArgs.thresholds.global);
+			actionsArgs.thresholds.roles.forEach((role) => {
+				roleNames.push(role.name);
+				roleThresholds.push(BigInt(role.threshold));
+			});
+		}
+
+		config.proposeConfigRules(
+			tx,
+			{
+				multisig: this.id,
+				key: proposalArgs.key,
+				description: proposalArgs.description ? proposalArgs.description : "",
+				executionTime: BigInt(proposalArgs.executionTime ? proposalArgs.executionTime : 0),
+				expirationEpoch: BigInt(proposalArgs.expirationEpoch ? proposalArgs.expirationEpoch : this.epoch + 7),
+				addresses,
+				weights,
+				roles,
+				global,
+				roleNames,
+				roleThresholds,
+			}
+		);
+
+		this.approveProposal(tx, proposalArgs.key);
+		const executable = this.executeProposal(tx, proposalArgs.key);
+
+		return config.executeConfigRules(tx, { executable, multisig });
+	}
+
+	configDeps(
+		tx: Transaction,
+		proposalArgs: ProposalArgs,
+		actionsArgs: ConfigDepsFields,
+		multisig: TransactionObjectInput = this.id, // need for adding deps upon creation
+	): TransactionResult {
+		this.assertMultisig();
+		this.assertKey(proposalArgs);
+
+		const names: string[] = [];
+		const packages: string[] = [];
+		const versions: bigint[] = [];
+		actionsArgs.deps.forEach((dep) => {
+			names.push(dep.name);
+			packages.push(dep.package);
+			versions.push(BigInt(dep.version));
+		});
+
+		config.proposeConfigDeps(
+			tx,
+			{
+				multisig,
+				key: proposalArgs.key,
+				description: proposalArgs.description ? proposalArgs.description : "",
+				executionTime: BigInt(proposalArgs.executionTime ? proposalArgs.executionTime : 0),
+				expirationEpoch: BigInt(proposalArgs.expirationEpoch ? proposalArgs.expirationEpoch : this.epoch + 7),
+				extensions: EXTENSIONS,
+				names,
+				packages,
+				versions,
+			}
+		);
+
+		this.approveProposal(tx, proposalArgs.key);
+		const executable = this.executeProposal(tx, proposalArgs.key);
+
+		return config.executeConfigDeps(tx, { executable, multisig });
+	}
+
+	mint(
+		tx: Transaction,
+		proposalArgs: ProposalArgs,
+		actionsArgs: MintFields,
+		multisig: TransactionObjectInput = this.id,
+	): TransactionResult {
+		this.assertMultisig();
+		this.assertKey(proposalArgs);
+
+		currency.proposeMint(
+			tx,
+			actionsArgs.coinType,
+			{
+				multisig: this.id,
+				key: proposalArgs.key,
+				description: proposalArgs.description ? proposalArgs.description : "",
+				executionTime: BigInt(proposalArgs.executionTime ? proposalArgs.executionTime : 0),
+				expirationEpoch: BigInt(proposalArgs.expirationEpoch ? proposalArgs.expirationEpoch : this.epoch + 7),
+				amount: BigInt(actionsArgs.amount),
+			}
+		);
+
+		this.approveProposal(tx, proposalArgs.key);
+		const executable = this.executeProposal(tx, proposalArgs.key);
+
+		return currency.executeMint(tx, actionsArgs.coinType, { executable, multisig });
+	}
+
+	burn(
+		tx: Transaction,
+		proposalArgs: ProposalArgs,
+		actionsArgs: BurnFields,
+	): TransactionResult {
+		this.assertMultisig();
+		this.assertKey(proposalArgs);
+
+		currency.proposeBurn(
+			tx,
+			actionsArgs.coinType,
+			{
+				multisig: this.id,
+				key: proposalArgs.key,
+				description: proposalArgs.description ? proposalArgs.description : "",
+				executionTime: BigInt(proposalArgs.executionTime ? proposalArgs.executionTime : 0),
+				expirationEpoch: BigInt(proposalArgs.expirationEpoch ? proposalArgs.expirationEpoch : this.epoch + 7),
+				coinId: actionsArgs.coinId,
+				amount: BigInt(actionsArgs.amount),
+			}
+		);
+
+		this.approveProposal(tx, proposalArgs.key);
+		const executable = this.executeProposal(tx, proposalArgs.key);
+
+		return currency.executeBurn(tx, actionsArgs.coinType, { executable, multisig: this.id, receiving: actionsArgs.coinId });
+	}
+
+	update(
+		tx: Transaction,
+		proposalArgs: ProposalArgs,
+		actionsArgs: UpdateFields,
+		metadata: string, // CoinMetadata<CoinType> ID
+	): TransactionResult {
+		this.assertMultisig();
+		this.assertKey(proposalArgs);
+
+		currency.proposeUpdate(
+			tx,
+			actionsArgs.coinType,
+			{
+				multisig: this.id,
+				key: proposalArgs.key,
+				description: proposalArgs.description ? proposalArgs.description : "",
+				executionTime: BigInt(proposalArgs.executionTime ? proposalArgs.executionTime : 0),
+				expirationEpoch: BigInt(proposalArgs.expirationEpoch ? proposalArgs.expirationEpoch : this.epoch + 7),
+				mdName: actionsArgs.name,
+				mdSymbol: actionsArgs.symbol,
+				mdDescription: actionsArgs.description,
+				mdIcon: actionsArgs.icon,
+			}
+		);
+
+		this.approveProposal(tx, proposalArgs.key);
+		const executable = this.executeProposal(tx, proposalArgs.key);
+
+		return currency.executeUpdate(tx, actionsArgs.coinType, { executable, multisig: this.id, metadata });
+	}
+
+	// take(
+	// 	tx: Transaction,
+	// 	args: TakeArgs,
+	// ): TransactionResult {
+	// 	this.assertMultisig();
+	// 	this.assertKey(args);
+
+	// 	kiosk.proposeTake(
+	// 		tx,
+	// 		{
+	// 			multisig: this.id,
+	// 			key: args.key,
+	// 			description: args.description ? args.description : "",
+	// 			executionTime: BigInt(args.executionTime ? args.executionTime : 0),
+	// 			expirationEpoch: BigInt(args.expirationEpoch ? args.expirationEpoch : this.epoch + 7),
+	// 			name: args.name,
+	// 			nftIds: args.nftIds,
+	// 			recipient: args.recipient,
+	// 		}
+	// 	);
+
+	// 	this.approveProposal(tx, args.key);
+	// 	const executable = this.executeProposal(tx, args.key);
+
+	// 	return kiosk.executeTake(tx, { executable, multisig: this.id });
+	// }
+
+	// === Helpers ===
+
+	assertMultisig() {
+		if (this.id === "") {
+			throw new Error("Multisig id is not set. Please fetch the multisig before calling this method.");
+		}
+	}
+
+	assertKey(args: ProposalArgs) {
+		if (!args.key) throw new Error("Key is required.");
+	}
+
+	// Factory function to create the appropriate proposal type
+	async initProposalWithActions(
+		client: SuiClient,
+		proposalFields: ProposalFields
+	): Promise<Proposal> {
+		switch ("0x" + proposalFields.auth.witness.name) {
+			case `${KRAKEN_ACTIONS}::config::ConfigNameProposal`:
+				const proposal = new ConfigNameProposal(client, this.id);
+				return await ConfigNameProposal.init(proposal, proposalFields);
+			// ... other cases for different proposal types
+			default:
+				throw new Error(`Proposal type ${proposalFields.auth.witness.name} not supported.`);
+		}
 	}
 }
 

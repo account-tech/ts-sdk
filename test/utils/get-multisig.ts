@@ -1,15 +1,16 @@
+import { getFullnodeUrl, SuiClient } from "@mysten/sui/client";
 import { Multisig } from "../../src/lib/multisig.js"
 import { Ed25519Keypair } from "@mysten/sui/keypairs/ed25519";
 import { PACKAGE_ID } from "../../src/.gen/kraken-multisig/index.js";
+import { Transaction } from "@mysten/sui/transactions";
 
 (async () => {
     const keypair = Ed25519Keypair.fromSecretKey(Uint8Array.from(Buffer.from("AM06bExREdFceWiExfSacTJ+64AQtFl7SRkSiTmAqh6F", "base64")).slice(1));
+    const client = new SuiClient({ url: getFullnodeUrl("testnet") });
     const multisig = await Multisig.init(
-        "localnet",
-        PACKAGE_ID,
+        client,
         keypair.toSuiAddress(),
+        "0x2516b30e82f8c1bbe6105e140cf470e8f53a3d4a097fe393bbd0cd6bdd9438e9"
     )
-
-    const ms = await multisig.getMultisig("0xab88d653676fdb6ba987ec40cc424d8c75e3fb30f9398baf821bf8bdb96df879");
-    console.log(ms);
+    console.log(multisig);
 })();

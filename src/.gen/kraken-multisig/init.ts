@@ -23,8 +23,8 @@ loader.register(thresholds.Role);
 loader.register(thresholds.Thresholds);
 loader.register(executable.Executable);
 loader.register(multisig.Multisig);
-loader.register(account.Issuer);
 loader.register(account.Account);
 loader.register(account.Invite);
-loader.register(coinOperations.Issuer);
+loader.register(account.Registry);
+loader.register(coinOperations.ManageCoins);
  }

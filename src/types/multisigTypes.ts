@@ -9,7 +9,18 @@ export type Role = {
     totalWeight: number,
 }
 
+export type Threshold = {
+    name: string,
+    threshold: number,
+}
+
 export type Member = {
+    address: string,
+    weight: number,
+    roles: string[],
+};
+
+export type MemberAccount = {
     address: string,
     accountId: string,
     username: string,
@@ -17,18 +28,6 @@ export type Member = {
     weight: number,
     roles: string[],
 };
-
-export type Proposal = {
-    auth: { issuer: string, name: string },
-    name: string,
-    description: string,
-    expirationEpoch: bigint,
-    executionTime: bigint,
-    actions: any[],
-    totalWeight: number,
-    roleWeight: number,
-    approved: string[],
-}
 
 export type Kiosk = {
     cap: string,

@@ -6,9 +6,9 @@ import {Receiving} from "../../_dependencies/source/0x2/transfer/structs";
 import {GenericArg, generic, obj, option, pure} from "../../_framework/util";
 import {Transaction, TransactionArgument, TransactionObjectInput} from "@mysten/sui/transactions";
 
-export interface AccessCoinArgs { executable: TransactionObjectInput; multisig: TransactionObjectInput; receiving: (TransactionObjectInput | TransactionArgument | null); issuer: GenericArg }
+export interface AccessCoinArgs { executable: TransactionObjectInput; multisig: TransactionObjectInput; receiving: (TransactionObjectInput | TransactionArgument | null); witness: GenericArg }
 
-export function accessCoin( tx: Transaction, typeArgs: [string, string], args: AccessCoinArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::transfers::access_coin`, typeArguments: typeArgs, arguments: [ obj(tx, args.executable), obj(tx, args.multisig), option(tx, `${Receiving.$typeName}<${Coin.$typeName}<${typeArgs[0]}>>`, args.receiving), generic(tx, `${typeArgs[1]}`, args.issuer) ], }) }
+export function accessCoin( tx: Transaction, typeArgs: [string, string], args: AccessCoinArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::transfers::access_coin`, typeArguments: typeArgs, arguments: [ obj(tx, args.executable), obj(tx, args.multisig), option(tx, `${Receiving.$typeName}<${Coin.$typeName}<${typeArgs[0]}>>`, args.receiving), generic(tx, `${typeArgs[1]}`, args.witness) ], }) }
 
 export function isMint( tx: Transaction, typeArg: string, executable: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::transfers::is_mint`, typeArguments: [typeArg], arguments: [ obj(tx, executable) ], }) }
 
@@ -16,19 +16,19 @@ export function isSpend( tx: Transaction, typeArg: string, executable: Transacti
 
 export function isWithdraw( tx: Transaction, typeArg: string, executable: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::transfers::is_withdraw`, typeArguments: [typeArg], arguments: [ obj(tx, executable) ], }) }
 
-export function completeTransfer( tx: Transaction, executable: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::transfers::complete_transfer`, arguments: [ obj(tx, executable) ], }) }
+export function completeTransfers( tx: Transaction, executable: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::transfers::complete_transfers`, arguments: [ obj(tx, executable) ], }) }
 
 export function confirmTransferCoin( tx: Transaction, typeArg: string, executable: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::transfers::confirm_transfer_coin`, typeArguments: [typeArg], arguments: [ obj(tx, executable) ], }) }
 
-export function confirmTransferObject( tx: Transaction, executable: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::transfers::confirm_transfer_object`, arguments: [ obj(tx, executable) ], }) }
+export function confirmTransferObjects( tx: Transaction, executable: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::transfers::confirm_transfer_objects`, arguments: [ obj(tx, executable) ], }) }
 
-export interface DestroyTransferCoinArgs { executable: TransactionObjectInput; issuer: GenericArg }
+export interface DestroyTransferCoinArgs { executable: TransactionObjectInput; witness: GenericArg }
 
-export function destroyTransferCoin( tx: Transaction, typeArgs: [string, string], args: DestroyTransferCoinArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::transfers::destroy_transfer_coin`, typeArguments: typeArgs, arguments: [ obj(tx, args.executable), generic(tx, `${typeArgs[1]}`, args.issuer) ], }) }
+export function destroyTransferCoin( tx: Transaction, typeArgs: [string, string], args: DestroyTransferCoinArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::transfers::destroy_transfer_coin`, typeArguments: typeArgs, arguments: [ obj(tx, args.executable), generic(tx, `${typeArgs[1]}`, args.witness) ], }) }
 
-export interface DestroyTransferObjectArgs { executable: TransactionObjectInput; issuer: GenericArg }
+export interface DestroyTransferObjectsArgs { executable: TransactionObjectInput; witness: GenericArg }
 
-export function destroyTransferObject( tx: Transaction, typeArg: string, args: DestroyTransferObjectArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::transfers::destroy_transfer_object`, typeArguments: [typeArg], arguments: [ obj(tx, args.executable), generic(tx, `${typeArg}`, args.issuer) ], }) }
+export function destroyTransferObjects( tx: Transaction, typeArg: string, args: DestroyTransferObjectsArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::transfers::destroy_transfer_objects`, typeArguments: [typeArg], arguments: [ obj(tx, args.executable), generic(tx, `${typeArg}`, args.witness) ], }) }
 
 export interface ExecuteTransferCoinArgs { executable: TransactionObjectInput; multisig: TransactionObjectInput; receiving: (TransactionObjectInput | TransactionArgument | null) }
 
@@ -50,9 +50,9 @@ export interface NewTransferCoinTreasuryArgs { proposal: TransactionObjectInput;
 
 export function newTransferCoinTreasury( tx: Transaction, args: NewTransferCoinTreasuryArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::transfers::new_transfer_coin_treasury`, arguments: [ obj(tx, args.proposal), pure(tx, args.treasuryName, `${String.$typeName}`), pure(tx, args.coinTypes, `vector<${String.$typeName}>`), pure(tx, args.amounts, `vector<u64>`), pure(tx, args.recipient, `address`) ], }) }
 
-export interface NewTransferObjectArgs { proposal: TransactionObjectInput; objects: Array<string | TransactionArgument> | TransactionArgument; recipient: string | TransactionArgument }
+export interface NewTransferObjectsArgs { proposal: TransactionObjectInput; objects: Array<string | TransactionArgument> | TransactionArgument; recipient: string | TransactionArgument }
 
-export function newTransferObject( tx: Transaction, args: NewTransferObjectArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::transfers::new_transfer_object`, arguments: [ obj(tx, args.proposal), pure(tx, args.objects, `vector<${ID.$typeName}>`), pure(tx, args.recipient, `address`) ], }) }
+export function newTransferObjects( tx: Transaction, args: NewTransferObjectsArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::transfers::new_transfer_objects`, arguments: [ obj(tx, args.proposal), pure(tx, args.objects, `vector<${ID.$typeName}>`), pure(tx, args.recipient, `address`) ], }) }
 
 export interface ProposeTransferCoinMintedArgs { multisig: TransactionObjectInput; key: string | TransactionArgument; description: string | TransactionArgument; executionTime: bigint | TransactionArgument; expirationEpoch: bigint | TransactionArgument; amounts: Array<bigint | TransactionArgument> | TransactionArgument; recipients: Array<string | TransactionArgument> | TransactionArgument }
 
@@ -66,14 +66,14 @@ export interface ProposeTransferCoinTreasuryArgs { multisig: TransactionObjectIn
 
 export function proposeTransferCoinTreasury( tx: Transaction, args: ProposeTransferCoinTreasuryArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::transfers::propose_transfer_coin_treasury`, arguments: [ obj(tx, args.multisig), pure(tx, args.key, `${String.$typeName}`), pure(tx, args.description, `${String.$typeName}`), pure(tx, args.executionTime, `u64`), pure(tx, args.expirationEpoch, `u64`), pure(tx, args.treasuryName, `${String.$typeName}`), pure(tx, args.coinTypes, `vector<vector<${String.$typeName}>>`), pure(tx, args.coinAmounts, `vector<vector<u64>>`), pure(tx, args.recipients, `vector<address>`) ], }) }
 
-export interface ProposeTransferObjectArgs { multisig: TransactionObjectInput; key: string | TransactionArgument; description: string | TransactionArgument; executionTime: bigint | TransactionArgument; expirationEpoch: bigint | TransactionArgument; objects: Array<Array<string | TransactionArgument> | TransactionArgument> | TransactionArgument; recipients: Array<string | TransactionArgument> | TransactionArgument }
+export interface ProposeTransferObjectsArgs { multisig: TransactionObjectInput; key: string | TransactionArgument; description: string | TransactionArgument; executionTime: bigint | TransactionArgument; expirationEpoch: bigint | TransactionArgument; objects: Array<Array<string | TransactionArgument> | TransactionArgument> | TransactionArgument; recipients: Array<string | TransactionArgument> | TransactionArgument }
 
-export function proposeTransferObject( tx: Transaction, args: ProposeTransferObjectArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::transfers::propose_transfer_object`, arguments: [ obj(tx, args.multisig), pure(tx, args.key, `${String.$typeName}`), pure(tx, args.description, `${String.$typeName}`), pure(tx, args.executionTime, `u64`), pure(tx, args.expirationEpoch, `u64`), pure(tx, args.objects, `vector<vector<${ID.$typeName}>>`), pure(tx, args.recipients, `vector<address>`) ], }) }
+export function proposeTransferObjects( tx: Transaction, args: ProposeTransferObjectsArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::transfers::propose_transfer_objects`, arguments: [ obj(tx, args.multisig), pure(tx, args.key, `${String.$typeName}`), pure(tx, args.description, `${String.$typeName}`), pure(tx, args.executionTime, `u64`), pure(tx, args.expirationEpoch, `u64`), pure(tx, args.objects, `vector<vector<${ID.$typeName}>>`), pure(tx, args.recipients, `vector<address>`) ], }) }
 
-export interface TransferCoinArgs { executable: TransactionObjectInput; multisig: TransactionObjectInput; coin: TransactionObjectInput; issuer: GenericArg }
+export interface TransferCoinArgs { executable: TransactionObjectInput; multisig: TransactionObjectInput; coin: TransactionObjectInput; witness: GenericArg }
 
-export function transferCoin( tx: Transaction, typeArgs: [string, string], args: TransferCoinArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::transfers::transfer_coin`, typeArguments: typeArgs, arguments: [ obj(tx, args.executable), obj(tx, args.multisig), obj(tx, args.coin), generic(tx, `${typeArgs[1]}`, args.issuer) ], }) }
+export function transferCoin( tx: Transaction, typeArgs: [string, string], args: TransferCoinArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::transfers::transfer_coin`, typeArguments: typeArgs, arguments: [ obj(tx, args.executable), obj(tx, args.multisig), obj(tx, args.coin), generic(tx, `${typeArgs[1]}`, args.witness) ], }) }
 
-export interface TransferObjectArgs { executable: TransactionObjectInput; multisig: TransactionObjectInput; receiving: TransactionObjectInput; issuer: GenericArg }
+export interface TransferObjectArgs { executable: TransactionObjectInput; multisig: TransactionObjectInput; receiving: TransactionObjectInput; witness: GenericArg }
 
-export function transferObject( tx: Transaction, typeArgs: [string, string], args: TransferObjectArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::transfers::transfer_object`, typeArguments: typeArgs, arguments: [ obj(tx, args.executable), obj(tx, args.multisig), obj(tx, args.receiving), generic(tx, `${typeArgs[1]}`, args.issuer) ], }) }
+export function transferObject( tx: Transaction, typeArgs: [string, string], args: TransferObjectArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::transfers::transfer_object`, typeArguments: typeArgs, arguments: [ obj(tx, args.executable), obj(tx, args.multisig), obj(tx, args.receiving), generic(tx, `${typeArgs[1]}`, args.witness) ], }) }

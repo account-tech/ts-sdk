@@ -3,21 +3,21 @@ import {String} from "../../_dependencies/source/0x1/string/structs";
 import {GenericArg, generic, obj, pure} from "../../_framework/util";
 import {Transaction, TransactionArgument, TransactionObjectInput} from "@mysten/sui/transactions";
 
-export interface ConfigDepsArgs { executable: TransactionObjectInput; multisig: TransactionObjectInput; issuer: GenericArg }
+export interface ConfigDepsArgs { executable: TransactionObjectInput; multisig: TransactionObjectInput; witness: GenericArg }
 
-export function configDeps( tx: Transaction, typeArg: string, args: ConfigDepsArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::config::config_deps`, typeArguments: [typeArg], arguments: [ obj(tx, args.executable), obj(tx, args.multisig), generic(tx, `${typeArg}`, args.issuer) ], }) }
+export function configDeps( tx: Transaction, typeArg: string, args: ConfigDepsArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::config::config_deps`, typeArguments: [typeArg], arguments: [ obj(tx, args.executable), obj(tx, args.multisig), generic(tx, `${typeArg}`, args.witness) ], }) }
 
-export interface ConfigMembersArgs { executable: TransactionObjectInput; multisig: TransactionObjectInput; issuer: GenericArg }
+export interface ConfigMembersArgs { executable: TransactionObjectInput; multisig: TransactionObjectInput; witness: GenericArg }
 
-export function configMembers( tx: Transaction, typeArg: string, args: ConfigMembersArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::config::config_members`, typeArguments: [typeArg], arguments: [ obj(tx, args.executable), obj(tx, args.multisig), generic(tx, `${typeArg}`, args.issuer) ], }) }
+export function configMembers( tx: Transaction, typeArg: string, args: ConfigMembersArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::config::config_members`, typeArguments: [typeArg], arguments: [ obj(tx, args.executable), obj(tx, args.multisig), generic(tx, `${typeArg}`, args.witness) ], }) }
 
-export interface ConfigNameArgs { executable: TransactionObjectInput; multisig: TransactionObjectInput; issuer: GenericArg }
+export interface ConfigNameArgs { executable: TransactionObjectInput; multisig: TransactionObjectInput; witness: GenericArg }
 
-export function configName( tx: Transaction, typeArg: string, args: ConfigNameArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::config::config_name`, typeArguments: [typeArg], arguments: [ obj(tx, args.executable), obj(tx, args.multisig), generic(tx, `${typeArg}`, args.issuer) ], }) }
+export function configName( tx: Transaction, typeArg: string, args: ConfigNameArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::config::config_name`, typeArguments: [typeArg], arguments: [ obj(tx, args.executable), obj(tx, args.multisig), generic(tx, `${typeArg}`, args.witness) ], }) }
 
-export interface ConfigThresholdsArgs { executable: TransactionObjectInput; multisig: TransactionObjectInput; issuer: GenericArg }
+export interface ConfigThresholdsArgs { executable: TransactionObjectInput; multisig: TransactionObjectInput; witness: GenericArg }
 
-export function configThresholds( tx: Transaction, typeArg: string, args: ConfigThresholdsArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::config::config_thresholds`, typeArguments: [typeArg], arguments: [ obj(tx, args.executable), obj(tx, args.multisig), generic(tx, `${typeArg}`, args.issuer) ], }) }
+export function configThresholds( tx: Transaction, typeArg: string, args: ConfigThresholdsArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::config::config_thresholds`, typeArguments: [typeArg], arguments: [ obj(tx, args.executable), obj(tx, args.multisig), generic(tx, `${typeArg}`, args.witness) ], }) }
 
 export interface ExecuteConfigDepsArgs { executable: TransactionObjectInput; multisig: TransactionObjectInput }
 
