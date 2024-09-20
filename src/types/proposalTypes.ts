@@ -1,5 +1,14 @@
 import { Dep, Member, Threshold } from "./multisigTypes";
 
+export enum ProposalTypes {
+    ConfigName = "ConfigName",
+    ConfigRules = "ConfigRules",
+    ConfigDeps = "ConfigDeps",
+    Mint = "Mint",
+    Burn = "Burn",
+    Update = "Update",
+};
+
 export type ProposalArgs = {
     key: string;
     description?: string;
@@ -22,13 +31,13 @@ export type ConfigDepsArgs = {
 
 export type MintArgs = {
     coinType: string;
-    amount: bigint;
+    amount: number;
 }
 
 export type BurnArgs = {
     coinType: string;
     coinId: string;
-    amount: bigint;
+    amount: number;
 }
 
 export type UpdateArgs = {

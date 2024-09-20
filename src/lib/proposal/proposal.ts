@@ -4,8 +4,11 @@ import { SuiClient } from "@mysten/sui/client";
 import { ProposalFields } from "../../.gen/kraken-multisig/proposals/structs"
 import { approveProposal, removeApproval, executeProposal } from "../../.gen/kraken-multisig/multisig/functions"
 import { CLOCK } from "src/types/constants";
+import { ProposalArgs, ProposalTypes } from "src/types/proposalTypes";
 
 export abstract class Proposal {
+    client: SuiClient;
+    multisig: string;
     auth?: { witness: string, name: string };
     key?: string;
     description?: string;
@@ -14,10 +17,10 @@ export abstract class Proposal {
     totalWeight?: number;
     roleWeight?: number;
     approved?: string[];
-    
+
     constructor(
-        public client: SuiClient,
-        public multisig: string,
+        client: SuiClient,
+        multisig: string,
     ) {
         this.client = client;
         this.multisig = multisig;
@@ -27,7 +30,7 @@ export abstract class Proposal {
         this.setProposalFromFields(fields);
     }
     
-    abstract propose(tx: Transaction, multisigId: string, ...args: any[]): TransactionResult;
+    abstract propose<Args>(tx: Transaction, multisigId: string, proposalArgs: ProposalArgs, actionArgs: Args): TransactionResult;
 
     abstract execute(tx: Transaction, ...args: any[]): TransactionResult;
 
@@ -45,7 +48,10 @@ export abstract class Proposal {
                 ids,
                 options: { showContent: true }
             });
-            actions = actionDfs.map((df: any) => df.data?.content?.fields.value.fields);
+            actions = actionDfs.map((df: any) => ({
+                type: df.data?.content?.fields.value.type,
+                ...df.data?.content?.fields.value.fields
+            }));
         }
 
         return actions;

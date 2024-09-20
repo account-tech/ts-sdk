@@ -1,21 +1,25 @@
 import { SuiClient, getFullnodeUrl } from "@mysten/sui/client";
 import { Transaction, TransactionResult } from "@mysten/sui/transactions";
 import { KioskClient, Network } from "@mysten/kiosk";
-import { KRAKEN_MULTISIG, ProposalTypes } from "./types/constants.js";
+import { KRAKEN_MULTISIG } from "./types/constants.js";
 import { Dep, Kiosk, Member, TransferPolicy } from "./types/multisigTypes.js";
 import { Account } from "./lib/account.js";
 import { Multisig } from "./lib/multisig.js";
 import { TransactionPureInput } from "./types/helperTypes.js";
 import { getObjectId } from "./lib/utils.js";
 import { ConfigDepsProposal, ConfigNameProposal, ConfigRulesProposal } from "./lib/proposal/proposals/config.js";
-import { ProposalArgs } from "./types/proposalTypes.js";
+import { ProposalArgs, ProposalTypes } from "./types/proposalTypes.js";
 import { Proposal } from "./lib/proposal/proposal.js";
 import { Extensions } from "./lib/extensions.js";
+import { MintProposal } from "./lib/proposal/proposals/currency.js";
 
 const proposalRegistry: Record<string, typeof Proposal> = {
-    [ProposalTypes.configName]: ConfigNameProposal,
-    [ProposalTypes.configRules]: ConfigRulesProposal,
-    [ProposalTypes.configDeps]: ConfigDepsProposal,
+    [ProposalTypes.ConfigName]: ConfigNameProposal,
+    [ProposalTypes.ConfigRules]: ConfigRulesProposal,
+    [ProposalTypes.ConfigDeps]: ConfigDepsProposal,
+    [ProposalTypes.Mint]: MintProposal,
+    // [ProposalTypes.burn]: BurnProposal,
+    // [ProposalTypes.update]: UpdateProposal,
 };
 
 export class KrakenClient {
@@ -95,15 +99,15 @@ export class KrakenClient {
 	}
 
 	// Factory function to call the appropriate propose function
-	propose(
+	propose<Args>(
 		tx: Transaction,
 		proposalType: ProposalTypes,
 		proposalArgs: ProposalArgs,
-		...actionsArgs: any[]
+		actionsArgs: Args
 	) {
 		const proposalClass = proposalRegistry[proposalType];
 		const method = proposalClass.prototype.propose;
-		method.call(proposalClass, tx, this.multisig.id, proposalArgs, ...actionsArgs);
+		method.call(proposalClass, tx, this.multisig.id, proposalArgs, actionsArgs);
 		// directly approve after proposing
 		this.multisig.approveProposal(tx, proposalArgs.key, this.multisig.id);
 	}

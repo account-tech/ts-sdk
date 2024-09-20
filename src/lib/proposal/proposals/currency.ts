@@ -1,28 +1,26 @@
-
 import { Transaction, TransactionResult } from "@mysten/sui/transactions";
 import { SuiClient } from "@mysten/sui/client";
-import * as config from "../../../.gen/kraken-actions/config/functions";
+import * as currency from "../../../.gen/kraken-actions/currency/functions";
 import { Proposal } from "../proposal";
 import { ProposalFields } from "src/.gen/kraken-multisig/proposals/structs";
-import { EXTENSIONS } from "src/types/constants";
-import { ConfigDepsArgs, ConfigNameArgs, ConfigRulesArgs, ProposalArgs } from "src/types/proposalTypes";
+import { UpdateArgs, BurnArgs, MintArgs, ProposalArgs, ProposalTypes } from "src/types/proposalTypes";
 
-export class ConfigNameProposal extends Proposal {
-    args?: ConfigNameArgs;
+export class MintProposal extends Proposal {
+    args?: MintArgs;
 
     constructor(
-        client: SuiClient,
-        multisig: string,
+        public client: SuiClient,
+        public multisig: string,
     ) {
         super(client, multisig);
     }
-    
+
     static async init(
         client: SuiClient,
         multisig: string,
         fields: ProposalFields,
-    ): Promise<ConfigNameProposal> {
-        const proposal = new ConfigNameProposal(client, multisig);
+    ): Promise<MintProposal> {
+        const proposal = new MintProposal(client, multisig);
         proposal.setProposalFromFields(fields);
         // resolve actions
         const actions = await proposal.fetchActions(fields.actions.id);
@@ -30,7 +28,10 @@ export class ConfigNameProposal extends Proposal {
             throw new Error('No actions found for the ConfigName proposal');
         }
 
-        proposal.args = { name: actions[0].inner };
+        proposal.args = { 
+            coinType: actions[0].type.match(/<([^>]*)>/)[1],
+            amount: actions[0].amount,
+        };
         return proposal;
     }
 
@@ -40,16 +41,17 @@ export class ConfigNameProposal extends Proposal {
         proposalArgs: ProposalArgs,
         actionArgs: Args,
     ): TransactionResult {
-        const configNameArgs = actionArgs as ConfigNameArgs;
-        return config.proposeConfigName(
+        const mintArgs = actionArgs as MintArgs;
+        return currency.proposeMint(
             tx,
+            mintArgs.coinType,
             {
                 multisig,
                 key: proposalArgs.key,
                 description: proposalArgs.description ?? "",
                 executionTime: BigInt(proposalArgs.executionTime ?? 0),
                 expirationEpoch: BigInt(proposalArgs.expirationEpoch ?? 0),
-                name: configNameArgs.name,
+                amount: BigInt(mintArgs.amount),
             }
         );
     }
@@ -58,8 +60,9 @@ export class ConfigNameProposal extends Proposal {
         tx: Transaction,
     ): TransactionResult {
         const executable = this.constructExecutable(tx);
-        return config.executeConfigName(
+        return currency.executeMint(
             tx,
+            this.args!.coinType,
             {
                 executable,
                 multisig: this.multisig!,
@@ -68,12 +71,12 @@ export class ConfigNameProposal extends Proposal {
     }
 }
 
-export class ConfigRulesProposal extends Proposal {    
-    args?: ConfigRulesArgs;
+export class BurnProposal extends Proposal {
+    args?: BurnArgs;
 
     constructor(
-        client: SuiClient,
-        multisig: string,
+        public client: SuiClient,
+        public multisig: string,
     ) {
         super(client, multisig);
     }
@@ -82,18 +85,19 @@ export class ConfigRulesProposal extends Proposal {
         client: SuiClient,
         multisig: string,
         fields: ProposalFields,
-    ): Promise<ConfigRulesProposal> {
-        const proposal = new ConfigRulesProposal(client, multisig);
+    ): Promise<BurnProposal> {
+        const proposal = new BurnProposal(client, multisig);
         proposal.setProposalFromFields(fields);
         // resolve actions
         const actions = await proposal.fetchActions(fields.actions.id);
         if (actions.length === 0) {
-            throw new Error('No actions found for the ConfigRules proposal');
+            throw new Error('No actions found for the ConfigName proposal');
         }
 
         proposal.args = { 
-            members: actions[0].inner,
-            thresholds: actions[1].inner,
+            coinType: actions[0].type.match(/<([^>]*)>/)[1],
+            coinId: actions[0].coinId,
+            amount: actions[0].amount,
         };
         return proposal;
     }
@@ -104,68 +108,44 @@ export class ConfigRulesProposal extends Proposal {
         proposalArgs: ProposalArgs,
         actionArgs: Args,
     ): TransactionResult {
-        const configRulesArgs = actionArgs as ConfigRulesArgs;
-        let addresses: string[] = [];
-        let weights: bigint[] = [];
-        let roles: string[][] = [];
-        if (configRulesArgs.members) {
-            configRulesArgs.members.forEach((member) => {
-                addresses.push(member.address);
-                weights.push(BigInt(member.weight));
-                roles.push(member.roles);
-            });
-        }
-
-        let global = 0n;
-        let roleNames: string[] = [];
-        let roleThresholds: bigint[] = [];
-        if (configRulesArgs.thresholds) {
-            global = BigInt(configRulesArgs.thresholds.global);
-            configRulesArgs.thresholds.roles.forEach((role) => {
-                roleNames.push(role.name);
-                roleThresholds.push(BigInt(role.threshold));
-            });
-        }
-
-        config.proposeConfigRules(
+        const burnArgs = actionArgs as BurnArgs;
+        return currency.proposeBurn(
             tx,
+            burnArgs.coinType,
             {
                 multisig,
                 key: proposalArgs.key,
                 description: proposalArgs.description ?? "",
                 executionTime: BigInt(proposalArgs.executionTime ?? 0),
                 expirationEpoch: BigInt(proposalArgs.expirationEpoch ?? 0),
-                addresses,
-                weights,
-                roles,
-                global,
-                roleNames,
-                roleThresholds,
+                coinId: burnArgs.coinId,
+                amount: BigInt(burnArgs.amount),
             }
         );
-        return this.approve(tx);
     }
 
     execute(
         tx: Transaction,
     ): TransactionResult {
         const executable = this.constructExecutable(tx);
-        return config.executeConfigRules(
+        return currency.executeBurn(
             tx,
+            this.args!.coinType,
             {
                 executable,
                 multisig: this.multisig!,
+                receiving: this.args!.coinId,
             }
         );
     }
 }
 
-export class ConfigDepsProposal extends Proposal {
-    args?: ConfigDepsArgs;
+export class UpdateProposal extends Proposal {
+    args?: UpdateArgs;
 
     constructor(
-        client: SuiClient,
-        multisig: string,
+        public client: SuiClient,
+        public multisig: string,
     ) {
         super(client, multisig);
     }
@@ -174,17 +154,21 @@ export class ConfigDepsProposal extends Proposal {
         client: SuiClient,
         multisig: string,
         fields: ProposalFields,
-    ): Promise<ConfigDepsProposal> {
-        const proposal = new ConfigDepsProposal(client, multisig);
+    ): Promise<UpdateProposal> {
+        const proposal = new UpdateProposal(client, multisig);
         proposal.setProposalFromFields(fields);
         // resolve actions
         const actions = await proposal.fetchActions(fields.actions.id);
         if (actions.length === 0) {
-            throw new Error('No actions found for the ConfigDeps proposal');
+            throw new Error('No actions found for the ConfigName proposal');
         }
 
-        proposal.args = {
-            deps: actions[0].inner,
+        proposal.args = { 
+            coinType: actions[0].type.match(/<([^>]*)>/)[1],
+            name: actions[0].name,
+            symbol: actions[0].symbol,
+            description: actions[0].description,
+            icon: actions[0].icon,
         };
         return proposal;
     }
@@ -195,42 +179,36 @@ export class ConfigDepsProposal extends Proposal {
         proposalArgs: ProposalArgs,
         actionArgs: Args,
     ): TransactionResult {
-        const configDepsArgs = actionArgs as ConfigDepsArgs;
-        const names: string[] = [];
-        const packages: string[] = [];
-        const versions: bigint[] = [];
-        configDepsArgs.deps.forEach((dep) => {
-            names.push(dep.name);
-            packages.push(dep.package);
-            versions.push(BigInt(dep.version));
-        });
-
-        config.proposeConfigDeps(
+        const updateArgs = actionArgs as UpdateArgs;
+        return currency.proposeUpdate(
             tx,
+            updateArgs.coinType,
             {
                 multisig,
                 key: proposalArgs.key,
                 description: proposalArgs.description ?? "",
                 executionTime: BigInt(proposalArgs.executionTime ?? 0),
                 expirationEpoch: BigInt(proposalArgs.expirationEpoch ?? 0),
-                extensions: EXTENSIONS,
-                names,
-                packages,
-                versions,
+                mdName: updateArgs.name,
+                mdSymbol: updateArgs.symbol,
+                mdDescription: updateArgs.description,
+                mdIcon: updateArgs.icon,
             }
         );
-        return this.approve(tx);
     }
 
     execute(
         tx: Transaction,
+        metadata: string,
     ): TransactionResult {
         const executable = this.constructExecutable(tx);
-        return config.executeConfigDeps(
+        return currency.executeUpdate(
             tx,
+            this.args!.coinType,
             {
                 executable,
                 multisig: this.multisig!,
+                metadata,
             }
         );
     }

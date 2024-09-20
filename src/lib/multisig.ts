@@ -14,10 +14,11 @@ import { CLOCK, EXTENSIONS, KRAKEN_ACTIONS } from "../types/constants";
 import { getCurrentEpoch } from "./utils";
 import { Account } from "./account";
 import { Proposal } from "./proposal/proposal";
-import { ConfigNameProposal } from "./proposal/proposals/config";
+import { ConfigDepsProposal, ConfigNameProposal, ConfigRulesProposal } from "./proposal/proposals/config";
 import { Dep, Role, MemberAccount } from "../types/multisigTypes";
 import { BurnArgs, ConfigDepsArgs, ConfigNameArgs, ConfigRulesArgs, MintArgs, ProposalArgs, UpdateArgs } from "../types/proposalTypes";
 import { TransactionPureInput } from "src/types/helperTypes";
+import { MintProposal } from "./proposal/proposals/currency";
 
 export interface MultisigData {
 	id: string;
@@ -29,17 +30,17 @@ export interface MultisigData {
 }
 
 export class Multisig implements MultisigData {
-	public epoch: number = 0;
-    public id: string = "";
-    public name: string = "";
-    public deps: Dep[] = [];
-    public roles: Map<string, Role> = new Map();
-    public members: MemberAccount[] = [];
-    public proposals: Proposal[] = [];
+	userAddr: string = "";
+	epoch: number = 0;
+    id: string = "";
+    name: string = "";
+    deps: Dep[] = [];
+    roles: Map<string, Role> = new Map();
+    members: MemberAccount[] = [];
+    proposals: Proposal[] = [];
 
 	constructor(
 		public client: SuiClient,
-		public userAddr: string,
 	) {}
 
 	static async init(
@@ -47,7 +48,8 @@ export class Multisig implements MultisigData {
         userAddr: string, 
         multisigId?: string,
     ): Promise<Multisig> {
-		const multisig = new Multisig(client, userAddr);
+		const multisig = new Multisig(client);
+		multisig.userAddr = userAddr;
 		multisig.epoch = await getCurrentEpoch(multisig.client);
         if (multisigId) {
 			multisig.id = multisigId;
@@ -209,9 +211,9 @@ export class Multisig implements MultisigData {
 			{
 				multisig: this.id,
 				key: proposalArgs.key,
-				description: proposalArgs.description ? proposalArgs.description : "",
-				executionTime: BigInt(proposalArgs.executionTime ? proposalArgs.executionTime : 0),
-				expirationEpoch: BigInt(proposalArgs.expirationEpoch ? proposalArgs.expirationEpoch : this.epoch + 7),
+				description: proposalArgs.description ?? "",
+				executionTime: BigInt(proposalArgs.executionTime ?? 0),
+				expirationEpoch: BigInt(proposalArgs.expirationEpoch ?? this.epoch + 7),
 				name: actionsArgs.name,
 			}
 		);
@@ -258,9 +260,9 @@ export class Multisig implements MultisigData {
 			{
 				multisig: this.id,
 				key: proposalArgs.key,
-				description: proposalArgs.description ? proposalArgs.description : "",
-				executionTime: BigInt(proposalArgs.executionTime ? proposalArgs.executionTime : 0),
-				expirationEpoch: BigInt(proposalArgs.expirationEpoch ? proposalArgs.expirationEpoch : this.epoch + 7),
+				description: proposalArgs.description ?? "",
+				executionTime: BigInt(proposalArgs.executionTime ?? 0),
+				expirationEpoch: BigInt(proposalArgs.expirationEpoch ?? this.epoch + 7),
 				addresses,
 				weights,
 				roles,
@@ -299,9 +301,9 @@ export class Multisig implements MultisigData {
 			{
 				multisig,
 				key: proposalArgs.key,
-				description: proposalArgs.description ? proposalArgs.description : "",
-				executionTime: BigInt(proposalArgs.executionTime ? proposalArgs.executionTime : 0),
-				expirationEpoch: BigInt(proposalArgs.expirationEpoch ? proposalArgs.expirationEpoch : this.epoch + 7),
+				description: proposalArgs.description ?? "",
+				executionTime: BigInt(proposalArgs.executionTime ?? 0),
+				expirationEpoch: BigInt(proposalArgs.expirationEpoch ?? this.epoch + 7),
 				extensions: EXTENSIONS,
 				names,
 				packages,
@@ -330,9 +332,9 @@ export class Multisig implements MultisigData {
 			{
 				multisig: this.id,
 				key: proposalArgs.key,
-				description: proposalArgs.description ? proposalArgs.description : "",
-				executionTime: BigInt(proposalArgs.executionTime ? proposalArgs.executionTime : 0),
-				expirationEpoch: BigInt(proposalArgs.expirationEpoch ? proposalArgs.expirationEpoch : this.epoch + 7),
+				description: proposalArgs.description ?? "",
+				executionTime: BigInt(proposalArgs.executionTime ?? 0),
+				expirationEpoch: BigInt(proposalArgs.expirationEpoch ?? this.epoch + 7),
 				amount: BigInt(actionsArgs.amount),
 			}
 		);
@@ -357,9 +359,9 @@ export class Multisig implements MultisigData {
 			{
 				multisig: this.id,
 				key: proposalArgs.key,
-				description: proposalArgs.description ? proposalArgs.description : "",
-				executionTime: BigInt(proposalArgs.executionTime ? proposalArgs.executionTime : 0),
-				expirationEpoch: BigInt(proposalArgs.expirationEpoch ? proposalArgs.expirationEpoch : this.epoch + 7),
+				description: proposalArgs.description ?? "",
+				executionTime: BigInt(proposalArgs.executionTime ?? 0),
+				expirationEpoch: BigInt(proposalArgs.expirationEpoch ?? this.epoch + 7),
 				coinId: actionsArgs.coinId,
 				amount: BigInt(actionsArgs.amount),
 			}
@@ -386,9 +388,9 @@ export class Multisig implements MultisigData {
 			{
 				multisig: this.id,
 				key: proposalArgs.key,
-				description: proposalArgs.description ? proposalArgs.description : "",
-				executionTime: BigInt(proposalArgs.executionTime ? proposalArgs.executionTime : 0),
-				expirationEpoch: BigInt(proposalArgs.expirationEpoch ? proposalArgs.expirationEpoch : this.epoch + 7),
+				description: proposalArgs.description ?? "",
+				executionTime: BigInt(proposalArgs.executionTime ?? 0),
+				expirationEpoch: BigInt(proposalArgs.expirationEpoch ?? this.epoch + 7),
 				mdName: actionsArgs.name,
 				mdSymbol: actionsArgs.symbol,
 				mdDescription: actionsArgs.description,
@@ -414,9 +416,9 @@ export class Multisig implements MultisigData {
 	// 		{
 	// 			multisig: this.id,
 	// 			key: args.key,
-	// 			description: args.description ? args.description : "",
-	// 			executionTime: BigInt(args.executionTime ? args.executionTime : 0),
-	// 			expirationEpoch: BigInt(args.expirationEpoch ? args.expirationEpoch : this.epoch + 7),
+	// 			description: args.description ?? "",
+	// 			executionTime: BigInt(args.executionTime ?? 0),
+	// 			expirationEpoch: BigInt(args.expirationEpoch ?? this.epoch + 7),
 	// 			name: args.name,
 	// 			nftIds: args.nftIds,
 	// 			recipient: args.recipient,
@@ -449,6 +451,16 @@ export class Multisig implements MultisigData {
 		switch ("0x" + fields.auth.witness.name) {
 			case `${KRAKEN_ACTIONS}::config::ConfigNameProposal`:
 				return await ConfigNameProposal.init(client, this.id, fields);
+			case `${KRAKEN_ACTIONS}::config::ConfigRulesProposal`:
+				return await ConfigRulesProposal.init(client, this.id, fields);
+			case `${KRAKEN_ACTIONS}::config::ConfigDepsProposal`:
+				return await ConfigDepsProposal.init(client, this.id, fields);
+			case `${KRAKEN_ACTIONS}::currency::MintProposal`:
+				return await MintProposal.init(client, this.id, fields);
+			// case `${KRAKEN_ACTIONS}::currency::BurnProposal`:
+			// 	return await BurnProposal.init(client, this.id, fields);
+			// case `${KRAKEN_ACTIONS}::currency::UpdateProposal`:
+			// 	return await UpdateProposal.init(client, this.id, fields);
 			// ... other cases for different proposal types
 			default:
 				throw new Error(`Proposal type ${fields.auth.witness.name} not supported.`);

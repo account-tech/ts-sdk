@@ -21,3 +21,10 @@ export function getObjectId(
 		arguments: [tx.object(object)],
 	});
 }
+
+
+export function areTypesEqual<T, U>() {
+	type TypesAreEqual<T, U> = T extends U ? (U extends T ? true : false) : false;
+	type AreEqual = TypesAreEqual<T, U>;
+	return {} as AreEqual;
+}

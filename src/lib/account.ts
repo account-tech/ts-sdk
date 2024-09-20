@@ -14,10 +14,10 @@ export interface AccountData {
 }
 
 export class Account implements AccountData {
-    public id: string = ""	;
-	public username: string = "";
-	public profilePicture: string = "";
-    public multisigs: {id: string, name: string}[] = [];
+    id: string = ""	;
+	username: string = "";
+	profilePicture: string = "";
+    multisigs: {id: string, name: string}[] = [];
 
 	constructor(
 		public client: SuiClient,
