@@ -5,10 +5,10 @@ import * as config from "../../../.gen/kraken-actions/config/functions";
 import { Proposal } from "../proposal";
 import { ProposalFields } from "src/.gen/kraken-multisig/proposals/structs";
 import { EXTENSIONS } from "src/types/constants";
-import { ConfigDepsFields, ConfigNameFields, ConfigRulesFields, ProposalArgs } from "src/types/proposalTypes";
+import { ConfigDepsArgs, ConfigNameArgs, ConfigRulesArgs, ProposalArgs } from "src/types/proposalTypes";
 
 export class ConfigNameProposal extends Proposal {
-    public args?: ConfigNameFields;
+    public args?: ConfigNameArgs;
 
     constructor(
         public client: SuiClient,
@@ -38,7 +38,7 @@ export class ConfigNameProposal extends Proposal {
         tx: Transaction,
         multisig: string,
         proposalArgs: ProposalArgs,
-        actionArgs: ConfigNameFields,
+        actionArgs: ConfigNameArgs,
     ): TransactionResult {
         return config.proposeConfigName(
             tx,
@@ -68,7 +68,7 @@ export class ConfigNameProposal extends Proposal {
 }
 
 export class ConfigRulesProposal extends Proposal {
-    public args?: ConfigRulesFields; 
+    public args?: ConfigRulesArgs; 
     
     constructor(
         public client: SuiClient,
@@ -100,8 +100,8 @@ export class ConfigRulesProposal extends Proposal {
     propose(
         tx: Transaction,
         multisig: string,
-        proposalArgs: ProposalFields,
-        actionArgs: ConfigRulesFields,
+        proposalArgs: ProposalArgs,
+        actionArgs: ConfigRulesArgs,
     ): TransactionResult {
         let addresses: string[] = [];
         let weights: bigint[] = [];
@@ -159,7 +159,7 @@ export class ConfigRulesProposal extends Proposal {
 }
 
 export class ConfigDepsProposal extends Proposal {
-    public args?: ConfigDepsFields;
+    public args?: ConfigDepsArgs;
 
     constructor(
         public client: SuiClient,
@@ -190,8 +190,8 @@ export class ConfigDepsProposal extends Proposal {
     propose(
         tx: Transaction,
         multisig: string,
-        proposalArgs: ProposalFields,
-        actionArgs: ConfigDepsFields,
+        proposalArgs: ProposalArgs,
+        actionArgs: ConfigDepsArgs,
     ): TransactionResult {
         const names: string[] = [];
         const packages: string[] = [];

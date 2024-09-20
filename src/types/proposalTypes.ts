@@ -7,31 +7,31 @@ export type ProposalArgs = {
     expirationEpoch?: number;
 }
 
-export type ConfigNameFields = {
+export type ConfigNameArgs = {
     name: string;
 }
 
-export type ConfigRulesFields = {
+export type ConfigRulesArgs = {
     members?: Member[];
     thresholds?: { global: number, roles: Threshold[] };
 }
 
-export type ConfigDepsFields = {
+export type ConfigDepsArgs = {
     deps: Dep[];
 }
 
-export type MintFields = {
+export type MintArgs = {
     coinType: string;
     amount: bigint;
 }
 
-export type BurnFields = {
+export type BurnArgs = {
     coinType: string;
     coinId: string;
     amount: bigint;
 }
 
-export type UpdateFields = {
+export type UpdateArgs = {
     coinType: string;
     name: string | null;
     symbol: string | null;
@@ -39,7 +39,7 @@ export type UpdateFields = {
     icon: string | null;
 }
 
-export type TakeFields = {
+export type TakeArgs = {
     name: string;
     nftIds: string[];
     recipient: string;

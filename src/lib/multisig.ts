@@ -16,7 +16,7 @@ import { Account } from "./account";
 import { Proposal } from "./proposal/proposal";
 import { ConfigNameProposal } from "./proposal/proposals/config";
 import { Dep, Role, MemberAccount } from "../types/multisigTypes";
-import { BurnFields, ConfigDepsFields, ConfigNameFields, ConfigRulesFields, MintFields, ProposalArgs, UpdateFields } from "../types/proposalTypes";
+import { BurnArgs, ConfigDepsArgs, ConfigNameArgs, ConfigRulesArgs, MintArgs, ProposalArgs, UpdateArgs } from "../types/proposalTypes";
 import { TransactionPureInput } from "src/types/helperTypes";
 
 export interface MultisigData {
@@ -199,7 +199,7 @@ export class Multisig implements MultisigData {
 	configName(
 		tx: Transaction,
 		proposalArgs: ProposalArgs,
-		actionsArgs: ConfigNameFields,
+		actionsArgs: ConfigNameArgs,
 	): TransactionResult {
 		this.assertMultisig();
 		this.assertKey(proposalArgs);
@@ -225,7 +225,7 @@ export class Multisig implements MultisigData {
 	configRules(
 		tx: Transaction,
 		proposalArgs: ProposalArgs,
-		actionsArgs: ConfigRulesFields,
+		actionsArgs: ConfigRulesArgs,
 		multisig: TransactionObjectInput = this.id, // need for adding members upon creation
 	): TransactionResult {
 		this.assertMultisig();
@@ -279,7 +279,7 @@ export class Multisig implements MultisigData {
 	configDeps(
 		tx: Transaction,
 		proposalArgs: ProposalArgs,
-		actionsArgs: ConfigDepsFields,
+		actionsArgs: ConfigDepsArgs,
 		multisig: TransactionObjectInput = this.id, // need for adding deps upon creation
 	): TransactionResult {
 		this.assertMultisig();
@@ -318,7 +318,7 @@ export class Multisig implements MultisigData {
 	mint(
 		tx: Transaction,
 		proposalArgs: ProposalArgs,
-		actionsArgs: MintFields,
+		actionsArgs: MintArgs,
 		multisig: TransactionObjectInput = this.id,
 	): TransactionResult {
 		this.assertMultisig();
@@ -346,7 +346,7 @@ export class Multisig implements MultisigData {
 	burn(
 		tx: Transaction,
 		proposalArgs: ProposalArgs,
-		actionsArgs: BurnFields,
+		actionsArgs: BurnArgs,
 	): TransactionResult {
 		this.assertMultisig();
 		this.assertKey(proposalArgs);
@@ -374,7 +374,7 @@ export class Multisig implements MultisigData {
 	update(
 		tx: Transaction,
 		proposalArgs: ProposalArgs,
-		actionsArgs: UpdateFields,
+		actionsArgs: UpdateArgs,
 		metadata: string, // CoinMetadata<CoinType> ID
 	): TransactionResult {
 		this.assertMultisig();
