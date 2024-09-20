@@ -15,19 +15,23 @@ export class ConfigNameProposal extends Proposal {
         public multisig: string,
     ) {
         super(client, multisig);
-        this.multisig = multisig;
     }
     
     static async init(
-        self: ConfigNameProposal,
-        proposal: ProposalFields,
+        client: SuiClient,
+        multisig: string,
+        fields: ProposalFields,
     ): Promise<ConfigNameProposal> {
-        self.setProposalFromFields(proposal);
+        const proposal = new ConfigNameProposal(client, multisig);
+        proposal.setProposalFromFields(fields);
         // resolve actions
-        const actions = await self.fetchActions(proposal.actions.id);
-        self.args = { name: actions[0].inner };
+        const actions = await proposal.fetchActions(fields.actions.id);
+        if (actions.length === 0) {
+            throw new Error('No actions found for the ConfigName proposal');
+        }
 
-        return self;
+        proposal.args = { name: actions[0].inner };
+        return proposal;
     }
 
     propose(
@@ -64,29 +68,33 @@ export class ConfigNameProposal extends Proposal {
 }
 
 export class ConfigRulesProposal extends Proposal {
-    public args?: ConfigRulesFields;
-
+    public args?: ConfigRulesFields; 
+    
     constructor(
         public client: SuiClient,
         public multisig: string,
     ) {
         super(client, multisig);
-        this.multisig = multisig;
     }
 
     static async init(
-        self: ConfigRulesProposal,
-        proposal: ProposalFields,
+        client: SuiClient,
+        multisig: string,
+        fields: ProposalFields,
     ): Promise<ConfigRulesProposal> {
-        self.setProposalFromFields(proposal);
+        const proposal = new ConfigRulesProposal(client, multisig);
+        proposal.setProposalFromFields(fields);
         // resolve actions
-        const actions = await self.fetchActions(proposal.actions.id);
-        self.args = { 
+        const actions = await proposal.fetchActions(fields.actions.id);
+        if (actions.length === 0) {
+            throw new Error('No actions found for the ConfigRules proposal');
+        }
+
+        proposal.args = { 
             members: actions[0].inner,
             thresholds: actions[1].inner,
         };
-
-        return self;
+        return proposal;
     }
 
     propose(
@@ -158,21 +166,25 @@ export class ConfigDepsProposal extends Proposal {
         public multisig: string,
     ) {
         super(client, multisig);
-        this.multisig = multisig;
     }
 
     static async init(
-        self: ConfigDepsProposal,
-        proposal: ProposalFields,
+        client: SuiClient,
+        multisig: string,
+        fields: ProposalFields,
     ): Promise<ConfigDepsProposal> {
-        self.setProposalFromFields(proposal);
+        const proposal = new ConfigDepsProposal(client, multisig);
+        proposal.setProposalFromFields(fields);
         // resolve actions
-        const actions = await self.fetchActions(proposal.actions.id);
-        self.args = {
+        const actions = await proposal.fetchActions(fields.actions.id);
+        if (actions.length === 0) {
+            throw new Error('No actions found for the ConfigDeps proposal');
+        }
+
+        proposal.args = {
             deps: actions[0].inner,
         };
-
-        return self;
+        return proposal;
     }
 
     propose(

@@ -1,4 +1,4 @@
-import { Transaction, TransactionArgument, TransactionObjectInput, TransactionResult } from "@mysten/sui/transactions";
+import { Transaction, TransactionObjectInput, TransactionResult } from "@mysten/sui/transactions";
 import { SuiClient, SuiObjectResponse } from "@mysten/sui/client";
 import { Account as AccountRaw } from "../.gen/kraken-multisig/account/structs";
 import { Multisig as MultisigRaw } from "../.gen/kraken-multisig/multisig/structs";
@@ -14,17 +14,15 @@ export interface AccountData {
 }
 
 export class Account implements AccountData {
-    id: string = ""	;
-	username: string = "";
-	profilePicture: string = "";
-    multisigs: {id: string, name: string}[] = [];
+    public id: string = ""	;
+	public username: string = "";
+	public profilePicture: string = "";
+    public multisigs: {id: string, name: string}[] = [];
 
 	constructor(
 		public client: SuiClient,
 		public userAddr: string,
-	) {
-		this.client = client;
-	}
+	) {}
 
 	static async init(
         client: SuiClient,

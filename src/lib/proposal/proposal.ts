@@ -5,9 +5,6 @@ import { ProposalFields } from "../../.gen/kraken-multisig/proposals/structs"
 import { approveProposal, removeApproval, executeProposal } from "../../.gen/kraken-multisig/multisig/functions"
 import { CLOCK } from "src/types/constants";
 
-export interface ProposalData {
-}
-
 export abstract class Proposal {
     auth?: { witness: string, name: string };
     key?: string;
@@ -26,8 +23,8 @@ export abstract class Proposal {
         this.multisig = multisig;
     }
     
-    init(self: Proposal, proposal: ProposalFields) {
-        self.setProposalFromFields(proposal);
+    init(fields: ProposalFields) {
+        this.setProposalFromFields(fields);
     }
     
     abstract propose(tx: Transaction, multisigId: string, ...args: any[]): TransactionResult;

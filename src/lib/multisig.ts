@@ -29,20 +29,18 @@ export interface MultisigData {
 }
 
 export class Multisig implements MultisigData {
-	epoch: number = 0;
-    id: string = "";
-    name: string = "";
-    deps: Dep[] = [];
-    roles: Map<string, Role> = new Map();
-    members: MemberAccount[] = [];
-    proposals: Proposal[] = [];
+	public epoch: number = 0;
+    public id: string = "";
+    public name: string = "";
+    public deps: Dep[] = [];
+    public roles: Map<string, Role> = new Map();
+    public members: MemberAccount[] = [];
+    public proposals: Proposal[] = [];
 
 	constructor(
 		public client: SuiClient,
 		public userAddr: string,
-	) {
-		this.client = client;
-	}
+	) {}
 
 	static async init(
         client: SuiClient,
@@ -107,8 +105,8 @@ export class Multisig implements MultisigData {
 			roles.set(role.name, { threshold: Number(role.threshold), totalWeight: roleWeights.get(role.name) || 0 });
 		});
 		// get Proposals with actions
-		const proposals = await Promise.all(multisigRaw!.proposals.inner.map(async (proposal: ProposalFields) => {
-			return await this.initProposalWithActions(this.client, proposal);
+		const proposals = await Promise.all(multisigRaw!.proposals.inner.map(async (fields: ProposalFields) => {
+			return await this.initProposalWithActions(this.client, fields);
 		}));
 		
 		return {
@@ -446,15 +444,14 @@ export class Multisig implements MultisigData {
 	// Factory function to create the appropriate proposal type
 	async initProposalWithActions(
 		client: SuiClient,
-		proposalFields: ProposalFields
+		fields: ProposalFields
 	): Promise<Proposal> {
-		switch ("0x" + proposalFields.auth.witness.name) {
+		switch ("0x" + fields.auth.witness.name) {
 			case `${KRAKEN_ACTIONS}::config::ConfigNameProposal`:
-				const proposal = new ConfigNameProposal(client, this.id);
-				return await ConfigNameProposal.init(proposal, proposalFields);
+				return await ConfigNameProposal.init(client, this.id, fields);
 			// ... other cases for different proposal types
 			default:
-				throw new Error(`Proposal type ${proposalFields.auth.witness.name} not supported.`);
+				throw new Error(`Proposal type ${fields.auth.witness.name} not supported.`);
 		}
 	}
 }

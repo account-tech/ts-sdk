@@ -10,6 +10,7 @@ import { getObjectId } from "./lib/utils.js";
 import { ConfigDepsProposal, ConfigNameProposal, ConfigRulesProposal } from "./lib/proposal/proposals/config.js";
 import { ProposalArgs } from "./types/proposalTypes.js";
 import { Proposal } from "./lib/proposal/proposal.js";
+import { Extensions } from "./lib/extensions.js";
 
 const proposalRegistry: Record<string, typeof Proposal> = {
     [ProposalTypes.configName]: ConfigNameProposal,
@@ -23,27 +24,26 @@ export class KrakenClient {
 	 * @param client connection to fullnode
 	 */
 
-	public client: SuiClient;
-	public account: Account;
-	public multisig: Multisig;
-
 	private constructor(
-		public network: "mainnet" | "testnet" | "devnet" | "localnet" | string,
-	) {
-		const url = (network == "mainnet" || network == "testnet" || network == "devnet" || network == "localnet") ? getFullnodeUrl(network) : network;
-		this.client = new SuiClient({ url });
-		this.account = new Account(this.client, "");
-		this.multisig = new Multisig(this.client, "");
-	}
+		public client: SuiClient,
+		public account: Account,
+		public multisig: Multisig,
+		public extensions: Extensions,
+	) {}
 	
 	static async init(
-        network: "mainnet" | "testnet" | "devnet" | "localnet" | string,
+		network: "mainnet" | "testnet" | "devnet" | "localnet" | string,
         userAddr: string, 
 		multisigId?: string,
     ): Promise<KrakenClient> {
-		const kraken = new KrakenClient(network);
-		kraken.account = await Account.init(kraken.client, userAddr);
-		kraken.multisig = await Multisig.init(kraken.client, userAddr, multisigId);
+		const url = (network == "mainnet" || network == "testnet" || network == "devnet" || network == "localnet") ? getFullnodeUrl(network) : network;
+		const client = new SuiClient({ url });
+
+		const account = await Account.init(client, userAddr);
+		const multisig = await Multisig.init(client, userAddr, multisigId);
+		const extensions = await Extensions.init(client);
+
+		const kraken = new KrakenClient(client, account, multisig, extensions);
 		return kraken;
 	}
 
