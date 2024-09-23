@@ -3,7 +3,7 @@ import { SuiClient } from "@mysten/sui/client";
 import * as currency from "../../../.gen/kraken-actions/currency/functions";
 import { Proposal } from "../proposal";
 import { ProposalFields } from "src/.gen/kraken-multisig/proposals/structs";
-import { UpdateArgs, BurnArgs, MintArgs, ProposalArgs, ProposalTypes } from "src/types/proposalTypes";
+import { UpdateArgs, BurnArgs, MintArgs, ProposalArgs, ProposalTypes } from "src/types/proposal-types";
 
 export class MintProposal extends Proposal {
     args?: MintArgs;

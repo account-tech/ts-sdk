@@ -1,13 +1,4 @@
-import { Dep, Member, Threshold } from "./multisigTypes";
-
-export enum ProposalTypes {
-    ConfigName = "ConfigName",
-    ConfigRules = "ConfigRules",
-    ConfigDeps = "ConfigDeps",
-    Mint = "Mint",
-    Burn = "Burn",
-    Update = "Update",
-};
+import { Dep, Member, Threshold } from "./multisig-types";
 
 export type ProposalArgs = {
     key: string;

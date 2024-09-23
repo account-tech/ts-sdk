@@ -1,32 +1,28 @@
 import { SuiClient, getFullnodeUrl } from "@mysten/sui/client";
 import { Transaction, TransactionResult } from "@mysten/sui/transactions";
 import { KioskClient, Network } from "@mysten/kiosk";
-import { KRAKEN_MULTISIG } from "./types/constants.js";
-import { Dep, Kiosk, Member, TransferPolicy } from "./types/multisigTypes.js";
-import { Account } from "./lib/account.js";
-import { Multisig } from "./lib/multisig.js";
-import { TransactionPureInput } from "./types/helperTypes.js";
-import { getObjectId } from "./lib/utils.js";
-import { ConfigDepsProposal, ConfigNameProposal, ConfigRulesProposal } from "./lib/proposal/proposals/config.js";
-import { ProposalArgs, ProposalTypes } from "./types/proposalTypes.js";
-import { Proposal } from "./lib/proposal/proposal.js";
-import { Extensions } from "./lib/extensions.js";
-import { MintProposal } from "./lib/proposal/proposals/currency.js";
+import { FRAMEWORK, KRAKEN_MULTISIG } from "./types/constants";
+import { Dep, Kiosk, Member, TransferPolicy } from "./types/multisig-types";
+import { Account } from "./lib/account";
+import { Multisig } from "./lib/multisig";
+import { TransactionPureInput } from "./types/helper-types";
+import { ConfigDepsProposal, ConfigNameProposal, ConfigRulesProposal } from "./lib/proposal/proposals/config";
+import { ProposalArgs } from "./types/proposal-types";
+import { ProposalTypes } from "./types/constants";
+import { Proposal } from "./lib/proposal/proposal";
+import { Extensions } from "./lib/extensions";
+import { BurnProposal, MintProposal, UpdateProposal } from "./lib/proposal/proposals/currency";
 
 const proposalRegistry: Record<string, typeof Proposal> = {
     [ProposalTypes.ConfigName]: ConfigNameProposal,
     [ProposalTypes.ConfigRules]: ConfigRulesProposal,
     [ProposalTypes.ConfigDeps]: ConfigDepsProposal,
     [ProposalTypes.Mint]: MintProposal,
-    // [ProposalTypes.burn]: BurnProposal,
-    // [ProposalTypes.update]: UpdateProposal,
+    [ProposalTypes.Burn]: BurnProposal,
+    [ProposalTypes.Update]: UpdateProposal,
 };
 
 export class KrakenClient {
-	/**
-	 * @description SDK to interact with Kraken package.
-	 * @param client connection to fullnode
-	 */
 
 	private constructor(
 		public client: SuiClient,
@@ -75,7 +71,11 @@ export class KrakenClient {
 		if (accountId === "") {
 			if (!newAccount) throw new Error("User must create an account before creating a multisig");
 			createdAccount = this.account.createAccount(tx, newAccount.username, newAccount.profilePicture);
-			accountId = getObjectId(tx, createdAccount, `${KRAKEN_MULTISIG}::account::Account`);
+			accountId = tx.moveCall({
+				target: `${FRAMEWORK}::object::id`,
+				typeArguments: [`${KRAKEN_MULTISIG}::account::Account`],
+				arguments: [tx.object(createdAccount)],
+			});
 		}
 		// create the multisig
 		const multisig = this.multisig?.newMultisig(tx, name, accountId);

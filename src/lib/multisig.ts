@@ -15,10 +15,10 @@ import { getCurrentEpoch } from "./utils";
 import { Account } from "./account";
 import { Proposal } from "./proposal/proposal";
 import { ConfigDepsProposal, ConfigNameProposal, ConfigRulesProposal } from "./proposal/proposals/config";
-import { Dep, Role, MemberAccount } from "../types/multisigTypes";
-import { BurnArgs, ConfigDepsArgs, ConfigNameArgs, ConfigRulesArgs, MintArgs, ProposalArgs, UpdateArgs } from "../types/proposalTypes";
-import { TransactionPureInput } from "src/types/helperTypes";
-import { MintProposal } from "./proposal/proposals/currency";
+import { Dep, Role, MemberAccount } from "../types/multisig-types";
+import { BurnArgs, ConfigDepsArgs, ConfigNameArgs, ConfigRulesArgs, MintArgs, ProposalArgs, UpdateArgs } from "../types/proposal-types";
+import { TransactionPureInput } from "src/types/helper-types";
+import { BurnProposal, MintProposal, UpdateProposal } from "./proposal/proposals/currency";
 
 export interface MultisigData {
 	id: string;
@@ -457,10 +457,10 @@ export class Multisig implements MultisigData {
 				return await ConfigDepsProposal.init(client, this.id, fields);
 			case `${KRAKEN_ACTIONS}::currency::MintProposal`:
 				return await MintProposal.init(client, this.id, fields);
-			// case `${KRAKEN_ACTIONS}::currency::BurnProposal`:
-			// 	return await BurnProposal.init(client, this.id, fields);
-			// case `${KRAKEN_ACTIONS}::currency::UpdateProposal`:
-			// 	return await UpdateProposal.init(client, this.id, fields);
+			case `${KRAKEN_ACTIONS}::currency::BurnProposal`:
+				return await BurnProposal.init(client, this.id, fields);
+			case `${KRAKEN_ACTIONS}::currency::UpdateProposal`:
+				return await UpdateProposal.init(client, this.id, fields);
 			// ... other cases for different proposal types
 			default:
 				throw new Error(`Proposal type ${fields.auth.witness.name} not supported.`);

@@ -5,7 +5,7 @@ import * as config from "../../../.gen/kraken-actions/config/functions";
 import { Proposal } from "../proposal";
 import { ProposalFields } from "src/.gen/kraken-multisig/proposals/structs";
 import { EXTENSIONS } from "src/types/constants";
-import { ConfigDepsArgs, ConfigNameArgs, ConfigRulesArgs, ProposalArgs } from "src/types/proposalTypes";
+import { ConfigDepsArgs, ConfigNameArgs, ConfigRulesArgs, ProposalArgs } from "src/types/proposal-types";
 
 export class ConfigNameProposal extends Proposal {
     args?: ConfigNameArgs;

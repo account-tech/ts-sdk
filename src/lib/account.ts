@@ -4,7 +4,7 @@ import { Account as AccountRaw } from "../.gen/kraken-multisig/account/structs";
 import { Multisig as MultisigRaw } from "../.gen/kraken-multisig/multisig/structs";
 import { new_, transfer, destroy, joinMultisig, leaveMultisig, sendInvite, acceptInvite, refuseInvite } from "../.gen/kraken-multisig/account/functions";
 import { ACCOUNT_REGISTRY, KRAKEN_MULTISIG } from "../types/constants";
-import { TransactionPureInput } from "src/types/helperTypes";
+import { TransactionPureInput } from "src/types/helper-types";
 
 export interface AccountData {
     id: string;

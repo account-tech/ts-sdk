@@ -10,3 +10,12 @@ export const KRAKEN_ACTIONS = "0x29dd152d8a8a427cb3eb343e2f58f68e9f07587597eb238
 // Shared objects
 export const EXTENSIONS = "0xce279d1dd9558f9f5a7175e2b7bfb3975350dbefcd22b2a8c370b2931cff6c14";
 export const ACCOUNT_REGISTRY = "0xd2df54caf2cf9ecd91e10c105a1db673466c619ae0c33651c1dfd9fa22834872";
+// Proposal Types
+export enum ProposalTypes {
+    ConfigName = "ConfigName",
+    ConfigRules = "ConfigRules",
+    ConfigDeps = "ConfigDeps",
+    Mint = "Mint",
+    Burn = "Burn",
+    Update = "Update",
+};
