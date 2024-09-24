@@ -7,15 +7,7 @@ import { ProposalFields } from "src/.gen/kraken-multisig/proposals/structs";
 import { EXTENSIONS } from "src/types/constants";
 import { ConfigDepsArgs, ConfigNameArgs, ConfigRulesArgs, ProposalArgs } from "src/types/proposal-types";
 
-export class ConfigNameProposal extends Proposal {
-    args?: ConfigNameArgs;
-
-    constructor(
-        client: SuiClient,
-        multisig: string,
-    ) {
-        super(client, multisig);
-    }
+export class ConfigNameProposal extends Proposal<ConfigNameArgs> {
     
     static async init(
         client: SuiClient,
@@ -34,13 +26,12 @@ export class ConfigNameProposal extends Proposal {
         return proposal;
     }
 
-    propose<Args>(
+    propose(
         tx: Transaction,
         multisig: string,
         proposalArgs: ProposalArgs,
-        actionArgs: Args,
+        actionArgs: ConfigNameArgs,
     ): TransactionResult {
-        const configNameArgs = actionArgs as ConfigNameArgs;
         return config.proposeConfigName(
             tx,
             {
@@ -49,7 +40,7 @@ export class ConfigNameProposal extends Proposal {
                 description: proposalArgs.description ?? "",
                 executionTime: BigInt(proposalArgs.executionTime ?? 0),
                 expirationEpoch: BigInt(proposalArgs.expirationEpoch ?? 0),
-                name: configNameArgs.name,
+                name: actionArgs.name,
             }
         );
     }
@@ -68,15 +59,7 @@ export class ConfigNameProposal extends Proposal {
     }
 }
 
-export class ConfigRulesProposal extends Proposal {    
-    args?: ConfigRulesArgs;
-
-    constructor(
-        client: SuiClient,
-        multisig: string,
-    ) {
-        super(client, multisig);
-    }
+export class ConfigRulesProposal extends Proposal<ConfigRulesArgs> {
 
     static async init(
         client: SuiClient,
@@ -98,18 +81,17 @@ export class ConfigRulesProposal extends Proposal {
         return proposal;
     }
 
-    propose<Args>(
+    propose(
         tx: Transaction,
         multisig: string,
         proposalArgs: ProposalArgs,
-        actionArgs: Args,
+        actionArgs: ConfigRulesArgs,
     ): TransactionResult {
-        const configRulesArgs = actionArgs as ConfigRulesArgs;
         let addresses: string[] = [];
         let weights: bigint[] = [];
         let roles: string[][] = [];
-        if (configRulesArgs.members) {
-            configRulesArgs.members.forEach((member) => {
+        if (actionArgs.members) {
+            actionArgs.members.forEach((member) => {
                 addresses.push(member.address);
                 weights.push(BigInt(member.weight));
                 roles.push(member.roles);
@@ -119,9 +101,9 @@ export class ConfigRulesProposal extends Proposal {
         let global = 0n;
         let roleNames: string[] = [];
         let roleThresholds: bigint[] = [];
-        if (configRulesArgs.thresholds) {
-            global = BigInt(configRulesArgs.thresholds.global);
-            configRulesArgs.thresholds.roles.forEach((role) => {
+        if (actionArgs.thresholds) {
+            global = BigInt(actionArgs.thresholds.global);
+            actionArgs.thresholds.roles.forEach((role) => {
                 roleNames.push(role.name);
                 roleThresholds.push(BigInt(role.threshold));
             });
@@ -160,15 +142,7 @@ export class ConfigRulesProposal extends Proposal {
     }
 }
 
-export class ConfigDepsProposal extends Proposal {
-    args?: ConfigDepsArgs;
-
-    constructor(
-        client: SuiClient,
-        multisig: string,
-    ) {
-        super(client, multisig);
-    }
+export class ConfigDepsProposal extends Proposal<ConfigDepsArgs> {
 
     static async init(
         client: SuiClient,
@@ -189,17 +163,16 @@ export class ConfigDepsProposal extends Proposal {
         return proposal;
     }
 
-    propose<Args>(
+    propose(
         tx: Transaction,
         multisig: string,
         proposalArgs: ProposalArgs,
-        actionArgs: Args,
+        actionArgs: ConfigDepsArgs,
     ): TransactionResult {
-        const configDepsArgs = actionArgs as ConfigDepsArgs;
         const names: string[] = [];
         const packages: string[] = [];
         const versions: bigint[] = [];
-        configDepsArgs.deps.forEach((dep) => {
+        actionArgs.deps.forEach((dep) => {
             names.push(dep.name);
             packages.push(dep.package);
             versions.push(BigInt(dep.version));

@@ -1,8 +1,8 @@
 import { Transaction } from "@mysten/sui/transactions";
 import { KrakenClient } from "../../src/client";
 import { Ed25519Keypair } from "@mysten/sui/keypairs/ed25519";
-import { ConfigNameArgs, MintArgs, ProposalTypes } from "../../src/types/proposalTypes";
-import { FRAMEWORK } from "../../src/types/constants";
+import { ConfigNameArgs, MintArgs } from "../../src/types/proposal-types";
+import { FRAMEWORK, ProposalTypes } from "../../src/types/constants";
 
 (async () => {
     const multisigId = "0x2516b30e82f8c1bbe6105e140cf470e8f53a3d4a097fe393bbd0cd6bdd9438e9";
@@ -17,11 +17,11 @@ import { FRAMEWORK } from "../../src/types/constants";
     const tx = new Transaction();
     tx.setGasBudget(100000000);
 
-    kraken.propose(
+    kraken.propose<ConfigNameArgs>(
         tx, 
-        ProposalTypes.Mint, 
-        { key: "Mint SUI" }, 
-        { coinType: `0x2::sui::SUI`, amount: 10 }
+        ProposalTypes.ConfigName,
+        { key: "new name" }, 
+        { name: "BRO" }
     );
 
     const result = await kraken.client.signAndExecuteTransaction({

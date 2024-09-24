@@ -13,7 +13,7 @@ import { Proposal } from "./lib/proposal/proposal";
 import { Extensions } from "./lib/extensions";
 import { BurnProposal, MintProposal, UpdateProposal } from "./lib/proposal/proposals/currency";
 
-const proposalRegistry: Record<string, typeof Proposal> = {
+const proposalRegistry: Record<string, typeof Proposal<unknown>> = {
     [ProposalTypes.ConfigName]: ConfigNameProposal,
     [ProposalTypes.ConfigRules]: ConfigRulesProposal,
     [ProposalTypes.ConfigDeps]: ConfigDepsProposal,
@@ -116,17 +116,16 @@ export class KrakenClient {
 	execute(
 		tx: Transaction,
 		caller: string,
-		proposalKey: string,
-		...actionsArgs: any[]
+		proposalKey: string
 	) {
 		const proposal = this.proposal(proposalKey);
 		proposal?.maybeApprove(tx, caller);
-		proposal?.execute(tx, ...actionsArgs);
+		proposal?.execute(tx);
 	}
 
 	// === Helpers ===
 
-	proposal(key: string): Proposal | undefined {
+	proposal(key: string): Proposal<unknown> | undefined {
 		return this.multisig?.getProposal(key);
 	}
 

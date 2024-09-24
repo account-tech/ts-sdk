@@ -13,7 +13,7 @@ import { Ed25519Keypair } from "@mysten/sui/keypairs/ed25519";
     );
 
     const tx = new Transaction();
-    kraken.execute(tx, keypair.toSuiAddress(), "Mint SUI");
+    kraken.execute(tx, keypair.toSuiAddress(), "new name");
 
     const result = await kraken.client.signAndExecuteTransaction({
         signer: keypair,

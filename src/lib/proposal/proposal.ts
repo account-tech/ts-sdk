@@ -6,9 +6,13 @@ import { approveProposal, removeApproval, executeProposal } from "../../.gen/kra
 import { CLOCK } from "src/types/constants";
 import { ProposalArgs } from "src/types/proposal-types";
 
-export abstract class Proposal {
-    client: SuiClient;
-    multisig: string;
+export interface Proposal<Args> {
+    init(client: SuiClient, multisig: string, fields: ProposalFields): void;
+    propose(tx: Transaction, multisigId: string, proposalArgs: ProposalArgs, actionArgs: Args): TransactionResult;
+    execute(tx: Transaction, ...args: any[]): TransactionResult;
+}
+
+export class Proposal<Args> {
     auth?: { witness: string, name: string };
     key?: string;
     description?: string;
@@ -17,22 +21,12 @@ export abstract class Proposal {
     totalWeight?: number;
     roleWeight?: number;
     approved?: string[];
+    args?: Args;
 
     constructor(
-        client: SuiClient,
-        multisig: string,
-    ) {
-        this.client = client;
-        this.multisig = multisig;
-    }
-    
-    init(fields: ProposalFields) {
-        this.setProposalFromFields(fields);
-    }
-    
-    abstract propose<Args>(tx: Transaction, multisigId: string, proposalArgs: ProposalArgs, actionArgs: Args): TransactionResult;
-
-    abstract execute(tx: Transaction, ...args: any[]): TransactionResult;
+        public client: SuiClient,
+        public multisig: string,
+    ) {}
 
     async fetchActions(parentId: string) {
         // get the actions in each proposal bag
@@ -104,6 +98,7 @@ export abstract class Proposal {
         this.roleWeight = Number(fields.roleWeight);
         this.approved = fields.approved.contents;
     }
+}
 
     // // === Kiosk === 
 
@@ -158,5 +153,3 @@ export abstract class Proposal {
     //         ],
     //     });
     // }
-}
-

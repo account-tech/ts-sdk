@@ -1,19 +1,12 @@
 import { Transaction, TransactionResult } from "@mysten/sui/transactions";
-import { SuiClient } from "@mysten/sui/client";
+import { CoinMetadata, SuiClient } from "@mysten/sui/client";
+import { getCoinMeta } from "@polymedia/coinmeta";
 import * as currency from "../../../.gen/kraken-actions/currency/functions";
 import { Proposal } from "../proposal";
 import { ProposalFields } from "src/.gen/kraken-multisig/proposals/structs";
-import { UpdateArgs, BurnArgs, MintArgs, ProposalArgs, ProposalTypes } from "src/types/proposal-types";
+import { UpdateArgs, BurnArgs, MintArgs, ProposalArgs } from "src/types/proposal-types";
 
-export class MintProposal extends Proposal {
-    args?: MintArgs;
-
-    constructor(
-        public client: SuiClient,
-        public multisig: string,
-    ) {
-        super(client, multisig);
-    }
+export class MintProposal extends Proposal<MintArgs> {
 
     static async init(
         client: SuiClient,
@@ -35,23 +28,22 @@ export class MintProposal extends Proposal {
         return proposal;
     }
 
-    propose<Args>(
+    propose(
         tx: Transaction,
         multisig: string,
         proposalArgs: ProposalArgs,
-        actionArgs: Args,
+        actionArgs: MintArgs,
     ): TransactionResult {
-        const mintArgs = actionArgs as MintArgs;
         return currency.proposeMint(
             tx,
-            mintArgs.coinType,
+            actionArgs.coinType,
             {
                 multisig,
                 key: proposalArgs.key,
                 description: proposalArgs.description ?? "",
                 executionTime: BigInt(proposalArgs.executionTime ?? 0),
                 expirationEpoch: BigInt(proposalArgs.expirationEpoch ?? 0),
-                amount: BigInt(mintArgs.amount),
+                amount: BigInt(actionArgs.amount),
             }
         );
     }
@@ -71,15 +63,7 @@ export class MintProposal extends Proposal {
     }
 }
 
-export class BurnProposal extends Proposal {
-    args?: BurnArgs;
-
-    constructor(
-        public client: SuiClient,
-        public multisig: string,
-    ) {
-        super(client, multisig);
-    }
+export class BurnProposal extends Proposal<BurnArgs> {
 
     static async init(
         client: SuiClient,
@@ -102,24 +86,23 @@ export class BurnProposal extends Proposal {
         return proposal;
     }
 
-    propose<Args>(
+    propose(
         tx: Transaction,
         multisig: string,
         proposalArgs: ProposalArgs,
-        actionArgs: Args,
+        actionArgs: BurnArgs,
     ): TransactionResult {
-        const burnArgs = actionArgs as BurnArgs;
         return currency.proposeBurn(
             tx,
-            burnArgs.coinType,
+            actionArgs.coinType,
             {
                 multisig,
                 key: proposalArgs.key,
                 description: proposalArgs.description ?? "",
                 executionTime: BigInt(proposalArgs.executionTime ?? 0),
                 expirationEpoch: BigInt(proposalArgs.expirationEpoch ?? 0),
-                coinId: burnArgs.coinId,
-                amount: BigInt(burnArgs.amount),
+                coinId: actionArgs.coinId,
+                amount: BigInt(actionArgs.amount),
             }
         );
     }
@@ -140,15 +123,8 @@ export class BurnProposal extends Proposal {
     }
 }
 
-export class UpdateProposal extends Proposal {
-    args?: UpdateArgs;
-
-    constructor(
-        public client: SuiClient,
-        public multisig: string,
-    ) {
-        super(client, multisig);
-    }
+export class UpdateProposal extends Proposal<UpdateArgs> {
+    metadata?: CoinMetadata;
 
     static async init(
         client: SuiClient,
@@ -170,37 +146,41 @@ export class UpdateProposal extends Proposal {
             description: actions[0].description,
             icon: actions[0].icon,
         };
+
+        proposal.metadata = await getCoinMeta(client, proposal.args.coinType);
         return proposal;
     }
 
-    propose<Args>(
+    propose(
         tx: Transaction,
         multisig: string,
         proposalArgs: ProposalArgs,
-        actionArgs: Args,
+        actionArgs: UpdateArgs,
     ): TransactionResult {
-        const updateArgs = actionArgs as UpdateArgs;
         return currency.proposeUpdate(
             tx,
-            updateArgs.coinType,
+            actionArgs.coinType,
             {
                 multisig,
                 key: proposalArgs.key,
                 description: proposalArgs.description ?? "",
                 executionTime: BigInt(proposalArgs.executionTime ?? 0),
                 expirationEpoch: BigInt(proposalArgs.expirationEpoch ?? 0),
-                mdName: updateArgs.name,
-                mdSymbol: updateArgs.symbol,
-                mdDescription: updateArgs.description,
-                mdIcon: updateArgs.icon,
+                mdName: actionArgs.name,
+                mdSymbol: actionArgs.symbol,
+                mdDescription: actionArgs.description,
+                mdIcon: actionArgs.icon,
             }
         );
     }
 
     execute(
         tx: Transaction,
-        metadata: string,
     ): TransactionResult {
+        if (!this.metadata?.id) {
+            throw new Error('Metadata not found for the Update proposal');
+        }
+        
         const executable = this.constructExecutable(tx);
         return currency.executeUpdate(
             tx,
@@ -208,7 +188,7 @@ export class UpdateProposal extends Proposal {
             {
                 executable,
                 multisig: this.multisig!,
-                metadata,
+                metadata: this.metadata?.id!,
             }
         );
     }

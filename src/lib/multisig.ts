@@ -22,26 +22,25 @@ import { BurnProposal, MintProposal, UpdateProposal } from "./proposal/proposals
 
 export interface MultisigData {
 	id: string;
-    name: string;
-    deps: Dep[];
-    roles: Map<string, Role>;
-    members: MemberAccount[];
-    proposals: Proposal[];
+	name: string;
+	deps: Dep[];
+	roles: Map<string, Role>;
+	members: MemberAccount[];
+	proposals: Proposal<unknown>[];
 }
 
 export class Multisig implements MultisigData {
 	userAddr: string = "";
 	epoch: number = 0;
+	// Multisig Data
     id: string = "";
     name: string = "";
     deps: Dep[] = [];
     roles: Map<string, Role> = new Map();
     members: MemberAccount[] = [];
-    proposals: Proposal[] = [];
+    proposals: Proposal<unknown>[] = [];
 
-	constructor(
-		public client: SuiClient,
-	) {}
+	constructor(public client: SuiClient) {}
 
 	static async init(
         client: SuiClient,
@@ -141,7 +140,7 @@ export class Multisig implements MultisigData {
 		}
 	}
 
-	getProposal(key: string): Proposal {
+	getProposal(key: string): Proposal<unknown> {
 		const proposal = this.proposals?.find(p => p.key == key);
 		if (!proposal) {
 			throw new Error(`Proposal with key ${key} not found.`);
@@ -447,7 +446,7 @@ export class Multisig implements MultisigData {
 	async initProposalWithActions(
 		client: SuiClient,
 		fields: ProposalFields
-	): Promise<Proposal> {
+	): Promise<Proposal<unknown>> {
 		switch ("0x" + fields.auth.witness.name) {
 			case `${KRAKEN_ACTIONS}::config::ConfigNameProposal`:
 				return await ConfigNameProposal.init(client, this.id, fields);
