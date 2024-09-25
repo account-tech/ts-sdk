@@ -1,5 +1,11 @@
 # kraken-sdk
 
+## 0.1.3
+
+### Patch Changes
+
+- Revamp proposal interface
+
 ## 0.1.2
 
 ### Patch Changes
