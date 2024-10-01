@@ -1,5 +1,17 @@
 # kraken-sdk
 
+## 0.1.5
+
+### Patch Changes
+
+- Bump @polymedia/coinmeta ( fix data.json )
+
+## 0.1.4
+
+### Patch Changes
+
+- Fix npm release
+
 ## 0.1.3
 
 ### Patch Changes

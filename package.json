@@ -1,7 +1,7 @@
 {
   "name": "kraken-sui-sdk",
   "author": "Thouny <thouny@tuta.io>",
-  "version": "0.1.3",
+  "version": "0.1.5",
   "license": "MIT",
   "description": "Kraken TypeScript SDK",
   "files": [
@@ -20,7 +20,7 @@
   "dependencies": {
     "@mysten/kiosk": "^0.8.10",
     "@mysten/sui": "^1.2.0",
-    "@polymedia/coinmeta": "^0.0.10",
+    "@polymedia/coinmeta": "^0.0.13",
     "bun-types": "^1.0.25"
   },
   "devDependencies": {
