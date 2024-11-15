@@ -20,8 +20,8 @@ import { FRAMEWORK, ProposalTypes } from "../../src/types/constants";
     kraken.propose<ConfigNameArgs>(
         tx, 
         ProposalTypes.ConfigName,
-        { key: "new name" }, 
-        { name: "BRO" }
+        { key: "new name" }, // proposalArgs 
+        { name: "BRO" } // actionsArgs
     );
 
     const result = await kraken.client.signAndExecuteTransaction({

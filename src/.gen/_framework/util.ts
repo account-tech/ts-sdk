@@ -34,7 +34,7 @@ export function splitGenericParameters(
   genericSeparators: [string, string] = ['<', '>']
 ) {
   const [left, right] = genericSeparators
-  const tok = []
+  const tok: string[] = []
   let word = ''
   let nestedAngleBrackets = 0
 

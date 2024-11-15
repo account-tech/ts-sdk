@@ -1,11 +1,14 @@
 [config]
 # will be set to mainnet by default if omitted
 rpc = "https://fullnode.testnet.sui.io:443"
+# rpc = "https://sui-testnet-endpoint.blockvision.org:443"
 
 [packages]
-# KrakenExtensions = { git = "https://github.com/gmove-io/kraken.git", subdir = "packages/extensions", rev = "testnet" }
-# KrakenMultisig = { git = "https://github.com/gmove-io/kraken.git", subdir = "packages/multisig", rev = "testnet" }
-# KrakenActions = { git = "https://github.com/gmove-io/kraken.git", subdir = "packages/actions", rev = "testnet" }
-KrakenExtensions = { local = "../../../kraken/packages/extensions" }
-KrakenMultisig = { local = "../../../kraken/packages/multisig" }
-KrakenActions = { local = "../../../kraken/packages/actions" }
+# AccountExtensions = { git = "https://github.com/gmove-io/account.tech.git", subdir = "packages/extensions", rev = "testnet" }
+# AccountProtocol = { git = "https://github.com/gmove-io/account.tech.git", subdir = "packages/protocol", rev = "testnet" }
+# AccountConfig = { git = "https://github.com/gmove-io/account.tech.git", subdir = "packages/config", rev = "testnet" }
+# AccountActions = { git = "https://github.com/gmove-io/account.tech.git", subdir = "packages/actions", rev = "testnet" }
+AccountExtensions = { local = "../../../account.tech/packages/extensions" }
+AccountProtocol = { local = "../../../account.tech/packages/protocol" }
+AccountConfig = { local = "../../../account.tech/packages/config" }
+AccountActions = { local = "../../../account.tech/packages/actions" }
