@@ -1,31 +1,23 @@
-
 import { Transaction, TransactionResult } from "@mysten/sui/transactions";
 import { SuiClient } from "@mysten/sui/client";
-import { ProposalFields } from "../../.gen/kraken-multisig/proposals/structs"
-import { approveProposal, removeApproval, executeProposal } from "../../.gen/kraken-multisig/multisig/functions"
-import { CLOCK } from "src/types/constants";
-import { ProposalArgs } from "src/types/proposal-types";
+import { ActionsArgs, ProposalArgs, ProposalFields } from "src/types/proposal-types";
+import { Outcome } from "./outcome";
 
-export interface Proposal<Args> {
-    init(client: SuiClient, multisig: string, fields: ProposalFields): void;
-    propose(tx: Transaction, multisigId: string, proposalArgs: ProposalArgs, actionArgs: Args): TransactionResult;
+export interface Proposal {
+    args?: ActionsArgs;
+    
+    init(client: SuiClient, account: string): Promise<Proposal>;
+    propose(tx: Transaction, account: string, accountGenerics: [string, string], proposalArgs: ProposalArgs, actionArgs: ActionsArgs): TransactionResult;
     execute(tx: Transaction, ...args: any[]): TransactionResult;
 }
 
-export class Proposal<Args> {
-    auth?: { witness: string, name: string };
-    key?: string;
-    description?: string;
-    executionTime?: number;
-    expirationEpoch?: number;
-    totalWeight?: number;
-    roleWeight?: number;
-    approved?: string[];
-    args?: Args;
 
+export class Proposal {
     constructor(
         public client: SuiClient,
-        public multisig: string,
+        public account: string,
+        public outcome: Outcome,
+        public fields: ProposalFields,
     ) {}
 
     async fetchActions(parentId: string) {
@@ -51,52 +43,10 @@ export class Proposal<Args> {
         return actions;
     }
 
-    hasApproved(addr: string): boolean {
-        this.assertProposal();
-        return this.approved!.includes(addr);
-    }
-
-    approve(
-        tx: Transaction,
-    ): TransactionResult {
-        this.assertProposal();
-        return approveProposal(tx, { multisig: this.multisig, key: this.key! });
-    }
-
-    maybeApprove(
-        tx: Transaction,
-        caller: string,
-    ) {
-        if (!this.hasApproved(caller)) {
-            this.approve(tx);
-        }
-    }
-
-    constructExecutable(
-        tx: Transaction,
-    ): TransactionResult {
-        return executeProposal(tx, { multisig: this.multisig, key: this.key!, clock: CLOCK });
-    }
-
-    removeApproval(tx: Transaction): TransactionResult {
-        return removeApproval(tx, { multisig: this.multisig, key: this.key! });
-    }
-
     assertProposal() {
-        if (!this.key) {
+        if (!this.fields?.key) {
             throw new Error("Proposal is not set. Please set the proposal before calling this method.");
         }
-    }
-
-    setProposalFromFields(fields: ProposalFields) {
-        this.auth = { witness: fields.auth.witness.name, name: fields.auth.name };
-        this.key = fields.key;
-        this.description = fields.description;
-        this.executionTime = Number(fields.executionTime);
-        this.expirationEpoch = Number(fields.expirationEpoch);
-        this.totalWeight = Number(fields.totalWeight);
-        this.roleWeight = Number(fields.roleWeight);
-        this.approved = fields.approved.contents;
     }
 }
 
@@ -110,11 +60,11 @@ export class Proposal<Args> {
     //     return kiosk.proposeTake(
     //         tx,
     //         {
-    //             multisig: this.multisig!,
+    //             account: this.account!,
     //             key: args.key,
     //             description: args.description,
     //             executionTime: BigInt(args.executionTime),
-    //             expirationEpoch: BigInt(args.expirationEpoch),
+    //             expirationTime: BigInt(args.expirationTime),
     //             name: args.name,
     //             nftIds: args.nftIds,
     //             recipient: args.recipient,
@@ -129,7 +79,7 @@ export class Proposal<Args> {
     //     tx: Transaction,
     //     key: string,
     //     executionTime: number,
-    //     expirationEpoch: number,
+    //     expirationTime: number,
     //     description: string,
     //     objects: string[],
     //     recipients: string[],
@@ -140,10 +90,10 @@ export class Proposal<Args> {
     //     tx.moveCall({
     //         target: `${this.packageId}::config::propose_modify`,
     //         arguments: [
-    //             typeof(this.multisig) === "string" ? tx.object(this.multisig) : this.multisig, 
+    //             typeof(this.account) === "string" ? tx.object(this.account) : this.account, 
     //             tx.pure(key), 
     //             tx.pure(executionTime), 
-    //             tx.pure(expirationEpoch), 
+    //             tx.pure(expirationTime), 
     //             tx.pure(description), 
     //             name ? tx.pure([name]) : tx.pure([]), 
     //             threshold ? tx.pure([threshold]) : tx.pure([]), 

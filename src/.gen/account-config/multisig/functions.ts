@@ -41,6 +41,8 @@ export interface DisapproveProposalArgs { account: TransactionObjectInput; key: 
 
 export function disapproveProposal( tx: Transaction, args: DisapproveProposalArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::multisig::disapprove_proposal`, arguments: [ obj(tx, args.account), pure(tx, args.key, `${String.$typeName}`) ], }) }
 
+export function emptyOutcome( tx: Transaction, account: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::multisig::empty_outcome`, arguments: [ obj(tx, account) ], }) }
+
 export interface ExecuteConfigMultisigArgs { executable: TransactionObjectInput; account: TransactionObjectInput }
 
 export function executeConfigMultisig( tx: Transaction, args: ExecuteConfigMultisigArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::multisig::execute_config_multisig`, arguments: [ obj(tx, args.executable), obj(tx, args.account) ], }) }
@@ -82,8 +84,6 @@ export function memberMut( tx: Transaction, args: MemberMutArgs ) { return tx.mo
 export interface NewAccountArgs { extensions: TransactionObjectInput; name: string | TransactionArgument }
 
 export function newAccount( tx: Transaction, args: NewAccountArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::multisig::new_account`, arguments: [ obj(tx, args.extensions), pure(tx, args.name, `${String.$typeName}`) ], }) }
-
-export function newOutcome( tx: Transaction, account: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::multisig::new_outcome`, arguments: [ obj(tx, account) ], }) }
 
 export interface ProposeConfigMultisigArgs { extensions: TransactionObjectInput; account: TransactionObjectInput; key: string | TransactionArgument; description: string | TransactionArgument; executionTime: bigint | TransactionArgument; expirationEpoch: bigint | TransactionArgument; addresses: Array<string | TransactionArgument> | TransactionArgument; weights: Array<bigint | TransactionArgument> | TransactionArgument; roles: Array<Array<string | TransactionArgument> | TransactionArgument> | TransactionArgument; global: bigint | TransactionArgument; roleNames: Array<string | TransactionArgument> | TransactionArgument; roleThresholds: Array<bigint | TransactionArgument> | TransactionArgument }
 

@@ -1,22 +1,24 @@
-import { Transaction, TransactionResult } from "@mysten/sui/transactions";
+import { Transaction, TransactionObjectInput, TransactionResult } from "@mysten/sui/transactions";
 import { CoinMetadata, SuiClient } from "@mysten/sui/client";
 import { getCoinMeta } from "@polymedia/coinmeta";
-import * as currency from "../../../.gen/kraken-actions/currency/functions";
+import * as currency from "src/.gen/account-actions/currency/functions";
+import { UpdateArgs, BurnArgs, MintArgs, ProposalArgs, ProposalFields } from "src/types/proposal-types";
 import { Proposal } from "../proposal";
-import { ProposalFields } from "src/.gen/kraken-multisig/proposals/structs";
-import { UpdateArgs, BurnArgs, MintArgs, ProposalArgs } from "src/types/proposal-types";
+import { Outcome } from "../outcome";
+import { getAccountGenerics } from "src/lib/utils";
 
-export class MintProposal extends Proposal<MintArgs> {
+export class MintProposal extends Proposal {
+    args?: MintArgs;
 
     static async init(
         client: SuiClient,
-        multisig: string,
+        account: string,
+        outcome: Outcome,
         fields: ProposalFields,
     ): Promise<MintProposal> {
-        const proposal = new MintProposal(client, multisig);
-        proposal.setProposalFromFields(fields);
+        const proposal = new MintProposal(client, account, outcome, fields);
         // resolve actions
-        const actions = await proposal.fetchActions(fields.actions.id);
+        const actions = await proposal.fetchActions(fields.actionsId);
         if (actions.length === 0) {
             throw new Error('No actions found for the ConfigName proposal');
         }
@@ -30,15 +32,18 @@ export class MintProposal extends Proposal<MintArgs> {
 
     propose(
         tx: Transaction,
-        multisig: string,
+        account: string,
+        accountGenerics: [string, string],
         proposalArgs: ProposalArgs,
         actionArgs: MintArgs,
     ): TransactionResult {
         return currency.proposeMint(
             tx,
-            actionArgs.coinType,
+            [...accountGenerics, actionArgs.coinType],
             {
-                multisig,
+                auth: proposalArgs.auth,
+                account,
+                outcome: proposalArgs.outcome,
                 key: proposalArgs.key,
                 description: proposalArgs.description ?? "",
                 executionTime: BigInt(proposalArgs.executionTime ?? 0),
@@ -50,30 +55,31 @@ export class MintProposal extends Proposal<MintArgs> {
 
     execute(
         tx: Transaction,
+        executable: TransactionObjectInput,
     ): TransactionResult {
-        const executable = this.constructExecutable(tx);
         return currency.executeMint(
             tx,
-            this.args!.coinType,
+            [...getAccountGenerics(this.outcome), this.args!.coinType],
             {
                 executable,
-                multisig: this.multisig!,
+                account: this.account!,
             }
         );
     }
 }
 
-export class BurnProposal extends Proposal<BurnArgs> {
+export class BurnProposal extends Proposal {
+    args?: BurnArgs;
 
     static async init(
         client: SuiClient,
-        multisig: string,
+        account: string,
+        outcome: Outcome,
         fields: ProposalFields,
     ): Promise<BurnProposal> {
-        const proposal = new BurnProposal(client, multisig);
-        proposal.setProposalFromFields(fields);
+        const proposal = new BurnProposal(client, account, outcome, fields);
         // resolve actions
-        const actions = await proposal.fetchActions(fields.actions.id);
+        const actions = await proposal.fetchActions(fields.actionsId);
         if (actions.length === 0) {
             throw new Error('No actions found for the ConfigName proposal');
         }
@@ -88,15 +94,18 @@ export class BurnProposal extends Proposal<BurnArgs> {
 
     propose(
         tx: Transaction,
-        multisig: string,
+        account: string,
+        accountGenerics: [string, string],
         proposalArgs: ProposalArgs,
         actionArgs: BurnArgs,
     ): TransactionResult {
         return currency.proposeBurn(
             tx,
-            actionArgs.coinType,
+            [...accountGenerics, actionArgs.coinType],
             {
-                multisig,
+                auth: proposalArgs.auth,
+                account,
+                outcome: proposalArgs.outcome,
                 key: proposalArgs.key,
                 description: proposalArgs.description ?? "",
                 executionTime: BigInt(proposalArgs.executionTime ?? 0),
@@ -109,32 +118,33 @@ export class BurnProposal extends Proposal<BurnArgs> {
 
     execute(
         tx: Transaction,
+        executable: TransactionObjectInput,
     ): TransactionResult {
-        const executable = this.constructExecutable(tx);
         return currency.executeBurn(
             tx,
-            this.args!.coinType,
+            [...getAccountGenerics(this.outcome), this.args!.coinType],
             {
                 executable,
-                multisig: this.multisig!,
+                account: this.account!,
                 receiving: this.args!.coinId,
             }
         );
     }
 }
 
-export class UpdateProposal extends Proposal<UpdateArgs> {
+export class UpdateProposal extends Proposal {
+    args?: UpdateArgs;
     metadata?: CoinMetadata;
 
     static async init(
         client: SuiClient,
-        multisig: string,
+        account: string,
+        outcome: Outcome,
         fields: ProposalFields,
     ): Promise<UpdateProposal> {
-        const proposal = new UpdateProposal(client, multisig);
-        proposal.setProposalFromFields(fields);
+        const proposal = new UpdateProposal(client, account, outcome, fields);
         // resolve actions
-        const actions = await proposal.fetchActions(fields.actions.id);
+        const actions = await proposal.fetchActions(fields.actionsId);
         if (actions.length === 0) {
             throw new Error('No actions found for the ConfigName proposal');
         }
@@ -153,15 +163,18 @@ export class UpdateProposal extends Proposal<UpdateArgs> {
 
     propose(
         tx: Transaction,
-        multisig: string,
+        account: string,
+        accountGenerics: [string, string],
         proposalArgs: ProposalArgs,
         actionArgs: UpdateArgs,
     ): TransactionResult {
         return currency.proposeUpdate(
             tx,
-            actionArgs.coinType,
+            [...accountGenerics, this.args!.coinType],
             {
-                multisig,
+                auth: proposalArgs.auth,
+                account,
+                outcome: proposalArgs.outcome,
                 key: proposalArgs.key,
                 description: proposalArgs.description ?? "",
                 executionTime: BigInt(proposalArgs.executionTime ?? 0),
@@ -176,18 +189,18 @@ export class UpdateProposal extends Proposal<UpdateArgs> {
 
     execute(
         tx: Transaction,
+        executable: TransactionObjectInput,
     ): TransactionResult {
         if (!this.metadata?.id) {
             throw new Error('Metadata not found for the Update proposal');
         }
         
-        const executable = this.constructExecutable(tx);
         return currency.executeUpdate(
             tx,
-            this.args!.coinType,
+            [...getAccountGenerics(this.outcome), this.args!.coinType],
             {
                 executable,
-                multisig: this.multisig!,
+                account: this.account!,
                 metadata: this.metadata?.id!,
             }
         );

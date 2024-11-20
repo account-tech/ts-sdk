@@ -1,5 +1,5 @@
 import { SuiClient } from "@mysten/sui/client";
-import { ExtensionFields, Extensions as ExtensionsRaw, History } from "../.gen/kraken-extensions/extensions/structs";
+import { ExtensionFields, Extensions as ExtensionsRaw, History } from "../.gen/account-extensions/extensions/structs";
 import { EXTENSIONS } from "../types/constants";
 
 export interface Extension {
@@ -37,7 +37,7 @@ export class Extensions {
         const extensions: Extension[] = extensionsRaw.inner.map((extension: ExtensionFields) => {
             const history = extension.history.map((entry: History) => {
                 return {
-                    package: entry.package,
+                    package: entry.addr,
                     version: Number(entry.version),
                 }
             });

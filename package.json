@@ -19,7 +19,8 @@
   },
   "dependencies": {
     "@mysten/kiosk": "^0.8.10",
-    "@mysten/sui": "^1.2.0",
+    "@mysten/sui": "^1.14.4",
+    "@mysten/suins-toolkit": "^0.5.27",
     "@polymedia/coinmeta": "^0.0.13",
     "bun-types": "^1.0.25"
   },

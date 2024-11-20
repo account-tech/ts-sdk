@@ -1,5 +1,5 @@
-export * from "./client";
+export * from "./multisig-client";
 export * from "./lib/multisig";
 export * from "./lib/extensions";
-export * from "./lib/account";
+export * from "./lib/user";
 export * from "./types/proposal-types";

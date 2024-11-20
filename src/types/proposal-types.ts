@@ -1,17 +1,48 @@
-import { Dep, Member, Threshold } from "./multisig-types";
+import { TransactionObjectInput } from "@mysten/sui/transactions";
+import { Dep, Member, Threshold } from "./account-types";
+import { Proposal } from "src/lib/proposal/proposal";
+import { ConfigDepsProposal } from "src/lib/proposal/proposals/config";
+import { MintProposal, BurnProposal, UpdateProposal } from "src/lib/proposal/proposals/currency";
+
+export enum ProposalTypes {
+    // Config
+    ConfigMultisig = "ConfigMultisig",
+    // Actions
+    ConfigDeps = "ConfigDeps",
+    Mint = "Mint",
+    Burn = "Burn",
+    Update = "Update",
+};
+
+export const proposalRegistry: Record<string, typeof Proposal> = {
+    // [ProposalTypes.ConfigMultisig]: ConfigMultisigProposal,
+    [ProposalTypes.ConfigDeps]: ConfigDepsProposal,
+    [ProposalTypes.Mint]: MintProposal,
+    [ProposalTypes.Burn]: BurnProposal,
+    [ProposalTypes.Update]: UpdateProposal,
+};
+
+export type ProposalFields = {
+    issuer: { accountAddr: string, roleType: string, roleName: string };
+    key: string;
+    description: string;
+    executionTime: number;
+    expirationTime: number;
+    actionsId: string;
+}
 
 export type ProposalArgs = {
+    auth: TransactionObjectInput;
+    outcome: TransactionObjectInput;
     key: string;
     description?: string;
     executionTime?: number;
     expirationEpoch?: number;
 }
 
-export type ConfigNameArgs = {
-    name: string;
-}
+export type ActionsArgs = ConfigMultisigArgs | ConfigDepsArgs | MintArgs | BurnArgs | UpdateArgs | TakeArgs;
 
-export type ConfigRulesArgs = {
+export type ConfigMultisigArgs = {
     members?: Member[];
     thresholds?: { global: number, roles: Threshold[] };
 }

@@ -1,32 +1,22 @@
 import { SuiClient, getFullnodeUrl } from "@mysten/sui/client";
 import { Transaction, TransactionResult } from "@mysten/sui/transactions";
 import { KioskClient, Network } from "@mysten/kiosk";
-import { FRAMEWORK, KRAKEN_MULTISIG } from "./types/constants";
-import { Dep, Kiosk, Member, TransferPolicy } from "./types/multisig-types";
-import { Account } from "./lib/account";
-import { Multisig } from "./lib/multisig";
+import { FRAMEWORK, ACCOUNT_PROTOCOL, ACCOUNT_CONFIG, MULTISIG_GENERICS } from "./types/constants";
+import { AccountType, Dep, Kiosk, Member, TransferPolicy } from "./types/account-types";
+import { User } from "./lib/user";
+import { Multisig } from "./lib/account/configs/multisig";
 import { TransactionPureInput } from "./types/helper-types";
-import { ConfigDepsProposal, ConfigNameProposal, ConfigRulesProposal } from "./lib/proposal/proposals/config";
-import { ProposalArgs } from "./types/proposal-types";
-import { ProposalTypes } from "./types/constants";
+import { ActionsArgs, ProposalArgs, proposalRegistry, ProposalTypes } from "./types/proposal-types";
 import { Proposal } from "./lib/proposal/proposal";
 import { Extensions } from "./lib/extensions";
-import { BurnProposal, MintProposal, UpdateProposal } from "./lib/proposal/proposals/currency";
+import { Approvals } from "./lib/proposal/outcomes/approvals";
 
-const proposalRegistry: Record<string, typeof Proposal<unknown>> = {
-    [ProposalTypes.ConfigName]: ConfigNameProposal,
-    [ProposalTypes.ConfigRules]: ConfigRulesProposal,
-    [ProposalTypes.ConfigDeps]: ConfigDepsProposal,
-    [ProposalTypes.Mint]: MintProposal,
-    [ProposalTypes.Burn]: BurnProposal,
-    [ProposalTypes.Update]: UpdateProposal,
-};
 
-export class KrakenClient {
+export class MultisigClient {
 
 	private constructor(
 		public client: SuiClient,
-		public account: Account,
+		public user: User,
 		public multisig: Multisig,
 		public extensions: Extensions,
 	) {}
@@ -35,21 +25,21 @@ export class KrakenClient {
 		network: "mainnet" | "testnet" | "devnet" | "localnet" | string,
         userAddr: string, 
 		multisigId?: string,
-    ): Promise<KrakenClient> {
+    ): Promise<MultisigClient> {
 		const url = (network == "mainnet" || network == "testnet" || network == "devnet" || network == "localnet") ? getFullnodeUrl(network) : network;
 		const client = new SuiClient({ url });
 
-		const account = await Account.init(client, userAddr);
+		const user = await User.init(client, userAddr, AccountType.MULTISIG);
 		const multisig = await Multisig.init(client, userAddr, multisigId);
 		const extensions = await Extensions.init(client);
 
-		const kraken = new KrakenClient(client, account, multisig, extensions);
-		return kraken;
+		const msClient = new MultisigClient(client, user, multisig, extensions);
+		return msClient;
 	}
 
-	async refreshAccount(address: string = this.account.userAddr) {
-		let account = await this.account.fetchAccount(address);
-		this.account.setAccount(account);
+	async refreshAccount(address: string = this.user.address) {
+		let user = await this.user.fetchUser(address);
+		this.user.setUser(user);
 	}
 
 	async refreshMultisig(address: string = this.multisig.id) {
@@ -65,49 +55,53 @@ export class KrakenClient {
 		memberAddresses?: string[],
 		deps?: Dep[],
 	): TransactionResult {
-		// create the account if the user doesn't have one
-		let accountId: TransactionPureInput = this.account.id;
+		// create the user if the user doesn't have one
+		let accountId: TransactionPureInput = this.user.id;
 		let createdAccount: TransactionPureInput | null = null;
 		if (accountId === "") {
-			if (!newAccount) throw new Error("User must create an account before creating a multisig");
-			createdAccount = this.account.createAccount(tx, newAccount.username, newAccount.profilePicture);
+			if (!newAccount) throw new Error("User must create an user before creating a multisig");
+			createdAccount = this.user.createUser(tx); // TODO: add optional params for username and avatar 
 			accountId = tx.moveCall({
 				target: `${FRAMEWORK}::object::id`,
-				typeArguments: [`${KRAKEN_MULTISIG}::account::Account`],
+				typeArguments: [`${ACCOUNT_CONFIG}::user::User`],
 				arguments: [tx.object(createdAccount)],
 			});
 		}
 		// create the multisig
-		const multisig = this.multisig?.newMultisig(tx, name, accountId);
+		const multisig = this.multisig?.newMultisig(tx, name);
 		// update multisig rules if members are provided
 		if (memberAddresses) {
+			const auth = this.multisig.authenticate(tx, "");
+			const outcome = this.multisig.emptyOutcome(tx);
 			const members = memberAddresses.map((address: string) => ({ address, weight: 1, roles: [] }));
-			this.multisig.configRules(tx, { key: "init_members" }, { members }); // atomic proposal
+			this.multisig.configMultisig(tx, { auth, outcome, key: "init_members" }, { members }); // atomic proposal
 		}
 		// update multisig deps if provided
 		if (deps) {
-			this.multisig.configDeps(tx, { key: "init_deps" }, { deps }); // atomic proposal
+			const auth = this.multisig.authenticate(tx, "");
+			const outcome = this.multisig.emptyOutcome(tx);
+			this.multisig.configDeps(tx, { auth, outcome, key: "init_deps" }, { deps }); // atomic proposal
 		}
-		// creator register the multisig in his account
-		this.account.joinMultisig(tx, createdAccount ? createdAccount : accountId, multisig);
+		// creator register the multisig in his user
+		this.multisig.joinMultisig(tx, createdAccount ? createdAccount : accountId, multisig);
 		// send invites to added members
-		memberAddresses?.forEach(address => { this.account?.sendInvite(tx, multisig, address) });
-		// transfer the account if just created
-		if (createdAccount) this.account.transferAccount(tx, createdAccount, this.account.userAddr);
+		memberAddresses?.forEach(address => { this.user?.sendInvite(tx, multisig, address) });
+		// transfer the user if just created
+		if (createdAccount) this.user.transferUser(tx, createdAccount, this.user.address);
 		// share the multisig
 		return this.multisig?.shareMultisig(tx, multisig);
 	}
 
 	// Factory function to call the appropriate propose function
-	propose<Args>(
+	propose(
 		tx: Transaction,
 		proposalType: ProposalTypes,
 		proposalArgs: ProposalArgs,
-		actionsArgs: Args
+		actionsArgs: ActionsArgs,
 	) {
 		const proposalClass = proposalRegistry[proposalType];
 		const method = proposalClass.prototype.propose;
-		method.call(proposalClass, tx, this.multisig.id, proposalArgs, actionsArgs);
+		method.call(proposalClass, tx, this.multisig.id, MULTISIG_GENERICS, proposalArgs, actionsArgs);
 		// directly approve after proposing
 		this.multisig.approveProposal(tx, proposalArgs.key, this.multisig.id);
 	}
@@ -119,18 +113,18 @@ export class KrakenClient {
 		proposalKey: string
 	) {
 		const proposal = this.proposal(proposalKey);
-		proposal?.maybeApprove(tx, caller);
+		(proposal?.outcome as Approvals).maybeApprove(tx, caller);
 		proposal?.execute(tx);
 	}
 
 	// === Helpers ===
 
-	proposal(key: string): Proposal<unknown> | undefined {
+	proposal(key: string): Proposal | undefined {
 		return this.multisig?.getProposal(key);
 	}
 
-	hasApproved(key: string, userAddr: string = this.account.userAddr): boolean {
-		const has = this.proposal(key)?.approved?.includes(userAddr);
+	hasApproved(key: string, userAddr: string = this.user.address): boolean {
+		const has = (this.proposal(key)?.outcome as Approvals).approved?.includes(userAddr);
 		if (!has) throw new Error("Proposal not found");
 		return has;
 	}

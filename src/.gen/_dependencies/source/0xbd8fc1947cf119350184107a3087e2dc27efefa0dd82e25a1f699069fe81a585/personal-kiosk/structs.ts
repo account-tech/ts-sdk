@@ -3,14 +3,14 @@ import {FieldsWithTypes, composeSuiType, compressSuiType} from "../../../../_fra
 import {Option} from "../../0x1/option/structs";
 import {KioskOwnerCap} from "../../0x2/kiosk/structs";
 import {ID, UID} from "../../0x2/object/structs";
-import {PKG_V2, PKG_V3} from "../index";
+import {PKG_V1} from "../index";
 import {bcs} from "@mysten/sui/bcs";
 import {SuiClient, SuiObjectData, SuiParsedData} from "@mysten/sui/client";
 import {fromB64} from "@mysten/sui/utils";
 
 /* ============================== Borrow =============================== */
 
-export function isBorrow(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V2}::personal_kiosk::Borrow`; }
+export function isBorrow(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::personal_kiosk::Borrow`; }
 
 export interface BorrowFields { capId: ToField<ID>; ownedId: ToField<ID> }
 
@@ -18,17 +18,17 @@ export type BorrowReified = Reified< Borrow, BorrowFields >;
 
 export class Borrow implements StructClass { __StructClass = true as const;
 
- static readonly $typeName = `${PKG_V2}::personal_kiosk::Borrow`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
+ static readonly $typeName = `${PKG_V1}::personal_kiosk::Borrow`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
 
- readonly $typeName = Borrow.$typeName; readonly $fullTypeName: `${typeof PKG_V2}::personal_kiosk::Borrow`; readonly $typeArgs: []; readonly $isPhantom = Borrow.$isPhantom;
+ readonly $typeName = Borrow.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::personal_kiosk::Borrow`; readonly $typeArgs: []; readonly $isPhantom = Borrow.$isPhantom;
 
  readonly capId: ToField<ID>; readonly ownedId: ToField<ID>
 
- private constructor(typeArgs: [], fields: BorrowFields, ) { this.$fullTypeName = composeSuiType( Borrow.$typeName, ...typeArgs ) as `${typeof PKG_V2}::personal_kiosk::Borrow`; this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [], fields: BorrowFields, ) { this.$fullTypeName = composeSuiType( Borrow.$typeName, ...typeArgs ) as `${typeof PKG_V1}::personal_kiosk::Borrow`; this.$typeArgs = typeArgs;
 
  this.capId = fields.capId;; this.ownedId = fields.ownedId; }
 
- static reified( ): BorrowReified { return { typeName: Borrow.$typeName, fullTypeName: composeSuiType( Borrow.$typeName, ...[] ) as `${typeof PKG_V2}::personal_kiosk::Borrow`, typeArgs: [ ] as [], isPhantom: Borrow.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => Borrow.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => Borrow.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => Borrow.fromBcs( data, ), bcs: Borrow.bcs, fromJSONField: (field: any) => Borrow.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => Borrow.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => Borrow.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => Borrow.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => Borrow.fetch( client, id, ), new: ( fields: BorrowFields, ) => { return new Borrow( [], fields ) }, kind: "StructClassReified", } }
+ static reified( ): BorrowReified { return { typeName: Borrow.$typeName, fullTypeName: composeSuiType( Borrow.$typeName, ...[] ) as `${typeof PKG_V1}::personal_kiosk::Borrow`, typeArgs: [ ] as [], isPhantom: Borrow.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => Borrow.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => Borrow.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => Borrow.fromBcs( data, ), bcs: Borrow.bcs, fromJSONField: (field: any) => Borrow.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => Borrow.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => Borrow.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => Borrow.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => Borrow.fetch( client, id, ), new: ( fields: BorrowFields, ) => { return new Borrow( [], fields ) }, kind: "StructClassReified", } }
 
  static get r() { return Borrow.reified() }
 
@@ -78,7 +78,7 @@ export class Borrow implements StructClass { __StructClass = true as const;
 
 /* ============================== NewPersonalKiosk =============================== */
 
-export function isNewPersonalKiosk(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V3}::personal_kiosk::NewPersonalKiosk`; }
+export function isNewPersonalKiosk(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::personal_kiosk::NewPersonalKiosk`; }
 
 export interface NewPersonalKioskFields { kioskId: ToField<ID> }
 
@@ -86,17 +86,17 @@ export type NewPersonalKioskReified = Reified< NewPersonalKiosk, NewPersonalKios
 
 export class NewPersonalKiosk implements StructClass { __StructClass = true as const;
 
- static readonly $typeName = `${PKG_V3}::personal_kiosk::NewPersonalKiosk`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
+ static readonly $typeName = `${PKG_V1}::personal_kiosk::NewPersonalKiosk`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
 
- readonly $typeName = NewPersonalKiosk.$typeName; readonly $fullTypeName: `${typeof PKG_V3}::personal_kiosk::NewPersonalKiosk`; readonly $typeArgs: []; readonly $isPhantom = NewPersonalKiosk.$isPhantom;
+ readonly $typeName = NewPersonalKiosk.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::personal_kiosk::NewPersonalKiosk`; readonly $typeArgs: []; readonly $isPhantom = NewPersonalKiosk.$isPhantom;
 
  readonly kioskId: ToField<ID>
 
- private constructor(typeArgs: [], fields: NewPersonalKioskFields, ) { this.$fullTypeName = composeSuiType( NewPersonalKiosk.$typeName, ...typeArgs ) as `${typeof PKG_V3}::personal_kiosk::NewPersonalKiosk`; this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [], fields: NewPersonalKioskFields, ) { this.$fullTypeName = composeSuiType( NewPersonalKiosk.$typeName, ...typeArgs ) as `${typeof PKG_V1}::personal_kiosk::NewPersonalKiosk`; this.$typeArgs = typeArgs;
 
  this.kioskId = fields.kioskId; }
 
- static reified( ): NewPersonalKioskReified { return { typeName: NewPersonalKiosk.$typeName, fullTypeName: composeSuiType( NewPersonalKiosk.$typeName, ...[] ) as `${typeof PKG_V3}::personal_kiosk::NewPersonalKiosk`, typeArgs: [ ] as [], isPhantom: NewPersonalKiosk.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => NewPersonalKiosk.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => NewPersonalKiosk.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => NewPersonalKiosk.fromBcs( data, ), bcs: NewPersonalKiosk.bcs, fromJSONField: (field: any) => NewPersonalKiosk.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => NewPersonalKiosk.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => NewPersonalKiosk.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => NewPersonalKiosk.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => NewPersonalKiosk.fetch( client, id, ), new: ( fields: NewPersonalKioskFields, ) => { return new NewPersonalKiosk( [], fields ) }, kind: "StructClassReified", } }
+ static reified( ): NewPersonalKioskReified { return { typeName: NewPersonalKiosk.$typeName, fullTypeName: composeSuiType( NewPersonalKiosk.$typeName, ...[] ) as `${typeof PKG_V1}::personal_kiosk::NewPersonalKiosk`, typeArgs: [ ] as [], isPhantom: NewPersonalKiosk.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => NewPersonalKiosk.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => NewPersonalKiosk.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => NewPersonalKiosk.fromBcs( data, ), bcs: NewPersonalKiosk.bcs, fromJSONField: (field: any) => NewPersonalKiosk.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => NewPersonalKiosk.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => NewPersonalKiosk.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => NewPersonalKiosk.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => NewPersonalKiosk.fetch( client, id, ), new: ( fields: NewPersonalKioskFields, ) => { return new NewPersonalKiosk( [], fields ) }, kind: "StructClassReified", } }
 
  static get r() { return NewPersonalKiosk.reified() }
 
@@ -146,7 +146,7 @@ export class NewPersonalKiosk implements StructClass { __StructClass = true as c
 
 /* ============================== OwnerMarker =============================== */
 
-export function isOwnerMarker(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V2}::personal_kiosk::OwnerMarker`; }
+export function isOwnerMarker(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::personal_kiosk::OwnerMarker`; }
 
 export interface OwnerMarkerFields { dummyField: ToField<"bool"> }
 
@@ -154,17 +154,17 @@ export type OwnerMarkerReified = Reified< OwnerMarker, OwnerMarkerFields >;
 
 export class OwnerMarker implements StructClass { __StructClass = true as const;
 
- static readonly $typeName = `${PKG_V2}::personal_kiosk::OwnerMarker`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
+ static readonly $typeName = `${PKG_V1}::personal_kiosk::OwnerMarker`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
 
- readonly $typeName = OwnerMarker.$typeName; readonly $fullTypeName: `${typeof PKG_V2}::personal_kiosk::OwnerMarker`; readonly $typeArgs: []; readonly $isPhantom = OwnerMarker.$isPhantom;
+ readonly $typeName = OwnerMarker.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::personal_kiosk::OwnerMarker`; readonly $typeArgs: []; readonly $isPhantom = OwnerMarker.$isPhantom;
 
  readonly dummyField: ToField<"bool">
 
- private constructor(typeArgs: [], fields: OwnerMarkerFields, ) { this.$fullTypeName = composeSuiType( OwnerMarker.$typeName, ...typeArgs ) as `${typeof PKG_V2}::personal_kiosk::OwnerMarker`; this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [], fields: OwnerMarkerFields, ) { this.$fullTypeName = composeSuiType( OwnerMarker.$typeName, ...typeArgs ) as `${typeof PKG_V1}::personal_kiosk::OwnerMarker`; this.$typeArgs = typeArgs;
 
  this.dummyField = fields.dummyField; }
 
- static reified( ): OwnerMarkerReified { return { typeName: OwnerMarker.$typeName, fullTypeName: composeSuiType( OwnerMarker.$typeName, ...[] ) as `${typeof PKG_V2}::personal_kiosk::OwnerMarker`, typeArgs: [ ] as [], isPhantom: OwnerMarker.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => OwnerMarker.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => OwnerMarker.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => OwnerMarker.fromBcs( data, ), bcs: OwnerMarker.bcs, fromJSONField: (field: any) => OwnerMarker.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => OwnerMarker.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => OwnerMarker.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => OwnerMarker.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => OwnerMarker.fetch( client, id, ), new: ( fields: OwnerMarkerFields, ) => { return new OwnerMarker( [], fields ) }, kind: "StructClassReified", } }
+ static reified( ): OwnerMarkerReified { return { typeName: OwnerMarker.$typeName, fullTypeName: composeSuiType( OwnerMarker.$typeName, ...[] ) as `${typeof PKG_V1}::personal_kiosk::OwnerMarker`, typeArgs: [ ] as [], isPhantom: OwnerMarker.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => OwnerMarker.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => OwnerMarker.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => OwnerMarker.fromBcs( data, ), bcs: OwnerMarker.bcs, fromJSONField: (field: any) => OwnerMarker.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => OwnerMarker.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => OwnerMarker.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => OwnerMarker.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => OwnerMarker.fetch( client, id, ), new: ( fields: OwnerMarkerFields, ) => { return new OwnerMarker( [], fields ) }, kind: "StructClassReified", } }
 
  static get r() { return OwnerMarker.reified() }
 
@@ -214,7 +214,7 @@ export class OwnerMarker implements StructClass { __StructClass = true as const;
 
 /* ============================== PersonalKioskCap =============================== */
 
-export function isPersonalKioskCap(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V2}::personal_kiosk::PersonalKioskCap`; }
+export function isPersonalKioskCap(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::personal_kiosk::PersonalKioskCap`; }
 
 export interface PersonalKioskCapFields { id: ToField<UID>; cap: ToField<Option<KioskOwnerCap>> }
 
@@ -222,17 +222,17 @@ export type PersonalKioskCapReified = Reified< PersonalKioskCap, PersonalKioskCa
 
 export class PersonalKioskCap implements StructClass { __StructClass = true as const;
 
- static readonly $typeName = `${PKG_V2}::personal_kiosk::PersonalKioskCap`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
+ static readonly $typeName = `${PKG_V1}::personal_kiosk::PersonalKioskCap`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
 
- readonly $typeName = PersonalKioskCap.$typeName; readonly $fullTypeName: `${typeof PKG_V2}::personal_kiosk::PersonalKioskCap`; readonly $typeArgs: []; readonly $isPhantom = PersonalKioskCap.$isPhantom;
+ readonly $typeName = PersonalKioskCap.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::personal_kiosk::PersonalKioskCap`; readonly $typeArgs: []; readonly $isPhantom = PersonalKioskCap.$isPhantom;
 
  readonly id: ToField<UID>; readonly cap: ToField<Option<KioskOwnerCap>>
 
- private constructor(typeArgs: [], fields: PersonalKioskCapFields, ) { this.$fullTypeName = composeSuiType( PersonalKioskCap.$typeName, ...typeArgs ) as `${typeof PKG_V2}::personal_kiosk::PersonalKioskCap`; this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [], fields: PersonalKioskCapFields, ) { this.$fullTypeName = composeSuiType( PersonalKioskCap.$typeName, ...typeArgs ) as `${typeof PKG_V1}::personal_kiosk::PersonalKioskCap`; this.$typeArgs = typeArgs;
 
  this.id = fields.id;; this.cap = fields.cap; }
 
- static reified( ): PersonalKioskCapReified { return { typeName: PersonalKioskCap.$typeName, fullTypeName: composeSuiType( PersonalKioskCap.$typeName, ...[] ) as `${typeof PKG_V2}::personal_kiosk::PersonalKioskCap`, typeArgs: [ ] as [], isPhantom: PersonalKioskCap.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => PersonalKioskCap.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => PersonalKioskCap.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => PersonalKioskCap.fromBcs( data, ), bcs: PersonalKioskCap.bcs, fromJSONField: (field: any) => PersonalKioskCap.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => PersonalKioskCap.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => PersonalKioskCap.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => PersonalKioskCap.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => PersonalKioskCap.fetch( client, id, ), new: ( fields: PersonalKioskCapFields, ) => { return new PersonalKioskCap( [], fields ) }, kind: "StructClassReified", } }
+ static reified( ): PersonalKioskCapReified { return { typeName: PersonalKioskCap.$typeName, fullTypeName: composeSuiType( PersonalKioskCap.$typeName, ...[] ) as `${typeof PKG_V1}::personal_kiosk::PersonalKioskCap`, typeArgs: [ ] as [], isPhantom: PersonalKioskCap.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => PersonalKioskCap.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => PersonalKioskCap.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => PersonalKioskCap.fromBcs( data, ), bcs: PersonalKioskCap.bcs, fromJSONField: (field: any) => PersonalKioskCap.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => PersonalKioskCap.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => PersonalKioskCap.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => PersonalKioskCap.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => PersonalKioskCap.fetch( client, id, ), new: ( fields: PersonalKioskCapFields, ) => { return new PersonalKioskCap( [], fields ) }, kind: "StructClassReified", } }
 
  static get r() { return PersonalKioskCap.reified() }
 
