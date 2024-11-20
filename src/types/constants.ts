@@ -3,21 +3,28 @@ export const STDLIB = "0x0000000000000000000000000000000000000000000000000000000
 export const FRAMEWORK = "0x0000000000000000000000000000000000000000000000000000000000000002";
 export const CLOCK = "0x0000000000000000000000000000000000000000000000000000000000000006";
 export const SUI_SYSTEM_STATE_INNER = "0x5b890eaf2abcfa2ab90b77b8e6f3d5d8609586c3e583baf3dccd5af17edf48d1";
-// Kraken Published Packages (V1)
+// SuiNS packages and objects
+export const contractObjects = {
+    packageId: '0xfdba31b34a43e058f17c5cf4b12d9b9e0a08c0623d8569092c022e0c77df46d3',
+    registry: '0xac06695279c2a92436068cebe5ea778135ac503337642e27493431603ae6a71d',
+    reverseRegistry: '0x34a36dd204f8351a157d19b87bada9d448ec40229d56f22bff04fa23713a5c31',
+    suins: '0x4acaf19db12fafce1943bbd44c7f794e1d81d00aeb63617096e5caa39499ba88',
+}
+// Account.tech Published Packages
 export enum ACCOUNT_EXTENSIONS {
-    V1 = "0x2d1f315f2b4f5cb64901b054c7f315a03f0aea3f49f6e6c9b74cbd1d12f4b6c7",
+    V1 = "0x7d84a9d786503d6de795896df00a5729588de1723c433fd727edd5842d413624",
 }
 export enum ACCOUNT_PROTOCOL {
-    V1 = "0xacfd4da2d93e228e252150fc3bd030c8c3ce86b6267706de94ad8f9f6b6eba0d",
+    V1 = "0x0216b1790ffa86e5147b8ace8b2bdc0ba04fe5970d42eddcf33f8f3512134adc",
 }
 export enum ACCOUNT_CONFIG {
-    V1 = "0xacfd4da2d93e228e252150fc3bd030c8c3ce86b6267706de94ad8f9f6b6eba0d",
+    V1 = "0x62f210209975f48d52705d4f5b9383d1715ac4a72f2790f19c706c7aceb5ec5f",
 }
 export enum ACCOUNT_ACTIONS {
-    V1 = "0x29dd152d8a8a427cb3eb343e2f58f68e9f07587597eb23816df3e2b04a72bdfd",
+    V1 = "0x44d7e0d34256670a0c41927282b8a738137a9a52d109db113cad5ab44e889676",
 }
 // Shared objects
-export const EXTENSIONS = "0xce279d1dd9558f9f5a7175e2b7bfb3975350dbefcd22b2a8c370b2931cff6c14";
-export const USER_REGISTRY = "0xd2df54caf2cf9ecd91e10c105a1db673466c619ae0c33651c1dfd9fa22834872";
+export const EXTENSIONS = "0xe9dd2a36bc1295fe406c6c44d90cf924d1cf8d0616a4f43db30ad2f1a2f37186";
+export const USER_REGISTRY = "0xe6dd0803d1ba99adb9bc02f4c38a3b9021178b9f7e2aae9e61a622fd979aa623";
 // Types
 export const MULTISIG_GENERICS: [string, string] = [`${ACCOUNT_CONFIG.V1}::multisig::Multisig`, `${ACCOUNT_CONFIG.V1}::multisig::Approvals`];

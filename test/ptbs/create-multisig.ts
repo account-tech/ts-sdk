@@ -1,10 +1,10 @@
 import { Transaction } from "@mysten/sui/transactions";
 import { Ed25519Keypair } from "@mysten/sui/keypairs/ed25519";
-import { KrakenClient } from "../../src/client.js";
+import { MultisigClient } from "../../src/multisig-client";
 
 (async () => {
     const keypair = Ed25519Keypair.fromSecretKey(Uint8Array.from(Buffer.from("AM06bExREdFceWiExfSacTJ+64AQtFl7SRkSiTmAqh6F", "base64")).slice(1));    
-    const kraken = await KrakenClient.init(
+    const ms = await MultisigClient.init(
         "testnet",
         keypair.toSuiAddress(),
     );
@@ -12,9 +12,9 @@ import { KrakenClient } from "../../src/client.js";
     const tx = new Transaction();
     tx.setGasBudget(1000000000);
 
-    kraken.createMultisig(tx, "Thouny's Multisig", { username: "Thouny", profilePicture: "https://x.com/BL0CKRUNNER/picture" })
+    ms.createMultisig(tx, "Thouny's Multisig")
     
-    const result = await kraken.client.signAndExecuteTransaction({
+    const result = await ms.client.signAndExecuteTransaction({
         signer: keypair,
         transaction: tx,
         options: { showEffects: true, showObjectChanges: true },

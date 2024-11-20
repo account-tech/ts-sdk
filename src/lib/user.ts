@@ -4,7 +4,7 @@ import { SuinsClient } from '@mysten/suins-toolkit';
 import { User as UserRaw } from "../.gen/account-config/user/structs";
 import { sendInvite, acceptInvite, refuseInvite } from "../.gen/account-config/multisig/functions";
 import { new_, transfer, destroy } from "../.gen/account-config/user/functions";
-import { USER_REGISTRY, ACCOUNT_CONFIG } from "../types/constants";
+import { USER_REGISTRY, ACCOUNT_CONFIG, contractObjects } from "../types/constants";
 // import { TransactionPureInput } from "src/types/helper-types";
 import { AccountType } from "src/types/account-types";
 
@@ -36,42 +36,51 @@ export class User implements UserData {
 		user.setUser(await user.fetchUser());
 		return user;
 	}
-
-	async fetchUserRaw(owner: string = this.address): Promise<UserRaw | null> {
-		const { data } = await this.client.getOwnedObjects({
-			owner,
-			filter: { StructType: `${ACCOUNT_CONFIG}::user::User` },
-			options: { showContent: true }
-		});
-		return data.length !== 0 ? UserRaw.fromSuiParsedData(data[0].data?.content!) : null;
-	}
 	
 	async fetchUser(owner: string = this.address): Promise<UserData> {
-		const UserRaw = await this.fetchUserRaw(owner);
-
-		if (UserRaw) {
+		const { data } = await this.client.getOwnedObjects({
+			owner,
+			filter: { StructType: `${ACCOUNT_CONFIG.V1}::user::User` },
+			options: { showContent: true }
+		});
+		const userRaw = data.length !== 0 ? UserRaw.fromSuiParsedData(data[0].data?.content!) : null;
+		
+		if (userRaw) {
 			// get accounts objects depending on the account type
-			const accountsObjs = await this.client.multiGetObjects({
-				ids: UserRaw.accounts.contents.find((entry) => entry.key === this.accountType)?.value!,
-				options: { showContent: true }
-			});
-			// get accounts name
-			const accounts = await Promise.all(accountsObjs.map(async (acc: SuiObjectResponse) => {
-				const content = acc.data?.content! as any;
-				return {
-					id: content.fields.id.id,
-					name: content.fields.metadata.inner.contents.find((entry: any) => entry.key === "name")?.value!
-				}
-			}));
+			let accounts: {id: string, name: string}[] = [];
+			if (userRaw.accounts.contents.length > 0) {
+				const accountsObjs = await this.client.multiGetObjects({
+					ids: userRaw.accounts.contents.find((entry) => entry.key === this.accountType)?.value!,
+					options: { showContent: true }
+				});
+				// get accounts name
+				accounts = await Promise.all(accountsObjs.map(async (acc: SuiObjectResponse) => {
+					const content = acc.data?.content! as any;
+					return {
+						id: content.fields.id.id,
+						name: content.fields.metadata.fields.inner.fields.contents.find((entry: any) => entry.fields.key === "name")?.fields.value!
+					}
+				}));
+			}
 			// get user name and avatar
-			const suinsClient = new SuinsClient(this.client);
+			const suinsClient = new SuinsClient(this.client, { networkType: 'testnet', contractObjects });
 			const name = await suinsClient.getName(this.address);
-			const nameObject = await suinsClient.getNameObject(name!, { showOwner: true });
-
+			
+			let username = this.address.slice(0,5) + "..." + this.address.slice(-3);
+			let avatar = "https://cdn1.iconfinder.com/data/icons/user-pictures/100/unknown-1024.png";
+			
+			if (name) {
+				username = name;
+				const nameObject = await suinsClient.getNameObject(name, { showOwner: true });
+				if (nameObject?.avatar) {
+					avatar = nameObject.avatar;
+				}
+			}
+			
 			return {
-				id: UserRaw.id,
-				username: name!,
-				avatar: nameObject?.avatar!,
+				id: userRaw.id,
+				username,
+				avatar,
 				accounts
 			}
 		} else {

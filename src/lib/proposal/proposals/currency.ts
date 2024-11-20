@@ -5,7 +5,6 @@ import * as currency from "src/.gen/account-actions/currency/functions";
 import { UpdateArgs, BurnArgs, MintArgs, ProposalArgs, ProposalFields } from "src/types/proposal-types";
 import { Proposal } from "../proposal";
 import { Outcome } from "../outcome";
-import { getAccountGenerics } from "src/lib/utils";
 
 export class MintProposal extends Proposal {
     args?: MintArgs;
@@ -32,6 +31,8 @@ export class MintProposal extends Proposal {
 
     propose(
         tx: Transaction,
+        auth: TransactionObjectInput,
+        outcome: TransactionObjectInput,
         account: string,
         accountGenerics: [string, string],
         proposalArgs: ProposalArgs,
@@ -41,13 +42,13 @@ export class MintProposal extends Proposal {
             tx,
             [...accountGenerics, actionArgs.coinType],
             {
-                auth: proposalArgs.auth,
+                auth,
                 account,
-                outcome: proposalArgs.outcome,
+                outcome,
                 key: proposalArgs.key,
                 description: proposalArgs.description ?? "",
                 executionTime: BigInt(proposalArgs.executionTime ?? 0),
-                expirationEpoch: BigInt(proposalArgs.expirationEpoch ?? 0),
+                expirationTime: BigInt(proposalArgs.expirationEpoch ?? Math.floor(Date.now()) + 7*24*60*60*1000),
                 amount: BigInt(actionArgs.amount),
             }
         );
@@ -56,10 +57,11 @@ export class MintProposal extends Proposal {
     execute(
         tx: Transaction,
         executable: TransactionObjectInput,
+        accountGenerics: [string, string],
     ): TransactionResult {
         return currency.executeMint(
             tx,
-            [...getAccountGenerics(this.outcome), this.args!.coinType],
+            [...accountGenerics, this.args!.coinType],
             {
                 executable,
                 account: this.account!,
@@ -94,6 +96,8 @@ export class BurnProposal extends Proposal {
 
     propose(
         tx: Transaction,
+        auth: TransactionObjectInput,
+        outcome: TransactionObjectInput,
         account: string,
         accountGenerics: [string, string],
         proposalArgs: ProposalArgs,
@@ -103,13 +107,13 @@ export class BurnProposal extends Proposal {
             tx,
             [...accountGenerics, actionArgs.coinType],
             {
-                auth: proposalArgs.auth,
+                auth,
                 account,
-                outcome: proposalArgs.outcome,
+                outcome,
                 key: proposalArgs.key,
                 description: proposalArgs.description ?? "",
                 executionTime: BigInt(proposalArgs.executionTime ?? 0),
-                expirationEpoch: BigInt(proposalArgs.expirationEpoch ?? 0),
+                expirationTime: BigInt(proposalArgs.expirationEpoch ?? Math.floor(Date.now()) + 7*24*60*60*1000),
                 coinId: actionArgs.coinId,
                 amount: BigInt(actionArgs.amount),
             }
@@ -119,10 +123,11 @@ export class BurnProposal extends Proposal {
     execute(
         tx: Transaction,
         executable: TransactionObjectInput,
+        accountGenerics: [string, string],
     ): TransactionResult {
         return currency.executeBurn(
             tx,
-            [...getAccountGenerics(this.outcome), this.args!.coinType],
+            [...accountGenerics, this.args!.coinType],
             {
                 executable,
                 account: this.account!,
@@ -163,6 +168,8 @@ export class UpdateProposal extends Proposal {
 
     propose(
         tx: Transaction,
+        auth: TransactionObjectInput,
+        outcome: TransactionObjectInput,
         account: string,
         accountGenerics: [string, string],
         proposalArgs: ProposalArgs,
@@ -172,13 +179,13 @@ export class UpdateProposal extends Proposal {
             tx,
             [...accountGenerics, this.args!.coinType],
             {
-                auth: proposalArgs.auth,
+                auth,
                 account,
-                outcome: proposalArgs.outcome,
+                outcome,
                 key: proposalArgs.key,
                 description: proposalArgs.description ?? "",
                 executionTime: BigInt(proposalArgs.executionTime ?? 0),
-                expirationEpoch: BigInt(proposalArgs.expirationEpoch ?? 0),
+                expirationTime: BigInt(proposalArgs.expirationEpoch ?? Math.floor(Date.now()) + 7*24*60*60*1000),
                 mdName: actionArgs.name,
                 mdSymbol: actionArgs.symbol,
                 mdDescription: actionArgs.description,
@@ -190,6 +197,7 @@ export class UpdateProposal extends Proposal {
     execute(
         tx: Transaction,
         executable: TransactionObjectInput,
+        accountGenerics: [string, string],
     ): TransactionResult {
         if (!this.metadata?.id) {
             throw new Error('Metadata not found for the Update proposal');
@@ -197,7 +205,7 @@ export class UpdateProposal extends Proposal {
         
         return currency.executeUpdate(
             tx,
-            [...getAccountGenerics(this.outcome), this.args!.coinType],
+            [...accountGenerics, this.args!.coinType],
             {
                 executable,
                 account: this.account!,

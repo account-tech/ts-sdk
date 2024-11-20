@@ -27,9 +27,9 @@ export interface NewAccessArgs { proposal: TransactionObjectInput; witness: Gene
 
 export function newAccess( tx: Transaction, typeArgs: [string, string, string], args: NewAccessArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::access_control::new_access`, typeArguments: typeArgs, arguments: [ obj(tx, args.proposal), generic(tx, `${typeArgs[2]}`, args.witness) ], }) }
 
-export interface ProposeAccessArgs { auth: TransactionObjectInput; account: TransactionObjectInput; outcome: GenericArg; key: string | TransactionArgument; description: string | TransactionArgument; executionTime: bigint | TransactionArgument; expirationEpoch: bigint | TransactionArgument }
+export interface ProposeAccessArgs { auth: TransactionObjectInput; account: TransactionObjectInput; outcome: GenericArg; key: string | TransactionArgument; description: string | TransactionArgument; executionTime: bigint | TransactionArgument; expirationTime: bigint | TransactionArgument }
 
-export function proposeAccess( tx: Transaction, typeArgs: [string, string, string], args: ProposeAccessArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::access_control::propose_access`, typeArguments: typeArgs, arguments: [ obj(tx, args.auth), obj(tx, args.account), generic(tx, `${typeArgs[1]}`, args.outcome), pure(tx, args.key, `${String.$typeName}`), pure(tx, args.description, `${String.$typeName}`), pure(tx, args.executionTime, `u64`), pure(tx, args.expirationEpoch, `u64`) ], }) }
+export function proposeAccess( tx: Transaction, typeArgs: [string, string, string], args: ProposeAccessArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::access_control::propose_access`, typeArguments: typeArgs, arguments: [ obj(tx, args.auth), obj(tx, args.account), generic(tx, `${typeArgs[1]}`, args.outcome), pure(tx, args.key, `${String.$typeName}`), pure(tx, args.description, `${String.$typeName}`), pure(tx, args.executionTime, `u64`), pure(tx, args.expirationTime, `u64`) ], }) }
 
 export interface ReturnCapArgs { account: TransactionObjectInput; borrow: TransactionObjectInput; cap: GenericArg; version: TransactionObjectInput }
 

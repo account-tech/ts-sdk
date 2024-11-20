@@ -13,7 +13,6 @@ import { DepFields } from "../../../.gen/account-protocol/deps/structs";
 import { MemberFields, RoleFields } from "../../../.gen/account-config/multisig/structs";
 import { ProposalFields as ProposalFieldsRaw } from "../../../.gen/account-protocol/proposals/structs";
 import { CLOCK, EXTENSIONS, ACCOUNT_ACTIONS, ACCOUNT_CONFIG, MULTISIG_GENERICS } from "../../../types/constants";
-import { getCurrentEpoch } from "../../utils";
 import { User } from "../../user";
 import { Proposal } from "../../proposal/proposal";
 import { ConfigDepsProposal } from "../../proposal/proposals/config";
@@ -36,7 +35,6 @@ export class Multisig extends Account {
     ): Promise<Multisig> {
         const multisig = new Multisig(client);
         multisig.userAddr = userAddr;
-        multisig.epoch = await getCurrentEpoch(multisig.client);
         if (multisigId) {
             multisig.id = multisigId;
             multisig.setMultisig(await multisig.fetchMultisig(multisigId));
@@ -253,7 +251,7 @@ export class Multisig extends Account {
                 key: proposalArgs.key,
                 description: proposalArgs.description ?? "",
                 executionTime: BigInt(proposalArgs.executionTime ?? 0),
-                expirationEpoch: BigInt(proposalArgs.expirationEpoch ?? this.epoch + 7),
+                expirationTime: BigInt(proposalArgs.expirationEpoch ?? Math.floor(Date.now()) + 7*24*60*60*1000),
                 addresses,
                 weights,
                 roles,
@@ -271,6 +269,8 @@ export class Multisig extends Account {
 
     configDeps(
         tx: Transaction,
+        auth: TransactionObjectInput,
+        outcome: TransactionObjectInput,
         proposalArgs: ProposalArgs,
         actionsArgs: ConfigDepsArgs,
         multisig: TransactionObjectInput = this.id, // need for adding deps upon creation
@@ -291,13 +291,13 @@ export class Multisig extends Account {
             tx,
             MULTISIG_GENERICS,
             {
-                auth: proposalArgs.auth,
+                auth,
                 account: multisig,
-                outcome: proposalArgs.outcome,
+                outcome,
                 key: proposalArgs.key,
                 description: proposalArgs.description ?? "",
                 executionTime: BigInt(proposalArgs.executionTime ?? 0),
-                expirationEpoch: BigInt(proposalArgs.expirationEpoch ?? this.epoch + 7),
+                expirationTime: BigInt(proposalArgs.expirationEpoch ?? Math.floor(Date.now()) + 7*24*60*60*1000),
                 extensions: EXTENSIONS,
                 names,
                 addresses,
@@ -446,13 +446,13 @@ export class Multisig extends Account {
         switch ("0x" + fields.issuer.roleType) {
             // case `${ACCOUNT_ACTIONS}::config::ConfigRulesProposal`:
             //     return await ConfigRulesProposal.init(client, this.id, fields);
-            case `${ACCOUNT_ACTIONS}::config::ConfigDepsProposal`:
+            case `${ACCOUNT_ACTIONS.V1}::config::ConfigDepsProposal`:
                 return await ConfigDepsProposal.init(client, this.id, outcome, fields);
-            case `${ACCOUNT_ACTIONS}::currency::MintProposal`:
+            case `${ACCOUNT_ACTIONS.V1}::currency::MintProposal`:
                 return await MintProposal.init(client, this.id, outcome, fields);
-            case `${ACCOUNT_ACTIONS}::currency::BurnProposal`:
+            case `${ACCOUNT_ACTIONS.V1}::currency::BurnProposal`:
                 return await BurnProposal.init(client, this.id, outcome, fields);
-            case `${ACCOUNT_ACTIONS}::currency::UpdateProposal`:
+            case `${ACCOUNT_ACTIONS.V1}::currency::UpdateProposal`:
                 return await UpdateProposal.init(client, this.id, outcome, fields);
             // ... other cases for different proposal types
             default:

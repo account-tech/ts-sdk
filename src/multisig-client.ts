@@ -11,7 +11,6 @@ import { Proposal } from "./lib/proposal/proposal";
 import { Extensions } from "./lib/extensions";
 import { Approvals } from "./lib/proposal/outcomes/approvals";
 
-
 export class MultisigClient {
 
 	private constructor(
@@ -71,16 +70,14 @@ export class MultisigClient {
 		const multisig = this.multisig?.newMultisig(tx, name);
 		// update multisig rules if members are provided
 		if (memberAddresses) {
-			const auth = this.multisig.authenticate(tx, "");
-			const outcome = this.multisig.emptyOutcome(tx);
 			const members = memberAddresses.map((address: string) => ({ address, weight: 1, roles: [] }));
-			this.multisig.configMultisig(tx, { auth, outcome, key: "init_members" }, { members }); // atomic proposal
+			this.multisig.configMultisig(tx, { key: "init_members" }, { members }); // atomic proposal
 		}
 		// update multisig deps if provided
 		if (deps) {
 			const auth = this.multisig.authenticate(tx, "");
 			const outcome = this.multisig.emptyOutcome(tx);
-			this.multisig.configDeps(tx, { auth, outcome, key: "init_deps" }, { deps }); // atomic proposal
+			this.multisig.configDeps(tx, auth, outcome, { key: "init_deps" }, { deps }); // atomic proposal
 		}
 		// creator register the multisig in his user
 		this.multisig.joinMultisig(tx, createdAccount ? createdAccount : accountId, multisig);
@@ -98,10 +95,14 @@ export class MultisigClient {
 		proposalType: ProposalTypes,
 		proposalArgs: ProposalArgs,
 		actionsArgs: ActionsArgs,
+		role?: string,
 	) {
+		const auth = this.multisig.authenticate(tx, role ?? "");
+		const outcome = this.multisig.emptyOutcome(tx);
+
 		const proposalClass = proposalRegistry[proposalType];
 		const method = proposalClass.prototype.propose;
-		method.call(proposalClass, tx, this.multisig.id, MULTISIG_GENERICS, proposalArgs, actionsArgs);
+		method.call(proposalClass, tx, auth, outcome, this.multisig.id, MULTISIG_GENERICS, proposalArgs, actionsArgs);
 		// directly approve after proposing
 		this.multisig.approveProposal(tx, proposalArgs.key, this.multisig.id);
 	}
@@ -114,7 +115,8 @@ export class MultisigClient {
 	) {
 		const proposal = this.proposal(proposalKey);
 		(proposal?.outcome as Approvals).maybeApprove(tx, caller);
-		proposal?.execute(tx);
+		const executable = (proposal?.outcome as Approvals).constructExecutable(tx);
+		proposal?.execute(tx, executable, MULTISIG_GENERICS);
 	}
 
 	// === Helpers ===

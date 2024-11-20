@@ -5,7 +5,6 @@ import { Proposal } from "../proposal";
 import { EXTENSIONS } from "src/types/constants";
 import { ConfigDepsArgs, ProposalArgs, ProposalFields } from "src/types/proposal-types";
 import { Outcome } from "../outcome";
-import { getAccountGenerics } from "src/lib/utils";
 
 export class ConfigDepsProposal extends Proposal {
 
@@ -30,6 +29,8 @@ export class ConfigDepsProposal extends Proposal {
 
     propose(
         tx: Transaction,
+        auth: TransactionObjectInput,
+        outcome: TransactionObjectInput,
         account: string,
         accountGenerics: [string, string],
         proposalArgs: ProposalArgs,
@@ -48,13 +49,13 @@ export class ConfigDepsProposal extends Proposal {
             tx,
             accountGenerics,
             {
-                auth: proposalArgs.auth,
+                auth,
                 account,
-                outcome: proposalArgs.outcome,
+                outcome,
                 key: proposalArgs.key,
                 description: proposalArgs.description ?? "",
                 executionTime: BigInt(proposalArgs.executionTime ?? 0),
-                expirationEpoch: BigInt(proposalArgs.expirationEpoch ?? 0),
+                expirationTime: BigInt(proposalArgs.expirationEpoch ?? Math.floor(Date.now()) + 7*24*60*60*1000),
                 extensions: EXTENSIONS,
                 names,
                 addresses,
@@ -66,10 +67,11 @@ export class ConfigDepsProposal extends Proposal {
     execute(
         tx: Transaction,
         executable: TransactionObjectInput,
+        accountGenerics: [string, string],
     ): TransactionResult {
         return config.executeConfigDeps(
             tx,
-            getAccountGenerics(this.outcome),
+            accountGenerics,
             {
                 executable,
                 account: this.account!,

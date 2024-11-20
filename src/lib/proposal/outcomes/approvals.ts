@@ -1,12 +1,9 @@
 import { Transaction, TransactionResult } from "@mysten/sui/transactions";
 import { approveProposal, disapproveProposal, executeProposal } from "../../../.gen/account-config/multisig/functions";
-import { ACCOUNT_CONFIG, CLOCK } from "../../../types/constants";
+import { CLOCK } from "../../../types/constants";
 import { Outcome } from "../outcome";
 
 export class Approvals extends Outcome {    
-    static configType: string = `${ACCOUNT_CONFIG}::multisig::Multisig`;
-    static outcomeType: string = `${ACCOUNT_CONFIG}::multisig::Approvals`;
-    
     constructor(
         public multisig: string,
         public key: string,

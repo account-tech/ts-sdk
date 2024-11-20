@@ -1,4 +1,4 @@
-import { Transaction, TransactionResult } from "@mysten/sui/transactions";
+import { Transaction, TransactionObjectInput, TransactionResult } from "@mysten/sui/transactions";
 import { SuiClient } from "@mysten/sui/client";
 import { ActionsArgs, ProposalArgs, ProposalFields } from "src/types/proposal-types";
 import { Outcome } from "./outcome";
@@ -7,8 +7,8 @@ export interface Proposal {
     args?: ActionsArgs;
     
     init(client: SuiClient, account: string): Promise<Proposal>;
-    propose(tx: Transaction, account: string, accountGenerics: [string, string], proposalArgs: ProposalArgs, actionArgs: ActionsArgs): TransactionResult;
-    execute(tx: Transaction, ...args: any[]): TransactionResult;
+    propose(tx: Transaction, auth: TransactionObjectInput, outcome: TransactionObjectInput, account: string, accountGenerics: [string, string], proposalArgs: ProposalArgs, actionArgs: ActionsArgs): TransactionResult;
+    execute(tx: Transaction, executable: TransactionObjectInput, accountGenerics: [string, string], ...args: any[]): TransactionResult;
 }
 
 

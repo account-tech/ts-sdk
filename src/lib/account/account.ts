@@ -6,7 +6,6 @@ import { Outcome } from "../proposal/outcome";
 
 export interface Account {
 	userAddr: string;
-	epoch: number;
 	// Account Data
 	generics: [string, string];
     id: string;

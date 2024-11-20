@@ -1,4 +1,3 @@
-import { TransactionObjectInput } from "@mysten/sui/transactions";
 import { Dep, Member, Threshold } from "./account-types";
 import { Proposal } from "src/lib/proposal/proposal";
 import { ConfigDepsProposal } from "src/lib/proposal/proposals/config";
@@ -32,8 +31,6 @@ export type ProposalFields = {
 }
 
 export type ProposalArgs = {
-    auth: TransactionObjectInput;
-    outcome: TransactionObjectInput;
     key: string;
     description?: string;
     executionTime?: number;

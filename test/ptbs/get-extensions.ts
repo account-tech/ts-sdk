@@ -1,5 +1,5 @@
 import { SuiClient } from "@mysten/sui/client";
-import { Extensions } from "../../src/lib/extensions.js"
+import { Extensions } from "../../src/lib/extensions"
 
 (async () => {
     const client = new SuiClient({ url: "testnet" });
