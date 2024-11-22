@@ -12,19 +12,19 @@ export const contractObjects = {
 }
 // Account.tech Published Packages
 export enum ACCOUNT_EXTENSIONS {
-    V1 = "0x7d84a9d786503d6de795896df00a5729588de1723c433fd727edd5842d413624",
+    V1 = "0xc796940575f9cc85c2b7773907767be737bcc08e8df8d25f7b4a1e23cd83f86d",
 }
 export enum ACCOUNT_PROTOCOL {
-    V1 = "0x0216b1790ffa86e5147b8ace8b2bdc0ba04fe5970d42eddcf33f8f3512134adc",
+    V1 = "0xf5e80b75b4da9656c3e5bf4de7cd5904f6892050c707d84f2f17fcb55f429ecc",
 }
 export enum ACCOUNT_CONFIG {
-    V1 = "0x62f210209975f48d52705d4f5b9383d1715ac4a72f2790f19c706c7aceb5ec5f",
+    V1 = "0x8f56ea68e62a1dae01474fa14ac5f1b7d18e329bb7a1c9ae436ed4001b10cc83",
 }
 export enum ACCOUNT_ACTIONS {
-    V1 = "0x44d7e0d34256670a0c41927282b8a738137a9a52d109db113cad5ab44e889676",
+    V1 = "0xf9ebf7a79462158e222d23e68325817fbbc37104b10c4651e7a9b6966619e3a6",
 }
 // Shared objects
-export const EXTENSIONS = "0xe9dd2a36bc1295fe406c6c44d90cf924d1cf8d0616a4f43db30ad2f1a2f37186";
-export const USER_REGISTRY = "0xe6dd0803d1ba99adb9bc02f4c38a3b9021178b9f7e2aae9e61a622fd979aa623";
+export const EXTENSIONS = "0xea0710456b2a2422474fe4aaa4a1c4025ac9372441fdb7917edf3637fc6fe8ab";
+export const USER_REGISTRY = "0x40c1b76fface320427b2022fb25ecfdcaa4b229c677f36481e6cb0575af9a8c8";
 // Types
 export const MULTISIG_GENERICS: [string, string] = [`${ACCOUNT_CONFIG.V1}::multisig::Multisig`, `${ACCOUNT_CONFIG.V1}::multisig::Approvals`];

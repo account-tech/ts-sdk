@@ -8,5 +8,5 @@ import { MultisigClient } from "../../src/multisig-client";
         keypair.toSuiAddress(),
         "0x8c4e23dd9d0b90dcd122807ab4c1c59af6221f88a7ab1f0a9f7e68a67d02956a"
     )
-    console.log(ms);
+    console.log(ms.multisig.proposals);
 })();

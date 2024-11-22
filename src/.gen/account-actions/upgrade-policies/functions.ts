@@ -3,39 +3,29 @@ import {String} from "../../_dependencies/source/0x1/string/structs";
 import {GenericArg, generic, obj, pure} from "../../_framework/util";
 import {Transaction, TransactionArgument, TransactionObjectInput} from "@mysten/sui/transactions";
 
-export interface AddRuleArgs { lock: TransactionObjectInput; key: GenericArg; rule: GenericArg }
+export function name( tx: Transaction, rules: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::upgrade_policies::name`, arguments: [ obj(tx, rules) ], }) }
 
-export function addRule( tx: Transaction, typeArgs: [string, string], args: AddRuleArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::upgrade_policies::add_rule`, typeArguments: typeArgs, arguments: [ obj(tx, args.lock), generic(tx, `${typeArgs[0]}`, args.key), generic(tx, `${typeArgs[1]}`, args.rule) ], }) }
+export function capId( tx: Transaction, rules: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::upgrade_policies::cap_id`, arguments: [ obj(tx, rules) ], }) }
 
-export interface GetRuleArgs { lock: TransactionObjectInput; key: GenericArg }
+export interface LockCapArgs { auth: TransactionObjectInput; account: TransactionObjectInput; cap: TransactionObjectInput; name: string | TransactionArgument; delayMs: bigint | TransactionArgument }
 
-export function getRule( tx: Transaction, typeArgs: [string, string], args: GetRuleArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::upgrade_policies::get_rule`, typeArguments: typeArgs, arguments: [ obj(tx, args.lock), generic(tx, `${typeArgs[0]}`, args.key) ], }) }
+export function lockCap( tx: Transaction, typeArgs: [string, string], args: LockCapArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::upgrade_policies::lock_cap`, typeArguments: typeArgs, arguments: [ obj(tx, args.auth), obj(tx, args.account), obj(tx, args.cap), pure(tx, args.name, `${String.$typeName}`), pure(tx, args.delayMs, `u64`) ], }) }
 
-export interface HasRuleArgs { lock: TransactionObjectInput; key: GenericArg }
+export interface BorrowCapArgs { account: TransactionObjectInput; package: string | TransactionArgument }
 
-export function hasRule( tx: Transaction, typeArg: string, args: HasRuleArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::upgrade_policies::has_rule`, typeArguments: [typeArg], arguments: [ obj(tx, args.lock), generic(tx, `${typeArg}`, args.key) ], }) }
+export function borrowCap( tx: Transaction, typeArgs: [string, string], args: BorrowCapArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::upgrade_policies::borrow_cap`, typeArguments: typeArgs, arguments: [ obj(tx, args.account), pure(tx, args.package, `address`) ], }) }
 
-export function upgradeCap( tx: Transaction, lock: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::upgrade_policies::upgrade_cap`, arguments: [ obj(tx, lock) ], }) }
+export interface BorrowRulesArgs { account: TransactionObjectInput; package: string | TransactionArgument }
 
-export interface HasLockArgs { account: TransactionObjectInput; package: string | TransactionArgument }
+export function borrowRules( tx: Transaction, typeArgs: [string, string], args: BorrowRulesArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::upgrade_policies::borrow_rules`, typeArguments: typeArgs, arguments: [ obj(tx, args.account), pure(tx, args.package, `address`) ], }) }
 
-export function hasLock( tx: Transaction, typeArgs: [string, string], args: HasLockArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::upgrade_policies::has_lock`, typeArguments: typeArgs, arguments: [ obj(tx, args.account), pure(tx, args.package, `address`) ], }) }
+export interface CompleteUpgradeArgs { executable: TransactionObjectInput; account: TransactionObjectInput; receipt: TransactionObjectInput; cap: TransactionObjectInput; rules: TransactionObjectInput }
 
-export interface LockCapArgs { auth: TransactionObjectInput; account: TransactionObjectInput; lock: TransactionObjectInput }
+export function completeUpgrade( tx: Transaction, typeArgs: [string, string], args: CompleteUpgradeArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::upgrade_policies::complete_upgrade`, typeArguments: typeArgs, arguments: [ obj(tx, args.executable), obj(tx, args.account), obj(tx, args.receipt), obj(tx, args.cap), obj(tx, args.rules) ], }) }
 
-export function lockCap( tx: Transaction, typeArgs: [string, string], args: LockCapArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::upgrade_policies::lock_cap`, typeArguments: typeArgs, arguments: [ obj(tx, args.auth), obj(tx, args.account), obj(tx, args.lock) ], }) }
+export interface ConfirmUpgradeArgs { executable: TransactionObjectInput; account: TransactionObjectInput; receipt: TransactionObjectInput; cap: TransactionObjectInput; rules: TransactionObjectInput; version: TransactionObjectInput; witness: GenericArg }
 
-export interface BorrowLockArgs { account: TransactionObjectInput; package: string | TransactionArgument }
-
-export function borrowLock( tx: Transaction, typeArgs: [string, string], args: BorrowLockArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::upgrade_policies::borrow_lock`, typeArguments: typeArgs, arguments: [ obj(tx, args.account), pure(tx, args.package, `address`) ], }) }
-
-export interface CompleteUpgradeArgs { executable: TransactionObjectInput; account: TransactionObjectInput; receipt: TransactionObjectInput; lock: TransactionObjectInput }
-
-export function completeUpgrade( tx: Transaction, typeArgs: [string, string], args: CompleteUpgradeArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::upgrade_policies::complete_upgrade`, typeArguments: typeArgs, arguments: [ obj(tx, args.executable), obj(tx, args.account), obj(tx, args.receipt), obj(tx, args.lock) ], }) }
-
-export interface ConfirmUpgradeArgs { executable: TransactionObjectInput; account: TransactionObjectInput; receipt: TransactionObjectInput; lock: TransactionObjectInput; version: TransactionObjectInput; witness: GenericArg }
-
-export function confirmUpgrade( tx: Transaction, typeArgs: [string, string, string], args: ConfirmUpgradeArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::upgrade_policies::confirm_upgrade`, typeArguments: typeArgs, arguments: [ obj(tx, args.executable), obj(tx, args.account), obj(tx, args.receipt), obj(tx, args.lock), obj(tx, args.version), generic(tx, `${typeArgs[2]}`, args.witness) ], }) }
+export function confirmUpgrade( tx: Transaction, typeArgs: [string, string, string], args: ConfirmUpgradeArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::upgrade_policies::confirm_upgrade`, typeArguments: typeArgs, arguments: [ obj(tx, args.executable), obj(tx, args.account), obj(tx, args.receipt), obj(tx, args.cap), obj(tx, args.rules), obj(tx, args.version), generic(tx, `${typeArgs[2]}`, args.witness) ], }) }
 
 export function deleteRestrictAction( tx: Transaction, typeArg: string, expired: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::upgrade_policies::delete_restrict_action`, typeArguments: [typeArg], arguments: [ obj(tx, expired) ], }) }
 
@@ -57,15 +47,9 @@ export interface ExecuteUpgradeArgs { executable: TransactionObjectInput; accoun
 
 export function executeUpgrade( tx: Transaction, typeArgs: [string, string], args: ExecuteUpgradeArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::upgrade_policies::execute_upgrade`, typeArguments: typeArgs, arguments: [ obj(tx, args.executable), obj(tx, args.account) ], }) }
 
-export function hasTimelock( tx: Transaction, lock: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::upgrade_policies::has_timelock`, arguments: [ obj(tx, lock) ], }) }
+export interface HasCapArgs { account: TransactionObjectInput; package: string | TransactionArgument }
 
-export interface LockCapWithTimelockArgs { auth: TransactionObjectInput; account: TransactionObjectInput; name: string | TransactionArgument; delayMs: bigint | TransactionArgument; upgradeCap: TransactionObjectInput }
-
-export function lockCapWithTimelock( tx: Transaction, typeArgs: [string, string], args: LockCapWithTimelockArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::upgrade_policies::lock_cap_with_timelock`, typeArguments: typeArgs, arguments: [ obj(tx, args.auth), obj(tx, args.account), pure(tx, args.name, `${String.$typeName}`), pure(tx, args.delayMs, `u64`), obj(tx, args.upgradeCap) ], }) }
-
-export interface NewLockArgs { upgradeCap: TransactionObjectInput; name: string | TransactionArgument }
-
-export function newLock( tx: Transaction, args: NewLockArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::upgrade_policies::new_lock`, arguments: [ obj(tx, args.upgradeCap), pure(tx, args.name, `${String.$typeName}`) ], }) }
+export function hasCap( tx: Transaction, typeArgs: [string, string], args: HasCapArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::upgrade_policies::has_cap`, typeArguments: typeArgs, arguments: [ obj(tx, args.account), pure(tx, args.package, `address`) ], }) }
 
 export interface NewRestrictArgs { proposal: TransactionObjectInput; package: string | TransactionArgument; currentPolicy: number | TransactionArgument; policy: number | TransactionArgument; witness: GenericArg }
 
@@ -83,4 +67,4 @@ export interface ProposeUpgradeArgs { auth: TransactionObjectInput; account: Tra
 
 export function proposeUpgrade( tx: Transaction, typeArgs: [string, string], args: ProposeUpgradeArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::upgrade_policies::propose_upgrade`, typeArguments: typeArgs, arguments: [ obj(tx, args.auth), obj(tx, args.account), generic(tx, `${typeArgs[1]}`, args.outcome), pure(tx, args.key, `${String.$typeName}`), pure(tx, args.description, `${String.$typeName}`), pure(tx, args.expirationTime, `u64`), pure(tx, args.package, `address`), pure(tx, args.digest, `vector<u8>`), obj(tx, args.clock) ], }) }
 
-export function timeDelay( tx: Transaction, lock: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::upgrade_policies::time_delay`, arguments: [ obj(tx, lock) ], }) }
+export function timeDelay( tx: Transaction, rules: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::upgrade_policies::time_delay`, arguments: [ obj(tx, rules) ], }) }

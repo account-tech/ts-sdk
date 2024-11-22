@@ -143,47 +143,47 @@ export class TransferProposal implements StructClass { __StructClass = true as c
 
  }
 
-/* ============================== Deposit =============================== */
+/* ============================== DepositCommand =============================== */
 
-export function isDeposit(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::treasury::Deposit`; }
+export function isDepositCommand(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::treasury::DepositCommand`; }
 
-export interface DepositFields { dummyField: ToField<"bool"> }
+export interface DepositCommandFields { dummyField: ToField<"bool"> }
 
-export type DepositReified = Reified< Deposit, DepositFields >;
+export type DepositCommandReified = Reified< DepositCommand, DepositCommandFields >;
 
-export class Deposit implements StructClass { __StructClass = true as const;
+export class DepositCommand implements StructClass { __StructClass = true as const;
 
- static readonly $typeName = `${PKG_V1}::treasury::Deposit`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
+ static readonly $typeName = `${PKG_V1}::treasury::DepositCommand`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
 
- readonly $typeName = Deposit.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::treasury::Deposit`; readonly $typeArgs: []; readonly $isPhantom = Deposit.$isPhantom;
+ readonly $typeName = DepositCommand.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::treasury::DepositCommand`; readonly $typeArgs: []; readonly $isPhantom = DepositCommand.$isPhantom;
 
  readonly dummyField: ToField<"bool">
 
- private constructor(typeArgs: [], fields: DepositFields, ) { this.$fullTypeName = composeSuiType( Deposit.$typeName, ...typeArgs ) as `${typeof PKG_V1}::treasury::Deposit`; this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [], fields: DepositCommandFields, ) { this.$fullTypeName = composeSuiType( DepositCommand.$typeName, ...typeArgs ) as `${typeof PKG_V1}::treasury::DepositCommand`; this.$typeArgs = typeArgs;
 
  this.dummyField = fields.dummyField; }
 
- static reified( ): DepositReified { return { typeName: Deposit.$typeName, fullTypeName: composeSuiType( Deposit.$typeName, ...[] ) as `${typeof PKG_V1}::treasury::Deposit`, typeArgs: [ ] as [], isPhantom: Deposit.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => Deposit.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => Deposit.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => Deposit.fromBcs( data, ), bcs: Deposit.bcs, fromJSONField: (field: any) => Deposit.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => Deposit.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => Deposit.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => Deposit.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => Deposit.fetch( client, id, ), new: ( fields: DepositFields, ) => { return new Deposit( [], fields ) }, kind: "StructClassReified", } }
+ static reified( ): DepositCommandReified { return { typeName: DepositCommand.$typeName, fullTypeName: composeSuiType( DepositCommand.$typeName, ...[] ) as `${typeof PKG_V1}::treasury::DepositCommand`, typeArgs: [ ] as [], isPhantom: DepositCommand.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => DepositCommand.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => DepositCommand.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => DepositCommand.fromBcs( data, ), bcs: DepositCommand.bcs, fromJSONField: (field: any) => DepositCommand.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => DepositCommand.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => DepositCommand.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => DepositCommand.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => DepositCommand.fetch( client, id, ), new: ( fields: DepositCommandFields, ) => { return new DepositCommand( [], fields ) }, kind: "StructClassReified", } }
 
- static get r() { return Deposit.reified() }
+ static get r() { return DepositCommand.reified() }
 
- static phantom( ): PhantomReified<ToTypeStr<Deposit>> { return phantom(Deposit.reified( )); } static get p() { return Deposit.phantom() }
+ static phantom( ): PhantomReified<ToTypeStr<DepositCommand>> { return phantom(DepositCommand.reified( )); } static get p() { return DepositCommand.phantom() }
 
- static get bcs() { return bcs.struct("Deposit", {
+ static get bcs() { return bcs.struct("DepositCommand", {
 
  dummy_field: bcs.bool()
 
 }) };
 
- static fromFields( fields: Record<string, any> ): Deposit { return Deposit.reified( ).new( { dummyField: decodeFromFields("bool", fields.dummy_field) } ) }
+ static fromFields( fields: Record<string, any> ): DepositCommand { return DepositCommand.reified( ).new( { dummyField: decodeFromFields("bool", fields.dummy_field) } ) }
 
- static fromFieldsWithTypes( item: FieldsWithTypes ): Deposit { if (!isDeposit(item.type)) { throw new Error("not a Deposit type");
+ static fromFieldsWithTypes( item: FieldsWithTypes ): DepositCommand { if (!isDepositCommand(item.type)) { throw new Error("not a DepositCommand type");
 
  }
 
- return Deposit.reified( ).new( { dummyField: decodeFromFieldsWithTypes("bool", item.fields.dummy_field) } ) }
+ return DepositCommand.reified( ).new( { dummyField: decodeFromFieldsWithTypes("bool", item.fields.dummy_field) } ) }
 
- static fromBcs( data: Uint8Array ): Deposit { return Deposit.fromFields( Deposit.bcs.parse(data) ) }
+ static fromBcs( data: Uint8Array ): DepositCommand { return DepositCommand.fromFields( DepositCommand.bcs.parse(data) ) }
 
  toJSONField() { return {
 
@@ -193,21 +193,21 @@ export class Deposit implements StructClass { __StructClass = true as const;
 
  toJSON() { return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() } }
 
- static fromJSONField( field: any ): Deposit { return Deposit.reified( ).new( { dummyField: decodeFromJSONField("bool", field.dummyField) } ) }
+ static fromJSONField( field: any ): DepositCommand { return DepositCommand.reified( ).new( { dummyField: decodeFromJSONField("bool", field.dummyField) } ) }
 
- static fromJSON( json: Record<string, any> ): Deposit { if (json.$typeName !== Deposit.$typeName) { throw new Error("not a WithTwoGenerics json object") };
+ static fromJSON( json: Record<string, any> ): DepositCommand { if (json.$typeName !== DepositCommand.$typeName) { throw new Error("not a WithTwoGenerics json object") };
 
- return Deposit.fromJSONField( json, ) }
+ return DepositCommand.fromJSONField( json, ) }
 
- static fromSuiParsedData( content: SuiParsedData ): Deposit { if (content.dataType !== "moveObject") { throw new Error("not an object"); } if (!isDeposit(content.type)) { throw new Error(`object at ${(content.fields as any).id} is not a Deposit object`); } return Deposit.fromFieldsWithTypes( content ); }
+ static fromSuiParsedData( content: SuiParsedData ): DepositCommand { if (content.dataType !== "moveObject") { throw new Error("not an object"); } if (!isDepositCommand(content.type)) { throw new Error(`object at ${(content.fields as any).id} is not a DepositCommand object`); } return DepositCommand.fromFieldsWithTypes( content ); }
 
- static fromSuiObjectData( data: SuiObjectData ): Deposit { if (data.bcs) { if (data.bcs.dataType !== "moveObject" || !isDeposit(data.bcs.type)) { throw new Error(`object at is not a Deposit object`); }
+ static fromSuiObjectData( data: SuiObjectData ): DepositCommand { if (data.bcs) { if (data.bcs.dataType !== "moveObject" || !isDepositCommand(data.bcs.type)) { throw new Error(`object at is not a DepositCommand object`); }
 
- return Deposit.fromBcs( fromB64(data.bcs.bcsBytes) ); } if (data.content) { return Deposit.fromSuiParsedData( data.content ) } throw new Error( "Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request." ); }
+ return DepositCommand.fromBcs( fromB64(data.bcs.bcsBytes) ); } if (data.content) { return DepositCommand.fromSuiParsedData( data.content ) } throw new Error( "Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request." ); }
 
- static async fetch( client: SuiClient, id: string ): Promise<Deposit> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching Deposit object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isDeposit(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a Deposit object`); }
+ static async fetch( client: SuiClient, id: string ): Promise<DepositCommand> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching DepositCommand object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isDepositCommand(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a DepositCommand object`); }
 
- return Deposit.fromSuiObjectData( res.data ); }
+ return DepositCommand.fromSuiObjectData( res.data ); }
 
  }
 
@@ -346,6 +346,74 @@ export class Treasury implements StructClass { __StructClass = true as const;
  static async fetch( client: SuiClient, id: string ): Promise<Treasury> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching Treasury object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isTreasury(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a Treasury object`); }
 
  return Treasury.fromSuiObjectData( res.data ); }
+
+ }
+
+/* ============================== TreasuryCommand =============================== */
+
+export function isTreasuryCommand(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::treasury::TreasuryCommand`; }
+
+export interface TreasuryCommandFields { dummyField: ToField<"bool"> }
+
+export type TreasuryCommandReified = Reified< TreasuryCommand, TreasuryCommandFields >;
+
+export class TreasuryCommand implements StructClass { __StructClass = true as const;
+
+ static readonly $typeName = `${PKG_V1}::treasury::TreasuryCommand`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
+
+ readonly $typeName = TreasuryCommand.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::treasury::TreasuryCommand`; readonly $typeArgs: []; readonly $isPhantom = TreasuryCommand.$isPhantom;
+
+ readonly dummyField: ToField<"bool">
+
+ private constructor(typeArgs: [], fields: TreasuryCommandFields, ) { this.$fullTypeName = composeSuiType( TreasuryCommand.$typeName, ...typeArgs ) as `${typeof PKG_V1}::treasury::TreasuryCommand`; this.$typeArgs = typeArgs;
+
+ this.dummyField = fields.dummyField; }
+
+ static reified( ): TreasuryCommandReified { return { typeName: TreasuryCommand.$typeName, fullTypeName: composeSuiType( TreasuryCommand.$typeName, ...[] ) as `${typeof PKG_V1}::treasury::TreasuryCommand`, typeArgs: [ ] as [], isPhantom: TreasuryCommand.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => TreasuryCommand.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => TreasuryCommand.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => TreasuryCommand.fromBcs( data, ), bcs: TreasuryCommand.bcs, fromJSONField: (field: any) => TreasuryCommand.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => TreasuryCommand.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => TreasuryCommand.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => TreasuryCommand.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => TreasuryCommand.fetch( client, id, ), new: ( fields: TreasuryCommandFields, ) => { return new TreasuryCommand( [], fields ) }, kind: "StructClassReified", } }
+
+ static get r() { return TreasuryCommand.reified() }
+
+ static phantom( ): PhantomReified<ToTypeStr<TreasuryCommand>> { return phantom(TreasuryCommand.reified( )); } static get p() { return TreasuryCommand.phantom() }
+
+ static get bcs() { return bcs.struct("TreasuryCommand", {
+
+ dummy_field: bcs.bool()
+
+}) };
+
+ static fromFields( fields: Record<string, any> ): TreasuryCommand { return TreasuryCommand.reified( ).new( { dummyField: decodeFromFields("bool", fields.dummy_field) } ) }
+
+ static fromFieldsWithTypes( item: FieldsWithTypes ): TreasuryCommand { if (!isTreasuryCommand(item.type)) { throw new Error("not a TreasuryCommand type");
+
+ }
+
+ return TreasuryCommand.reified( ).new( { dummyField: decodeFromFieldsWithTypes("bool", item.fields.dummy_field) } ) }
+
+ static fromBcs( data: Uint8Array ): TreasuryCommand { return TreasuryCommand.fromFields( TreasuryCommand.bcs.parse(data) ) }
+
+ toJSONField() { return {
+
+ dummyField: this.dummyField,
+
+} }
+
+ toJSON() { return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() } }
+
+ static fromJSONField( field: any ): TreasuryCommand { return TreasuryCommand.reified( ).new( { dummyField: decodeFromJSONField("bool", field.dummyField) } ) }
+
+ static fromJSON( json: Record<string, any> ): TreasuryCommand { if (json.$typeName !== TreasuryCommand.$typeName) { throw new Error("not a WithTwoGenerics json object") };
+
+ return TreasuryCommand.fromJSONField( json, ) }
+
+ static fromSuiParsedData( content: SuiParsedData ): TreasuryCommand { if (content.dataType !== "moveObject") { throw new Error("not an object"); } if (!isTreasuryCommand(content.type)) { throw new Error(`object at ${(content.fields as any).id} is not a TreasuryCommand object`); } return TreasuryCommand.fromFieldsWithTypes( content ); }
+
+ static fromSuiObjectData( data: SuiObjectData ): TreasuryCommand { if (data.bcs) { if (data.bcs.dataType !== "moveObject" || !isTreasuryCommand(data.bcs.type)) { throw new Error(`object at is not a TreasuryCommand object`); }
+
+ return TreasuryCommand.fromBcs( fromB64(data.bcs.bcsBytes) ); } if (data.content) { return TreasuryCommand.fromSuiParsedData( data.content ) } throw new Error( "Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request." ); }
+
+ static async fetch( client: SuiClient, id: string ): Promise<TreasuryCommand> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching TreasuryCommand object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isTreasuryCommand(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a TreasuryCommand object`); }
+
+ return TreasuryCommand.fromSuiObjectData( res.data ); }
 
  }
 

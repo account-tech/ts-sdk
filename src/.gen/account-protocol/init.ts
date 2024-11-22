@@ -12,11 +12,11 @@ export function registerClasses(loader: StructClassLoader) { loader.register(iss
 loader.register(proposals.Expired);
 loader.register(proposals.Proposal);
 loader.register(proposals.Proposals);
-loader.register(metadata.Metadata);
 loader.register(deps.Dep);
 loader.register(deps.Deps);
 loader.register(executable.Executable);
 loader.register(auth.Auth);
+loader.register(metadata.Metadata);
 loader.register(account.ACCOUNT);
 loader.register(account.Account);
 loader.register(version.V1);

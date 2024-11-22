@@ -1,5 +1,4 @@
 import {String} from "../../_dependencies/source/0x1/string/structs";
-import {KioskOwnerCap} from "../../_dependencies/source/0x2/kiosk/structs";
 import {ID} from "../../_dependencies/source/0x2/object/structs";
 import {PhantomReified, Reified, StructClass, ToField, ToTypeStr, decodeFromFields, decodeFromFieldsWithTypes, decodeFromJSONField, phantom} from "../../_framework/reified";
 import {FieldsWithTypes, composeSuiType, compressSuiType} from "../../_framework/util";
@@ -8,47 +7,47 @@ import {bcs} from "@mysten/sui/bcs";
 import {SuiClient, SuiObjectData, SuiParsedData} from "@mysten/sui/client";
 import {fromB64, fromHEX, toHEX} from "@mysten/sui/utils";
 
-/* ============================== Delist =============================== */
+/* ============================== DelistCommand =============================== */
 
-export function isDelist(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::kiosk::Delist`; }
+export function isDelistCommand(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::kiosk::DelistCommand`; }
 
-export interface DelistFields { dummyField: ToField<"bool"> }
+export interface DelistCommandFields { dummyField: ToField<"bool"> }
 
-export type DelistReified = Reified< Delist, DelistFields >;
+export type DelistCommandReified = Reified< DelistCommand, DelistCommandFields >;
 
-export class Delist implements StructClass { __StructClass = true as const;
+export class DelistCommand implements StructClass { __StructClass = true as const;
 
- static readonly $typeName = `${PKG_V1}::kiosk::Delist`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
+ static readonly $typeName = `${PKG_V1}::kiosk::DelistCommand`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
 
- readonly $typeName = Delist.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::kiosk::Delist`; readonly $typeArgs: []; readonly $isPhantom = Delist.$isPhantom;
+ readonly $typeName = DelistCommand.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::kiosk::DelistCommand`; readonly $typeArgs: []; readonly $isPhantom = DelistCommand.$isPhantom;
 
  readonly dummyField: ToField<"bool">
 
- private constructor(typeArgs: [], fields: DelistFields, ) { this.$fullTypeName = composeSuiType( Delist.$typeName, ...typeArgs ) as `${typeof PKG_V1}::kiosk::Delist`; this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [], fields: DelistCommandFields, ) { this.$fullTypeName = composeSuiType( DelistCommand.$typeName, ...typeArgs ) as `${typeof PKG_V1}::kiosk::DelistCommand`; this.$typeArgs = typeArgs;
 
  this.dummyField = fields.dummyField; }
 
- static reified( ): DelistReified { return { typeName: Delist.$typeName, fullTypeName: composeSuiType( Delist.$typeName, ...[] ) as `${typeof PKG_V1}::kiosk::Delist`, typeArgs: [ ] as [], isPhantom: Delist.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => Delist.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => Delist.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => Delist.fromBcs( data, ), bcs: Delist.bcs, fromJSONField: (field: any) => Delist.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => Delist.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => Delist.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => Delist.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => Delist.fetch( client, id, ), new: ( fields: DelistFields, ) => { return new Delist( [], fields ) }, kind: "StructClassReified", } }
+ static reified( ): DelistCommandReified { return { typeName: DelistCommand.$typeName, fullTypeName: composeSuiType( DelistCommand.$typeName, ...[] ) as `${typeof PKG_V1}::kiosk::DelistCommand`, typeArgs: [ ] as [], isPhantom: DelistCommand.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => DelistCommand.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => DelistCommand.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => DelistCommand.fromBcs( data, ), bcs: DelistCommand.bcs, fromJSONField: (field: any) => DelistCommand.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => DelistCommand.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => DelistCommand.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => DelistCommand.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => DelistCommand.fetch( client, id, ), new: ( fields: DelistCommandFields, ) => { return new DelistCommand( [], fields ) }, kind: "StructClassReified", } }
 
- static get r() { return Delist.reified() }
+ static get r() { return DelistCommand.reified() }
 
- static phantom( ): PhantomReified<ToTypeStr<Delist>> { return phantom(Delist.reified( )); } static get p() { return Delist.phantom() }
+ static phantom( ): PhantomReified<ToTypeStr<DelistCommand>> { return phantom(DelistCommand.reified( )); } static get p() { return DelistCommand.phantom() }
 
- static get bcs() { return bcs.struct("Delist", {
+ static get bcs() { return bcs.struct("DelistCommand", {
 
  dummy_field: bcs.bool()
 
 }) };
 
- static fromFields( fields: Record<string, any> ): Delist { return Delist.reified( ).new( { dummyField: decodeFromFields("bool", fields.dummy_field) } ) }
+ static fromFields( fields: Record<string, any> ): DelistCommand { return DelistCommand.reified( ).new( { dummyField: decodeFromFields("bool", fields.dummy_field) } ) }
 
- static fromFieldsWithTypes( item: FieldsWithTypes ): Delist { if (!isDelist(item.type)) { throw new Error("not a Delist type");
+ static fromFieldsWithTypes( item: FieldsWithTypes ): DelistCommand { if (!isDelistCommand(item.type)) { throw new Error("not a DelistCommand type");
 
  }
 
- return Delist.reified( ).new( { dummyField: decodeFromFieldsWithTypes("bool", item.fields.dummy_field) } ) }
+ return DelistCommand.reified( ).new( { dummyField: decodeFromFieldsWithTypes("bool", item.fields.dummy_field) } ) }
 
- static fromBcs( data: Uint8Array ): Delist { return Delist.fromFields( Delist.bcs.parse(data) ) }
+ static fromBcs( data: Uint8Array ): DelistCommand { return DelistCommand.fromFields( DelistCommand.bcs.parse(data) ) }
 
  toJSONField() { return {
 
@@ -58,21 +57,89 @@ export class Delist implements StructClass { __StructClass = true as const;
 
  toJSON() { return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() } }
 
- static fromJSONField( field: any ): Delist { return Delist.reified( ).new( { dummyField: decodeFromJSONField("bool", field.dummyField) } ) }
+ static fromJSONField( field: any ): DelistCommand { return DelistCommand.reified( ).new( { dummyField: decodeFromJSONField("bool", field.dummyField) } ) }
 
- static fromJSON( json: Record<string, any> ): Delist { if (json.$typeName !== Delist.$typeName) { throw new Error("not a WithTwoGenerics json object") };
+ static fromJSON( json: Record<string, any> ): DelistCommand { if (json.$typeName !== DelistCommand.$typeName) { throw new Error("not a WithTwoGenerics json object") };
 
- return Delist.fromJSONField( json, ) }
+ return DelistCommand.fromJSONField( json, ) }
 
- static fromSuiParsedData( content: SuiParsedData ): Delist { if (content.dataType !== "moveObject") { throw new Error("not an object"); } if (!isDelist(content.type)) { throw new Error(`object at ${(content.fields as any).id} is not a Delist object`); } return Delist.fromFieldsWithTypes( content ); }
+ static fromSuiParsedData( content: SuiParsedData ): DelistCommand { if (content.dataType !== "moveObject") { throw new Error("not an object"); } if (!isDelistCommand(content.type)) { throw new Error(`object at ${(content.fields as any).id} is not a DelistCommand object`); } return DelistCommand.fromFieldsWithTypes( content ); }
 
- static fromSuiObjectData( data: SuiObjectData ): Delist { if (data.bcs) { if (data.bcs.dataType !== "moveObject" || !isDelist(data.bcs.type)) { throw new Error(`object at is not a Delist object`); }
+ static fromSuiObjectData( data: SuiObjectData ): DelistCommand { if (data.bcs) { if (data.bcs.dataType !== "moveObject" || !isDelistCommand(data.bcs.type)) { throw new Error(`object at is not a DelistCommand object`); }
 
- return Delist.fromBcs( fromB64(data.bcs.bcsBytes) ); } if (data.content) { return Delist.fromSuiParsedData( data.content ) } throw new Error( "Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request." ); }
+ return DelistCommand.fromBcs( fromB64(data.bcs.bcsBytes) ); } if (data.content) { return DelistCommand.fromSuiParsedData( data.content ) } throw new Error( "Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request." ); }
 
- static async fetch( client: SuiClient, id: string ): Promise<Delist> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching Delist object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isDelist(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a Delist object`); }
+ static async fetch( client: SuiClient, id: string ): Promise<DelistCommand> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching DelistCommand object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isDelistCommand(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a DelistCommand object`); }
 
- return Delist.fromSuiObjectData( res.data ); }
+ return DelistCommand.fromSuiObjectData( res.data ); }
+
+ }
+
+/* ============================== KioskCommand =============================== */
+
+export function isKioskCommand(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::kiosk::KioskCommand`; }
+
+export interface KioskCommandFields { dummyField: ToField<"bool"> }
+
+export type KioskCommandReified = Reified< KioskCommand, KioskCommandFields >;
+
+export class KioskCommand implements StructClass { __StructClass = true as const;
+
+ static readonly $typeName = `${PKG_V1}::kiosk::KioskCommand`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
+
+ readonly $typeName = KioskCommand.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::kiosk::KioskCommand`; readonly $typeArgs: []; readonly $isPhantom = KioskCommand.$isPhantom;
+
+ readonly dummyField: ToField<"bool">
+
+ private constructor(typeArgs: [], fields: KioskCommandFields, ) { this.$fullTypeName = composeSuiType( KioskCommand.$typeName, ...typeArgs ) as `${typeof PKG_V1}::kiosk::KioskCommand`; this.$typeArgs = typeArgs;
+
+ this.dummyField = fields.dummyField; }
+
+ static reified( ): KioskCommandReified { return { typeName: KioskCommand.$typeName, fullTypeName: composeSuiType( KioskCommand.$typeName, ...[] ) as `${typeof PKG_V1}::kiosk::KioskCommand`, typeArgs: [ ] as [], isPhantom: KioskCommand.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => KioskCommand.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => KioskCommand.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => KioskCommand.fromBcs( data, ), bcs: KioskCommand.bcs, fromJSONField: (field: any) => KioskCommand.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => KioskCommand.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => KioskCommand.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => KioskCommand.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => KioskCommand.fetch( client, id, ), new: ( fields: KioskCommandFields, ) => { return new KioskCommand( [], fields ) }, kind: "StructClassReified", } }
+
+ static get r() { return KioskCommand.reified() }
+
+ static phantom( ): PhantomReified<ToTypeStr<KioskCommand>> { return phantom(KioskCommand.reified( )); } static get p() { return KioskCommand.phantom() }
+
+ static get bcs() { return bcs.struct("KioskCommand", {
+
+ dummy_field: bcs.bool()
+
+}) };
+
+ static fromFields( fields: Record<string, any> ): KioskCommand { return KioskCommand.reified( ).new( { dummyField: decodeFromFields("bool", fields.dummy_field) } ) }
+
+ static fromFieldsWithTypes( item: FieldsWithTypes ): KioskCommand { if (!isKioskCommand(item.type)) { throw new Error("not a KioskCommand type");
+
+ }
+
+ return KioskCommand.reified( ).new( { dummyField: decodeFromFieldsWithTypes("bool", item.fields.dummy_field) } ) }
+
+ static fromBcs( data: Uint8Array ): KioskCommand { return KioskCommand.fromFields( KioskCommand.bcs.parse(data) ) }
+
+ toJSONField() { return {
+
+ dummyField: this.dummyField,
+
+} }
+
+ toJSON() { return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() } }
+
+ static fromJSONField( field: any ): KioskCommand { return KioskCommand.reified( ).new( { dummyField: decodeFromJSONField("bool", field.dummyField) } ) }
+
+ static fromJSON( json: Record<string, any> ): KioskCommand { if (json.$typeName !== KioskCommand.$typeName) { throw new Error("not a WithTwoGenerics json object") };
+
+ return KioskCommand.fromJSONField( json, ) }
+
+ static fromSuiParsedData( content: SuiParsedData ): KioskCommand { if (content.dataType !== "moveObject") { throw new Error("not an object"); } if (!isKioskCommand(content.type)) { throw new Error(`object at ${(content.fields as any).id} is not a KioskCommand object`); } return KioskCommand.fromFieldsWithTypes( content ); }
+
+ static fromSuiObjectData( data: SuiObjectData ): KioskCommand { if (data.bcs) { if (data.bcs.dataType !== "moveObject" || !isKioskCommand(data.bcs.type)) { throw new Error(`object at is not a KioskCommand object`); }
+
+ return KioskCommand.fromBcs( fromB64(data.bcs.bcsBytes) ); } if (data.content) { return KioskCommand.fromSuiParsedData( data.content ) } throw new Error( "Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request." ); }
+
+ static async fetch( client: SuiClient, id: string ): Promise<KioskCommand> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching KioskCommand object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isKioskCommand(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a KioskCommand object`); }
+
+ return KioskCommand.fromSuiObjectData( res.data ); }
 
  }
 
@@ -141,74 +208,6 @@ export class KioskOwnerKey implements StructClass { __StructClass = true as cons
  static async fetch( client: SuiClient, id: string ): Promise<KioskOwnerKey> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching KioskOwnerKey object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isKioskOwnerKey(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a KioskOwnerKey object`); }
 
  return KioskOwnerKey.fromSuiObjectData( res.data ); }
-
- }
-
-/* ============================== KioskOwnerLock =============================== */
-
-export function isKioskOwnerLock(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::kiosk::KioskOwnerLock`; }
-
-export interface KioskOwnerLockFields { kioskOwnerCap: ToField<KioskOwnerCap> }
-
-export type KioskOwnerLockReified = Reified< KioskOwnerLock, KioskOwnerLockFields >;
-
-export class KioskOwnerLock implements StructClass { __StructClass = true as const;
-
- static readonly $typeName = `${PKG_V1}::kiosk::KioskOwnerLock`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
-
- readonly $typeName = KioskOwnerLock.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::kiosk::KioskOwnerLock`; readonly $typeArgs: []; readonly $isPhantom = KioskOwnerLock.$isPhantom;
-
- readonly kioskOwnerCap: ToField<KioskOwnerCap>
-
- private constructor(typeArgs: [], fields: KioskOwnerLockFields, ) { this.$fullTypeName = composeSuiType( KioskOwnerLock.$typeName, ...typeArgs ) as `${typeof PKG_V1}::kiosk::KioskOwnerLock`; this.$typeArgs = typeArgs;
-
- this.kioskOwnerCap = fields.kioskOwnerCap; }
-
- static reified( ): KioskOwnerLockReified { return { typeName: KioskOwnerLock.$typeName, fullTypeName: composeSuiType( KioskOwnerLock.$typeName, ...[] ) as `${typeof PKG_V1}::kiosk::KioskOwnerLock`, typeArgs: [ ] as [], isPhantom: KioskOwnerLock.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => KioskOwnerLock.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => KioskOwnerLock.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => KioskOwnerLock.fromBcs( data, ), bcs: KioskOwnerLock.bcs, fromJSONField: (field: any) => KioskOwnerLock.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => KioskOwnerLock.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => KioskOwnerLock.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => KioskOwnerLock.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => KioskOwnerLock.fetch( client, id, ), new: ( fields: KioskOwnerLockFields, ) => { return new KioskOwnerLock( [], fields ) }, kind: "StructClassReified", } }
-
- static get r() { return KioskOwnerLock.reified() }
-
- static phantom( ): PhantomReified<ToTypeStr<KioskOwnerLock>> { return phantom(KioskOwnerLock.reified( )); } static get p() { return KioskOwnerLock.phantom() }
-
- static get bcs() { return bcs.struct("KioskOwnerLock", {
-
- kiosk_owner_cap: KioskOwnerCap.bcs
-
-}) };
-
- static fromFields( fields: Record<string, any> ): KioskOwnerLock { return KioskOwnerLock.reified( ).new( { kioskOwnerCap: decodeFromFields(KioskOwnerCap.reified(), fields.kiosk_owner_cap) } ) }
-
- static fromFieldsWithTypes( item: FieldsWithTypes ): KioskOwnerLock { if (!isKioskOwnerLock(item.type)) { throw new Error("not a KioskOwnerLock type");
-
- }
-
- return KioskOwnerLock.reified( ).new( { kioskOwnerCap: decodeFromFieldsWithTypes(KioskOwnerCap.reified(), item.fields.kiosk_owner_cap) } ) }
-
- static fromBcs( data: Uint8Array ): KioskOwnerLock { return KioskOwnerLock.fromFields( KioskOwnerLock.bcs.parse(data) ) }
-
- toJSONField() { return {
-
- kioskOwnerCap: this.kioskOwnerCap.toJSONField(),
-
-} }
-
- toJSON() { return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() } }
-
- static fromJSONField( field: any ): KioskOwnerLock { return KioskOwnerLock.reified( ).new( { kioskOwnerCap: decodeFromJSONField(KioskOwnerCap.reified(), field.kioskOwnerCap) } ) }
-
- static fromJSON( json: Record<string, any> ): KioskOwnerLock { if (json.$typeName !== KioskOwnerLock.$typeName) { throw new Error("not a WithTwoGenerics json object") };
-
- return KioskOwnerLock.fromJSONField( json, ) }
-
- static fromSuiParsedData( content: SuiParsedData ): KioskOwnerLock { if (content.dataType !== "moveObject") { throw new Error("not an object"); } if (!isKioskOwnerLock(content.type)) { throw new Error(`object at ${(content.fields as any).id} is not a KioskOwnerLock object`); } return KioskOwnerLock.fromFieldsWithTypes( content ); }
-
- static fromSuiObjectData( data: SuiObjectData ): KioskOwnerLock { if (data.bcs) { if (data.bcs.dataType !== "moveObject" || !isKioskOwnerLock(data.bcs.type)) { throw new Error(`object at is not a KioskOwnerLock object`); }
-
- return KioskOwnerLock.fromBcs( fromB64(data.bcs.bcsBytes) ); } if (data.content) { return KioskOwnerLock.fromSuiParsedData( data.content ) } throw new Error( "Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request." ); }
-
- static async fetch( client: SuiClient, id: string ): Promise<KioskOwnerLock> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching KioskOwnerLock object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isKioskOwnerLock(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a KioskOwnerLock object`); }
-
- return KioskOwnerLock.fromSuiObjectData( res.data ); }
 
  }
 
@@ -348,47 +347,47 @@ export class ListProposal implements StructClass { __StructClass = true as const
 
  }
 
-/* ============================== Place =============================== */
+/* ============================== PlaceCommand =============================== */
 
-export function isPlace(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::kiosk::Place`; }
+export function isPlaceCommand(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::kiosk::PlaceCommand`; }
 
-export interface PlaceFields { dummyField: ToField<"bool"> }
+export interface PlaceCommandFields { dummyField: ToField<"bool"> }
 
-export type PlaceReified = Reified< Place, PlaceFields >;
+export type PlaceCommandReified = Reified< PlaceCommand, PlaceCommandFields >;
 
-export class Place implements StructClass { __StructClass = true as const;
+export class PlaceCommand implements StructClass { __StructClass = true as const;
 
- static readonly $typeName = `${PKG_V1}::kiosk::Place`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
+ static readonly $typeName = `${PKG_V1}::kiosk::PlaceCommand`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
 
- readonly $typeName = Place.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::kiosk::Place`; readonly $typeArgs: []; readonly $isPhantom = Place.$isPhantom;
+ readonly $typeName = PlaceCommand.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::kiosk::PlaceCommand`; readonly $typeArgs: []; readonly $isPhantom = PlaceCommand.$isPhantom;
 
  readonly dummyField: ToField<"bool">
 
- private constructor(typeArgs: [], fields: PlaceFields, ) { this.$fullTypeName = composeSuiType( Place.$typeName, ...typeArgs ) as `${typeof PKG_V1}::kiosk::Place`; this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [], fields: PlaceCommandFields, ) { this.$fullTypeName = composeSuiType( PlaceCommand.$typeName, ...typeArgs ) as `${typeof PKG_V1}::kiosk::PlaceCommand`; this.$typeArgs = typeArgs;
 
  this.dummyField = fields.dummyField; }
 
- static reified( ): PlaceReified { return { typeName: Place.$typeName, fullTypeName: composeSuiType( Place.$typeName, ...[] ) as `${typeof PKG_V1}::kiosk::Place`, typeArgs: [ ] as [], isPhantom: Place.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => Place.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => Place.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => Place.fromBcs( data, ), bcs: Place.bcs, fromJSONField: (field: any) => Place.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => Place.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => Place.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => Place.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => Place.fetch( client, id, ), new: ( fields: PlaceFields, ) => { return new Place( [], fields ) }, kind: "StructClassReified", } }
+ static reified( ): PlaceCommandReified { return { typeName: PlaceCommand.$typeName, fullTypeName: composeSuiType( PlaceCommand.$typeName, ...[] ) as `${typeof PKG_V1}::kiosk::PlaceCommand`, typeArgs: [ ] as [], isPhantom: PlaceCommand.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => PlaceCommand.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => PlaceCommand.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => PlaceCommand.fromBcs( data, ), bcs: PlaceCommand.bcs, fromJSONField: (field: any) => PlaceCommand.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => PlaceCommand.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => PlaceCommand.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => PlaceCommand.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => PlaceCommand.fetch( client, id, ), new: ( fields: PlaceCommandFields, ) => { return new PlaceCommand( [], fields ) }, kind: "StructClassReified", } }
 
- static get r() { return Place.reified() }
+ static get r() { return PlaceCommand.reified() }
 
- static phantom( ): PhantomReified<ToTypeStr<Place>> { return phantom(Place.reified( )); } static get p() { return Place.phantom() }
+ static phantom( ): PhantomReified<ToTypeStr<PlaceCommand>> { return phantom(PlaceCommand.reified( )); } static get p() { return PlaceCommand.phantom() }
 
- static get bcs() { return bcs.struct("Place", {
+ static get bcs() { return bcs.struct("PlaceCommand", {
 
  dummy_field: bcs.bool()
 
 }) };
 
- static fromFields( fields: Record<string, any> ): Place { return Place.reified( ).new( { dummyField: decodeFromFields("bool", fields.dummy_field) } ) }
+ static fromFields( fields: Record<string, any> ): PlaceCommand { return PlaceCommand.reified( ).new( { dummyField: decodeFromFields("bool", fields.dummy_field) } ) }
 
- static fromFieldsWithTypes( item: FieldsWithTypes ): Place { if (!isPlace(item.type)) { throw new Error("not a Place type");
+ static fromFieldsWithTypes( item: FieldsWithTypes ): PlaceCommand { if (!isPlaceCommand(item.type)) { throw new Error("not a PlaceCommand type");
 
  }
 
- return Place.reified( ).new( { dummyField: decodeFromFieldsWithTypes("bool", item.fields.dummy_field) } ) }
+ return PlaceCommand.reified( ).new( { dummyField: decodeFromFieldsWithTypes("bool", item.fields.dummy_field) } ) }
 
- static fromBcs( data: Uint8Array ): Place { return Place.fromFields( Place.bcs.parse(data) ) }
+ static fromBcs( data: Uint8Array ): PlaceCommand { return PlaceCommand.fromFields( PlaceCommand.bcs.parse(data) ) }
 
  toJSONField() { return {
 
@@ -398,21 +397,21 @@ export class Place implements StructClass { __StructClass = true as const;
 
  toJSON() { return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() } }
 
- static fromJSONField( field: any ): Place { return Place.reified( ).new( { dummyField: decodeFromJSONField("bool", field.dummyField) } ) }
+ static fromJSONField( field: any ): PlaceCommand { return PlaceCommand.reified( ).new( { dummyField: decodeFromJSONField("bool", field.dummyField) } ) }
 
- static fromJSON( json: Record<string, any> ): Place { if (json.$typeName !== Place.$typeName) { throw new Error("not a WithTwoGenerics json object") };
+ static fromJSON( json: Record<string, any> ): PlaceCommand { if (json.$typeName !== PlaceCommand.$typeName) { throw new Error("not a WithTwoGenerics json object") };
 
- return Place.fromJSONField( json, ) }
+ return PlaceCommand.fromJSONField( json, ) }
 
- static fromSuiParsedData( content: SuiParsedData ): Place { if (content.dataType !== "moveObject") { throw new Error("not an object"); } if (!isPlace(content.type)) { throw new Error(`object at ${(content.fields as any).id} is not a Place object`); } return Place.fromFieldsWithTypes( content ); }
+ static fromSuiParsedData( content: SuiParsedData ): PlaceCommand { if (content.dataType !== "moveObject") { throw new Error("not an object"); } if (!isPlaceCommand(content.type)) { throw new Error(`object at ${(content.fields as any).id} is not a PlaceCommand object`); } return PlaceCommand.fromFieldsWithTypes( content ); }
 
- static fromSuiObjectData( data: SuiObjectData ): Place { if (data.bcs) { if (data.bcs.dataType !== "moveObject" || !isPlace(data.bcs.type)) { throw new Error(`object at is not a Place object`); }
+ static fromSuiObjectData( data: SuiObjectData ): PlaceCommand { if (data.bcs) { if (data.bcs.dataType !== "moveObject" || !isPlaceCommand(data.bcs.type)) { throw new Error(`object at is not a PlaceCommand object`); }
 
- return Place.fromBcs( fromB64(data.bcs.bcsBytes) ); } if (data.content) { return Place.fromSuiParsedData( data.content ) } throw new Error( "Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request." ); }
+ return PlaceCommand.fromBcs( fromB64(data.bcs.bcsBytes) ); } if (data.content) { return PlaceCommand.fromSuiParsedData( data.content ) } throw new Error( "Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request." ); }
 
- static async fetch( client: SuiClient, id: string ): Promise<Place> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching Place object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isPlace(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a Place object`); }
+ static async fetch( client: SuiClient, id: string ): Promise<PlaceCommand> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching PlaceCommand object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isPlaceCommand(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a PlaceCommand object`); }
 
- return Place.fromSuiObjectData( res.data ); }
+ return PlaceCommand.fromSuiObjectData( res.data ); }
 
  }
 

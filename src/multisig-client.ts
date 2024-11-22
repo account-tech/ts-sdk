@@ -6,10 +6,12 @@ import { AccountType, Dep, Kiosk, Member, TransferPolicy } from "./types/account
 import { User } from "./lib/user";
 import { Multisig } from "./lib/account/configs/multisig";
 import { TransactionPureInput } from "./types/helper-types";
-import { ActionsArgs, ProposalArgs, proposalRegistry, ProposalTypes } from "./types/proposal-types";
+import { ActionsArgs, ConfigDepsArgs, ConfigMetadataArgs, ProposalArgs, proposalRegistry, ProposalTypes } from "./types/proposal-types";
 import { Proposal } from "./lib/proposal/proposal";
 import { Extensions } from "./lib/extensions";
 import { Approvals } from "./lib/proposal/outcomes/approvals";
+import { ConfigDepsProposal, ConfigMetadataProposal } from "./lib/proposal/proposals/config";
+import { BurnProposal, MintProposal, UpdateProposal } from "./lib/proposal/proposals/currency";
 
 export class MultisigClient {
 
@@ -119,6 +121,138 @@ export class MultisigClient {
 		proposal?.execute(tx, executable, MULTISIG_GENERICS);
 	}
 
+	// === Proposals ===
+
+	proposeConfigMetadata(
+		tx: Transaction,
+		newName: string = this.multisig.name,
+		otherMetadata: Map<string, string> = new Map(),
+		key: string,
+		description?: string, // default is empty
+		executionTime?: number, // default is now
+		expirationTime?: number, // default is 1 week
+	) {
+		const auth = this.multisig.authenticate(tx, "");
+		const outcome = this.multisig.emptyOutcome(tx);
+
+		ConfigMetadataProposal.prototype.propose(
+			tx,
+			auth,
+			outcome,
+			this.multisig.id,
+			MULTISIG_GENERICS,
+			{ key, description, executionTime, expirationTime },
+			{ name: newName, other: otherMetadata },
+		);
+		
+		return this.multisig.approveProposal(tx, key, this.multisig.id);
+	}
+	
+	proposeConfigDeps(
+		tx: Transaction,
+		deps: Dep[],
+		key: string,
+		description?: string, // default is empty
+		executionTime?: number, // default is now
+		expirationTime?: number, // default is 1 week
+	) {
+		const auth = this.multisig.authenticate(tx, "");
+		const outcome = this.multisig.emptyOutcome(tx);
+		
+		ConfigDepsProposal.prototype.propose(
+			tx,
+			auth,
+			outcome,
+			this.multisig.id,
+			MULTISIG_GENERICS,
+			{ key, description, executionTime, expirationTime },
+			{ deps },
+		);
+		
+		return this.multisig.approveProposal(tx, key, this.multisig.id);
+	}
+
+	proposeMint(
+		tx: Transaction,
+		coinType: string,
+		amount: number,
+		key: string,
+		description?: string, // default is empty
+		executionTime?: number, // default is now
+		expirationTime?: number, // default is 1 week
+	) {
+		const auth = this.multisig.authenticate(tx, "");
+		const outcome = this.multisig.emptyOutcome(tx);
+
+		MintProposal.prototype.propose(
+			tx,
+			auth,
+			outcome,
+			this.multisig.id,
+			MULTISIG_GENERICS,
+			{ key, description, executionTime, expirationTime },
+			{ coinType, amount },
+		);
+
+		return this.multisig.approveProposal(tx, key, this.multisig.id);
+	}
+
+	proposeBurn(
+		tx: Transaction,
+		coinType: string,
+		coinId: string,
+		amount: number,
+		key: string,
+		description?: string, // default is empty
+		executionTime?: number, // default is now
+		expirationTime?: number, // default is 1 week
+	) {
+		const auth = this.multisig.authenticate(tx, "");
+		const outcome = this.multisig.emptyOutcome(tx);
+
+		BurnProposal.prototype.propose(
+			tx,
+			auth,
+			outcome,
+			this.multisig.id,
+			MULTISIG_GENERICS,
+			{ key, description, executionTime, expirationTime },
+			{ coinType, coinId, amount },
+		);
+
+		return this.multisig.approveProposal(tx, key, this.multisig.id);
+	}
+
+	proposeUpdate(
+		tx: Transaction,
+		coinType: string,
+		newName: string | null,
+		newSymbol: string | null,
+		newDescription: string | null,
+		newIcon: string | null,
+		key: string,
+		description?: string, // default is empty
+		executionTime?: number, // default is now
+		expirationTime?: number, // default is 1 week
+	) {
+		const auth = this.multisig.authenticate(tx, "");
+		const outcome = this.multisig.emptyOutcome(tx);
+
+		UpdateProposal.prototype.propose(
+			tx,
+			auth,
+			outcome,
+			this.multisig.id,
+			MULTISIG_GENERICS,
+			{ key, description, executionTime, expirationTime },
+			{ coinType, name: newName, symbol: newSymbol, description: newDescription, icon: newIcon },
+		);
+
+		return this.multisig.approveProposal(tx, key, this.multisig.id);
+	}
+
+	
+	
 	// === Helpers ===
 
 	proposal(key: string): Proposal | undefined {

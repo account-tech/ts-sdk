@@ -16,10 +16,6 @@ export interface HasLockArgs { account: TransactionObjectInput; name: string | T
 
 export function hasLock( tx: Transaction, typeArgs: [string, string], args: HasLockArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::kiosk::has_lock`, typeArguments: typeArgs, arguments: [ obj(tx, args.account), pure(tx, args.name, `${String.$typeName}`) ], }) }
 
-export interface BorrowLockArgs { account: TransactionObjectInput; name: string | TransactionArgument }
-
-export function borrowLock( tx: Transaction, typeArgs: [string, string], args: BorrowLockArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::kiosk::borrow_lock`, typeArguments: typeArgs, arguments: [ obj(tx, args.account), pure(tx, args.name, `${String.$typeName}`) ], }) }
-
 export interface CloseArgs { auth: TransactionObjectInput; account: TransactionObjectInput; name: string | TransactionArgument; kiosk: TransactionObjectInput }
 
 export function close( tx: Transaction, typeArgs: [string, string], args: CloseArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::kiosk::close`, typeArguments: typeArgs, arguments: [ obj(tx, args.auth), obj(tx, args.account), pure(tx, args.name, `${String.$typeName}`), obj(tx, args.kiosk) ], }) }

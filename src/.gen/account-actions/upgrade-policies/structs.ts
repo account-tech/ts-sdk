@@ -1,7 +1,6 @@
 import * as reified from "../../_framework/reified";
 import {String} from "../../_dependencies/source/0x1/string/structs";
-import {UID} from "../../_dependencies/source/0x2/object/structs";
-import {UpgradeCap} from "../../_dependencies/source/0x2/package/structs";
+import {ID} from "../../_dependencies/source/0x2/object/structs";
 import {PhantomReified, Reified, StructClass, ToField, ToTypeStr, decodeFromFields, decodeFromFieldsWithTypes, decodeFromJSONField, fieldToJSON, phantom} from "../../_framework/reified";
 import {FieldsWithTypes, composeSuiType, compressSuiType} from "../../_framework/util";
 import {Vector} from "../../_framework/vector";
@@ -9,6 +8,74 @@ import {PKG_V1} from "../index";
 import {bcs} from "@mysten/sui/bcs";
 import {SuiClient, SuiObjectData, SuiParsedData} from "@mysten/sui/client";
 import {fromB64, fromHEX, toHEX} from "@mysten/sui/utils";
+
+/* ============================== LockCommand =============================== */
+
+export function isLockCommand(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::upgrade_policies::LockCommand`; }
+
+export interface LockCommandFields { dummyField: ToField<"bool"> }
+
+export type LockCommandReified = Reified< LockCommand, LockCommandFields >;
+
+export class LockCommand implements StructClass { __StructClass = true as const;
+
+ static readonly $typeName = `${PKG_V1}::upgrade_policies::LockCommand`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
+
+ readonly $typeName = LockCommand.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::upgrade_policies::LockCommand`; readonly $typeArgs: []; readonly $isPhantom = LockCommand.$isPhantom;
+
+ readonly dummyField: ToField<"bool">
+
+ private constructor(typeArgs: [], fields: LockCommandFields, ) { this.$fullTypeName = composeSuiType( LockCommand.$typeName, ...typeArgs ) as `${typeof PKG_V1}::upgrade_policies::LockCommand`; this.$typeArgs = typeArgs;
+
+ this.dummyField = fields.dummyField; }
+
+ static reified( ): LockCommandReified { return { typeName: LockCommand.$typeName, fullTypeName: composeSuiType( LockCommand.$typeName, ...[] ) as `${typeof PKG_V1}::upgrade_policies::LockCommand`, typeArgs: [ ] as [], isPhantom: LockCommand.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => LockCommand.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => LockCommand.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => LockCommand.fromBcs( data, ), bcs: LockCommand.bcs, fromJSONField: (field: any) => LockCommand.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => LockCommand.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => LockCommand.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => LockCommand.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => LockCommand.fetch( client, id, ), new: ( fields: LockCommandFields, ) => { return new LockCommand( [], fields ) }, kind: "StructClassReified", } }
+
+ static get r() { return LockCommand.reified() }
+
+ static phantom( ): PhantomReified<ToTypeStr<LockCommand>> { return phantom(LockCommand.reified( )); } static get p() { return LockCommand.phantom() }
+
+ static get bcs() { return bcs.struct("LockCommand", {
+
+ dummy_field: bcs.bool()
+
+}) };
+
+ static fromFields( fields: Record<string, any> ): LockCommand { return LockCommand.reified( ).new( { dummyField: decodeFromFields("bool", fields.dummy_field) } ) }
+
+ static fromFieldsWithTypes( item: FieldsWithTypes ): LockCommand { if (!isLockCommand(item.type)) { throw new Error("not a LockCommand type");
+
+ }
+
+ return LockCommand.reified( ).new( { dummyField: decodeFromFieldsWithTypes("bool", item.fields.dummy_field) } ) }
+
+ static fromBcs( data: Uint8Array ): LockCommand { return LockCommand.fromFields( LockCommand.bcs.parse(data) ) }
+
+ toJSONField() { return {
+
+ dummyField: this.dummyField,
+
+} }
+
+ toJSON() { return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() } }
+
+ static fromJSONField( field: any ): LockCommand { return LockCommand.reified( ).new( { dummyField: decodeFromJSONField("bool", field.dummyField) } ) }
+
+ static fromJSON( json: Record<string, any> ): LockCommand { if (json.$typeName !== LockCommand.$typeName) { throw new Error("not a WithTwoGenerics json object") };
+
+ return LockCommand.fromJSONField( json, ) }
+
+ static fromSuiParsedData( content: SuiParsedData ): LockCommand { if (content.dataType !== "moveObject") { throw new Error("not an object"); } if (!isLockCommand(content.type)) { throw new Error(`object at ${(content.fields as any).id} is not a LockCommand object`); } return LockCommand.fromFieldsWithTypes( content ); }
+
+ static fromSuiObjectData( data: SuiObjectData ): LockCommand { if (data.bcs) { if (data.bcs.dataType !== "moveObject" || !isLockCommand(data.bcs.type)) { throw new Error(`object at is not a LockCommand object`); }
+
+ return LockCommand.fromBcs( fromB64(data.bcs.bcsBytes) ); } if (data.content) { return LockCommand.fromSuiParsedData( data.content ) } throw new Error( "Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request." ); }
+
+ static async fetch( client: SuiClient, id: string ): Promise<LockCommand> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching LockCommand object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isLockCommand(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a LockCommand object`); }
+
+ return LockCommand.fromSuiObjectData( res.data ); }
+
+ }
 
 /* ============================== RestrictAction =============================== */
 
@@ -146,142 +213,6 @@ export class RestrictProposal implements StructClass { __StructClass = true as c
 
  }
 
-/* ============================== TimeLock =============================== */
-
-export function isTimeLock(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::upgrade_policies::TimeLock`; }
-
-export interface TimeLockFields { delayMs: ToField<"u64"> }
-
-export type TimeLockReified = Reified< TimeLock, TimeLockFields >;
-
-export class TimeLock implements StructClass { __StructClass = true as const;
-
- static readonly $typeName = `${PKG_V1}::upgrade_policies::TimeLock`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
-
- readonly $typeName = TimeLock.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::upgrade_policies::TimeLock`; readonly $typeArgs: []; readonly $isPhantom = TimeLock.$isPhantom;
-
- readonly delayMs: ToField<"u64">
-
- private constructor(typeArgs: [], fields: TimeLockFields, ) { this.$fullTypeName = composeSuiType( TimeLock.$typeName, ...typeArgs ) as `${typeof PKG_V1}::upgrade_policies::TimeLock`; this.$typeArgs = typeArgs;
-
- this.delayMs = fields.delayMs; }
-
- static reified( ): TimeLockReified { return { typeName: TimeLock.$typeName, fullTypeName: composeSuiType( TimeLock.$typeName, ...[] ) as `${typeof PKG_V1}::upgrade_policies::TimeLock`, typeArgs: [ ] as [], isPhantom: TimeLock.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => TimeLock.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => TimeLock.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => TimeLock.fromBcs( data, ), bcs: TimeLock.bcs, fromJSONField: (field: any) => TimeLock.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => TimeLock.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => TimeLock.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => TimeLock.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => TimeLock.fetch( client, id, ), new: ( fields: TimeLockFields, ) => { return new TimeLock( [], fields ) }, kind: "StructClassReified", } }
-
- static get r() { return TimeLock.reified() }
-
- static phantom( ): PhantomReified<ToTypeStr<TimeLock>> { return phantom(TimeLock.reified( )); } static get p() { return TimeLock.phantom() }
-
- static get bcs() { return bcs.struct("TimeLock", {
-
- delay_ms: bcs.u64()
-
-}) };
-
- static fromFields( fields: Record<string, any> ): TimeLock { return TimeLock.reified( ).new( { delayMs: decodeFromFields("u64", fields.delay_ms) } ) }
-
- static fromFieldsWithTypes( item: FieldsWithTypes ): TimeLock { if (!isTimeLock(item.type)) { throw new Error("not a TimeLock type");
-
- }
-
- return TimeLock.reified( ).new( { delayMs: decodeFromFieldsWithTypes("u64", item.fields.delay_ms) } ) }
-
- static fromBcs( data: Uint8Array ): TimeLock { return TimeLock.fromFields( TimeLock.bcs.parse(data) ) }
-
- toJSONField() { return {
-
- delayMs: this.delayMs.toString(),
-
-} }
-
- toJSON() { return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() } }
-
- static fromJSONField( field: any ): TimeLock { return TimeLock.reified( ).new( { delayMs: decodeFromJSONField("u64", field.delayMs) } ) }
-
- static fromJSON( json: Record<string, any> ): TimeLock { if (json.$typeName !== TimeLock.$typeName) { throw new Error("not a WithTwoGenerics json object") };
-
- return TimeLock.fromJSONField( json, ) }
-
- static fromSuiParsedData( content: SuiParsedData ): TimeLock { if (content.dataType !== "moveObject") { throw new Error("not an object"); } if (!isTimeLock(content.type)) { throw new Error(`object at ${(content.fields as any).id} is not a TimeLock object`); } return TimeLock.fromFieldsWithTypes( content ); }
-
- static fromSuiObjectData( data: SuiObjectData ): TimeLock { if (data.bcs) { if (data.bcs.dataType !== "moveObject" || !isTimeLock(data.bcs.type)) { throw new Error(`object at is not a TimeLock object`); }
-
- return TimeLock.fromBcs( fromB64(data.bcs.bcsBytes) ); } if (data.content) { return TimeLock.fromSuiParsedData( data.content ) } throw new Error( "Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request." ); }
-
- static async fetch( client: SuiClient, id: string ): Promise<TimeLock> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching TimeLock object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isTimeLock(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a TimeLock object`); }
-
- return TimeLock.fromSuiObjectData( res.data ); }
-
- }
-
-/* ============================== TimeLockKey =============================== */
-
-export function isTimeLockKey(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::upgrade_policies::TimeLockKey`; }
-
-export interface TimeLockKeyFields { dummyField: ToField<"bool"> }
-
-export type TimeLockKeyReified = Reified< TimeLockKey, TimeLockKeyFields >;
-
-export class TimeLockKey implements StructClass { __StructClass = true as const;
-
- static readonly $typeName = `${PKG_V1}::upgrade_policies::TimeLockKey`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
-
- readonly $typeName = TimeLockKey.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::upgrade_policies::TimeLockKey`; readonly $typeArgs: []; readonly $isPhantom = TimeLockKey.$isPhantom;
-
- readonly dummyField: ToField<"bool">
-
- private constructor(typeArgs: [], fields: TimeLockKeyFields, ) { this.$fullTypeName = composeSuiType( TimeLockKey.$typeName, ...typeArgs ) as `${typeof PKG_V1}::upgrade_policies::TimeLockKey`; this.$typeArgs = typeArgs;
-
- this.dummyField = fields.dummyField; }
-
- static reified( ): TimeLockKeyReified { return { typeName: TimeLockKey.$typeName, fullTypeName: composeSuiType( TimeLockKey.$typeName, ...[] ) as `${typeof PKG_V1}::upgrade_policies::TimeLockKey`, typeArgs: [ ] as [], isPhantom: TimeLockKey.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => TimeLockKey.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => TimeLockKey.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => TimeLockKey.fromBcs( data, ), bcs: TimeLockKey.bcs, fromJSONField: (field: any) => TimeLockKey.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => TimeLockKey.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => TimeLockKey.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => TimeLockKey.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => TimeLockKey.fetch( client, id, ), new: ( fields: TimeLockKeyFields, ) => { return new TimeLockKey( [], fields ) }, kind: "StructClassReified", } }
-
- static get r() { return TimeLockKey.reified() }
-
- static phantom( ): PhantomReified<ToTypeStr<TimeLockKey>> { return phantom(TimeLockKey.reified( )); } static get p() { return TimeLockKey.phantom() }
-
- static get bcs() { return bcs.struct("TimeLockKey", {
-
- dummy_field: bcs.bool()
-
-}) };
-
- static fromFields( fields: Record<string, any> ): TimeLockKey { return TimeLockKey.reified( ).new( { dummyField: decodeFromFields("bool", fields.dummy_field) } ) }
-
- static fromFieldsWithTypes( item: FieldsWithTypes ): TimeLockKey { if (!isTimeLockKey(item.type)) { throw new Error("not a TimeLockKey type");
-
- }
-
- return TimeLockKey.reified( ).new( { dummyField: decodeFromFieldsWithTypes("bool", item.fields.dummy_field) } ) }
-
- static fromBcs( data: Uint8Array ): TimeLockKey { return TimeLockKey.fromFields( TimeLockKey.bcs.parse(data) ) }
-
- toJSONField() { return {
-
- dummyField: this.dummyField,
-
-} }
-
- toJSON() { return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() } }
-
- static fromJSONField( field: any ): TimeLockKey { return TimeLockKey.reified( ).new( { dummyField: decodeFromJSONField("bool", field.dummyField) } ) }
-
- static fromJSON( json: Record<string, any> ): TimeLockKey { if (json.$typeName !== TimeLockKey.$typeName) { throw new Error("not a WithTwoGenerics json object") };
-
- return TimeLockKey.fromJSONField( json, ) }
-
- static fromSuiParsedData( content: SuiParsedData ): TimeLockKey { if (content.dataType !== "moveObject") { throw new Error("not an object"); } if (!isTimeLockKey(content.type)) { throw new Error(`object at ${(content.fields as any).id} is not a TimeLockKey object`); } return TimeLockKey.fromFieldsWithTypes( content ); }
-
- static fromSuiObjectData( data: SuiObjectData ): TimeLockKey { if (data.bcs) { if (data.bcs.dataType !== "moveObject" || !isTimeLockKey(data.bcs.type)) { throw new Error(`object at is not a TimeLockKey object`); }
-
- return TimeLockKey.fromBcs( fromB64(data.bcs.bcsBytes) ); } if (data.content) { return TimeLockKey.fromSuiParsedData( data.content ) } throw new Error( "Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request." ); }
-
- static async fetch( client: SuiClient, id: string ): Promise<TimeLockKey> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching TimeLockKey object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isTimeLockKey(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a TimeLockKey object`); }
-
- return TimeLockKey.fromSuiObjectData( res.data ); }
-
- }
-
 /* ============================== UpgradeAction =============================== */
 
 export function isUpgradeAction(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::upgrade_policies::UpgradeAction`; }
@@ -350,47 +281,47 @@ export class UpgradeAction implements StructClass { __StructClass = true as cons
 
  }
 
-/* ============================== UpgradeKey =============================== */
+/* ============================== UpgradeCapKey =============================== */
 
-export function isUpgradeKey(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::upgrade_policies::UpgradeKey`; }
+export function isUpgradeCapKey(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::upgrade_policies::UpgradeCapKey`; }
 
-export interface UpgradeKeyFields { package: ToField<"address"> }
+export interface UpgradeCapKeyFields { package: ToField<"address"> }
 
-export type UpgradeKeyReified = Reified< UpgradeKey, UpgradeKeyFields >;
+export type UpgradeCapKeyReified = Reified< UpgradeCapKey, UpgradeCapKeyFields >;
 
-export class UpgradeKey implements StructClass { __StructClass = true as const;
+export class UpgradeCapKey implements StructClass { __StructClass = true as const;
 
- static readonly $typeName = `${PKG_V1}::upgrade_policies::UpgradeKey`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
+ static readonly $typeName = `${PKG_V1}::upgrade_policies::UpgradeCapKey`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
 
- readonly $typeName = UpgradeKey.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::upgrade_policies::UpgradeKey`; readonly $typeArgs: []; readonly $isPhantom = UpgradeKey.$isPhantom;
+ readonly $typeName = UpgradeCapKey.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::upgrade_policies::UpgradeCapKey`; readonly $typeArgs: []; readonly $isPhantom = UpgradeCapKey.$isPhantom;
 
  readonly package: ToField<"address">
 
- private constructor(typeArgs: [], fields: UpgradeKeyFields, ) { this.$fullTypeName = composeSuiType( UpgradeKey.$typeName, ...typeArgs ) as `${typeof PKG_V1}::upgrade_policies::UpgradeKey`; this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [], fields: UpgradeCapKeyFields, ) { this.$fullTypeName = composeSuiType( UpgradeCapKey.$typeName, ...typeArgs ) as `${typeof PKG_V1}::upgrade_policies::UpgradeCapKey`; this.$typeArgs = typeArgs;
 
  this.package = fields.package; }
 
- static reified( ): UpgradeKeyReified { return { typeName: UpgradeKey.$typeName, fullTypeName: composeSuiType( UpgradeKey.$typeName, ...[] ) as `${typeof PKG_V1}::upgrade_policies::UpgradeKey`, typeArgs: [ ] as [], isPhantom: UpgradeKey.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => UpgradeKey.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => UpgradeKey.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => UpgradeKey.fromBcs( data, ), bcs: UpgradeKey.bcs, fromJSONField: (field: any) => UpgradeKey.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => UpgradeKey.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => UpgradeKey.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => UpgradeKey.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => UpgradeKey.fetch( client, id, ), new: ( fields: UpgradeKeyFields, ) => { return new UpgradeKey( [], fields ) }, kind: "StructClassReified", } }
+ static reified( ): UpgradeCapKeyReified { return { typeName: UpgradeCapKey.$typeName, fullTypeName: composeSuiType( UpgradeCapKey.$typeName, ...[] ) as `${typeof PKG_V1}::upgrade_policies::UpgradeCapKey`, typeArgs: [ ] as [], isPhantom: UpgradeCapKey.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => UpgradeCapKey.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => UpgradeCapKey.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => UpgradeCapKey.fromBcs( data, ), bcs: UpgradeCapKey.bcs, fromJSONField: (field: any) => UpgradeCapKey.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => UpgradeCapKey.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => UpgradeCapKey.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => UpgradeCapKey.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => UpgradeCapKey.fetch( client, id, ), new: ( fields: UpgradeCapKeyFields, ) => { return new UpgradeCapKey( [], fields ) }, kind: "StructClassReified", } }
 
- static get r() { return UpgradeKey.reified() }
+ static get r() { return UpgradeCapKey.reified() }
 
- static phantom( ): PhantomReified<ToTypeStr<UpgradeKey>> { return phantom(UpgradeKey.reified( )); } static get p() { return UpgradeKey.phantom() }
+ static phantom( ): PhantomReified<ToTypeStr<UpgradeCapKey>> { return phantom(UpgradeCapKey.reified( )); } static get p() { return UpgradeCapKey.phantom() }
 
- static get bcs() { return bcs.struct("UpgradeKey", {
+ static get bcs() { return bcs.struct("UpgradeCapKey", {
 
  package: bcs.bytes(32).transform({ input: (val: string) => fromHEX(val), output: (val: Uint8Array) => toHEX(val), })
 
 }) };
 
- static fromFields( fields: Record<string, any> ): UpgradeKey { return UpgradeKey.reified( ).new( { package: decodeFromFields("address", fields.package) } ) }
+ static fromFields( fields: Record<string, any> ): UpgradeCapKey { return UpgradeCapKey.reified( ).new( { package: decodeFromFields("address", fields.package) } ) }
 
- static fromFieldsWithTypes( item: FieldsWithTypes ): UpgradeKey { if (!isUpgradeKey(item.type)) { throw new Error("not a UpgradeKey type");
+ static fromFieldsWithTypes( item: FieldsWithTypes ): UpgradeCapKey { if (!isUpgradeCapKey(item.type)) { throw new Error("not a UpgradeCapKey type");
 
  }
 
- return UpgradeKey.reified( ).new( { package: decodeFromFieldsWithTypes("address", item.fields.package) } ) }
+ return UpgradeCapKey.reified( ).new( { package: decodeFromFieldsWithTypes("address", item.fields.package) } ) }
 
- static fromBcs( data: Uint8Array ): UpgradeKey { return UpgradeKey.fromFields( UpgradeKey.bcs.parse(data) ) }
+ static fromBcs( data: Uint8Array ): UpgradeCapKey { return UpgradeCapKey.fromFields( UpgradeCapKey.bcs.parse(data) ) }
 
  toJSONField() { return {
 
@@ -400,89 +331,21 @@ export class UpgradeKey implements StructClass { __StructClass = true as const;
 
  toJSON() { return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() } }
 
- static fromJSONField( field: any ): UpgradeKey { return UpgradeKey.reified( ).new( { package: decodeFromJSONField("address", field.package) } ) }
+ static fromJSONField( field: any ): UpgradeCapKey { return UpgradeCapKey.reified( ).new( { package: decodeFromJSONField("address", field.package) } ) }
 
- static fromJSON( json: Record<string, any> ): UpgradeKey { if (json.$typeName !== UpgradeKey.$typeName) { throw new Error("not a WithTwoGenerics json object") };
+ static fromJSON( json: Record<string, any> ): UpgradeCapKey { if (json.$typeName !== UpgradeCapKey.$typeName) { throw new Error("not a WithTwoGenerics json object") };
 
- return UpgradeKey.fromJSONField( json, ) }
+ return UpgradeCapKey.fromJSONField( json, ) }
 
- static fromSuiParsedData( content: SuiParsedData ): UpgradeKey { if (content.dataType !== "moveObject") { throw new Error("not an object"); } if (!isUpgradeKey(content.type)) { throw new Error(`object at ${(content.fields as any).id} is not a UpgradeKey object`); } return UpgradeKey.fromFieldsWithTypes( content ); }
+ static fromSuiParsedData( content: SuiParsedData ): UpgradeCapKey { if (content.dataType !== "moveObject") { throw new Error("not an object"); } if (!isUpgradeCapKey(content.type)) { throw new Error(`object at ${(content.fields as any).id} is not a UpgradeCapKey object`); } return UpgradeCapKey.fromFieldsWithTypes( content ); }
 
- static fromSuiObjectData( data: SuiObjectData ): UpgradeKey { if (data.bcs) { if (data.bcs.dataType !== "moveObject" || !isUpgradeKey(data.bcs.type)) { throw new Error(`object at is not a UpgradeKey object`); }
+ static fromSuiObjectData( data: SuiObjectData ): UpgradeCapKey { if (data.bcs) { if (data.bcs.dataType !== "moveObject" || !isUpgradeCapKey(data.bcs.type)) { throw new Error(`object at is not a UpgradeCapKey object`); }
 
- return UpgradeKey.fromBcs( fromB64(data.bcs.bcsBytes) ); } if (data.content) { return UpgradeKey.fromSuiParsedData( data.content ) } throw new Error( "Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request." ); }
+ return UpgradeCapKey.fromBcs( fromB64(data.bcs.bcsBytes) ); } if (data.content) { return UpgradeCapKey.fromSuiParsedData( data.content ) } throw new Error( "Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request." ); }
 
- static async fetch( client: SuiClient, id: string ): Promise<UpgradeKey> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching UpgradeKey object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isUpgradeKey(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a UpgradeKey object`); }
+ static async fetch( client: SuiClient, id: string ): Promise<UpgradeCapKey> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching UpgradeCapKey object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isUpgradeCapKey(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a UpgradeCapKey object`); }
 
- return UpgradeKey.fromSuiObjectData( res.data ); }
-
- }
-
-/* ============================== UpgradeLock =============================== */
-
-export function isUpgradeLock(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::upgrade_policies::UpgradeLock`; }
-
-export interface UpgradeLockFields { id: ToField<UID>; name: ToField<String>; upgradeCap: ToField<UpgradeCap> }
-
-export type UpgradeLockReified = Reified< UpgradeLock, UpgradeLockFields >;
-
-export class UpgradeLock implements StructClass { __StructClass = true as const;
-
- static readonly $typeName = `${PKG_V1}::upgrade_policies::UpgradeLock`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
-
- readonly $typeName = UpgradeLock.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::upgrade_policies::UpgradeLock`; readonly $typeArgs: []; readonly $isPhantom = UpgradeLock.$isPhantom;
-
- readonly id: ToField<UID>; readonly name: ToField<String>; readonly upgradeCap: ToField<UpgradeCap>
-
- private constructor(typeArgs: [], fields: UpgradeLockFields, ) { this.$fullTypeName = composeSuiType( UpgradeLock.$typeName, ...typeArgs ) as `${typeof PKG_V1}::upgrade_policies::UpgradeLock`; this.$typeArgs = typeArgs;
-
- this.id = fields.id;; this.name = fields.name;; this.upgradeCap = fields.upgradeCap; }
-
- static reified( ): UpgradeLockReified { return { typeName: UpgradeLock.$typeName, fullTypeName: composeSuiType( UpgradeLock.$typeName, ...[] ) as `${typeof PKG_V1}::upgrade_policies::UpgradeLock`, typeArgs: [ ] as [], isPhantom: UpgradeLock.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => UpgradeLock.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => UpgradeLock.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => UpgradeLock.fromBcs( data, ), bcs: UpgradeLock.bcs, fromJSONField: (field: any) => UpgradeLock.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => UpgradeLock.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => UpgradeLock.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => UpgradeLock.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => UpgradeLock.fetch( client, id, ), new: ( fields: UpgradeLockFields, ) => { return new UpgradeLock( [], fields ) }, kind: "StructClassReified", } }
-
- static get r() { return UpgradeLock.reified() }
-
- static phantom( ): PhantomReified<ToTypeStr<UpgradeLock>> { return phantom(UpgradeLock.reified( )); } static get p() { return UpgradeLock.phantom() }
-
- static get bcs() { return bcs.struct("UpgradeLock", {
-
- id: UID.bcs, name: String.bcs, upgrade_cap: UpgradeCap.bcs
-
-}) };
-
- static fromFields( fields: Record<string, any> ): UpgradeLock { return UpgradeLock.reified( ).new( { id: decodeFromFields(UID.reified(), fields.id), name: decodeFromFields(String.reified(), fields.name), upgradeCap: decodeFromFields(UpgradeCap.reified(), fields.upgrade_cap) } ) }
-
- static fromFieldsWithTypes( item: FieldsWithTypes ): UpgradeLock { if (!isUpgradeLock(item.type)) { throw new Error("not a UpgradeLock type");
-
- }
-
- return UpgradeLock.reified( ).new( { id: decodeFromFieldsWithTypes(UID.reified(), item.fields.id), name: decodeFromFieldsWithTypes(String.reified(), item.fields.name), upgradeCap: decodeFromFieldsWithTypes(UpgradeCap.reified(), item.fields.upgrade_cap) } ) }
-
- static fromBcs( data: Uint8Array ): UpgradeLock { return UpgradeLock.fromFields( UpgradeLock.bcs.parse(data) ) }
-
- toJSONField() { return {
-
- id: this.id,name: this.name,upgradeCap: this.upgradeCap.toJSONField(),
-
-} }
-
- toJSON() { return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() } }
-
- static fromJSONField( field: any ): UpgradeLock { return UpgradeLock.reified( ).new( { id: decodeFromJSONField(UID.reified(), field.id), name: decodeFromJSONField(String.reified(), field.name), upgradeCap: decodeFromJSONField(UpgradeCap.reified(), field.upgradeCap) } ) }
-
- static fromJSON( json: Record<string, any> ): UpgradeLock { if (json.$typeName !== UpgradeLock.$typeName) { throw new Error("not a WithTwoGenerics json object") };
-
- return UpgradeLock.fromJSONField( json, ) }
-
- static fromSuiParsedData( content: SuiParsedData ): UpgradeLock { if (content.dataType !== "moveObject") { throw new Error("not an object"); } if (!isUpgradeLock(content.type)) { throw new Error(`object at ${(content.fields as any).id} is not a UpgradeLock object`); } return UpgradeLock.fromFieldsWithTypes( content ); }
-
- static fromSuiObjectData( data: SuiObjectData ): UpgradeLock { if (data.bcs) { if (data.bcs.dataType !== "moveObject" || !isUpgradeLock(data.bcs.type)) { throw new Error(`object at is not a UpgradeLock object`); }
-
- return UpgradeLock.fromBcs( fromB64(data.bcs.bcsBytes) ); } if (data.content) { return UpgradeLock.fromSuiParsedData( data.content ) } throw new Error( "Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request." ); }
-
- static async fetch( client: SuiClient, id: string ): Promise<UpgradeLock> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching UpgradeLock object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isUpgradeLock(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a UpgradeLock object`); }
-
- return UpgradeLock.fromSuiObjectData( res.data ); }
+ return UpgradeCapKey.fromSuiObjectData( res.data ); }
 
  }
 
@@ -551,5 +414,141 @@ export class UpgradeProposal implements StructClass { __StructClass = true as co
  static async fetch( client: SuiClient, id: string ): Promise<UpgradeProposal> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching UpgradeProposal object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isUpgradeProposal(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a UpgradeProposal object`); }
 
  return UpgradeProposal.fromSuiObjectData( res.data ); }
+
+ }
+
+/* ============================== UpgradeRules =============================== */
+
+export function isUpgradeRules(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::upgrade_policies::UpgradeRules`; }
+
+export interface UpgradeRulesFields { capId: ToField<ID>; name: ToField<String>; delayMs: ToField<"u64"> }
+
+export type UpgradeRulesReified = Reified< UpgradeRules, UpgradeRulesFields >;
+
+export class UpgradeRules implements StructClass { __StructClass = true as const;
+
+ static readonly $typeName = `${PKG_V1}::upgrade_policies::UpgradeRules`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
+
+ readonly $typeName = UpgradeRules.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::upgrade_policies::UpgradeRules`; readonly $typeArgs: []; readonly $isPhantom = UpgradeRules.$isPhantom;
+
+ readonly capId: ToField<ID>; readonly name: ToField<String>; readonly delayMs: ToField<"u64">
+
+ private constructor(typeArgs: [], fields: UpgradeRulesFields, ) { this.$fullTypeName = composeSuiType( UpgradeRules.$typeName, ...typeArgs ) as `${typeof PKG_V1}::upgrade_policies::UpgradeRules`; this.$typeArgs = typeArgs;
+
+ this.capId = fields.capId;; this.name = fields.name;; this.delayMs = fields.delayMs; }
+
+ static reified( ): UpgradeRulesReified { return { typeName: UpgradeRules.$typeName, fullTypeName: composeSuiType( UpgradeRules.$typeName, ...[] ) as `${typeof PKG_V1}::upgrade_policies::UpgradeRules`, typeArgs: [ ] as [], isPhantom: UpgradeRules.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => UpgradeRules.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => UpgradeRules.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => UpgradeRules.fromBcs( data, ), bcs: UpgradeRules.bcs, fromJSONField: (field: any) => UpgradeRules.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => UpgradeRules.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => UpgradeRules.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => UpgradeRules.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => UpgradeRules.fetch( client, id, ), new: ( fields: UpgradeRulesFields, ) => { return new UpgradeRules( [], fields ) }, kind: "StructClassReified", } }
+
+ static get r() { return UpgradeRules.reified() }
+
+ static phantom( ): PhantomReified<ToTypeStr<UpgradeRules>> { return phantom(UpgradeRules.reified( )); } static get p() { return UpgradeRules.phantom() }
+
+ static get bcs() { return bcs.struct("UpgradeRules", {
+
+ cap_id: ID.bcs, name: String.bcs, delay_ms: bcs.u64()
+
+}) };
+
+ static fromFields( fields: Record<string, any> ): UpgradeRules { return UpgradeRules.reified( ).new( { capId: decodeFromFields(ID.reified(), fields.cap_id), name: decodeFromFields(String.reified(), fields.name), delayMs: decodeFromFields("u64", fields.delay_ms) } ) }
+
+ static fromFieldsWithTypes( item: FieldsWithTypes ): UpgradeRules { if (!isUpgradeRules(item.type)) { throw new Error("not a UpgradeRules type");
+
+ }
+
+ return UpgradeRules.reified( ).new( { capId: decodeFromFieldsWithTypes(ID.reified(), item.fields.cap_id), name: decodeFromFieldsWithTypes(String.reified(), item.fields.name), delayMs: decodeFromFieldsWithTypes("u64", item.fields.delay_ms) } ) }
+
+ static fromBcs( data: Uint8Array ): UpgradeRules { return UpgradeRules.fromFields( UpgradeRules.bcs.parse(data) ) }
+
+ toJSONField() { return {
+
+ capId: this.capId,name: this.name,delayMs: this.delayMs.toString(),
+
+} }
+
+ toJSON() { return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() } }
+
+ static fromJSONField( field: any ): UpgradeRules { return UpgradeRules.reified( ).new( { capId: decodeFromJSONField(ID.reified(), field.capId), name: decodeFromJSONField(String.reified(), field.name), delayMs: decodeFromJSONField("u64", field.delayMs) } ) }
+
+ static fromJSON( json: Record<string, any> ): UpgradeRules { if (json.$typeName !== UpgradeRules.$typeName) { throw new Error("not a WithTwoGenerics json object") };
+
+ return UpgradeRules.fromJSONField( json, ) }
+
+ static fromSuiParsedData( content: SuiParsedData ): UpgradeRules { if (content.dataType !== "moveObject") { throw new Error("not an object"); } if (!isUpgradeRules(content.type)) { throw new Error(`object at ${(content.fields as any).id} is not a UpgradeRules object`); } return UpgradeRules.fromFieldsWithTypes( content ); }
+
+ static fromSuiObjectData( data: SuiObjectData ): UpgradeRules { if (data.bcs) { if (data.bcs.dataType !== "moveObject" || !isUpgradeRules(data.bcs.type)) { throw new Error(`object at is not a UpgradeRules object`); }
+
+ return UpgradeRules.fromBcs( fromB64(data.bcs.bcsBytes) ); } if (data.content) { return UpgradeRules.fromSuiParsedData( data.content ) } throw new Error( "Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request." ); }
+
+ static async fetch( client: SuiClient, id: string ): Promise<UpgradeRules> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching UpgradeRules object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isUpgradeRules(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a UpgradeRules object`); }
+
+ return UpgradeRules.fromSuiObjectData( res.data ); }
+
+ }
+
+/* ============================== UpgradeRulesKey =============================== */
+
+export function isUpgradeRulesKey(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::upgrade_policies::UpgradeRulesKey`; }
+
+export interface UpgradeRulesKeyFields { package: ToField<"address"> }
+
+export type UpgradeRulesKeyReified = Reified< UpgradeRulesKey, UpgradeRulesKeyFields >;
+
+export class UpgradeRulesKey implements StructClass { __StructClass = true as const;
+
+ static readonly $typeName = `${PKG_V1}::upgrade_policies::UpgradeRulesKey`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
+
+ readonly $typeName = UpgradeRulesKey.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::upgrade_policies::UpgradeRulesKey`; readonly $typeArgs: []; readonly $isPhantom = UpgradeRulesKey.$isPhantom;
+
+ readonly package: ToField<"address">
+
+ private constructor(typeArgs: [], fields: UpgradeRulesKeyFields, ) { this.$fullTypeName = composeSuiType( UpgradeRulesKey.$typeName, ...typeArgs ) as `${typeof PKG_V1}::upgrade_policies::UpgradeRulesKey`; this.$typeArgs = typeArgs;
+
+ this.package = fields.package; }
+
+ static reified( ): UpgradeRulesKeyReified { return { typeName: UpgradeRulesKey.$typeName, fullTypeName: composeSuiType( UpgradeRulesKey.$typeName, ...[] ) as `${typeof PKG_V1}::upgrade_policies::UpgradeRulesKey`, typeArgs: [ ] as [], isPhantom: UpgradeRulesKey.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => UpgradeRulesKey.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => UpgradeRulesKey.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => UpgradeRulesKey.fromBcs( data, ), bcs: UpgradeRulesKey.bcs, fromJSONField: (field: any) => UpgradeRulesKey.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => UpgradeRulesKey.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => UpgradeRulesKey.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => UpgradeRulesKey.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => UpgradeRulesKey.fetch( client, id, ), new: ( fields: UpgradeRulesKeyFields, ) => { return new UpgradeRulesKey( [], fields ) }, kind: "StructClassReified", } }
+
+ static get r() { return UpgradeRulesKey.reified() }
+
+ static phantom( ): PhantomReified<ToTypeStr<UpgradeRulesKey>> { return phantom(UpgradeRulesKey.reified( )); } static get p() { return UpgradeRulesKey.phantom() }
+
+ static get bcs() { return bcs.struct("UpgradeRulesKey", {
+
+ package: bcs.bytes(32).transform({ input: (val: string) => fromHEX(val), output: (val: Uint8Array) => toHEX(val), })
+
+}) };
+
+ static fromFields( fields: Record<string, any> ): UpgradeRulesKey { return UpgradeRulesKey.reified( ).new( { package: decodeFromFields("address", fields.package) } ) }
+
+ static fromFieldsWithTypes( item: FieldsWithTypes ): UpgradeRulesKey { if (!isUpgradeRulesKey(item.type)) { throw new Error("not a UpgradeRulesKey type");
+
+ }
+
+ return UpgradeRulesKey.reified( ).new( { package: decodeFromFieldsWithTypes("address", item.fields.package) } ) }
+
+ static fromBcs( data: Uint8Array ): UpgradeRulesKey { return UpgradeRulesKey.fromFields( UpgradeRulesKey.bcs.parse(data) ) }
+
+ toJSONField() { return {
+
+ package: this.package,
+
+} }
+
+ toJSON() { return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() } }
+
+ static fromJSONField( field: any ): UpgradeRulesKey { return UpgradeRulesKey.reified( ).new( { package: decodeFromJSONField("address", field.package) } ) }
+
+ static fromJSON( json: Record<string, any> ): UpgradeRulesKey { if (json.$typeName !== UpgradeRulesKey.$typeName) { throw new Error("not a WithTwoGenerics json object") };
+
+ return UpgradeRulesKey.fromJSONField( json, ) }
+
+ static fromSuiParsedData( content: SuiParsedData ): UpgradeRulesKey { if (content.dataType !== "moveObject") { throw new Error("not an object"); } if (!isUpgradeRulesKey(content.type)) { throw new Error(`object at ${(content.fields as any).id} is not a UpgradeRulesKey object`); } return UpgradeRulesKey.fromFieldsWithTypes( content ); }
+
+ static fromSuiObjectData( data: SuiObjectData ): UpgradeRulesKey { if (data.bcs) { if (data.bcs.dataType !== "moveObject" || !isUpgradeRulesKey(data.bcs.type)) { throw new Error(`object at is not a UpgradeRulesKey object`); }
+
+ return UpgradeRulesKey.fromBcs( fromB64(data.bcs.bcsBytes) ); } if (data.content) { return UpgradeRulesKey.fromSuiParsedData( data.content ) } throw new Error( "Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request." ); }
+
+ static async fetch( client: SuiClient, id: string ): Promise<UpgradeRulesKey> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching UpgradeRulesKey object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isUpgradeRulesKey(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a UpgradeRulesKey object`); }
+
+ return UpgradeRulesKey.fromSuiObjectData( res.data ); }
 
  }

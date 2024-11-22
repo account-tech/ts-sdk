@@ -6,17 +6,15 @@ import {ID} from "../../_dependencies/source/0x2/object/structs";
 import {GenericArg, generic, obj, pure} from "../../_framework/util";
 import {Transaction, TransactionArgument, TransactionObjectInput} from "@mysten/sui/transactions";
 
-export function supply( tx: Transaction, typeArg: string, lock: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::currency::supply`, typeArguments: [typeArg], arguments: [ obj(tx, lock) ], }) }
-
-export function hasLock( tx: Transaction, typeArgs: [string, string, string], account: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::currency::has_lock`, typeArguments: typeArgs, arguments: [ obj(tx, account) ], }) }
-
 export interface LockCapArgs { auth: TransactionObjectInput; account: TransactionObjectInput; treasuryCap: TransactionObjectInput; maxSupply: (bigint | TransactionArgument | TransactionArgument | null) }
 
 export function lockCap( tx: Transaction, typeArgs: [string, string, string], args: LockCapArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::currency::lock_cap`, typeArguments: typeArgs, arguments: [ obj(tx, args.auth), obj(tx, args.account), obj(tx, args.treasuryCap), pure(tx, args.maxSupply, `${Option.$typeName}<u64>`) ], }) }
 
 export function typeToName( tx: Transaction, typeArg: string, ) { return tx.moveCall({ target: `${PUBLISHED_AT}::currency::type_to_name`, typeArguments: [typeArg], arguments: [ ], }) }
 
-export function borrowLock( tx: Transaction, typeArgs: [string, string, string], account: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::currency::borrow_lock`, typeArguments: typeArgs, arguments: [ obj(tx, account) ], }) }
+export function borrowRules( tx: Transaction, typeArgs: [string, string, string], account: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::currency::borrow_rules`, typeArguments: typeArgs, arguments: [ obj(tx, account) ], }) }
+
+export function hasCap( tx: Transaction, typeArgs: [string, string, string], account: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::currency::has_cap`, typeArguments: typeArgs, arguments: [ obj(tx, account) ], }) }
 
 export function completeTransfer( tx: Transaction, executable: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::currency::complete_transfer`, arguments: [ obj(tx, executable) ], }) }
 
@@ -47,6 +45,8 @@ export function canUpdateIcon( tx: Transaction, typeArg: string, lock: Transacti
 export function canUpdateName( tx: Transaction, typeArg: string, lock: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::currency::can_update_name`, typeArguments: [typeArg], arguments: [ obj(tx, lock) ], }) }
 
 export function canUpdateSymbol( tx: Transaction, typeArg: string, lock: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::currency::can_update_symbol`, typeArguments: [typeArg], arguments: [ obj(tx, lock) ], }) }
+
+export function coinTypeSupply( tx: Transaction, typeArgs: [string, string, string], account: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::currency::coin_type_supply`, typeArguments: typeArgs, arguments: [ obj(tx, account) ], }) }
 
 export function deleteBurnAction( tx: Transaction, typeArgs: [string, string], expired: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::currency::delete_burn_action`, typeArguments: typeArgs, arguments: [ obj(tx, expired) ], }) }
 

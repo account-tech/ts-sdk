@@ -1,1 +1,1 @@
-# Kraken TypeScript SDK
+# Account.tech TypeScript SDK
