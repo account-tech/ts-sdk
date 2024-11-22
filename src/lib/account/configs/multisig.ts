@@ -243,11 +243,15 @@ export class Multisig extends Account {
             });
         }
 
+        const auth = this.authenticate(tx, "");
+        const outcome = this.emptyOutcome(tx);
+
         configMultisig.proposeConfigMultisig(
             tx,
             {
-                extensions: EXTENSIONS,
+                auth,
                 account: this.id,
+                outcome,
                 key: proposalArgs.key,
                 description: proposalArgs.description ?? "",
                 executionTime: BigInt(proposalArgs.executionTime ?? 0),
