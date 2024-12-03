@@ -12,8 +12,8 @@ import { MultisigClient } from "../../src/multisig-client";
     const tx = new Transaction();
     tx.setGasBudget(1000000000);
 
-    ms.createMultisig(tx, "Thouny's Multisig")
-    
+    // ms.createMultisig(tx, "Thouny's Multisig")
+    ms.createMultisig(tx, "Multisig Test Members", undefined, ["0x528b64ec15669c537d501d9260d321c56e948bd260459b6260a89cfd93178e15"]);
     const result = await ms.client.signAndExecuteTransaction({
         signer: keypair,
         transaction: tx,

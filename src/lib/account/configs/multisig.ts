@@ -166,8 +166,8 @@ export class Multisig extends Account {
         );
     }
 
-    shareMultisig(tx: Transaction, multisig: TransactionArgument): TransactionResult {
-        return share(tx, MULTISIG_GENERICS, multisig);
+    shareMultisig(tx: Transaction, account: TransactionArgument): TransactionResult {
+        return share(tx, MULTISIG_GENERICS, account);
     }
 
     joinMultisig(tx: Transaction, user: TransactionPureInput, account: TransactionObjectInput): TransactionResult {
@@ -178,36 +178,41 @@ export class Multisig extends Account {
         return leave(tx, { user, account });
     }
 
-    authenticate(tx: Transaction, role: string): TransactionResult {
-        return authenticate(tx, { extensions: EXTENSIONS, account: this.id, role });
+    authenticate(tx: Transaction, role: string, account: TransactionObjectInput = this.id): TransactionResult {
+        if (!account && !this.id) throw new Error("No multisig account provided");
+        return authenticate(tx, { extensions: EXTENSIONS, account, role });
     }
 
-    emptyOutcome(tx: Transaction): TransactionResult {
-        return emptyOutcome(tx, this.id);
+    emptyOutcome(tx: Transaction, account: TransactionObjectInput = this.id): TransactionResult {
+        if (!account && !this.id) throw new Error("No multisig account provided");
+        return emptyOutcome(tx, account);
     }
 
     approveProposal(
         tx: Transaction,
         key: string,
-        multisig: TransactionObjectInput = this.id,
+        account: TransactionObjectInput = this.id,
     ): TransactionResult {
-        return approveProposal(tx, { account: multisig, key });
+        if (!account && !this.id) throw new Error("No multisig account provided");
+        return approveProposal(tx, { account, key });
     }
 
     disapproveProposal(
         tx: Transaction,
         key: string,
-        multisig: TransactionObjectInput = this.id,
+        account: TransactionObjectInput = this.id,
     ): TransactionResult {
-        return disapproveProposal(tx, { account: multisig, key });
+        if (!account && !this.id) throw new Error("No multisig account provided");
+        return disapproveProposal(tx, { account, key });
     }
 
     executeProposal(
         tx: Transaction,
         key: string,
-        multisig: TransactionObjectInput = this.id,
+        account: TransactionObjectInput = this.id,
     ): TransactionResult {
-        return executeProposal(tx, { account: multisig, key, clock: CLOCK });
+        if (!account && !this.id) throw new Error("No multisig account provided");
+        return executeProposal(tx, { account, key, clock: CLOCK });
     }
 
     // === Atomic Proposals ===
@@ -216,7 +221,7 @@ export class Multisig extends Account {
         tx: Transaction,
         proposalArgs: ProposalArgs,
         actionsArgs: ConfigMultisigArgs,
-        multisig: TransactionObjectInput = this.id, // need for adding members upon creation
+        account: TransactionObjectInput = this.id, // need for adding members upon creation
     ): TransactionResult {
         this.assertMultisig();
         this.assertKey(proposalArgs);
@@ -243,14 +248,14 @@ export class Multisig extends Account {
             });
         }
 
-        const auth = this.authenticate(tx, "");
-        const outcome = this.emptyOutcome(tx);
+        const auth = this.authenticate(tx, "", account);
+        const outcome = this.emptyOutcome(tx, account);
 
         configMultisig.proposeConfigMultisig(
             tx,
             {
                 auth,
-                account: this.id,
+                account,
                 outcome,
                 key: proposalArgs.key,
                 description: proposalArgs.description ?? "",
@@ -265,10 +270,10 @@ export class Multisig extends Account {
             }
         );
 
-        this.approveProposal(tx, proposalArgs.key);
-        const executable = this.executeProposal(tx, proposalArgs.key);
-
-        return configMultisig.executeConfigMultisig(tx, { executable, account: multisig });
+        this.approveProposal(tx, proposalArgs.key, account);
+        const executable = this.executeProposal(tx, proposalArgs.key, account);
+        
+        return configMultisig.executeConfigMultisig(tx, { executable, account });
     }
 
     configDeps(
@@ -277,7 +282,7 @@ export class Multisig extends Account {
         outcome: TransactionObjectInput,
         proposalArgs: ProposalArgs,
         actionsArgs: ConfigDepsArgs,
-        multisig: TransactionObjectInput = this.id, // need for adding deps upon creation
+        account: TransactionObjectInput = this.id, // need for adding deps upon creation
     ): TransactionResult {
         this.assertMultisig();
         this.assertKey(proposalArgs);
@@ -296,7 +301,7 @@ export class Multisig extends Account {
             MULTISIG_GENERICS,
             {
                 auth,
-                account: multisig,
+                account,
                 outcome,
                 key: proposalArgs.key,
                 description: proposalArgs.description ?? "",
@@ -312,7 +317,7 @@ export class Multisig extends Account {
         this.approveProposal(tx, proposalArgs.key);
         const executable = this.executeProposal(tx, proposalArgs.key);
 
-        return config.executeConfigDeps(tx, MULTISIG_GENERICS, { executable, account: multisig });
+        return config.executeConfigDeps(tx, MULTISIG_GENERICS, { executable, account });
     }
 
     // mint(

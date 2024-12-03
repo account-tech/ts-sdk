@@ -70,16 +70,25 @@ export class MultisigClient {
 		}
 		// create the multisig
 		const multisig = this.multisig?.newMultisig(tx, name);
+		// get the multisig id if necessary
+		let multisigId;
+		if (memberAddresses || deps) {
+			multisigId = tx.moveCall({
+				target: `${FRAMEWORK}::object::id`,
+				typeArguments: [`${ACCOUNT_PROTOCOL}::account::Account<${ACCOUNT_CONFIG}::multisig::Multisig, ${ACCOUNT_CONFIG}::multisig::Approvals>`],
+				arguments: [tx.object(multisig)],
+			});
+		}
 		// update multisig rules if members are provided
 		if (memberAddresses) {
 			const members = memberAddresses.map((address: string) => ({ address, weight: 1, roles: [] }));
-			this.multisig.configMultisig(tx, { key: "init_members" }, { members }); // atomic proposal
+			this.multisig.configMultisig(tx, { key: "init_members" }, { members }, multisigId); // atomic proposal
 		}
 		// update multisig deps if provided
 		if (deps) {
 			const auth = this.multisig.authenticate(tx, "");
 			const outcome = this.multisig.emptyOutcome(tx);
-			this.multisig.configDeps(tx, auth, outcome, { key: "init_deps" }, { deps }); // atomic proposal
+			this.multisig.configDeps(tx, auth, outcome, { key: "init_deps" }, { deps }, multisigId); // atomic proposal
 		}
 		// creator register the multisig in his user
 		this.multisig.joinMultisig(tx, createdAccount ? createdAccount : accountId, multisig);
