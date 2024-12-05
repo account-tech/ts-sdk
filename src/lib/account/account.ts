@@ -1,8 +1,8 @@
 import { SuiClient } from "@mysten/sui/client";
-import { Proposal } from "../proposal/proposal";
+import { Proposal } from "../proposals/proposal";
 import { Dep } from "../../types/account-types";
 import { ProposalFields } from "src/types/proposal-types";
-import { Outcome } from "../proposal/outcome";
+import { Outcome } from "../proposals/outcome";
 
 export interface Account {
 	userAddr: string;

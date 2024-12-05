@@ -14,15 +14,15 @@ import { MemberFields, RoleFields } from "../../../.gen/account-config/multisig/
 import { ProposalFields as ProposalFieldsRaw } from "../../../.gen/account-protocol/proposals/structs";
 import { CLOCK, EXTENSIONS, ACCOUNT_ACTIONS, ACCOUNT_CONFIG, MULTISIG_GENERICS } from "../../../types/constants";
 import { User } from "../../user";
-import { Proposal } from "../../proposal/proposal";
-import { ConfigDepsProposal } from "../../proposal/proposals/config";
+import { Proposal } from "../../proposals/proposal";
+import { ConfigDepsProposal } from "../../proposals/account-actions/config";
 import { Dep, Role, MemberAccount, AccountType, MultisigData } from "../../../types/account-types";
 import { BurnArgs, ConfigDepsArgs, ConfigMultisigArgs, MintArgs, ProposalArgs, ProposalFields, UpdateArgs } from "../../../types/proposal-types";
 import { TransactionPureInput } from "src/types/helper-types";
-import { BurnProposal, MintProposal, UpdateProposal } from "../../proposal/proposals/currency";
+import { BurnProposal, MintProposal, UpdateProposal } from "../../proposals/account-actions/currency";
 import { Account } from "../account";
-import { Outcome } from "src/lib/proposal/outcome";
-import { Approvals } from "src/lib/proposal/outcomes/approvals";
+import { Outcome } from "src/lib/proposals/outcome";
+import { Approvals } from "src/lib/proposals/outcomes/approvals";
 
 export class Multisig extends Account {
     roles: Map<string, Role> = new Map();

@@ -1,4 +1,4 @@
-import { Proposal } from "src/lib/proposal/proposal";
+import { Proposal } from "src/lib/proposals/proposal";
 
 export enum AccountType {
     MULTISIG = "multisig",

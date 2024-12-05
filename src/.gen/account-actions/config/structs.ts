@@ -1,7 +1,6 @@
 import {PhantomReified, Reified, StructClass, ToField, ToTypeStr, decodeFromFields, decodeFromFieldsWithTypes, decodeFromJSONField, phantom} from "../../_framework/reified";
 import {FieldsWithTypes, composeSuiType, compressSuiType} from "../../_framework/util";
 import {Deps} from "../../account-protocol/deps/structs";
-import {Metadata} from "../../account-protocol/metadata/structs";
 import {PKG_V1} from "../index";
 import {bcs} from "@mysten/sui/bcs";
 import {SuiClient, SuiObjectData, SuiParsedData} from "@mysten/sui/client";
@@ -143,115 +142,47 @@ export class ConfigDepsProposal implements StructClass { __StructClass = true as
 
  }
 
-/* ============================== ConfigMetadataAction =============================== */
+/* ============================== ConfigMetadataCommand =============================== */
 
-export function isConfigMetadataAction(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::config::ConfigMetadataAction`; }
+export function isConfigMetadataCommand(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::config::ConfigMetadataCommand`; }
 
-export interface ConfigMetadataActionFields { metadata: ToField<Metadata> }
+export interface ConfigMetadataCommandFields { dummyField: ToField<"bool"> }
 
-export type ConfigMetadataActionReified = Reified< ConfigMetadataAction, ConfigMetadataActionFields >;
+export type ConfigMetadataCommandReified = Reified< ConfigMetadataCommand, ConfigMetadataCommandFields >;
 
-export class ConfigMetadataAction implements StructClass { __StructClass = true as const;
+export class ConfigMetadataCommand implements StructClass { __StructClass = true as const;
 
- static readonly $typeName = `${PKG_V1}::config::ConfigMetadataAction`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
+ static readonly $typeName = `${PKG_V1}::config::ConfigMetadataCommand`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
 
- readonly $typeName = ConfigMetadataAction.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::config::ConfigMetadataAction`; readonly $typeArgs: []; readonly $isPhantom = ConfigMetadataAction.$isPhantom;
-
- readonly metadata: ToField<Metadata>
-
- private constructor(typeArgs: [], fields: ConfigMetadataActionFields, ) { this.$fullTypeName = composeSuiType( ConfigMetadataAction.$typeName, ...typeArgs ) as `${typeof PKG_V1}::config::ConfigMetadataAction`; this.$typeArgs = typeArgs;
-
- this.metadata = fields.metadata; }
-
- static reified( ): ConfigMetadataActionReified { return { typeName: ConfigMetadataAction.$typeName, fullTypeName: composeSuiType( ConfigMetadataAction.$typeName, ...[] ) as `${typeof PKG_V1}::config::ConfigMetadataAction`, typeArgs: [ ] as [], isPhantom: ConfigMetadataAction.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => ConfigMetadataAction.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => ConfigMetadataAction.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => ConfigMetadataAction.fromBcs( data, ), bcs: ConfigMetadataAction.bcs, fromJSONField: (field: any) => ConfigMetadataAction.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => ConfigMetadataAction.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => ConfigMetadataAction.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => ConfigMetadataAction.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => ConfigMetadataAction.fetch( client, id, ), new: ( fields: ConfigMetadataActionFields, ) => { return new ConfigMetadataAction( [], fields ) }, kind: "StructClassReified", } }
-
- static get r() { return ConfigMetadataAction.reified() }
-
- static phantom( ): PhantomReified<ToTypeStr<ConfigMetadataAction>> { return phantom(ConfigMetadataAction.reified( )); } static get p() { return ConfigMetadataAction.phantom() }
-
- static get bcs() { return bcs.struct("ConfigMetadataAction", {
-
- metadata: Metadata.bcs
-
-}) };
-
- static fromFields( fields: Record<string, any> ): ConfigMetadataAction { return ConfigMetadataAction.reified( ).new( { metadata: decodeFromFields(Metadata.reified(), fields.metadata) } ) }
-
- static fromFieldsWithTypes( item: FieldsWithTypes ): ConfigMetadataAction { if (!isConfigMetadataAction(item.type)) { throw new Error("not a ConfigMetadataAction type");
-
- }
-
- return ConfigMetadataAction.reified( ).new( { metadata: decodeFromFieldsWithTypes(Metadata.reified(), item.fields.metadata) } ) }
-
- static fromBcs( data: Uint8Array ): ConfigMetadataAction { return ConfigMetadataAction.fromFields( ConfigMetadataAction.bcs.parse(data) ) }
-
- toJSONField() { return {
-
- metadata: this.metadata.toJSONField(),
-
-} }
-
- toJSON() { return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() } }
-
- static fromJSONField( field: any ): ConfigMetadataAction { return ConfigMetadataAction.reified( ).new( { metadata: decodeFromJSONField(Metadata.reified(), field.metadata) } ) }
-
- static fromJSON( json: Record<string, any> ): ConfigMetadataAction { if (json.$typeName !== ConfigMetadataAction.$typeName) { throw new Error("not a WithTwoGenerics json object") };
-
- return ConfigMetadataAction.fromJSONField( json, ) }
-
- static fromSuiParsedData( content: SuiParsedData ): ConfigMetadataAction { if (content.dataType !== "moveObject") { throw new Error("not an object"); } if (!isConfigMetadataAction(content.type)) { throw new Error(`object at ${(content.fields as any).id} is not a ConfigMetadataAction object`); } return ConfigMetadataAction.fromFieldsWithTypes( content ); }
-
- static fromSuiObjectData( data: SuiObjectData ): ConfigMetadataAction { if (data.bcs) { if (data.bcs.dataType !== "moveObject" || !isConfigMetadataAction(data.bcs.type)) { throw new Error(`object at is not a ConfigMetadataAction object`); }
-
- return ConfigMetadataAction.fromBcs( fromB64(data.bcs.bcsBytes) ); } if (data.content) { return ConfigMetadataAction.fromSuiParsedData( data.content ) } throw new Error( "Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request." ); }
-
- static async fetch( client: SuiClient, id: string ): Promise<ConfigMetadataAction> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching ConfigMetadataAction object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isConfigMetadataAction(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a ConfigMetadataAction object`); }
-
- return ConfigMetadataAction.fromSuiObjectData( res.data ); }
-
- }
-
-/* ============================== ConfigMetadataProposal =============================== */
-
-export function isConfigMetadataProposal(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::config::ConfigMetadataProposal`; }
-
-export interface ConfigMetadataProposalFields { dummyField: ToField<"bool"> }
-
-export type ConfigMetadataProposalReified = Reified< ConfigMetadataProposal, ConfigMetadataProposalFields >;
-
-export class ConfigMetadataProposal implements StructClass { __StructClass = true as const;
-
- static readonly $typeName = `${PKG_V1}::config::ConfigMetadataProposal`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
-
- readonly $typeName = ConfigMetadataProposal.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::config::ConfigMetadataProposal`; readonly $typeArgs: []; readonly $isPhantom = ConfigMetadataProposal.$isPhantom;
+ readonly $typeName = ConfigMetadataCommand.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::config::ConfigMetadataCommand`; readonly $typeArgs: []; readonly $isPhantom = ConfigMetadataCommand.$isPhantom;
 
  readonly dummyField: ToField<"bool">
 
- private constructor(typeArgs: [], fields: ConfigMetadataProposalFields, ) { this.$fullTypeName = composeSuiType( ConfigMetadataProposal.$typeName, ...typeArgs ) as `${typeof PKG_V1}::config::ConfigMetadataProposal`; this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [], fields: ConfigMetadataCommandFields, ) { this.$fullTypeName = composeSuiType( ConfigMetadataCommand.$typeName, ...typeArgs ) as `${typeof PKG_V1}::config::ConfigMetadataCommand`; this.$typeArgs = typeArgs;
 
  this.dummyField = fields.dummyField; }
 
- static reified( ): ConfigMetadataProposalReified { return { typeName: ConfigMetadataProposal.$typeName, fullTypeName: composeSuiType( ConfigMetadataProposal.$typeName, ...[] ) as `${typeof PKG_V1}::config::ConfigMetadataProposal`, typeArgs: [ ] as [], isPhantom: ConfigMetadataProposal.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => ConfigMetadataProposal.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => ConfigMetadataProposal.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => ConfigMetadataProposal.fromBcs( data, ), bcs: ConfigMetadataProposal.bcs, fromJSONField: (field: any) => ConfigMetadataProposal.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => ConfigMetadataProposal.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => ConfigMetadataProposal.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => ConfigMetadataProposal.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => ConfigMetadataProposal.fetch( client, id, ), new: ( fields: ConfigMetadataProposalFields, ) => { return new ConfigMetadataProposal( [], fields ) }, kind: "StructClassReified", } }
+ static reified( ): ConfigMetadataCommandReified { return { typeName: ConfigMetadataCommand.$typeName, fullTypeName: composeSuiType( ConfigMetadataCommand.$typeName, ...[] ) as `${typeof PKG_V1}::config::ConfigMetadataCommand`, typeArgs: [ ] as [], isPhantom: ConfigMetadataCommand.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => ConfigMetadataCommand.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => ConfigMetadataCommand.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => ConfigMetadataCommand.fromBcs( data, ), bcs: ConfigMetadataCommand.bcs, fromJSONField: (field: any) => ConfigMetadataCommand.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => ConfigMetadataCommand.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => ConfigMetadataCommand.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => ConfigMetadataCommand.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => ConfigMetadataCommand.fetch( client, id, ), new: ( fields: ConfigMetadataCommandFields, ) => { return new ConfigMetadataCommand( [], fields ) }, kind: "StructClassReified", } }
 
- static get r() { return ConfigMetadataProposal.reified() }
+ static get r() { return ConfigMetadataCommand.reified() }
 
- static phantom( ): PhantomReified<ToTypeStr<ConfigMetadataProposal>> { return phantom(ConfigMetadataProposal.reified( )); } static get p() { return ConfigMetadataProposal.phantom() }
+ static phantom( ): PhantomReified<ToTypeStr<ConfigMetadataCommand>> { return phantom(ConfigMetadataCommand.reified( )); } static get p() { return ConfigMetadataCommand.phantom() }
 
- static get bcs() { return bcs.struct("ConfigMetadataProposal", {
+ static get bcs() { return bcs.struct("ConfigMetadataCommand", {
 
  dummy_field: bcs.bool()
 
 }) };
 
- static fromFields( fields: Record<string, any> ): ConfigMetadataProposal { return ConfigMetadataProposal.reified( ).new( { dummyField: decodeFromFields("bool", fields.dummy_field) } ) }
+ static fromFields( fields: Record<string, any> ): ConfigMetadataCommand { return ConfigMetadataCommand.reified( ).new( { dummyField: decodeFromFields("bool", fields.dummy_field) } ) }
 
- static fromFieldsWithTypes( item: FieldsWithTypes ): ConfigMetadataProposal { if (!isConfigMetadataProposal(item.type)) { throw new Error("not a ConfigMetadataProposal type");
+ static fromFieldsWithTypes( item: FieldsWithTypes ): ConfigMetadataCommand { if (!isConfigMetadataCommand(item.type)) { throw new Error("not a ConfigMetadataCommand type");
 
  }
 
- return ConfigMetadataProposal.reified( ).new( { dummyField: decodeFromFieldsWithTypes("bool", item.fields.dummy_field) } ) }
+ return ConfigMetadataCommand.reified( ).new( { dummyField: decodeFromFieldsWithTypes("bool", item.fields.dummy_field) } ) }
 
- static fromBcs( data: Uint8Array ): ConfigMetadataProposal { return ConfigMetadataProposal.fromFields( ConfigMetadataProposal.bcs.parse(data) ) }
+ static fromBcs( data: Uint8Array ): ConfigMetadataCommand { return ConfigMetadataCommand.fromFields( ConfigMetadataCommand.bcs.parse(data) ) }
 
  toJSONField() { return {
 
@@ -261,20 +192,20 @@ export class ConfigMetadataProposal implements StructClass { __StructClass = tru
 
  toJSON() { return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() } }
 
- static fromJSONField( field: any ): ConfigMetadataProposal { return ConfigMetadataProposal.reified( ).new( { dummyField: decodeFromJSONField("bool", field.dummyField) } ) }
+ static fromJSONField( field: any ): ConfigMetadataCommand { return ConfigMetadataCommand.reified( ).new( { dummyField: decodeFromJSONField("bool", field.dummyField) } ) }
 
- static fromJSON( json: Record<string, any> ): ConfigMetadataProposal { if (json.$typeName !== ConfigMetadataProposal.$typeName) { throw new Error("not a WithTwoGenerics json object") };
+ static fromJSON( json: Record<string, any> ): ConfigMetadataCommand { if (json.$typeName !== ConfigMetadataCommand.$typeName) { throw new Error("not a WithTwoGenerics json object") };
 
- return ConfigMetadataProposal.fromJSONField( json, ) }
+ return ConfigMetadataCommand.fromJSONField( json, ) }
 
- static fromSuiParsedData( content: SuiParsedData ): ConfigMetadataProposal { if (content.dataType !== "moveObject") { throw new Error("not an object"); } if (!isConfigMetadataProposal(content.type)) { throw new Error(`object at ${(content.fields as any).id} is not a ConfigMetadataProposal object`); } return ConfigMetadataProposal.fromFieldsWithTypes( content ); }
+ static fromSuiParsedData( content: SuiParsedData ): ConfigMetadataCommand { if (content.dataType !== "moveObject") { throw new Error("not an object"); } if (!isConfigMetadataCommand(content.type)) { throw new Error(`object at ${(content.fields as any).id} is not a ConfigMetadataCommand object`); } return ConfigMetadataCommand.fromFieldsWithTypes( content ); }
 
- static fromSuiObjectData( data: SuiObjectData ): ConfigMetadataProposal { if (data.bcs) { if (data.bcs.dataType !== "moveObject" || !isConfigMetadataProposal(data.bcs.type)) { throw new Error(`object at is not a ConfigMetadataProposal object`); }
+ static fromSuiObjectData( data: SuiObjectData ): ConfigMetadataCommand { if (data.bcs) { if (data.bcs.dataType !== "moveObject" || !isConfigMetadataCommand(data.bcs.type)) { throw new Error(`object at is not a ConfigMetadataCommand object`); }
 
- return ConfigMetadataProposal.fromBcs( fromB64(data.bcs.bcsBytes) ); } if (data.content) { return ConfigMetadataProposal.fromSuiParsedData( data.content ) } throw new Error( "Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request." ); }
+ return ConfigMetadataCommand.fromBcs( fromB64(data.bcs.bcsBytes) ); } if (data.content) { return ConfigMetadataCommand.fromSuiParsedData( data.content ) } throw new Error( "Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request." ); }
 
- static async fetch( client: SuiClient, id: string ): Promise<ConfigMetadataProposal> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching ConfigMetadataProposal object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isConfigMetadataProposal(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a ConfigMetadataProposal object`); }
+ static async fetch( client: SuiClient, id: string ): Promise<ConfigMetadataCommand> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching ConfigMetadataCommand object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isConfigMetadataCommand(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a ConfigMetadataCommand object`); }
 
- return ConfigMetadataProposal.fromSuiObjectData( res.data ); }
+ return ConfigMetadataCommand.fromSuiObjectData( res.data ); }
 
  }

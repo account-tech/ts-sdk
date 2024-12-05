@@ -5,8 +5,6 @@ import {Transaction, TransactionArgument, TransactionObjectInput} from "@mysten/
 
 export function name( tx: Transaction, rules: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::upgrade_policies::name`, arguments: [ obj(tx, rules) ], }) }
 
-export function capId( tx: Transaction, rules: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::upgrade_policies::cap_id`, arguments: [ obj(tx, rules) ], }) }
-
 export interface LockCapArgs { auth: TransactionObjectInput; account: TransactionObjectInput; cap: TransactionObjectInput; name: string | TransactionArgument; delayMs: bigint | TransactionArgument }
 
 export function lockCap( tx: Transaction, typeArgs: [string, string], args: LockCapArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::upgrade_policies::lock_cap`, typeArguments: typeArgs, arguments: [ obj(tx, args.auth), obj(tx, args.account), obj(tx, args.cap), pure(tx, args.name, `${String.$typeName}`), pure(tx, args.delayMs, `u64`) ], }) }
@@ -18,6 +16,8 @@ export function borrowCap( tx: Transaction, typeArgs: [string, string], args: Bo
 export interface BorrowRulesArgs { account: TransactionObjectInput; package: string | TransactionArgument }
 
 export function borrowRules( tx: Transaction, typeArgs: [string, string], args: BorrowRulesArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::upgrade_policies::borrow_rules`, typeArguments: typeArgs, arguments: [ obj(tx, args.account), pure(tx, args.package, `address`) ], }) }
+
+export function capId( tx: Transaction, rules: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::upgrade_policies::cap_id`, arguments: [ obj(tx, rules) ], }) }
 
 export interface CompleteUpgradeArgs { executable: TransactionObjectInput; account: TransactionObjectInput; receipt: TransactionObjectInput; cap: TransactionObjectInput; rules: TransactionObjectInput }
 

@@ -1,7 +1,6 @@
 import { Transaction } from "@mysten/sui/transactions";
 import { Ed25519Keypair } from "@mysten/sui/keypairs/ed25519";
 import { MultisigClient } from "../../src/multisig-client";
-import { ACCOUNT_CONFIG, ACCOUNT_PROTOCOL, FRAMEWORK, MULTISIG_GENERICS } from "../../src/types/constants";
 
 (async () => {
     const keypair = Ed25519Keypair.fromSecretKey(Uint8Array.from(Buffer.from("AM06bExREdFceWiExfSacTJ+64AQtFl7SRkSiTmAqh6F", "base64")).slice(1));    

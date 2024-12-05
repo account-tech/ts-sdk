@@ -1,14 +1,13 @@
 import { Dep, Member, Threshold } from "./account-types";
-import { Proposal } from "src/lib/proposal/proposal";
-import { ConfigMetadataProposal, ConfigDepsProposal } from "src/lib/proposal/proposals/config";
-import { MintProposal, BurnProposal, UpdateProposal } from "src/lib/proposal/proposals/currency";
-import { ConfigMultisigProposal } from "src/lib/proposal/proposals/multisig";
+import { Proposal } from "src/lib/proposals/proposal";
+import { ConfigDepsProposal } from "src/lib/proposals/account-actions/config";
+import { MintProposal, BurnProposal, UpdateProposal } from "src/lib/proposals/account-actions/currency";
+import { ConfigMultisigProposal } from "src/lib/proposals/account-actions/multisig";
 
 export enum ProposalTypes {
     // Config
     ConfigMultisig = "ConfigMultisig",
     // Actions
-    ConfigMetadata = "ConfigMetadata",
     ConfigDeps = "ConfigDeps",
     Mint = "Mint",
     Burn = "Burn",
@@ -17,7 +16,6 @@ export enum ProposalTypes {
 
 export const proposalRegistry: Record<string, typeof Proposal> = {
     [ProposalTypes.ConfigMultisig]: ConfigMultisigProposal,
-    [ProposalTypes.ConfigMetadata]: ConfigMetadataProposal,
     [ProposalTypes.ConfigDeps]: ConfigDepsProposal,
     [ProposalTypes.Mint]: MintProposal,
     [ProposalTypes.Burn]: BurnProposal,
@@ -40,16 +38,11 @@ export type ProposalArgs = {
     expirationTime?: number;
 }
 
-export type ActionsArgs = ConfigMultisigArgs | ConfigMetadataArgs | ConfigDepsArgs | MintArgs | BurnArgs | UpdateArgs | TakeArgs;
+export type ActionsArgs = ConfigMultisigArgs | ConfigDepsArgs | MintArgs | BurnArgs | UpdateArgs | TakeArgs;
 
 export type ConfigMultisigArgs = {
     members?: Member[];
     thresholds?: { global: number, roles: Threshold[] };
-}
-
-export type ConfigMetadataArgs = {
-    name: string;
-    other?: Map<string, string>;
 }
 
 export type ConfigDepsArgs = {

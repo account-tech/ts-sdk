@@ -7,11 +7,11 @@ import { User } from "./lib/user";
 import { Multisig } from "./lib/account/configs/multisig";
 import { TransactionPureInput } from "./types/helper-types";
 import { ActionsArgs, ConfigDepsArgs, ConfigMetadataArgs, ProposalArgs, proposalRegistry, ProposalTypes } from "./types/proposal-types";
-import { Proposal } from "./lib/proposal/proposal";
+import { Proposal } from "./lib/proposals/proposal";
 import { Extensions } from "./lib/extensions";
-import { Approvals } from "./lib/proposal/outcomes/approvals";
-import { ConfigDepsProposal, ConfigMetadataProposal } from "./lib/proposal/proposals/config";
-import { BurnProposal, MintProposal, UpdateProposal } from "./lib/proposal/proposals/currency";
+import { Approvals } from "./lib/proposals/outcomes/approvals";
+import { ConfigDepsProposal, ConfigMetadataProposal } from "./lib/proposals/account-actions/config";
+import { BurnProposal, MintProposal, UpdateProposal } from "./lib/proposals/account-actions/currency";
 
 export class MultisigClient {
 
