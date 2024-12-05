@@ -54,7 +54,7 @@ export class MultisigClient {
 		name: string,
 		newAccount?: { username: string, profilePicture: string },
 		memberAddresses?: string[],
-		deps?: Dep[],
+		globalThreshold?: number,
 	): TransactionResult {
 		// create the user if the user doesn't have one
 		let accountId: TransactionPureInput = this.user.id;
@@ -64,31 +64,23 @@ export class MultisigClient {
 			createdAccount = this.user.createUser(tx); // TODO: add optional params for username and avatar 
 			accountId = tx.moveCall({
 				target: `${FRAMEWORK}::object::id`,
-				typeArguments: [`${ACCOUNT_CONFIG}::user::User`],
+				typeArguments: [`${ACCOUNT_CONFIG.V1}::user::User`],
 				arguments: [tx.object(createdAccount)],
 			});
 		}
 		// create the multisig
 		const multisig = this.multisig?.newMultisig(tx, name);
-		// get the multisig id if necessary
-		let multisigId;
-		if (memberAddresses || deps) {
-			multisigId = tx.moveCall({
-				target: `${FRAMEWORK}::object::id`,
-				typeArguments: [`${ACCOUNT_PROTOCOL}::account::Account<${ACCOUNT_CONFIG}::multisig::Multisig, ${ACCOUNT_CONFIG}::multisig::Approvals>`],
-				arguments: [tx.object(multisig)],
-			});
-		}
 		// update multisig rules if members are provided
 		if (memberAddresses) {
 			const members = memberAddresses.map((address: string) => ({ address, weight: 1, roles: [] }));
-			this.multisig.configMultisig(tx, { key: "init_members" }, { members }, multisigId); // atomic proposal
-		}
-		// update multisig deps if provided
-		if (deps) {
-			const auth = this.multisig.authenticate(tx, "");
-			const outcome = this.multisig.emptyOutcome(tx);
-			this.multisig.configDeps(tx, auth, outcome, { key: "init_deps" }, { deps }, multisigId); // atomic proposal
+			members.push({ address: this.user.address, weight: 1, roles: [] }); // add creator to the members
+			
+			this.multisig.configMultisig(
+				tx,
+				{ key: "init_members" },
+				{ members, thresholds: { global: globalThreshold ?? 1, roles: [] } },
+				multisig
+			); // atomic proposal
 		}
 		// creator register the multisig in his user
 		this.multisig.joinMultisig(tx, createdAccount ? createdAccount : accountId, multisig);
