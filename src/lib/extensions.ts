@@ -25,14 +25,7 @@ export class Extensions {
     
     // get and format extensions data
     async fetchExtensions(): Promise<Extension[]> {
-        const { data } = await this.client.getObject({
-            id: EXTENSIONS,
-            options: { showContent: true }
-        });
-    
-        if (!data?.content) throw new Error("Extensions shared object not found.");
-        
-        const extensionsRaw = ExtensionsRaw.fromSuiParsedData(data.content);
+        const extensionsRaw = await ExtensionsRaw.fetch(this.client, EXTENSIONS);
 
         const extensions: Extension[] = extensionsRaw.inner.map((extension: ExtensionFields) => {
             const history = extension.history.map((entry: History) => {

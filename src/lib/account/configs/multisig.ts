@@ -45,26 +45,19 @@ export class Multisig extends Account {
     }
 
     async fetchMultisig(id: string): Promise<MultisigData> {
-        const { data } = await this.client.getObject({
-            id,
-            options: { showContent: true }
-        });
-
-        if (!data?.content) throw new Error(`Multisig with id ${id} not found.`);
-
         const accountReified = AccountRaw.r(MultisigRaw.r, ApprovalsRaw.r);
-        const multisigReified = accountReified.fromSuiParsedData(data.content);
+        const multisigAccount = await accountReified.fetch(this.client, id);
 
         // get deps
-        const deps: Dep[] = multisigReified.deps.inner.map((dep: DepFields) => {
+        const deps: Dep[] = multisigAccount.deps.inner.map((dep: DepFields) => {
             return { name: dep.name, addr: dep.addr, version: Number(dep.version) };
         });
 
         // get all members" data (from account and member)
-        const membersAddress: string[] = multisigReified.config.members.map((member: MemberFields) => member.addr);
+        const membersAddress: string[] = multisigAccount.config.members.map((member: MemberFields) => member.addr);
         const members = await Promise.all(membersAddress.map(async memberAddr => {
-            const weight = multisigReified.config.members.find((m: MemberFields) => m.addr == memberAddr)?.weight;
-            const roles = multisigReified.config.members.find((m: MemberFields) => m.addr == memberAddr)?.roles.contents;
+            const weight = multisigAccount.config.members.find((m: MemberFields) => m.addr == memberAddr)?.weight;
+            const roles = multisigAccount.config.members.find((m: MemberFields) => m.addr == memberAddr)?.roles.contents;
             const user = await User.init(this.client, this.userAddr, AccountType.MULTISIG);
             const UserData = await user.fetchUser(memberAddr);
             return {
@@ -88,13 +81,13 @@ export class Multisig extends Account {
             });
         });
         // get thresholds
-        const global = { threshold: Number(multisigReified.config.global), totalWeight: globalWeight };
+        const global = { threshold: Number(multisigAccount.config.global), totalWeight: globalWeight };
         const roles = new Map<string, Role>();
-        multisigReified.config.roles.forEach((role: RoleFields) => {
+        multisigAccount.config.roles.forEach((role: RoleFields) => {
             roles.set(role.name, { threshold: Number(role.threshold), totalWeight: roleWeights.get(role.name) || 0 });
         });
         // get Proposals with actions
-        const proposals = await Promise.all(multisigReified!.proposals.inner.map(async (fieldsRaw: ProposalFieldsRaw<ApprovalsRaw>) => {
+        const proposals = await Promise.all(multisigAccount!.proposals.inner.map(async (fieldsRaw: ProposalFieldsRaw<ApprovalsRaw>) => {
             const outcome = new Approvals(this.id, fieldsRaw.key, Number(fieldsRaw.outcome.totalWeight), Number(fieldsRaw.outcome.roleWeight), fieldsRaw.outcome.approved.contents);
             const fields: ProposalFields = {
                 issuer: {
@@ -113,8 +106,8 @@ export class Multisig extends Account {
         }));
 
         return {
-            id: multisigReified.id,
-            name: multisigReified.metadata.inner.contents.find((m: any) => m.key == "name")?.value!,
+            id: multisigAccount.id,
+            name: multisigAccount.metadata.inner.contents.find((m: any) => m.key == "name")?.value!,
             deps,
             global,
             roles,
