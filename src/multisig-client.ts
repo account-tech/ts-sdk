@@ -1,17 +1,20 @@
 import { SuiClient, getFullnodeUrl } from "@mysten/sui/client";
-import { Transaction, TransactionResult } from "@mysten/sui/transactions";
+import { Transaction, TransactionObjectInput, TransactionResult } from "@mysten/sui/transactions";
 import { KioskClient, Network } from "@mysten/kiosk";
 import { FRAMEWORK, ACCOUNT_PROTOCOL, ACCOUNT_CONFIG, MULTISIG_GENERICS } from "./types/constants";
-import { AccountType, Dep, Kiosk, Member, TransferPolicy } from "./types/account-types";
+import { AccountType, Dep, Kiosk, Member, Threshold, TransferPolicy } from "./types/account-types";
 import { User } from "./lib/user";
 import { Multisig } from "./lib/account/configs/multisig";
 import { TransactionPureInput } from "./types/helper-types";
-import { ActionsArgs, ConfigDepsArgs, ConfigMetadataArgs, ProposalArgs, proposalRegistry, ProposalTypes } from "./types/proposal-types";
+import * as commands from "./lib/commands";
+import { ActionsArgs, ConfigDepsArgs, ProposalArgs, proposalRegistry, ProposalType, ProposalTypes } from "./types/proposal-types";
 import { Proposal } from "./lib/proposals/proposal";
 import { Extensions } from "./lib/extensions";
 import { Approvals } from "./lib/proposals/outcomes/approvals";
-import { ConfigDepsProposal, ConfigMetadataProposal } from "./lib/proposals/account-actions/config";
+import { ConfigDepsProposal } from "./lib/proposals/account-actions/config";
 import { BurnProposal, MintProposal, UpdateProposal } from "./lib/proposals/account-actions/currency";
+import { CommandTypes } from "./types/command-types";
+import { ConfigMultisigProposal } from "./lib/proposals/account-actions/multisig";
 
 export class MultisigClient {
 
@@ -40,12 +43,12 @@ export class MultisigClient {
 
 	async refreshAccount(address: string = this.user.address) {
 		let user = await this.user.fetchUser(address);
-		this.user.setUser(user);
+		this.user.setData(user);
 	}
 
 	async refreshMultisig(address: string = this.multisig.id) {
 		let multisig = await this.multisig.fetchMultisig(address);
-		this.multisig.setMultisig(multisig);
+		this.multisig.setData(multisig);
 	}
 
 	// creates a multisig with default weights of 1 (1 member = 1 voice)
@@ -95,7 +98,7 @@ export class MultisigClient {
 	// Factory function to call the appropriate propose function
 	propose(
 		tx: Transaction,
-		proposalType: ProposalTypes,
+		proposalType: ProposalType,
 		proposalArgs: ProposalArgs,
 		actionsArgs: ActionsArgs,
 		role?: string,
@@ -105,7 +108,7 @@ export class MultisigClient {
 
 		const proposalClass = proposalRegistry[proposalType];
 		const method = proposalClass.prototype.propose;
-		method.call(proposalClass, tx, auth, outcome, this.multisig.id, MULTISIG_GENERICS, proposalArgs, actionsArgs);
+		method.call(proposalClass, tx, MULTISIG_GENERICS, auth, outcome, this.multisig.id, proposalArgs, actionsArgs);
 		// directly approve after proposing
 		this.multisig.approveProposal(tx, proposalArgs.key, this.multisig.id);
 	}
@@ -119,15 +122,35 @@ export class MultisigClient {
 		const proposal = this.proposal(proposalKey);
 		(proposal?.outcome as Approvals).maybeApprove(tx, caller);
 		const executable = (proposal?.outcome as Approvals).constructExecutable(tx);
-		proposal?.execute(tx, executable, MULTISIG_GENERICS);
+		proposal?.execute(tx, MULTISIG_GENERICS, executable);
 	}
+
+	// === Commands ===
+
+	depositCap(
+		tx: Transaction,
+		capType: string,
+		capObject: TransactionObjectInput,
+	) {
+		const auth = this.multisig.authenticate(tx, CommandTypes.LockCap);
+		commands.depositCap(tx, MULTISIG_GENERICS, capType, auth, this.multisig.id, capObject);
+	}
+
+	modifyName(
+		tx: Transaction,
+		newName: string,
+	) {
+		const auth = this.multisig.authenticate(tx, CommandTypes.ConfigMetadata);	
+		commands.replaceMetadata(tx, MULTISIG_GENERICS, auth, this.multisig.id, ["name"], [newName]);
+	}	
 
 	// === Proposals ===
 
-	proposeConfigMetadata(
+	proposeConfigMultisig(
 		tx: Transaction,
-		newName: string = this.multisig.name,
-		otherMetadata: Map<string, string> = new Map(),
+		globalThreshold: number,
+		roleThresholds: Threshold[],
+		members: Member[],
 		key: string,
 		description?: string, // default is empty
 		executionTime?: number, // default is now
@@ -136,16 +159,16 @@ export class MultisigClient {
 		const auth = this.multisig.authenticate(tx, "");
 		const outcome = this.multisig.emptyOutcome(tx);
 
-		ConfigMetadataProposal.prototype.propose(
+		ConfigMultisigProposal.prototype.propose(
 			tx,
+			MULTISIG_GENERICS,
 			auth,
 			outcome,
 			this.multisig.id,
-			MULTISIG_GENERICS,
 			{ key, description, executionTime, expirationTime },
-			{ name: newName, other: otherMetadata },
+			{ members, thresholds: { global: globalThreshold, roles: roleThresholds } },
 		);
-		
+
 		return this.multisig.approveProposal(tx, key, this.multisig.id);
 	}
 	
@@ -162,10 +185,10 @@ export class MultisigClient {
 		
 		ConfigDepsProposal.prototype.propose(
 			tx,
+			MULTISIG_GENERICS,
 			auth,
 			outcome,
 			this.multisig.id,
-			MULTISIG_GENERICS,
 			{ key, description, executionTime, expirationTime },
 			{ deps },
 		);
@@ -187,10 +210,10 @@ export class MultisigClient {
 
 		MintProposal.prototype.propose(
 			tx,
+			MULTISIG_GENERICS,
 			auth,
 			outcome,
 			this.multisig.id,
-			MULTISIG_GENERICS,
 			{ key, description, executionTime, expirationTime },
 			{ coinType, amount },
 		);
@@ -213,10 +236,10 @@ export class MultisigClient {
 
 		BurnProposal.prototype.propose(
 			tx,
+			MULTISIG_GENERICS,
 			auth,
 			outcome,
 			this.multisig.id,
-			MULTISIG_GENERICS,
 			{ key, description, executionTime, expirationTime },
 			{ coinType, coinId, amount },
 		);
@@ -241,10 +264,10 @@ export class MultisigClient {
 
 		UpdateProposal.prototype.propose(
 			tx,
+			MULTISIG_GENERICS,
 			auth,
 			outcome,
 			this.multisig.id,
-			MULTISIG_GENERICS,
 			{ key, description, executionTime, expirationTime },
 			{ coinType, name: newName, symbol: newSymbol, description: newDescription, icon: newIcon },
 		);

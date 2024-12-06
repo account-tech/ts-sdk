@@ -1,10 +1,11 @@
 import { Transaction, TransactionObjectInput, TransactionResult } from "@mysten/sui/transactions";
 import { SuiClient } from "@mysten/sui/client";
-import * as config from "src/.gen/account-actions/config/functions";
+import * as config from "../../../.gen/account-actions/config/functions";
+import { ConfigDepsArgs, ProposalArgs, ProposalFields } from "../../../types/proposal-types";
+import { EXTENSIONS } from "../../../types/constants";
 import { Proposal } from "../proposal";
-import { EXTENSIONS } from "src/types/constants";
-import { ConfigDepsArgs, ProposalArgs, ProposalFields } from "src/types/proposal-types";
 import { Outcome } from "../outcome";
+import { ConfigDepsAction } from "src/.gen/account-actions/config/structs";
 
 export class ConfigDepsProposal extends Proposal {
     args?: ConfigDepsArgs;
@@ -18,22 +19,24 @@ export class ConfigDepsProposal extends Proposal {
         const proposal = new ConfigDepsProposal(client, account, outcome, fields);
         // resolve actions
         const actions = await proposal.fetchActions(fields.actionsId);
-        if (actions.length === 0) {
-            throw new Error('No actions found for the ConfigDeps proposal');
-        }
+        const configDepsAction = ConfigDepsAction.fromFieldsWithTypes(actions[0]);
 
         proposal.args = {
-            deps: actions[0].deps.inner,
+            deps: configDepsAction.deps.inner.map((dep) => ({
+                name: dep.name,
+                addr: dep.addr,
+                version: Number(dep.version),
+            })),
         };
         return proposal;
     }
 
     propose(
         tx: Transaction,
+        accountGenerics: [string, string],
         auth: TransactionObjectInput,
         outcome: TransactionObjectInput,
         account: string,
-        accountGenerics: [string, string],
         proposalArgs: ProposalArgs,
         actionArgs: ConfigDepsArgs,
     ): TransactionResult {
@@ -67,8 +70,8 @@ export class ConfigDepsProposal extends Proposal {
 
     execute(
         tx: Transaction,
-        executable: TransactionObjectInput,
         accountGenerics: [string, string],
+        executable: TransactionObjectInput,
     ): TransactionResult {
         return config.executeConfigDeps(
             tx,

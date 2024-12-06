@@ -33,7 +33,7 @@ export class User implements UserData {
         accountType: AccountType
     ): Promise<User> {
 		const user = new User(client, address, accountType);
-		user.setUser(await user.fetchUser());
+		user.setData(await user.fetchUser());
 		return user;
 	}
 	
@@ -93,14 +93,14 @@ export class User implements UserData {
 		}
 	}
 
-	setUser(account: UserData) {
+	setData(account: UserData) {
 		this.id = account.id;
 		this.username = account.username;
 		this.avatar = account.avatar;
 		this.accounts = account.accounts;
 	}
 
-	getUser(): UserData {
+	getData(): UserData {
 		return {
 			id: this.id,
 			username: this.username,

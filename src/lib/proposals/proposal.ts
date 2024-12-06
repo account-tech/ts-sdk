@@ -7,8 +7,8 @@ export interface Proposal {
     args?: ActionsArgs;
     
     init(client: SuiClient, account: string): Promise<Proposal>;
-    propose(tx: Transaction, auth: TransactionObjectInput, outcome: TransactionObjectInput, account: string, accountGenerics: [string, string], proposalArgs: ProposalArgs, actionArgs: ActionsArgs): TransactionResult;
-    execute(tx: Transaction, executable: TransactionObjectInput, accountGenerics: [string, string], ...args: any[]): TransactionResult;
+    propose(tx: Transaction, accountGenerics: [string, string], auth: TransactionObjectInput, outcome: TransactionObjectInput, account: string, proposalArgs: ProposalArgs, actionArgs: ActionsArgs): TransactionResult;
+    execute(tx: Transaction, accountGenerics: [string, string], executable: TransactionObjectInput, ...args: any[]): TransactionResult;
 }
 
 
@@ -34,10 +34,10 @@ export class Proposal {
                 ids,
                 options: { showContent: true }
             });
-            actions = actionDfs.map((df: any) => ({
-                type: df.data?.content?.fields.value.type,
-                ...df.data?.content?.fields.value.fields
-            }));
+            actions = actionDfs.map((df: any) => df.data?.content.fields.value);
+        }
+        if (actions.length === 0) {
+            throw new Error('No actions found for the proposal');
         }
 
         return actions;

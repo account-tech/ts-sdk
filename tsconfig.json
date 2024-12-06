@@ -80,7 +80,7 @@
       "baseUrl": "." /* Skip type checking all .d.ts files. */
   },
   "include": [
-      "src/**/*",
+      "src",
       "src/.gen/**/*"
   ]
 }

@@ -6,7 +6,7 @@ import { MultisigClient } from "../../src/multisig-client";
     const ms = await MultisigClient.init(
         "testnet",
         keypair.toSuiAddress(),
-        "0x43867c3b98bc88215b3bcbbbb2ccf9a94367dcd5195432dae499116860d619ea"
+        "0xdd50ac61bb4ec05ce67538c873339fbcf87869cd2cc10a84ff0aa0b34fee6a16"
     )
-    console.log(ms.multisig);
+    console.log(ms.proposal("Add ConfigMetadata role")?.args);
 })();

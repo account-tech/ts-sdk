@@ -15,11 +15,11 @@ export interface ExecuteProposalArgs { account: TransactionObjectInput; key: str
 
 export function executeProposal( tx: Transaction, args: ExecuteProposalArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::multisig::execute_proposal`, arguments: [ obj(tx, args.account), pure(tx, args.key, `${String.$typeName}`), obj(tx, args.clock) ], }) }
 
+export function addresses( tx: Transaction, multisig: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::multisig::addresses`, arguments: [ obj(tx, multisig) ], }) }
+
 export interface AcceptInviteArgs { user: TransactionObjectInput; invite: TransactionObjectInput }
 
 export function acceptInvite( tx: Transaction, args: AcceptInviteArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::multisig::accept_invite`, arguments: [ obj(tx, args.user), obj(tx, args.invite) ], }) }
-
-export function addresses( tx: Transaction, multisig: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::multisig::addresses`, arguments: [ obj(tx, multisig) ], }) }
 
 export interface ApproveProposalArgs { account: TransactionObjectInput; key: string | TransactionArgument }
 

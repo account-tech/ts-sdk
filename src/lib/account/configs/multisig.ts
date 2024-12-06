@@ -16,17 +16,19 @@ import { CLOCK, EXTENSIONS, ACCOUNT_ACTIONS, ACCOUNT_CONFIG, MULTISIG_GENERICS }
 import { User } from "../../user";
 import { Proposal } from "../../proposals/proposal";
 import { ConfigDepsProposal } from "../../proposals/account-actions/config";
-import { Dep, Role, MemberAccount, AccountType, MultisigData } from "../../../types/account-types";
-import { BurnArgs, ConfigDepsArgs, ConfigMultisigArgs, MintArgs, ProposalArgs, ProposalFields, UpdateArgs } from "../../../types/proposal-types";
+import { Dep, Role, MemberUser, AccountType, MultisigData } from "../../../types/account-types";
+import { BurnArgs, ConfigDepsArgs, ConfigMultisigArgs, MintArgs, ProposalArgs, ProposalFields, ProposalTypes, UpdateArgs } from "../../../types/proposal-types";
 import { TransactionPureInput } from "src/types/helper-types";
 import { BurnProposal, MintProposal, UpdateProposal } from "../../proposals/account-actions/currency";
 import { Account } from "../account";
 import { Outcome } from "src/lib/proposals/outcome";
 import { Approvals } from "src/lib/proposals/outcomes/approvals";
+import { ConfigMultisigProposal } from "src/lib/proposals/account-actions/multisig";
 
 export class Multisig extends Account {
+    global: Role = { threshold: 0, totalWeight: 0 };
     roles: Map<string, Role> = new Map();
-    members: MemberAccount[] = [];
+    members: MemberUser[] = [];
 
     static async init(
         client: SuiClient,
@@ -37,7 +39,7 @@ export class Multisig extends Account {
         multisig.userAddr = userAddr;
         if (multisigId) {
             multisig.id = multisigId;
-            multisig.setMultisig(await multisig.fetchMultisig(multisigId));
+            multisig.setData(await multisig.fetchMultisig(multisigId));
         }
         return multisig;
     }
@@ -86,8 +88,8 @@ export class Multisig extends Account {
             });
         });
         // get thresholds
+        const global = { threshold: Number(multisigReified.config.global), totalWeight: globalWeight };
         const roles = new Map<string, Role>();
-        roles.set("global", { threshold: Number(multisigReified.config.global), totalWeight: globalWeight });
         multisigReified.config.roles.forEach((role: RoleFields) => {
             roles.set(role.name, { threshold: Number(role.threshold), totalWeight: roleWeights.get(role.name) || 0 });
         });
@@ -114,26 +116,29 @@ export class Multisig extends Account {
             id: multisigReified.id,
             name: multisigReified.metadata.inner.contents.find((m: any) => m.key == "name")?.value!,
             deps,
+            global,
             roles,
             members,
             proposals,
         }
     }
 
-    setMultisig(multisig: MultisigData) {
+    setData(multisig: MultisigData) {
         this.id = multisig.id;
         this.name = multisig.name;
         this.deps = multisig.deps;
+        this.global = multisig.global;
         this.roles = multisig.roles;
         this.members = multisig.members;
         this.proposals = multisig.proposals;
     }
 
-    getMultisig(): MultisigData {
+    getData(): MultisigData {
         return {
             id: this.id,
             name: this.name,
             deps: this.deps,
+            global: this.global,
             roles: this.roles,
             members: this.members,
             proposals: this.proposals,
@@ -452,16 +457,16 @@ export class Multisig extends Account {
         outcome: Outcome,
         fields: ProposalFields
     ): Promise<Proposal> {
-        switch ("0x" + fields.issuer.roleType) {
-            // case `${ACCOUNT_ACTIONS}::config::ConfigRulesProposal`:
-            //     return await ConfigRulesProposal.init(client, this.id, fields);
-            case `${ACCOUNT_ACTIONS.V1}::config::ConfigDepsProposal`:
+        switch (fields.issuer.roleType) {
+            case ProposalTypes.ConfigMultisig:
+                return await ConfigMultisigProposal.init(client, this.id, outcome, fields);
+            case ProposalTypes.ConfigDeps:
                 return await ConfigDepsProposal.init(client, this.id, outcome, fields);
-            case `${ACCOUNT_ACTIONS.V1}::currency::MintProposal`:
+            case ProposalTypes.Mint:
                 return await MintProposal.init(client, this.id, outcome, fields);
-            case `${ACCOUNT_ACTIONS.V1}::currency::BurnProposal`:
+            case ProposalTypes.Burn:
                 return await BurnProposal.init(client, this.id, outcome, fields);
-            case `${ACCOUNT_ACTIONS.V1}::currency::UpdateProposal`:
+            case ProposalTypes.Update:
                 return await UpdateProposal.init(client, this.id, outcome, fields);
             // ... other cases for different proposal types
             default:

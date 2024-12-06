@@ -4,9 +4,9 @@ import {ID} from "../../_dependencies/source/0x2/object/structs";
 import {GenericArg, generic, obj, pure} from "../../_framework/util";
 import {Transaction, TransactionArgument, TransactionObjectInput} from "@mysten/sui/transactions";
 
-export interface DelistArgs { auth: TransactionObjectInput; account: TransactionObjectInput; kiosk: TransactionObjectInput; name: string | TransactionArgument; nft: string | TransactionArgument }
+export interface DelistArgs { auth: TransactionObjectInput; account: TransactionObjectInput; kiosk: TransactionObjectInput; name: string | TransactionArgument; nftId: string | TransactionArgument }
 
-export function delist( tx: Transaction, typeArgs: [string, string, string], args: DelistArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::kiosk::delist`, typeArguments: typeArgs, arguments: [ obj(tx, args.auth), obj(tx, args.account), obj(tx, args.kiosk), pure(tx, args.name, `${String.$typeName}`), pure(tx, args.nft, `${ID.$typeName}`) ], }) }
+export function delist( tx: Transaction, typeArgs: [string, string, string], args: DelistArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::kiosk::delist`, typeArguments: typeArgs, arguments: [ obj(tx, args.auth), obj(tx, args.account), obj(tx, args.kiosk), pure(tx, args.name, `${String.$typeName}`), pure(tx, args.nftId, `${ID.$typeName}`) ], }) }
 
 export interface PlaceArgs { auth: TransactionObjectInput; account: TransactionObjectInput; accountKiosk: TransactionObjectInput; senderKiosk: TransactionObjectInput; senderCap: TransactionObjectInput; policy: TransactionObjectInput; name: string | TransactionArgument; nftId: string | TransactionArgument }
 

@@ -1,24 +1,24 @@
 import { Transaction } from "@mysten/sui/transactions";
-import { Ed25519Keypair } from "@mysten/sui/keypairs/ed25519";
 import { MultisigClient } from "../../src/multisig-client";
+import { Ed25519Keypair } from "@mysten/sui/keypairs/ed25519";
 
 (async () => {
-    const keypair = Ed25519Keypair.fromSecretKey(Uint8Array.from(Buffer.from("AM06bExREdFceWiExfSacTJ+64AQtFl7SRkSiTmAqh6F", "base64")).slice(1));    
+    // ! important: set the correct multisig id
+    const multisigId = "0xef22166647326255140f47a01145fc8cf9f968a7de3e8d894ae62b6847d5b5b3";
+
+    const keypair = Ed25519Keypair.fromSecretKey(Uint8Array.from(Buffer.from("AM06bExREdFceWiExfSacTJ+64AQtFl7SRkSiTmAqh6F", "base64")).slice(1));
     const ms = await MultisigClient.init(
         "testnet",
         keypair.toSuiAddress(),
+        multisigId,
     );
 
     const tx = new Transaction();
-    tx.setGasBudget(1000000000);
+    tx.setGasBudget(100000000);
 
-    ms.createMultisig(
-        tx, 
-        "Multisig Test Members", 
-        { username: "Test User", profilePicture: "https://example.com/avatar.png" }, 
-        ["0x528b64ec15669c537d501d9260d321c56e948bd260459b6260a89cfd93178e15"]
-    );
-    
+    ms.modifyName(tx, "New Name");
+    // ms.depositCap(tx, "0x2::package::UpgradeCap", "0x1077c3b838f82dc89585715a1460e6bd99cb7b67c11e470988ada077a5b0340a");
+
     const result = await ms.client.signAndExecuteTransaction({
         signer: keypair,
         transaction: tx,
@@ -31,5 +31,5 @@ import { MultisigClient } from "../../src/multisig-client";
     }
 
     console.log(result.effects?.status.status);
-    console.log(result.objectChanges);
+    console.log(result.effects?.created);
 })();

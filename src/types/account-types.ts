@@ -31,8 +31,9 @@ export interface MultisigData {
     id: string;
     name: string;
     deps: Dep[];
+    global: Role;
     roles: Map<string, Role>;
-    members: MemberAccount[];
+    members: MemberUser[];
     proposals: Proposal[];
 }
 
@@ -52,7 +53,7 @@ export type Member = {
     roles: string[],
 };
 
-export type MemberAccount = {
+export type MemberUser = {
     address: string,
     accountId: string,
     username: string,

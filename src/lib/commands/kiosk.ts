@@ -47,12 +47,12 @@ export function delistFromKiosk(
     account: string,
     kiosk: TransactionObjectInput,
     name: string,
-    nft: TransactionPureInput,
+    nftId: TransactionPureInput,
 ) {
     delist(
         tx,
         [...accountGenerics, nftType],
-        { auth, account, kiosk, name, nft },
+        { auth, account, kiosk, name, nftId },
     );
 }
 

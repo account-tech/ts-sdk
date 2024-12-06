@@ -1,11 +1,13 @@
 import { Transaction, TransactionObjectInput, TransactionResult } from "@mysten/sui/transactions";
 import { SuiClient } from "@mysten/sui/client";
 import * as multisig from "../../../.gen/account-config/multisig/functions";
+import { ConfigMultisigAction } from "../../../.gen/account-config/multisig/structs";
+import { ConfigMultisigArgs, ProposalArgs, ProposalFields } from "../../../types/proposal-types";
 import { Proposal } from "../proposal";
-import { ConfigMultisigArgs, ProposalArgs, ProposalFields } from "src/types/proposal-types";
 import { Outcome } from "../outcome";
 
 export class ConfigMultisigProposal extends Proposal {
+    args?: ConfigMultisigArgs;
 
     static async init(
         client: SuiClient,
@@ -16,23 +18,32 @@ export class ConfigMultisigProposal extends Proposal {
         const proposal = new ConfigMultisigProposal(client, multisig, outcome, fields);
         // resolve actions
         const actions = await proposal.fetchActions(fields.actionsId);
-        if (actions.length === 0) {
-            throw new Error('No actions found for the ConfigRules proposal');
-        }
+        const configMultisigAction = ConfigMultisigAction.fromFieldsWithTypes(actions[0]);
 
         proposal.args = {
-            members: actions[0].inner,
-            thresholds: actions[1].inner,
+            members: configMultisigAction.config.members.map((member) => ({
+                address: member.addr,
+                weight: Number(member.weight),
+                roles: member.roles.contents,
+            })),
+            thresholds: {
+                global: Number(configMultisigAction.config.global),
+                roles: configMultisigAction.config.roles.map((role) => ({
+                    name: role.name,
+                    threshold: Number(role.threshold),
+                })),
+            },
         };
+
         return proposal;
     }
 
     propose(
         tx: Transaction,
+        _accountGenerics: [string, string], // can be anything, this is just to respect the interface
         auth: TransactionObjectInput,
         outcome: TransactionObjectInput,
         account: string,
-        _accountGenerics: [string, string],
         proposalArgs: ProposalArgs,
         actionArgs: ConfigMultisigArgs,
     ): TransactionResult {
@@ -80,6 +91,7 @@ export class ConfigMultisigProposal extends Proposal {
 
     execute(
         tx: Transaction,
+        _accountGenerics: [string, string], // can be anything, this is just to respect the interface
         executable: TransactionObjectInput,
     ): TransactionResult {
         return multisig.executeConfigMultisig(

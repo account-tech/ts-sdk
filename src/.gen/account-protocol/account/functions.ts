@@ -23,13 +23,13 @@ export interface KeepArgs { account: TransactionObjectInput; obj: GenericArg }
 
 export function keep( tx: Transaction, typeArgs: [string, string, string], args: KeepArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::account::keep`, typeArguments: typeArgs, arguments: [ obj(tx, args.account), generic(tx, `${typeArgs[2]}`, args.obj) ], }) }
 
-export function init( tx: Transaction, otw: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::account::init`, arguments: [ obj(tx, otw) ], }) }
-
 export function proposals( tx: Transaction, typeArgs: [string, string], account: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::account::proposals`, typeArguments: typeArgs, arguments: [ obj(tx, account) ], }) }
 
 export interface ProposalArgs { account: TransactionObjectInput; key: string | TransactionArgument }
 
 export function proposal( tx: Transaction, typeArgs: [string, string], args: ProposalArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::account::proposal`, typeArguments: typeArgs, arguments: [ obj(tx, args.account), pure(tx, args.key, `${String.$typeName}`) ], }) }
+
+export function init( tx: Transaction, otw: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::account::init`, arguments: [ obj(tx, otw) ], }) }
 
 export function deps( tx: Transaction, typeArgs: [string, string], account: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::account::deps`, typeArguments: typeArgs, arguments: [ obj(tx, account) ], }) }
 

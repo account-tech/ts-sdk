@@ -7,13 +7,14 @@ export function replaceMetadata(
     accountGenerics: [string, string],
     auth: TransactionObjectInput,
     account: string,
-    metadata: Map<string, string>,
+    keys: string[],
+    values: string[],
 ) {
-    if (Array.from(metadata.keys())[0] !== "name") throw new Error("'name' must be the first key in metadata");
+    if (keys[0] !== "name") throw new Error("'name' must be the first key in metadata");
 
     editMetadata(
         tx,
         accountGenerics,
-        { auth, account, keys: Array.from(metadata.keys()), values: Array.from(metadata.values()) },
+        { auth, account, keys, values },
     );
 }
