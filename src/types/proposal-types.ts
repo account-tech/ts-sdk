@@ -5,6 +5,7 @@ import { ConfigDepsProposal } from "../lib/proposals/account-actions/config";
 import { DisableProposal, MintProposal, BurnProposal, UpdateProposal } from "../lib/proposals/account-actions/currency";
 import { ConfigMultisigProposal } from "../lib/proposals/account-actions/multisig";
 import { ACCOUNT_ACTIONS, ACCOUNT_CONFIG } from "./constants";
+import { ListProposal, TakeProposal } from "../lib/proposals/account-actions/kiosk";
 
 export type ProposalType = typeof ProposalTypes[keyof typeof ProposalTypes];
 
@@ -18,6 +19,8 @@ export const ProposalTypes = {
     Mint: `${ACCOUNT_ACTIONS.V1.slice(2)}::currency::MintProposal`,
     Burn: `${ACCOUNT_ACTIONS.V1.slice(2)}::currency::BurnProposal`,
     Update: `${ACCOUNT_ACTIONS.V1.slice(2)}::currency::UpdateProposal`,
+    Take: `${ACCOUNT_ACTIONS.V1.slice(2)}::kiosk::TakeProposal`,
+    List: `${ACCOUNT_ACTIONS.V1.slice(2)}::kiosk::ListProposal`,
 } as const;
 
 export const proposalRegistry: Record<ProposalType, typeof Proposal> = {
@@ -28,6 +31,8 @@ export const proposalRegistry: Record<ProposalType, typeof Proposal> = {
     [ProposalTypes.Mint]: MintProposal,
     [ProposalTypes.Burn]: BurnProposal,
     [ProposalTypes.Update]: UpdateProposal,
+    [ProposalTypes.Take]: TakeProposal,
+    [ProposalTypes.List]: ListProposal,
 } as const;
 
 export type ProposalFields = {
@@ -46,7 +51,7 @@ export type ProposalArgs = {
     expirationTime?: number;
 }
 
-export type ActionsArgs = ConfigMultisigArgs | AccessArgs | ConfigDepsArgs | DisableArgs | MintArgs | BurnArgs | UpdateArgs | TakeArgs;
+export type ActionsArgs = ConfigMultisigArgs | AccessArgs | ConfigDepsArgs | DisableArgs | MintArgs | BurnArgs | UpdateArgs | TakeArgs | ListArgs;
 
 export type ConfigMultisigArgs = {
     members?: Member[];
@@ -94,4 +99,9 @@ export type TakeArgs = {
     name: string;
     nftIds: string[];
     recipient: string;
+}
+
+export type ListArgs = {
+    name: string;
+    listings: { nftId: string, price: number }[];
 }
