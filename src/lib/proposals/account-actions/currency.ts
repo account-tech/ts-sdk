@@ -3,10 +3,12 @@ import { CoinMetadata, SuiClient } from "@mysten/sui/client";
 import { getCoinMeta } from "@polymedia/coinmeta";
 import * as currency from "../../../.gen/account-actions/currency/functions";
 import { MintAction, BurnAction, UpdateAction, DisableAction } from "../../../.gen/account-actions/currency/structs";
-import { UpdateArgs, BurnArgs, MintArgs, ProposalArgs, ProposalFields, DisableArgs } from "../../../types/proposal-types";
+import { UpdateArgs, BurnArgs, MintArgs, ProposalArgs, ProposalFields, DisableArgs, MintAndTransferArgs, MintAndVestArgs } from "../../../types/proposal-types";
 import { Proposal } from "../proposal";
 import { Outcome } from "../outcome";
 import { WithdrawAction } from "src/.gen/account-actions/owned/structs";
+import { TransferAction } from "src/.gen/account-actions/transfer/structs";
+import { VestingAction } from "src/.gen/account-actions/vesting/structs";
 
 export class DisableProposal extends Proposal {
     args?: DisableArgs;
@@ -160,7 +162,7 @@ export class BurnProposal extends Proposal {
         const actions = await proposal.fetchActions(fields.actionsId);
 
         const withdrawAction = WithdrawAction.fromFieldsWithTypes(actions[0]); // CoinType, WithdrawAction
-        const coinType = actions[0].type.match(/<([^>]*)>/)[1];
+        const coinType = actions[1].type.match(/<([^>]*)>/)[1];
         const burnAction = BurnAction.fromFieldsWithTypes(coinType, actions[1]); // CoinType, BurnAction
 
         proposal.args = { 
@@ -287,6 +289,144 @@ export class UpdateProposal extends Proposal {
                 executable,
                 account: this.account!,
                 metadata: this.metadata?.id!,
+            }
+        );
+    }
+}
+
+export class MintAndTransferProposal extends Proposal {
+    args?: MintAndTransferArgs;
+
+    static async init(
+        client: SuiClient,
+        account: string,
+        outcome: Outcome,
+        fields: ProposalFields,
+    ): Promise<MintAndTransferProposal> {
+        const proposal = new MintAndTransferProposal(client, account, outcome, fields);
+        // resolve actions
+        const actions = await proposal.fetchActions(fields.actionsId);
+        const coinType = actions[0].type.match(/<([^>]*)>/)[1];
+
+        proposal.args = {
+            coinType,
+            transfers: Array.from({ length: actions.length / 2 }, (_, i) => ({
+                amount: Number(MintAction.fromFieldsWithTypes(coinType, actions[i * 2]).amount),
+                recipient: TransferAction.fromFieldsWithTypes(actions[i * 2 + 1]).recipient,
+            })),
+        };
+        return proposal;
+    }
+
+    propose(
+        tx: Transaction,
+        accountGenerics: [string, string],
+        auth: TransactionObjectInput,
+        outcome: TransactionObjectInput,
+        account: string,
+        proposalArgs: ProposalArgs,
+        actionArgs: MintAndTransferArgs,
+    ): TransactionResult {
+        return currency.proposeTransfer(
+            tx,
+            [...accountGenerics, actionArgs.coinType],
+            {
+                auth,
+                account,
+                outcome,
+                key: proposalArgs.key,
+                description: proposalArgs.description ?? "",
+                executionTime: BigInt(proposalArgs.executionTime ?? 0),
+                expirationTime: BigInt(proposalArgs.expirationTime ?? Math.floor(Date.now()) + 7 * 24 * 60 * 60 * 1000),
+                amounts: actionArgs.transfers.map(transfer => BigInt(transfer.amount)),
+                recipients: actionArgs.transfers.map(transfer => transfer.recipient),
+            }
+        );
+    }
+
+    execute(
+        tx: Transaction,
+        accountGenerics: [string, string],
+        executable: TransactionObjectInput,
+    ): TransactionResult {
+        let result;
+        for (let i = 0; i < this.args!.transfers.length; i++) {
+            result = currency.executeTransfer(
+                tx,
+                [...accountGenerics, this.args!.coinType],
+                {
+                    executable,
+                    account: this.account!,
+                }
+            );
+        }
+        return result!;
+    }
+}
+
+export class MintAndVestProposal extends Proposal {
+    args?: MintAndVestArgs;
+
+    static async init(
+        client: SuiClient,
+        account: string,
+        outcome: Outcome,
+        fields: ProposalFields,
+    ): Promise<MintAndVestProposal> {
+        const proposal = new MintAndVestProposal(client, account, outcome, fields);
+        // resolve actions
+        const actions = await proposal.fetchActions(fields.actionsId);
+        const coinType = actions[0].type.match(/<([^>]*)>/)[1];
+
+        proposal.args = {
+            coinType,
+            amount: Number(MintAction.fromFieldsWithTypes(coinType, actions[0]).amount),
+            recipient: VestingAction.fromFieldsWithTypes(actions[1]).recipient,
+            start: Number(VestingAction.fromFieldsWithTypes(actions[1]).startTimestamp),
+            end: Number(VestingAction.fromFieldsWithTypes(actions[1]).endTimestamp),
+        };
+        return proposal;
+    }
+
+    propose(
+        tx: Transaction,
+        accountGenerics: [string, string],
+        auth: TransactionObjectInput,
+        outcome: TransactionObjectInput,
+        account: string,
+        proposalArgs: ProposalArgs,
+        actionArgs: MintAndVestArgs,
+    ): TransactionResult {
+        return currency.proposeVesting(
+            tx,
+            [...accountGenerics, actionArgs.coinType],
+            {
+                auth,
+                account,
+                outcome,
+                key: proposalArgs.key,
+                description: proposalArgs.description ?? "",
+                executionTime: BigInt(proposalArgs.executionTime ?? 0),
+                expirationTime: BigInt(proposalArgs.expirationTime ?? Math.floor(Date.now()) + 7 * 24 * 60 * 60 * 1000),
+                totalAmount: BigInt(actionArgs.amount),
+                recipient: actionArgs.recipient,
+                startTimestamp: BigInt(actionArgs.start),
+                endTimestamp: BigInt(actionArgs.end),
+            }
+        );
+    }
+
+    execute(
+        tx: Transaction,
+        accountGenerics: [string, string],
+        executable: TransactionObjectInput,
+    ): TransactionResult {
+        return currency.executeVesting(
+            tx,
+            [...accountGenerics, this.args!.coinType],
+            {
+                executable,
+                account: this.account!,
             }
         );
     }
