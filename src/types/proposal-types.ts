@@ -6,6 +6,7 @@ import { DisableProposal, MintProposal, BurnProposal, UpdateProposal, MintAndTra
 import { ConfigMultisigProposal } from "../lib/proposals/account-actions/multisig";
 import { ACCOUNT_ACTIONS, ACCOUNT_CONFIG } from "./constants";
 import { ListProposal, TakeProposal } from "../lib/proposals/account-actions/kiosk";
+import { WithdrawAndTransferProposal, WithdrawAndVestProposal } from "src/lib/proposals/account-actions/owned";
 
 export type ProposalType = typeof ProposalTypes[keyof typeof ProposalTypes];
 
@@ -23,6 +24,8 @@ export const ProposalTypes = {
     MintAndVest: `${ACCOUNT_ACTIONS.V1.slice(2)}::currency::MintAndVestProposal`,
     Take: `${ACCOUNT_ACTIONS.V1.slice(2)}::kiosk::TakeProposal`,
     List: `${ACCOUNT_ACTIONS.V1.slice(2)}::kiosk::ListProposal`,
+    WithdrawAndTransfer: `${ACCOUNT_ACTIONS.V1.slice(2)}::owned::WithdrawAndTransferProposal`,
+    WithdrawAndVest: `${ACCOUNT_ACTIONS.V1.slice(2)}::owned::WithdrawAndVestProposal`,
 } as const;
 
 export const proposalRegistry: Record<ProposalType, typeof Proposal> = {
@@ -37,6 +40,8 @@ export const proposalRegistry: Record<ProposalType, typeof Proposal> = {
     [ProposalTypes.MintAndVest]: MintAndVestProposal,
     [ProposalTypes.Take]: TakeProposal,
     [ProposalTypes.List]: ListProposal,
+    [ProposalTypes.WithdrawAndTransfer]: WithdrawAndTransferProposal,
+    [ProposalTypes.WithdrawAndVest]: WithdrawAndVestProposal,
 } as const;
 
 export type ProposalFields = {
@@ -55,7 +60,7 @@ export type ProposalArgs = {
     expirationTime?: number;
 }
 
-export type ActionsArgs = ConfigMultisigArgs | AccessArgs | ConfigDepsArgs | DisableArgs | MintArgs | BurnArgs | UpdateArgs | MintAndTransferArgs | MintAndVestArgs | TakeArgs | ListArgs;
+export type ActionsArgs = ConfigMultisigArgs | AccessArgs | ConfigDepsArgs | DisableArgs | MintArgs | BurnArgs | UpdateArgs | MintAndTransferArgs | MintAndVestArgs | TakeArgs | ListArgs | WithdrawAndTransferArgs | WithdrawAndVestArgs;
 
 export type ConfigMultisigArgs = {
     members?: Member[];
@@ -121,4 +126,15 @@ export type TakeArgs = {
 export type ListArgs = {
     name: string;
     listings: { nftId: string, price: number }[];
+}
+
+export type WithdrawAndTransferArgs = {
+    transfers: { objectId: string, recipient: string }[];
+}
+
+export type WithdrawAndVestArgs = {
+    coinId: string;
+    start: number;
+    end: number;
+    recipient: string;
 }
