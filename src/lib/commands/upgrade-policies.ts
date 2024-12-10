@@ -1,5 +1,5 @@
 import { lockCap } from "src/.gen/account-actions/upgrade-policies/functions";
-import { Transaction, TransactionObjectInput } from "@mysten/sui/transactions";
+import { Transaction, TransactionObjectInput, TransactionResult } from "@mysten/sui/transactions";
 
 /// Deposits and locks an UpgradeCap in the Account
 export function depositUpgradeCap(
@@ -10,8 +10,8 @@ export function depositUpgradeCap(
     upgradeCap: TransactionObjectInput,
     packageName: string, // can be anything
     delayMs: number,
-) {
-    lockCap(
+): TransactionResult {
+    return lockCap(
         tx,
         accountGenerics,
         { auth, account, cap: upgradeCap, name: packageName, delayMs: BigInt(delayMs) },

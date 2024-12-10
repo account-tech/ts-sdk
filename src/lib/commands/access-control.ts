@@ -1,5 +1,5 @@
 import { lockCap } from "src/.gen/account-actions/access-control/functions";
-import { Transaction, TransactionObjectInput } from "@mysten/sui/transactions";
+import { Transaction, TransactionObjectInput, TransactionResult } from "@mysten/sui/transactions";
 
 /// Deposits and locks a Cap object in the Account
 export function depositCap(
@@ -9,8 +9,8 @@ export function depositCap(
     auth: TransactionObjectInput,
     account: string,
     capObject: TransactionObjectInput,
-) {
-    lockCap(
+): TransactionResult {
+    return lockCap(
         tx,
         [...accountGenerics, capType],
         { auth, account, cap: capObject },

@@ -1,7 +1,7 @@
 import { SuiClient, getFullnodeUrl } from "@mysten/sui/client";
 import { Transaction, TransactionObjectInput, TransactionResult } from "@mysten/sui/transactions";
 import { KioskClient, Network } from "@mysten/kiosk";
-import { FRAMEWORK, ACCOUNT_PROTOCOL, ACCOUNT_CONFIG, MULTISIG_GENERICS } from "./types/constants";
+import { FRAMEWORK, ACCOUNT_PROTOCOL, ACCOUNT_CONFIG, MULTISIG_GENERICS, TRANSFER_POLICY_RULES } from "./types/constants";
 import { AccountType, Dep, Kiosk, Member, Threshold, TransferPolicy } from "./types/account-types";
 import { User } from "./lib/user";
 import { Multisig } from "./lib/account/configs/multisig";
@@ -127,22 +127,168 @@ export class MultisigClient {
 
 	// === Commands ===
 
+	/// Deposits and locks a Cap object in the Account
 	depositCap(
 		tx: Transaction,
 		capType: string,
 		capObject: TransactionObjectInput,
-	) {
+	): TransactionResult {
 		const auth = this.multisig.authenticate(tx, CommandTypes.LockCap);
-		commands.depositCap(tx, MULTISIG_GENERICS, capType, auth, this.multisig.id, capObject);
+		return commands.depositCap(tx, MULTISIG_GENERICS, capType, auth, this.multisig.id, capObject);
 	}
 
+	/// Modifies the name of the Account
 	modifyName(
 		tx: Transaction,
 		newName: string,
-	) {
+	): TransactionResult {
 		const auth = this.multisig.authenticate(tx, CommandTypes.ConfigMetadata);	
-		commands.replaceMetadata(tx, MULTISIG_GENERICS, auth, this.multisig.id, ["name"], [newName]);
+		return commands.replaceMetadata(tx, MULTISIG_GENERICS, auth, this.multisig.id, ["name"], [newName]);
 	}	
+
+	/// Deposits and locks a TreasuryCap object in the Account
+	depositTreasuryCap(
+		tx: Transaction,
+		coinType: string,
+		treasuryCap: TransactionObjectInput,
+	): TransactionResult {
+		const auth = this.multisig.authenticate(tx, CommandTypes.LockTreasuryCap);
+		return commands.depositTreasuryCap(tx, MULTISIG_GENERICS, coinType, auth, this.multisig.id, treasuryCap);
+	}
+
+	/// Opens a Kiosk in the Account
+	openKiosk(
+		tx: Transaction,
+		kioskName: string,
+	): TransactionResult {
+		const auth = this.multisig.authenticate(tx, CommandTypes.Kiosk);
+		return commands.openKiosk(tx, MULTISIG_GENERICS, auth, this.multisig.id, kioskName);
+	}
+
+	/// Places an NFT in a Kiosk managed by the Account
+	async placeInKiosk(
+		tx: Transaction,
+		nftType: string,
+		senderKiosk: TransactionObjectInput,
+		senderCap: TransactionObjectInput,
+		kioskName: string,
+		nftId: string,
+	): Promise<TransactionResult> {
+		const kioskClient = new KioskClient({ client: this.client, network: Network.TESTNET }); // TODO: change to mainnet
+		const policies = await kioskClient.getTransferPolicies({ type: nftType });
+		// find a correct policy
+		let policyId = "";
+		if (policies.length == 0) {
+			throw new Error("No transfer policy found for the given NFT type");
+		} else if (policies.length == 1) {
+			policyId = policies[0].id;
+		} else {
+			// Find first policy that only contains known rules
+			const validPolicy = policies.find(policy => 
+				policy.rules.every(rule => TRANSFER_POLICY_RULES.includes(rule))
+			);
+			if (!validPolicy) throw new Error("No transfer policy found with only known rules");
+			policyId = validPolicy.id;
+		}
+
+		// get the account kiosk from its name 
+		const accountKiosk = ""; // TODO: ./objects/kiosk.ts
+		
+		const auth = this.multisig.authenticate(tx, CommandTypes.Place(kioskName));
+		const request = commands.placeInKiosk(tx, MULTISIG_GENERICS, nftType, auth, this.multisig.id, accountKiosk, senderKiosk, senderCap, policyId, kioskName, nftId);
+		return tx.moveCall({
+			target: `${FRAMEWORK}::transfer_policy::confirm_request`,
+			typeArguments: [nftType],
+			arguments: [tx.object(policyId), request],
+		});
+	}
+
+	/// Delists an NFT from a Kiosk managed by the Account
+	delistFromKiosk(
+		tx: Transaction,
+		kioskName: string,
+		nftId: string,
+	): TransactionResult {
+		// get the account kiosk from its name 
+		const kiosk = ""; // TODO: ./objects/kiosk.ts
+		// get the nft type from the nft id
+		const nftType = ""; // TODO: ./objects/kiosk.ts
+		const auth = this.multisig.authenticate(tx, CommandTypes.Delist(kioskName));
+		return commands.delistFromKiosk(tx, MULTISIG_GENERICS, nftType, auth, this.multisig.id, kiosk, kioskName, nftId);
+	}
+
+	/// Withdraws the profits from a Kiosk managed by the Account
+	withdrawProfitsFromKiosk(
+		tx: Transaction,
+		kioskName: string,
+	): TransactionResult {
+		// get the account kiosk from its name 
+		const kiosk = ""; // TODO: ./objects/kiosk.ts
+		const auth = this.multisig.authenticate(tx, CommandTypes.Kiosk);
+		return commands.withdrawProfitsFromKiosk(tx, MULTISIG_GENERICS, auth, this.multisig.id, kiosk, kioskName);
+	}
+
+	/// Closes an empty Kiosk managed by the Account
+	closeKiosk(
+		tx: Transaction,
+		kioskName: string,
+	): TransactionResult {
+		// get the account kiosk from its name 
+		const kiosk = ""; // TODO: ./objects/kiosk.ts
+		const auth = this.multisig.authenticate(tx, CommandTypes.Kiosk);
+		return commands.closeKiosk(tx, MULTISIG_GENERICS, auth, this.multisig.id, kiosk, kioskName);
+	}
+
+	/// Opens a Treasury in the Account
+	openTreasury(
+		tx: Transaction,
+		treasuryName: string,
+	): TransactionResult {
+		const auth = this.multisig.authenticate(tx, CommandTypes.Treasury);
+		return commands.openTreasury(tx, MULTISIG_GENERICS, auth, this.multisig.id, treasuryName);
+	}
+
+	/// Deposits an object owned by the Account into the Treasury
+	depositFromAccount(
+		tx: Transaction,
+		treasuryName: string,
+		coin: TransactionObjectInput,
+	): TransactionResult {
+		// get the coinType from the coin id 
+		const coinType = ""; // TODO: ./objects/owned.ts
+		const auth = this.multisig.authenticate(tx, CommandTypes.Deposit(treasuryName));
+		return commands.depositFromAccount(tx, MULTISIG_GENERICS, coinType, auth, this.multisig.id, treasuryName, coin);
+	}
+
+	/// Deposits an object into the Treasury from the caller wallet
+	depositFromWallet(
+		tx: Transaction,
+		coinType: string,
+		treasuryName: string,
+		coin: TransactionObjectInput,
+	): TransactionResult {
+		const auth = this.multisig.authenticate(tx, CommandTypes.Deposit(treasuryName));
+		return commands.depositFromWallet(tx, MULTISIG_GENERICS, coinType, auth, this.multisig.id, treasuryName, coin);
+	}
+
+	/// Closes an empty Treasury managed by the Account
+	closeTreasury(
+		tx: Transaction,
+		treasuryName: string,
+	): TransactionResult {
+		const auth = this.multisig.authenticate(tx, CommandTypes.Treasury);
+		return commands.closeTreasury(tx, MULTISIG_GENERICS, auth, this.multisig.id, treasuryName);
+	}
+
+	/// Deposits and locks an UpgradeCap object in the Account
+	depositUpgradeCap(
+		tx: Transaction,
+		packageName: string,
+		upgradeCap: TransactionObjectInput,
+	): TransactionResult {
+		const auth = this.multisig.authenticate(tx, CommandTypes.LockUpgradeCap);
+		return commands.depositUpgradeCap(tx, MULTISIG_GENERICS, auth, this.multisig.id, upgradeCap, packageName, 0);
+	}
 
 	// === Proposals ===
 

@@ -1,5 +1,5 @@
-import { open, place, delist, withdrawProfits } from "src/.gen/account-actions/kiosk/functions";
-import { Transaction, TransactionObjectInput } from "@mysten/sui/transactions";
+import { open, place, delist, withdrawProfits, close } from "src/.gen/account-actions/kiosk/functions";
+import { Transaction, TransactionObjectInput, TransactionResult } from "@mysten/sui/transactions";
 import { TransactionPureInput } from "src/types/helper-types";
 
 /// Opens a Kiosk managed by the Account
@@ -9,8 +9,8 @@ export function openKiosk(
     auth: TransactionObjectInput,
     account: string,
     name: string,
-) {
-    open(
+): TransactionResult {
+    return open(
         tx,
         accountGenerics,
         { auth, account, name },
@@ -30,8 +30,8 @@ export function placeInKiosk(
     transferPolicy: TransactionObjectInput,
     kioskName: string,
     nftId: TransactionPureInput,
-) {
-    place(
+): TransactionResult {
+    return place(
         tx,
         [...accountGenerics, nftType],
         { auth, account, accountKiosk, senderKiosk, senderCap, policy: transferPolicy, name: kioskName, nftId },
@@ -48,8 +48,8 @@ export function delistFromKiosk(
     kiosk: TransactionObjectInput,
     name: string,
     nftId: TransactionPureInput,
-) {
-    delist(
+): TransactionResult {
+    return delist(
         tx,
         [...accountGenerics, nftType],
         { auth, account, kiosk, name, nftId },
@@ -64,8 +64,24 @@ export function withdrawProfitsFromKiosk(
     account: string,
     kiosk: TransactionObjectInput,
     name: string,
-) {
-    withdrawProfits(
+): TransactionResult {
+    return withdrawProfits(
+        tx,
+        accountGenerics,
+        { auth, account, kiosk, name },
+    );
+}
+
+/// Closes an empty Kiosk managed by the Account
+export function closeKiosk(
+    tx: Transaction,
+    accountGenerics: [string, string],
+    auth: TransactionObjectInput,
+    account: string,
+    kiosk: TransactionObjectInput,
+    name: string,
+): TransactionResult {
+    return close(
         tx,
         accountGenerics,
         { auth, account, kiosk, name },

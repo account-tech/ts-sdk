@@ -1,5 +1,5 @@
 import { open, depositOwned, deposit, close } from "src/.gen/account-actions/treasury/functions";
-import { Transaction, TransactionObjectInput } from "@mysten/sui/transactions";
+import { Transaction, TransactionObjectInput, TransactionResult } from "@mysten/sui/transactions";
 
 /// Opens a Treasury managed by the Account
 export function openTreasury(
@@ -8,8 +8,8 @@ export function openTreasury(
     auth: TransactionObjectInput,
     account: string,
     name: string,
-) {
-    open(
+): TransactionResult {
+    return open(
         tx,
         accountGenerics,
         { auth, account, name },
@@ -25,8 +25,8 @@ export function depositFromAccount(
     account: string,
     name: string,
     coin: TransactionObjectInput,
-) {
-    depositOwned(
+): TransactionResult {
+    return depositOwned(
         tx,
         [...accountGenerics, coinType],
         { auth, account, name, receiving: coin },
@@ -42,8 +42,8 @@ export function depositFromWallet(
     account: string,
     name: string,
     coin: TransactionObjectInput,
-) {
-    deposit(
+): TransactionResult {
+    return deposit(
         tx,
         [...accountGenerics, coinType],
         { auth, account, name, coin },
@@ -57,8 +57,8 @@ export function closeTreasury(
     auth: TransactionObjectInput,
     account: string,
     name: string,
-) {
-    close(
+): TransactionResult {
+    return close(
         tx,
         accountGenerics,
         { auth, account, name },
