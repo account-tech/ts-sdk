@@ -19,7 +19,7 @@ import { ProposalTypes, AccessArgs } from "../../src/types/proposal-types";
 
     ms.propose(
         tx, 
-        ProposalTypes.AccessControl,
+        ProposalTypes.Access,
         { key: "Lock Coin" }, // proposalArgs 
         { 
             capType: "0x2::package::UpgradeCap",

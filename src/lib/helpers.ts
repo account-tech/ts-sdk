@@ -8,3 +8,7 @@ export async function getTypesForObjectIds(client: SuiClient, ids: string[]) {
 
     return types.map(type => type.data?.type);
 }
+
+export function roleWithName(role: string, name: string): string {
+    return `${role}::${name}`;
+}

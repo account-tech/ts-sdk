@@ -5,7 +5,7 @@ import { AccessArgs, ProposalArgs, ProposalFields } from "../../../types/proposa
 import { Proposal } from "../proposal";
 import { Outcome } from "../outcome";
 
-export class AccessControlProposal extends Proposal {
+export class AccessProposal extends Proposal {
     args?: AccessArgs;
 
     static async init(
@@ -13,8 +13,8 @@ export class AccessControlProposal extends Proposal {
         account: string,
         outcome: Outcome,
         fields: ProposalFields,
-    ): Promise<AccessControlProposal> {
-        const proposal = new AccessControlProposal(client, account, outcome, fields);
+    ): Promise<AccessProposal> {
+        const proposal = new AccessProposal(client, account, outcome, fields);
         // resolve actions
         const actions = await proposal.fetchActions(fields.actionsId);
         const capType = actions[0].type;

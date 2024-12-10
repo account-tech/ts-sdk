@@ -15,6 +15,7 @@ import { ConfigDepsProposal } from "./lib/proposals/account-actions/config";
 import { BurnProposal, MintProposal, UpdateProposal } from "./lib/proposals/account-actions/currency";
 import { CommandTypes } from "./types/command-types";
 import { ConfigMultisigProposal } from "./lib/proposals/account-actions/multisig";
+import { roleWithName } from "./lib/helpers";
 
 export class MultisigClient {
 
@@ -194,7 +195,7 @@ export class MultisigClient {
 		// get the account kiosk from its name 
 		const accountKiosk = ""; // TODO: ./objects/kiosk.ts
 		
-		const auth = this.multisig.authenticate(tx, CommandTypes.Place(kioskName));
+		const auth = this.multisig.authenticate(tx, roleWithName(CommandTypes.Place, kioskName));
 		const request = commands.placeInKiosk(tx, MULTISIG_GENERICS, nftType, auth, this.multisig.id, accountKiosk, senderKiosk, senderCap, policyId, kioskName, nftId);
 		return tx.moveCall({
 			target: `${FRAMEWORK}::transfer_policy::confirm_request`,
@@ -213,7 +214,7 @@ export class MultisigClient {
 		const kiosk = ""; // TODO: ./objects/kiosk.ts
 		// get the nft type from the nft id
 		const nftType = ""; // TODO: ./objects/kiosk.ts
-		const auth = this.multisig.authenticate(tx, CommandTypes.Delist(kioskName));
+		const auth = this.multisig.authenticate(tx, roleWithName(CommandTypes.Delist, kioskName));
 		return commands.delistFromKiosk(tx, MULTISIG_GENERICS, nftType, auth, this.multisig.id, kiosk, kioskName, nftId);
 	}
 
@@ -256,7 +257,7 @@ export class MultisigClient {
 	): TransactionResult {
 		// get the coinType from the coin id 
 		const coinType = ""; // TODO: ./objects/owned.ts
-		const auth = this.multisig.authenticate(tx, CommandTypes.Deposit(treasuryName));
+		const auth = this.multisig.authenticate(tx, roleWithName(CommandTypes.Deposit, treasuryName));
 		return commands.depositFromAccount(tx, MULTISIG_GENERICS, coinType, auth, this.multisig.id, treasuryName, coin);
 	}
 
@@ -267,7 +268,7 @@ export class MultisigClient {
 		treasuryName: string,
 		coin: TransactionObjectInput,
 	): TransactionResult {
-		const auth = this.multisig.authenticate(tx, CommandTypes.Deposit(treasuryName));
+		const auth = this.multisig.authenticate(tx, roleWithName(CommandTypes.Deposit, treasuryName));
 		return commands.depositFromWallet(tx, MULTISIG_GENERICS, coinType, auth, this.multisig.id, treasuryName, coin);
 	}
 

@@ -1,6 +1,6 @@
 import { Dep, Member, Threshold } from "./account-types";
 import { Proposal } from "../lib/proposals/proposal";
-import { AccessControlProposal } from "../lib/proposals/account-actions/access-control";
+import { AccessProposal } from "../lib/proposals/account-actions/access-control";
 import { ConfigDepsProposal } from "../lib/proposals/account-actions/config";
 import { DisableProposal, MintProposal, BurnProposal, UpdateProposal, MintAndTransferProposal, MintAndVestProposal } from "../lib/proposals/account-actions/currency";
 import { ConfigMultisigProposal } from "../lib/proposals/account-actions/multisig";
@@ -16,7 +16,7 @@ export const ProposalTypes = {
     // Config
     ConfigMultisig: `${ACCOUNT_CONFIG.V1.slice(2)}::multisig::ConfigMultisigProposal`,
     // Actions
-    AccessControl: `${ACCOUNT_ACTIONS.V1.slice(2)}::access_control::AccessControlProposal`,
+    Access: `${ACCOUNT_ACTIONS.V1.slice(2)}::access_control::AccessControlProposal`,
     ConfigDeps: `${ACCOUNT_ACTIONS.V1.slice(2)}::config::ConfigDepsProposal`,
     Disable: `${ACCOUNT_ACTIONS.V1.slice(2)}::currency::DisableProposal`,
     Mint: `${ACCOUNT_ACTIONS.V1.slice(2)}::currency::MintProposal`,
@@ -36,7 +36,7 @@ export const ProposalTypes = {
 
 export const proposalRegistry: Record<ProposalType, typeof Proposal> = {
     [ProposalTypes.ConfigMultisig]: ConfigMultisigProposal,
-    [ProposalTypes.AccessControl]: AccessControlProposal,
+    [ProposalTypes.Access]: AccessProposal,
     [ProposalTypes.ConfigDeps]: ConfigDepsProposal,
     [ProposalTypes.Disable]: DisableProposal,
     [ProposalTypes.Mint]: MintProposal,
