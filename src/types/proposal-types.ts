@@ -7,6 +7,8 @@ import { ConfigMultisigProposal } from "../lib/proposals/account-actions/multisi
 import { ACCOUNT_ACTIONS, ACCOUNT_CONFIG } from "./constants";
 import { ListProposal, TakeProposal } from "../lib/proposals/account-actions/kiosk";
 import { WithdrawAndTransferProposal, WithdrawAndVestProposal } from "src/lib/proposals/account-actions/owned";
+import { SpendAndTransferProposal, SpendAndVestProposal } from "src/lib/proposals/account-actions/treasury";
+import { RestrictProposal, UpgradeProposal } from "src/lib/proposals/account-actions/upgrade-policies";
 
 export type ProposalType = typeof ProposalTypes[keyof typeof ProposalTypes];
 
@@ -26,6 +28,10 @@ export const ProposalTypes = {
     List: `${ACCOUNT_ACTIONS.V1.slice(2)}::kiosk::ListProposal`,
     WithdrawAndTransfer: `${ACCOUNT_ACTIONS.V1.slice(2)}::owned::WithdrawAndTransferProposal`,
     WithdrawAndVest: `${ACCOUNT_ACTIONS.V1.slice(2)}::owned::WithdrawAndVestProposal`,
+    SpendAndTransfer: `${ACCOUNT_ACTIONS.V1.slice(2)}::treasury::SpendAndTransferProposal`,
+    SpendAndVest: `${ACCOUNT_ACTIONS.V1.slice(2)}::treasury::SpendAndVestProposal`,
+    Upgrade: `${ACCOUNT_ACTIONS.V1.slice(2)}::upgrade_policies::UpgradeProposal`,
+    Restrict: `${ACCOUNT_ACTIONS.V1.slice(2)}::upgrade_policies::RestrictProposal`,
 } as const;
 
 export const proposalRegistry: Record<ProposalType, typeof Proposal> = {
@@ -42,6 +48,10 @@ export const proposalRegistry: Record<ProposalType, typeof Proposal> = {
     [ProposalTypes.List]: ListProposal,
     [ProposalTypes.WithdrawAndTransfer]: WithdrawAndTransferProposal,
     [ProposalTypes.WithdrawAndVest]: WithdrawAndVestProposal,
+    [ProposalTypes.SpendAndTransfer]: SpendAndTransferProposal,
+    [ProposalTypes.SpendAndVest]: SpendAndVestProposal,
+    [ProposalTypes.Upgrade]: UpgradeProposal,
+    [ProposalTypes.Restrict]: RestrictProposal,
 } as const;
 
 export type ProposalFields = {
@@ -60,7 +70,7 @@ export type ProposalArgs = {
     expirationTime?: number;
 }
 
-export type ActionsArgs = ConfigMultisigArgs | AccessArgs | ConfigDepsArgs | DisableArgs | MintArgs | BurnArgs | UpdateArgs | MintAndTransferArgs | MintAndVestArgs | TakeArgs | ListArgs | WithdrawAndTransferArgs | WithdrawAndVestArgs;
+export type ActionsArgs = ConfigMultisigArgs | AccessArgs | ConfigDepsArgs | DisableArgs | MintArgs | BurnArgs | UpdateArgs | MintAndTransferArgs | MintAndVestArgs | TakeArgs | ListArgs | WithdrawAndTransferArgs | WithdrawAndVestArgs | SpendAndTransferArgs | SpendAndVestArgs | UpgradeArgs | RestrictArgs;
 
 export type ConfigMultisigArgs = {
     members?: Member[];
@@ -118,13 +128,13 @@ export type MintAndVestArgs = {
 }
 
 export type TakeArgs = {
-    name: string;
+    kioskName: string;
     nftIds: string[];
     recipient: string;
 }
 
 export type ListArgs = {
-    name: string;
+    kioskName: string;
     listings: { nftId: string, price: number }[];
 }
 
@@ -137,4 +147,29 @@ export type WithdrawAndVestArgs = {
     start: number;
     end: number;
     recipient: string;
+}
+
+export type SpendAndTransferArgs = {
+    treasuryName: string;
+    coinType: string;
+    transfers: { amount: number, recipient: string }[];
+}
+
+export type SpendAndVestArgs = {
+    treasuryName: string;
+    coinType: string;
+    amount: number;
+    start: number;
+    end: number;
+    recipient: string;
+}
+
+export type UpgradeArgs = {
+    package: string;
+    digest: number[];
+}
+
+export type RestrictArgs = {
+    package: string;
+    policy: number;
 }

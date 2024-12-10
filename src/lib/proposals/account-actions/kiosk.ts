@@ -21,7 +21,7 @@ export class TakeProposal extends Proposal {
         const takeActions = actions.map(action => TakeAction.fromFieldsWithTypes(action));
 
         proposal.args = {
-            name: fields.issuer.roleName,
+            kioskName: fields.issuer.roleName,
             nftIds: takeActions.map(action => action.nftId),
             recipient: takeActions[0].recipient,
         };
@@ -48,7 +48,7 @@ export class TakeProposal extends Proposal {
                 description: proposalArgs.description ?? "",
                 executionTime: BigInt(proposalArgs.executionTime ?? 0),
                 expirationTime: BigInt(proposalArgs.expirationTime ?? Math.floor(Date.now()) + 7 * 24 * 60 * 60 * 1000),
-                kioskName: actionArgs.name,
+                kioskName: actionArgs.kioskName,
                 nftIds: actionArgs.nftIds,
                 recipient: actionArgs.recipient,
             }
@@ -98,7 +98,7 @@ export class ListProposal extends Proposal {
         const listActions = actions.map(action => ListAction.fromFieldsWithTypes(action));
 
         proposal.args = {
-            name: fields.issuer.roleName,
+            kioskName: fields.issuer.roleName,
             listings: listActions.map(action => ({ nftId: action.nftId, price: Number(action.price) })),
         };
         return proposal;
@@ -124,7 +124,7 @@ export class ListProposal extends Proposal {
                 description: proposalArgs.description ?? "",
                 executionTime: BigInt(proposalArgs.executionTime ?? 0),
                 expirationTime: BigInt(proposalArgs.expirationTime ?? Math.floor(Date.now()) + 7 * 24 * 60 * 60 * 1000),
-                kioskName: actionArgs.name,
+                kioskName: actionArgs.kioskName,
                 nftIds: actionArgs.listings.map(listing => listing.nftId),
                 prices: actionArgs.listings.map(listing => BigInt(listing.price)),
             }
