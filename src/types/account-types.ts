@@ -29,7 +29,7 @@ export type TransferPolicy = {
 
 export interface MultisigData {
     id: string;
-    name: string;
+    metadata: { key: string, value: string }[];
     deps: Dep[];
     global: Role;
     roles: Map<string, Role>;

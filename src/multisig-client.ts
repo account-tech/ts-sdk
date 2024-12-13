@@ -34,22 +34,12 @@ export class MultisigClient {
 		const url = (network == "mainnet" || network == "testnet" || network == "devnet" || network == "localnet") ? getFullnodeUrl(network) : network;
 		const client = new SuiClient({ url });
 
-		const user = await User.init(client, userAddr, AccountType.MULTISIG);
-		const multisig = await Multisig.init(client, userAddr, multisigId);
+		const user = await User.init(client, AccountType.MULTISIG, userAddr);
+		const multisig = await Multisig.init(client, multisigId);
 		const extensions = await Extensions.init(client);
 
 		const msClient = new MultisigClient(client, user, multisig, extensions);
 		return msClient;
-	}
-
-	async refreshAccount(address: string = this.user.address) {
-		let user = await this.user.fetchUser(address);
-		this.user.setData(user);
-	}
-
-	async refreshMultisig(address: string = this.multisig.id) {
-		let multisig = await this.multisig.fetchMultisig(address);
-		this.multisig.setData(multisig);
 	}
 
 	// creates a multisig with default weights of 1 (1 member = 1 voice)
@@ -77,7 +67,7 @@ export class MultisigClient {
 		// update multisig rules if members are provided
 		if (memberAddresses) {
 			const members = memberAddresses.map((address: string) => ({ address, weight: 1, roles: [] }));
-			members.push({ address: this.user.address, weight: 1, roles: [] }); // add creator to the members
+			members.push({ address: this.user.address!, weight: 1, roles: [] }); // add creator to the members
 			
 			this.multisig.configMultisig(
 				tx,
@@ -91,7 +81,7 @@ export class MultisigClient {
 		// send invites to added members
 		memberAddresses?.forEach(address => { this.user?.sendInvite(tx, multisig, address) });
 		// transfer the user if just created
-		if (createdAccount) this.user.transferUser(tx, createdAccount, this.user.address);
+		if (createdAccount) this.user.transferUser(tx, createdAccount, this.user.address!);
 		// share the multisig
 		return this.multisig?.shareMultisig(tx, multisig);
 	}
@@ -175,8 +165,7 @@ export class MultisigClient {
 		kioskName: string,
 		nftId: string,
 	): Promise<TransactionResult> {
-		const kioskClient = new KioskClient({ client: this.client, network: Network.TESTNET }); // TODO: change to mainnet
-		const policies = await kioskClient.getTransferPolicies({ type: nftType });
+		const policies = await this.multisig.kioskClient.getTransferPolicies({ type: nftType });
 		// find a correct policy
 		let policyId = "";
 		if (policies.length == 0) {
@@ -430,7 +419,8 @@ export class MultisigClient {
 		return this.multisig?.getProposal(key);
 	}
 
-	hasApproved(key: string, userAddr: string = this.user.address): boolean {
+	hasApproved(key: string, userAddr: string = this.user.address!): boolean {
+		if (!userAddr && !this.user.address) throw new Error("No user address provided to check approval status");
 		const has = (this.proposal(key)?.outcome as Approvals).approved?.includes(userAddr);
 		if (!has) throw new Error("Proposal not found");
 		return has;

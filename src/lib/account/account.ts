@@ -3,13 +3,15 @@ import { Proposal } from "../proposals/proposal";
 import { Dep } from "../../types/account-types";
 import { ProposalFields } from "src/types/proposal-types";
 import { Outcome } from "../proposals/outcome";
+import { KioskClient, Network } from "@mysten/kiosk";
+import { Kiosk } from "../objects/kiosk";
 
 export interface Account {
-	userAddr: string;
+	kioskClient: KioskClient;
+	kiosks: Kiosk[];
 	// Account Data
-	generics: [string, string];
     id: string;
-    name: string;
+    metadata: { key: string, value: string }[];
     deps: Dep[];
     proposals: Proposal[];
 
@@ -19,5 +21,20 @@ export interface Account {
 }
 
 export class Account implements Account {
-	constructor(public client: SuiClient) {}
+	constructor(
+		public client: SuiClient,
+	) {
+		this.kioskClient = new KioskClient({ client, network: Network.TESTNET });
+	}
+
+	async fetchKiosks() {
+		const { kioskOwnerCaps, kioskIds } = await this.kioskClient.getOwnedKiosks({ address: this.id });
+		this.kiosks = await Promise.all(kioskIds.map(async (kioskId) => {
+			return await Kiosk.init(this.kioskClient, kioskId);
+		}));
+	}
+
+	getName(): string {
+		return this.metadata.find(m => m.key == "name")?.value!;
+	}
 }

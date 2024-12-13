@@ -23,21 +23,21 @@ export class User implements UserData {
 	
 	constructor(
 		public client: SuiClient,
-		public address: string,
-		public accountType: AccountType
+		public accountType: AccountType,
+		public address?: string,
 	) {}
 
 	static async init(
         client: SuiClient,
-        address: string, 
-        accountType: AccountType
+        accountType: AccountType,
+        address?: string, 
     ): Promise<User> {
-		const user = new User(client, address, accountType);
-		user.setData(await user.fetchUser());
+		const user = new User(client, accountType, address);
+		if (address) user.setData(await user.fetchUser());
 		return user;
 	}
 	
-	async fetchUser(owner: string = this.address): Promise<UserData> {
+	async fetchUser(owner: string = this.address!): Promise<UserData> {
 		const { data } = await this.client.getOwnedObjects({
 			owner,
 			filter: { StructType: `${ACCOUNT_CONFIG.V1}::user::User` },
@@ -64,9 +64,9 @@ export class User implements UserData {
 			}
 			// get user name and avatar
 			const suinsClient = new SuinsClient(this.client, { networkType: 'testnet', contractObjects });
-			const name = await suinsClient.getName(this.address);
+			const name = await suinsClient.getName(owner);
 			
-			let username = this.address.slice(0,5) + "..." + this.address.slice(-3);
+			let username = owner.slice(0,5) + "..." + owner.slice(-3);
 			let avatar = "https://cdn1.iconfinder.com/data/icons/user-pictures/100/unknown-1024.png";
 			
 			if (name) {
@@ -91,6 +91,13 @@ export class User implements UserData {
 				accounts: []
 			}
 		}
+	}
+
+	async refresh(address: string = this.address!) {
+		if (!address && !this.address) {
+			throw new Error("No address provided to refresh account");
+		}
+		this.setData(await this.fetchUser(address));
 	}
 
 	setData(account: UserData) {

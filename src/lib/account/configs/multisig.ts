@@ -32,19 +32,17 @@ export class Multisig extends Account {
 
     static async init(
         client: SuiClient,
-        userAddr: string,
         multisigId?: string,
     ): Promise<Multisig> {
         const multisig = new Multisig(client);
-        multisig.userAddr = userAddr;
         if (multisigId) {
             multisig.id = multisigId;
-            multisig.setData(await multisig.fetchMultisig(multisigId));
+            multisig.refresh();
         }
         return multisig;
     }
 
-    async fetchMultisig(id: string): Promise<MultisigData> {
+    async fetchMultisig(id: string = this.id): Promise<MultisigData> {
         const accountReified = AccountRaw.r(MultisigRaw.r, ApprovalsRaw.r);
         const multisigAccount = await accountReified.fetch(this.client, id);
 
@@ -58,7 +56,7 @@ export class Multisig extends Account {
         const members = await Promise.all(membersAddress.map(async memberAddr => {
             const weight = multisigAccount.config.members.find((m: MemberFields) => m.addr == memberAddr)?.weight;
             const roles = multisigAccount.config.members.find((m: MemberFields) => m.addr == memberAddr)?.roles.contents;
-            const user = await User.init(this.client, this.userAddr, AccountType.MULTISIG);
+            const user = await User.init(this.client, AccountType.MULTISIG);
             const UserData = await user.fetchUser(memberAddr);
             return {
                 address: memberAddr,
@@ -107,7 +105,7 @@ export class Multisig extends Account {
 
         return {
             id: multisigAccount.id,
-            name: multisigAccount.metadata.inner.contents.find((m: any) => m.key == "name")?.value!,
+            metadata: multisigAccount.metadata.inner.contents.map((m: any) => ({ key: m.key, value: m.value })),
             deps,
             global,
             roles,
@@ -116,9 +114,17 @@ export class Multisig extends Account {
         }
     }
 
+    async refresh(address: string = this.id) {
+        if (!address && !this.id) {
+            throw new Error("No address provided to refresh multisig");
+        }
+        this.setData(await this.fetchMultisig(address));
+        this.fetchKiosks();
+    }
+
     setData(multisig: MultisigData) {
         this.id = multisig.id;
-        this.name = multisig.name;
+        this.metadata = multisig.metadata;
         this.deps = multisig.deps;
         this.global = multisig.global;
         this.roles = multisig.roles;
@@ -129,7 +135,7 @@ export class Multisig extends Account {
     getData(): MultisigData {
         return {
             id: this.id,
-            name: this.name,
+            metadata: this.metadata,
             deps: this.deps,
             global: this.global,
             roles: this.roles,
