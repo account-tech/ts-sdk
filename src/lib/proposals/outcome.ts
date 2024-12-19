@@ -7,10 +7,3 @@ export class Outcome {
         public key: string,
     ) {}
 }
-
-// export const OutcomeTypeToClass = {
-//     [Approvals.type]: Approvals,
-//     [Votes.type]: Votes,
-// } as const;
-
-// export type OutcomeType = keyof typeof OutcomeTypeToClass;

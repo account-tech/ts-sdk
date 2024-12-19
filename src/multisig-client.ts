@@ -1,13 +1,12 @@
 import { SuiClient, getFullnodeUrl } from "@mysten/sui/client";
 import { Transaction, TransactionObjectInput, TransactionResult } from "@mysten/sui/transactions";
-import { KioskClient, Network } from "@mysten/kiosk";
-import { FRAMEWORK, ACCOUNT_PROTOCOL, ACCOUNT_CONFIG, MULTISIG_GENERICS, TRANSFER_POLICY_RULES } from "./types/constants";
-import { AccountType, Dep, Kiosk, Member, Threshold, TransferPolicy } from "./types/account-types";
+import { FRAMEWORK, ACCOUNT_CONFIG, MULTISIG_GENERICS, TRANSFER_POLICY_RULES } from "./types/constants";
+import { AccountType } from "./types/account-types";
 import { User } from "./lib/user";
-import { Multisig } from "./lib/account/configs/multisig";
+import { Member, Multisig, Threshold } from "./lib/account/configs/multisig";
 import { TransactionPureInput } from "./types/helper-types";
 import * as commands from "./lib/commands";
-import { ActionsArgs, ConfigDepsArgs, ProposalArgs, proposalRegistry, ProposalType, ProposalTypes } from "./types/proposal-types";
+import { ActionsArgs, ProposalArgs, proposalRegistry, ProposalType } from "./types/proposal-types";
 import { Proposal } from "./lib/proposals/proposal";
 import { Extensions } from "./lib/extensions";
 import { Approvals } from "./lib/proposals/outcomes/approvals";
@@ -16,6 +15,7 @@ import { BurnProposal, MintProposal, UpdateProposal } from "./lib/proposals/acco
 import { CommandTypes } from "./types/command-types";
 import { ConfigMultisigProposal } from "./lib/proposals/account-actions/multisig";
 import { roleWithName } from "./lib/helpers";
+import { Dep } from "./lib/account/account";
 
 export class MultisigClient {
 
@@ -40,6 +40,12 @@ export class MultisigClient {
 
 		const msClient = new MultisigClient(client, user, multisig, extensions);
 		return msClient;
+	}
+
+	async refresh() {
+		await this.user.refresh();
+		await this.multisig.refresh();
+		await this.extensions.refresh();
 	}
 
 	// creates a multisig with default weights of 1 (1 member = 1 voice)
@@ -165,7 +171,7 @@ export class MultisigClient {
 		kioskName: string,
 		nftId: string,
 	): Promise<TransactionResult> {
-		const policies = await this.multisig.kioskClient.getTransferPolicies({ type: nftType });
+		const policies = await this.multisig.managedAssets.kioskClient.getTransferPolicies({ type: nftType });
 		// find a correct policy
 		let policyId = "";
 		if (policies.length == 0) {
@@ -180,12 +186,11 @@ export class MultisigClient {
 			if (!validPolicy) throw new Error("No transfer policy found with only known rules");
 			policyId = validPolicy.id;
 		}
-
-		// get the account kiosk from its name 
-		const accountKiosk = ""; // TODO: ./objects/kiosk.ts
 		
+		// get the account kiosk from its name 
+		const accountKioskId = this.multisig.managedAssets.kiosks[kioskName].id;
 		const auth = this.multisig.authenticate(tx, roleWithName(CommandTypes.Place, kioskName));
-		const request = commands.placeInKiosk(tx, MULTISIG_GENERICS, nftType, auth, this.multisig.id, accountKiosk, senderKiosk, senderCap, policyId, kioskName, nftId);
+		const request = commands.placeInKiosk(tx, MULTISIG_GENERICS, nftType, auth, this.multisig.id, accountKioskId, senderKiosk, senderCap, policyId, kioskName, nftId);
 		return tx.moveCall({
 			target: `${FRAMEWORK}::transfer_policy::confirm_request`,
 			typeArguments: [nftType],
@@ -200,11 +205,12 @@ export class MultisigClient {
 		nftId: string,
 	): TransactionResult {
 		// get the account kiosk from its name 
-		const kiosk = ""; // TODO: ./objects/kiosk.ts
+		const accountKioskId = this.multisig.managedAssets.kiosks[kioskName].id;
 		// get the nft type from the nft id
-		const nftType = ""; // TODO: ./objects/kiosk.ts
+		const nftType = this.multisig.managedAssets.kiosks[kioskName].items.find(item => item.id === nftId)?.type;
+		if (!nftType) throw new Error("NFT not found in kiosk");
 		const auth = this.multisig.authenticate(tx, roleWithName(CommandTypes.Delist, kioskName));
-		return commands.delistFromKiosk(tx, MULTISIG_GENERICS, nftType, auth, this.multisig.id, kiosk, kioskName, nftId);
+		return commands.delistFromKiosk(tx, MULTISIG_GENERICS, nftType, auth, this.multisig.id, accountKioskId, kioskName, nftId);
 	}
 
 	/// Withdraws the profits from a Kiosk managed by the Account
@@ -213,9 +219,9 @@ export class MultisigClient {
 		kioskName: string,
 	): TransactionResult {
 		// get the account kiosk from its name 
-		const kiosk = ""; // TODO: ./objects/kiosk.ts
+		const accountKioskId = this.multisig.managedAssets.kiosks[kioskName].id;
 		const auth = this.multisig.authenticate(tx, CommandTypes.Kiosk);
-		return commands.withdrawProfitsFromKiosk(tx, MULTISIG_GENERICS, auth, this.multisig.id, kiosk, kioskName);
+		return commands.withdrawProfitsFromKiosk(tx, MULTISIG_GENERICS, auth, this.multisig.id, accountKioskId, kioskName);
 	}
 
 	/// Closes an empty Kiosk managed by the Account
@@ -224,9 +230,9 @@ export class MultisigClient {
 		kioskName: string,
 	): TransactionResult {
 		// get the account kiosk from its name 
-		const kiosk = ""; // TODO: ./objects/kiosk.ts
+		const accountKioskId = this.multisig.managedAssets.kiosks[kioskName].id;
 		const auth = this.multisig.authenticate(tx, CommandTypes.Kiosk);
-		return commands.closeKiosk(tx, MULTISIG_GENERICS, auth, this.multisig.id, kiosk, kioskName);
+		return commands.closeKiosk(tx, MULTISIG_GENERICS, auth, this.multisig.id, accountKioskId, kioskName);
 	}
 
 	/// Opens a Treasury in the Account

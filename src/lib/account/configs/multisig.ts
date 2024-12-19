@@ -6,28 +6,57 @@ import { newAccount } from "../../../.gen/account-config/multisig/functions";
 import { share } from "../../../.gen/account-protocol/account/functions";
 import * as configMultisig from "../../../.gen/account-config/multisig/functions";
 import * as config from "../../../.gen/account-actions/config/functions";
-import * as currency from "../../../.gen/account-actions/currency/functions";
-import * as kiosk from "../../../.gen/account-actions/kiosk/functions";
 import { approveProposal, disapproveProposal, executeProposal, authenticate, emptyOutcome, join, leave } from "../../../.gen/account-config/multisig/functions"
 import { DepFields } from "../../../.gen/account-protocol/deps/structs";
 import { MemberFields, RoleFields } from "../../../.gen/account-config/multisig/structs";
 import { ProposalFields as ProposalFieldsRaw } from "../../../.gen/account-protocol/proposals/structs";
-import { CLOCK, EXTENSIONS, ACCOUNT_ACTIONS, ACCOUNT_CONFIG, MULTISIG_GENERICS } from "../../../types/constants";
+import { CLOCK, EXTENSIONS, MULTISIG_GENERICS } from "../../../types/constants";
 import { User } from "../../user";
 import { Proposal } from "../../proposals/proposal";
 import { ConfigDepsProposal } from "../../proposals/account-actions/config";
-import { Dep, Role, MemberUser, AccountType, MultisigData } from "../../../types/account-types";
-import { BurnArgs, ConfigDepsArgs, ConfigMultisigArgs, MintArgs, ProposalArgs, ProposalFields, ProposalTypes, UpdateArgs } from "../../../types/proposal-types";
+import { AccountType } from "../../../types/account-types";
+import { ConfigDepsArgs, ConfigMultisigArgs, ProposalArgs, ProposalFields, ProposalTypes } from "../../../types/proposal-types";
 import { TransactionPureInput } from "src/types/helper-types";
 import { BurnProposal, MintProposal, UpdateProposal } from "../../proposals/account-actions/currency";
-import { Account } from "../account";
+import { Account, Dep } from "../account";
 import { Outcome } from "src/lib/proposals/outcome";
 import { Approvals } from "src/lib/proposals/outcomes/approvals";
 import { ConfigMultisigProposal } from "src/lib/proposals/account-actions/multisig";
+import { AccountData } from "../account";
+import { Managed } from "src/lib/objects/managed";
 
-export class Multisig extends Account {
+export type MultisigData = AccountData & {
+    global: Role;
+    roles: Record<string, Role>;
+    members: MemberUser[];
+    proposals: Proposal[];
+}
+
+export type Role = {
+    threshold: number,
+    totalWeight: number,
+}
+
+export type Threshold = {
+    name: string,
+    threshold: number,
+}
+
+export type Member = {
+    address: string,
+    weight: number,
+    roles: string[],
+};
+
+export type MemberUser = Member & {
+    accountId: string,
+    username: string,
+    avatar: string,
+};
+
+export class Multisig extends Account implements MultisigData {
     global: Role = { threshold: 0, totalWeight: 0 };
-    roles: Map<string, Role> = new Map();
+    roles: Record<string, Role> = {};
     members: MemberUser[] = [];
 
     static async init(
@@ -37,14 +66,21 @@ export class Multisig extends Account {
         const multisig = new Multisig(client);
         if (multisigId) {
             multisig.id = multisigId;
-            multisig.refresh();
+            await multisig.refresh();
         }
         return multisig;
     }
 
-    async fetchMultisig(id: string = this.id): Promise<MultisigData> {
+    async fetch(id: string = this.id): Promise<MultisigData> {
+        if (!id && !this.id) {
+            throw new Error("No address provided to refresh multisig");
+        }
+
         const accountReified = AccountRaw.r(MultisigRaw.r, ApprovalsRaw.r);
         const multisigAccount = await accountReified.fetch(this.client, id);
+
+        // get metadata
+        const metadata = multisigAccount.metadata.inner.contents.map((m: any) => ({ key: m.key, value: m.value }));
 
         // get deps
         const deps: Dep[] = multisigAccount.deps.inner.map((dep: DepFields) => {
@@ -57,12 +93,12 @@ export class Multisig extends Account {
             const weight = multisigAccount.config.members.find((m: MemberFields) => m.addr == memberAddr)?.weight;
             const roles = multisigAccount.config.members.find((m: MemberFields) => m.addr == memberAddr)?.roles.contents;
             const user = await User.init(this.client, AccountType.MULTISIG);
-            const UserData = await user.fetchUser(memberAddr);
+            const userData = await user.fetch(memberAddr);
             return {
                 address: memberAddr,
-                accountId: UserData?.id!,
-                username: UserData?.username!,
-                avatar: UserData?.avatar!,
+                accountId: userData?.id!,
+                username: userData?.username!,
+                avatar: userData?.avatar!,
                 weight: Number(weight)!,
                 roles: roles!
             }
@@ -71,22 +107,22 @@ export class Multisig extends Account {
         // calculate total weights
         const globalWeight = members.reduce((acc, member) => acc + member.weight, 0);
         // Calculate total weights for each role
-        const roleWeights = new Map<string, number>();
+        const roleWeights: Record<string, number> = {};
         members.forEach(member => {
             member.roles.forEach(role => {
-                const currentWeight = roleWeights.get(role) || 0;
-                roleWeights.set(role, currentWeight + member.weight);
+                const currentWeight = roleWeights[role] || 0;
+                roleWeights[role] = currentWeight + member.weight;
             });
         });
         // get thresholds
         const global = { threshold: Number(multisigAccount.config.global), totalWeight: globalWeight };
-        const roles = new Map<string, Role>();
+        const roles: Record<string, Role> = {};
         multisigAccount.config.roles.forEach((role: RoleFields) => {
-            roles.set(role.name, { threshold: Number(role.threshold), totalWeight: roleWeights.get(role.name) || 0 });
+            roles[role.name] = { threshold: Number(role.threshold), totalWeight: roleWeights[role.name] || 0 };
         });
         // get Proposals with actions
         const proposals = await Promise.all(multisigAccount!.proposals.inner.map(async (fieldsRaw: ProposalFieldsRaw<ApprovalsRaw>) => {
-            const outcome = new Approvals(this.id, fieldsRaw.key, Number(fieldsRaw.outcome.totalWeight), Number(fieldsRaw.outcome.roleWeight), fieldsRaw.outcome.approved.contents);
+            const outcome = new Approvals(id, fieldsRaw.key, Number(fieldsRaw.outcome.totalWeight), Number(fieldsRaw.outcome.roleWeight), fieldsRaw.outcome.approved.contents);
             const fields: ProposalFields = {
                 issuer: {
                     accountAddr: fieldsRaw.issuer.accountAddr,
@@ -103,23 +139,23 @@ export class Multisig extends Account {
             return await this.initProposalWithActions(this.client, outcome, fields);
         }));
 
+        // get managed assets
+        const managedAssets = await Managed.init(this.client, id);
+
         return {
             id: multisigAccount.id,
-            metadata: multisigAccount.metadata.inner.contents.map((m: any) => ({ key: m.key, value: m.value })),
+            metadata,
             deps,
             global,
             roles,
             members,
             proposals,
+            managedAssets,
         }
     }
 
-    async refresh(address: string = this.id) {
-        if (!address && !this.id) {
-            throw new Error("No address provided to refresh multisig");
-        }
-        this.setData(await this.fetchMultisig(address));
-        this.fetchKiosks();
+    async refresh(id: string = this.id) {
+        this.setData(await this.fetch(id));
     }
 
     setData(multisig: MultisigData) {
@@ -130,6 +166,7 @@ export class Multisig extends Account {
         this.roles = multisig.roles;
         this.members = multisig.members;
         this.proposals = multisig.proposals;
+        this.managedAssets = multisig.managedAssets;
     }
 
     getData(): MultisigData {
@@ -141,6 +178,7 @@ export class Multisig extends Account {
             roles: this.roles,
             members: this.members,
             proposals: this.proposals,
+            managedAssets: this.managedAssets,
         }
     }
 

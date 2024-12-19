@@ -3,7 +3,13 @@ name = "nft"
 edition = "2024.beta"
 
 [dependencies]
-Sui = { git = "https://github.com/MystenLabs/sui.git", subdir = "crates/sui-framework/packages/sui-framework", rev = "framework/testnet" }
+Sui = { override = true, git = "https://github.com/MystenLabs/sui.git", subdir = "crates/sui-framework/packages/sui-framework", rev = "framework/testnet" }
+
+
+[dependencies.Kiosk]
+git = "https://github.com/thounyy/apps.git"
+subdir = "kiosk"
+rev = "testnet"
 
 [addresses]
 nft = "0x0"

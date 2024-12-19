@@ -2,13 +2,13 @@ import { SuiClient } from "@mysten/sui/client";
 import { ExtensionFields, Extensions as ExtensionsRaw, History } from "../.gen/account-extensions/extensions/structs";
 import { EXTENSIONS } from "../types/constants";
 
-export interface Extension {
+export type ExtensionData = {
     name: string;
     history: { package: string, version: number }[];
 }
 
 export class Extensions {
-    extensions: Extension[] = [];
+    extensions: ExtensionData[] = [];
 
     private constructor(
         public client: SuiClient,
@@ -18,16 +18,16 @@ export class Extensions {
 
     static async init(client: SuiClient): Promise<Extensions> {
         const extensions = new Extensions(client);
-        extensions.setExtensions(await extensions.fetchExtensions());
+        await extensions.refresh();
 
         return extensions;
     }
     
     // get and format extensions data
-    async fetchExtensions(): Promise<Extension[]> {
+    async fetch(): Promise<ExtensionData[]> {
         const extensionsRaw = await ExtensionsRaw.fetch(this.client, EXTENSIONS);
 
-        const extensions: Extension[] = extensionsRaw.inner.map((extension: ExtensionFields) => {
+        const extensions: ExtensionData[] = extensionsRaw.inner.map((extension: ExtensionFields) => {
             const history = extension.history.map((entry: History) => {
                 return {
                     package: entry.addr,
@@ -41,11 +41,15 @@ export class Extensions {
         return extensions;
     }
 
-    setExtensions(extensions: Extension[]) {
+    async refresh() {
+        this.setData(await this.fetch());
+    }
+
+    setData(extensions: ExtensionData[]) {
         this.extensions = extensions;
     }
 
-    getExtensions(): Extension[] {
+    getData(): ExtensionData[] {
         return this.extensions;
     }
 }

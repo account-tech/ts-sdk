@@ -9,7 +9,7 @@ export const CommandTypes = {
     Kiosk: `${ACCOUNT_ACTIONS.V1.slice(2)}::kiosk::KioskCommand`,
     Place: `${ACCOUNT_ACTIONS.V1.slice(2)}::kiosk::PlaceCommand`,
     Delist: `${ACCOUNT_ACTIONS.V1.slice(2)}::kiosk::DelistCommand`,
-    Treasury: `${ACCOUNT_ACTIONS.V1.slice(2)}::currency::TreasuryCommand`,
-    Deposit: `${ACCOUNT_ACTIONS.V1.slice(2)}::currency::DepositCommand`,
+    Treasury: `${ACCOUNT_ACTIONS.V1.slice(2)}::treasury::TreasuryCommand`,
+    Deposit: `${ACCOUNT_ACTIONS.V1.slice(2)}::treasury::DepositCommand`,
     LockUpgradeCap: `${ACCOUNT_ACTIONS.V1.slice(2)}::upgrade_policies::LockCommand`,
 } as const;

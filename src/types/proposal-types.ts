@@ -1,4 +1,3 @@
-import { Dep, Member, Threshold } from "./account-types";
 import { Proposal } from "../lib/proposals/proposal";
 import { AccessProposal } from "../lib/proposals/account-actions/access-control";
 import { ConfigDepsProposal } from "../lib/proposals/account-actions/config";
@@ -6,9 +5,11 @@ import { DisableProposal, MintProposal, BurnProposal, UpdateProposal, MintAndTra
 import { ConfigMultisigProposal } from "../lib/proposals/account-actions/multisig";
 import { ACCOUNT_ACTIONS, ACCOUNT_CONFIG } from "./constants";
 import { ListProposal, TakeProposal } from "../lib/proposals/account-actions/kiosk";
-import { WithdrawAndTransferProposal, WithdrawAndVestProposal } from "src/lib/proposals/account-actions/owned";
-import { SpendAndTransferProposal, SpendAndVestProposal } from "src/lib/proposals/account-actions/treasury";
-import { RestrictProposal, UpgradeProposal } from "src/lib/proposals/account-actions/upgrade-policies";
+import { WithdrawAndTransferProposal, WithdrawAndVestProposal } from "../lib/proposals/account-actions/owned";
+import { SpendAndTransferProposal, SpendAndVestProposal } from "../lib/proposals/account-actions/treasury";
+import { RestrictProposal, UpgradeProposal } from "../lib/proposals/account-actions/upgrade-policies";
+import { Dep } from "../lib/account/account";
+import { Threshold, Member } from "../lib/account/configs/multisig";
 
 export type ProposalType = typeof ProposalTypes[keyof typeof ProposalTypes];
 

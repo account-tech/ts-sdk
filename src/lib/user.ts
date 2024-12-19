@@ -33,11 +33,15 @@ export class User implements UserData {
         address?: string, 
     ): Promise<User> {
 		const user = new User(client, accountType, address);
-		if (address) user.setData(await user.fetchUser());
+		if (address) await user.refresh();
 		return user;
 	}
 	
-	async fetchUser(owner: string = this.address!): Promise<UserData> {
+	async fetch(owner: string = this.address!): Promise<UserData> {
+		if (!owner && !this.address) {
+			throw new Error("No address provided to refresh account");
+		}
+
 		const { data } = await this.client.getOwnedObjects({
 			owner,
 			filter: { StructType: `${ACCOUNT_CONFIG.V1}::user::User` },
@@ -94,10 +98,7 @@ export class User implements UserData {
 	}
 
 	async refresh(address: string = this.address!) {
-		if (!address && !this.address) {
-			throw new Error("No address provided to refresh account");
-		}
-		this.setData(await this.fetchUser(address));
+		this.setData(await this.fetch(address));
 	}
 
 	setData(account: UserData) {

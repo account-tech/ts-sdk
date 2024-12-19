@@ -1,10 +1,9 @@
-import { SuiClient } from "@mysten/sui/client";
+import { getFullnodeUrl, SuiClient } from "@mysten/sui/client";
 import { Extensions } from "../../src/lib/extensions"
+import { NETWORK } from "./utils";
 
 (async () => {
-    const client = new SuiClient({ url: "testnet" });
+    const client = new SuiClient({ url: getFullnodeUrl(NETWORK) });
     const extensions = await Extensions.init(client)
-
-    const ext = await extensions.getExtensions();
-    console.log(ext);
+    console.log(extensions.getData());
 })();
