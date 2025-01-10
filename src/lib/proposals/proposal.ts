@@ -9,6 +9,7 @@ export interface Proposal {
     init(client: SuiClient, account: string): Promise<Proposal>;
     propose(tx: Transaction, accountGenerics: [string, string], auth: TransactionObjectInput, outcome: TransactionObjectInput, account: string, proposalArgs: ProposalArgs, actionArgs: ActionsArgs): TransactionResult;
     execute(tx: Transaction, accountGenerics: [string, string], executable: TransactionObjectInput, ...args: any[]): TransactionResult;
+    delete(tx: Transaction, accountGenerics: [string, string], expired: TransactionObjectInput): TransactionResult;
 }
 
 
@@ -47,6 +48,10 @@ export class Proposal {
         if (!this.fields?.key) {
             throw new Error("Proposal is not set. Please set the proposal before calling this method.");
         }
+    }
+
+    hasExpired(): boolean {
+        return this.fields.expirationTime < Date.now();
     }
 }
 

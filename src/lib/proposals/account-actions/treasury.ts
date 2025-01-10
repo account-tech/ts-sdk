@@ -1,6 +1,8 @@
 import { Transaction, TransactionObjectInput, TransactionResult } from "@mysten/sui/transactions";
 import { SuiClient } from "@mysten/sui/client";
 import * as treasury from "src/.gen/account-actions/treasury/functions";
+import * as transfer from "src/.gen/account-actions/transfer/functions";
+import * as vesting from "src/.gen/account-actions/vesting/functions";
 import { SpendAction } from "src/.gen/account-actions/treasury/structs";
 import { TransferAction } from "src/.gen/account-actions/transfer/structs";
 import { VestingAction } from "src/.gen/account-actions/vesting/structs";
@@ -78,6 +80,27 @@ export class SpendAndTransferProposal extends Proposal {
         }
         return result!;
     }
+
+    delete(
+        tx: Transaction,
+        accountGenerics: [string, string],
+        expired: TransactionObjectInput,
+    ): TransactionResult {
+        let result;
+        for (let i = 0; i < this.args!.transfers.length; i++) {
+            result = treasury.deleteSpendAction(
+                tx,
+                [accountGenerics[1], this.args!.coinType],
+                expired
+            );
+            result = transfer.deleteTransferAction(
+                tx,
+                accountGenerics[1],
+                expired
+            );
+        }
+        return result!;
+    }
 }
 
 export class SpendAndVestProposal extends Proposal {
@@ -146,6 +169,18 @@ export class SpendAndVestProposal extends Proposal {
                 executable,
                 account: this.account!,
             }
+        );
+    }
+
+    delete(
+        tx: Transaction,
+        accountGenerics: [string, string],
+        expired: TransactionObjectInput,
+    ): TransactionResult {
+        return vesting.deleteVestingAction(
+            tx,
+            accountGenerics[1],
+            expired
         );
     }
 }

@@ -2,6 +2,9 @@ import { Transaction, TransactionObjectInput, TransactionResult } from "@mysten/
 import { CoinMetadata, SuiClient } from "@mysten/sui/client";
 import { getCoinMeta } from "@polymedia/coinmeta";
 import * as currency from "../../../.gen/account-actions/currency/functions";
+import * as owned from "../../../.gen/account-actions/owned/functions";
+import * as transfer from "../../../.gen/account-actions/transfer/functions";
+import * as vesting from "../../../.gen/account-actions/vesting/functions";
 import { MintAction, BurnAction, UpdateAction, DisableAction } from "../../../.gen/account-actions/currency/structs";
 import { UpdateArgs, BurnArgs, MintArgs, ProposalArgs, ProposalFields, DisableArgs, MintAndTransferArgs, MintAndVestArgs } from "../../../types/proposal-types";
 import { Proposal } from "../proposal";
@@ -82,6 +85,18 @@ export class DisableProposal extends Proposal {
             }
         );
     }
+
+    delete(
+        tx: Transaction,
+        accountGenerics: [string, string],
+        expired: TransactionObjectInput,
+    ): TransactionResult {
+        return currency.deleteDisableAction(
+            tx,
+            [accountGenerics[1], this.args!.coinType],
+            expired
+        );
+    }
 }
 
 export class MintProposal extends Proposal {
@@ -144,6 +159,18 @@ export class MintProposal extends Proposal {
                 executable,
                 account: this.account!,
             }
+        );
+    }
+
+    delete(
+        tx: Transaction,
+        accountGenerics: [string, string],
+        expired: TransactionObjectInput,
+    ): TransactionResult {
+        return currency.deleteMintAction(
+            tx,
+            [accountGenerics[1], this.args!.coinType],
+            expired
         );
     }
 }
@@ -212,6 +239,23 @@ export class BurnProposal extends Proposal {
                 account: this.account!,
                 receiving: this.args!.coinId,
             }
+        );
+    }
+
+    delete(
+        tx: Transaction,
+        accountGenerics: [string, string],
+        expired: TransactionObjectInput,
+    ): TransactionResult {
+        owned.deleteWithdrawAction(
+            tx,
+            accountGenerics[1],
+            expired
+        );
+        return currency.deleteBurnAction(
+            tx,
+            [accountGenerics[1], this.args!.coinType],
+            expired
         );
     }
 }
@@ -292,6 +336,18 @@ export class UpdateProposal extends Proposal {
             }
         );
     }
+
+    delete(
+        tx: Transaction,
+        accountGenerics: [string, string],
+        expired: TransactionObjectInput,
+    ): TransactionResult {
+        return currency.deleteUpdateAction(
+            tx,
+            [accountGenerics[1], this.args!.coinType],
+            expired
+        );
+    }
 }
 
 export class MintAndTransferProposal extends Proposal {
@@ -362,6 +418,23 @@ export class MintAndTransferProposal extends Proposal {
         }
         return result!;
     }
+
+    delete(
+        tx: Transaction,
+        accountGenerics: [string, string],
+        expired: TransactionObjectInput,
+    ): TransactionResult {
+        transfer.deleteTransferAction(
+            tx,
+            accountGenerics[1],
+            expired
+        );
+        return currency.deleteMintAction(
+            tx,
+            [accountGenerics[1], this.args!.coinType],
+            expired
+        );
+    }
 }
 
 export class MintAndVestProposal extends Proposal {
@@ -428,6 +501,23 @@ export class MintAndVestProposal extends Proposal {
                 executable,
                 account: this.account!,
             }
+        );
+    }
+
+    delete(
+        tx: Transaction,
+        accountGenerics: [string, string],
+        expired: TransactionObjectInput,
+    ): TransactionResult {
+        vesting.deleteVestingAction(
+            tx,
+            accountGenerics[1],
+            expired
+        );
+        return currency.deleteMintAction(
+            tx,
+            [accountGenerics[1], this.args!.coinType],
+            expired
         );
     }
 }

@@ -2,7 +2,7 @@ import { Transaction, TransactionArgument, TransactionObjectInput, TransactionRe
 import { SuiClient } from "@mysten/sui/client";
 import { Account as AccountRaw } from "../../../.gen/account-protocol/account/structs";
 import { Multisig as MultisigRaw, Approvals as ApprovalsRaw } from "../../../.gen/account-config/multisig/structs";
-import { newAccount } from "../../../.gen/account-config/multisig/functions";
+import { deleteExpiredOutcome, deleteProposal, newAccount } from "../../../.gen/account-config/multisig/functions";
 import { share } from "../../../.gen/account-protocol/account/functions";
 import * as configMultisig from "../../../.gen/account-config/multisig/functions";
 import * as config from "../../../.gen/account-actions/config/functions";
@@ -255,6 +255,22 @@ export class Multisig extends Account implements MultisigData {
     ): TransactionResult {
         if (!account && !this.id) throw new Error("No multisig account provided");
         return executeProposal(tx, { account, key, clock: CLOCK });
+    }
+    
+    deleteProposal(
+        tx: Transaction,
+        key: string,
+        account: TransactionObjectInput = this.id,
+    ): TransactionResult {
+        if (!account && !this.id) throw new Error("No multisig account provided");
+        return deleteProposal(tx, { account, key, clock: CLOCK });
+    }
+
+    deleteExpiredOutcome(
+        tx: Transaction,
+        expired: TransactionObjectInput,
+    ): TransactionResult {
+        return deleteExpiredOutcome(tx, expired);
     }
 
     // === Atomic Proposals ===

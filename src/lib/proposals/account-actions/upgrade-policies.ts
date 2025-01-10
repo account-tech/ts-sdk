@@ -68,6 +68,18 @@ export class UpgradeProposal extends Proposal {
             }
         );
     }
+
+    delete(
+        tx: Transaction,
+        accountGenerics: [string, string],
+        expired: TransactionObjectInput,
+    ): TransactionResult {
+        return upgradePolicies.deleteUpgradeAction(
+            tx,
+            accountGenerics[1],
+            expired
+        );
+    }
 }
 
 export class RestrictProposal extends Proposal {
@@ -129,6 +141,18 @@ export class RestrictProposal extends Proposal {
                 executable,
                 account: this.account!,
             }
+        );
+    }
+
+    delete(
+        tx: Transaction,
+        accountGenerics: [string, string],
+        expired: TransactionObjectInput,
+    ): TransactionResult {
+        return upgradePolicies.deleteRestrictAction(
+            tx,
+            accountGenerics[1],
+            expired
         );
     }
 }

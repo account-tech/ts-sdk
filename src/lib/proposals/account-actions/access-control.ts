@@ -63,4 +63,16 @@ export class AccessProposal extends Proposal {
             }
         );
     }
+
+    delete(
+        tx: Transaction,
+        accountGenerics: [string, string],
+        expired: TransactionObjectInput,
+    ): TransactionResult {
+        return accessControl.deleteAccessAction(
+            tx,
+            [accountGenerics[1], this.args!.capType],
+            expired,
+        );
+    }
 }

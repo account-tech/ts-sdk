@@ -48,7 +48,7 @@ export class MultisigClient {
 		await this.extensions.refresh();
 	}
 
-	// creates a multisig with default weights of 1 (1 member = 1 voice)
+	/// Creates a multisig with default weights of 1 (1 member = 1 voice)
 	createMultisig(
 		tx: Transaction, 
 		name: string,
@@ -92,14 +92,14 @@ export class MultisigClient {
 		return this.multisig?.shareMultisig(tx, multisig);
 	}
 
-	// Factory function to call the appropriate propose function
+	/// Factory function to call the appropriate propose function
 	propose(
 		tx: Transaction,
 		proposalType: ProposalType,
 		proposalArgs: ProposalArgs,
 		actionsArgs: ActionsArgs,
 		role?: string,
-	) {
+	): TransactionResult {
 		const auth = this.multisig.authenticate(tx, role ?? "");
 		const outcome = this.multisig.emptyOutcome(tx);
 
@@ -107,19 +107,35 @@ export class MultisigClient {
 		const method = proposalClass.prototype.propose;
 		method.call(proposalClass, tx, MULTISIG_GENERICS, auth, outcome, this.multisig.id, proposalArgs, actionsArgs);
 		// directly approve after proposing
-		this.multisig.approveProposal(tx, proposalArgs.key, this.multisig.id);
+		return this.multisig.approveProposal(tx, proposalArgs.key, this.multisig.id);
 	}
 
-	// calls the execute function for the proposal
+	/// Calls the execute function for the proposal
 	execute(
 		tx: Transaction,
 		caller: string,
 		proposalKey: string
+	): TransactionResult {
+		const proposal = this.proposal(proposalKey);
+		if (!proposal) throw new Error("Proposal not found");
+
+		(proposal.outcome as Approvals).maybeApprove(tx, caller);
+		const executable = (proposal.outcome as Approvals).constructExecutable(tx);
+		return proposal.execute(tx, MULTISIG_GENERICS, executable);
+	}
+
+	/// Deletes a proposal if it has expired
+	delete(
+		tx: Transaction,
+		proposalKey: string,
 	) {
 		const proposal = this.proposal(proposalKey);
-		(proposal?.outcome as Approvals).maybeApprove(tx, caller);
-		const executable = (proposal?.outcome as Approvals).constructExecutable(tx);
-		proposal?.execute(tx, MULTISIG_GENERICS, executable);
+		if (!proposal) throw new Error("Proposal not found");
+		if (!proposal.hasExpired()) throw new Error("Proposal has not expired");
+
+		let expired = this.multisig.deleteProposal(tx, proposalKey);
+		proposal.delete(tx, MULTISIG_GENERICS, expired);
+		return this.multisig.deleteExpiredOutcome(tx, expired);
 	}
 
 	// === Commands ===

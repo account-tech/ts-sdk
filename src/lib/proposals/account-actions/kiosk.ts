@@ -81,6 +81,22 @@ export class TakeProposal extends Proposal {
         }
         return result!;
     }
+
+    delete(
+        tx: Transaction,
+        accountGenerics: [string, string],
+        expired: TransactionObjectInput,
+    ): TransactionResult {
+        let result;
+        for (let i = 0; i < this.args!.nftIds.length; i++) {
+            result = kiosk.deleteTakeAction(
+                tx,
+                accountGenerics[1],
+                expired
+            );
+        }
+        return result!;
+    }
 }
 
 export class ListProposal extends Proposal {
@@ -148,6 +164,22 @@ export class ListProposal extends Proposal {
                     account: this.account!,
                     kiosk: accountKiosk,
                 }
+            );
+        }
+        return result!;
+    }
+
+    delete(
+        tx: Transaction,
+        accountGenerics: [string, string],
+        expired: TransactionObjectInput,
+    ): TransactionResult {
+        let result;
+        for (let i = 0; i < this.args!.listings.length; i++) {
+            result = kiosk.deleteListAction(
+                tx,
+                accountGenerics[1],
+                expired
             );
         }
         return result!;

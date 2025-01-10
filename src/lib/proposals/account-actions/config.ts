@@ -82,4 +82,16 @@ export class ConfigDepsProposal extends Proposal {
             }
         );
     }
+
+    delete(
+        tx: Transaction,
+        accountGenerics: [string, string],
+        expired: TransactionObjectInput,
+    ): TransactionResult {
+        return config.deleteConfigDepsAction(
+            tx,
+            accountGenerics[1],
+            expired
+        );
+    }
 }

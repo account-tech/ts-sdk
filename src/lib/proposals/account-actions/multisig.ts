@@ -102,4 +102,15 @@ export class ConfigMultisigProposal extends Proposal {
             }
         );
     }
+
+    delete(
+        tx: Transaction,
+        _accountGenerics: [string, string],
+        expired: TransactionObjectInput,
+    ): TransactionResult {
+        return multisig.deleteExpiredConfigMultisig(
+            tx,
+            expired
+        );
+    }
 }
