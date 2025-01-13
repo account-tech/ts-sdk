@@ -7,8 +7,8 @@ import { NETWORK, testKeypair } from "./utils";
     const client = new SuiClient({ url: getFullnodeUrl(NETWORK) });
     const user = await User.init(
         client,
+        AccountType.MULTISIG,
         testKeypair.toSuiAddress(),
-        AccountType.MULTISIG
     )
 
     const userData = user.getData();

@@ -6,7 +6,7 @@ import { executeTx, NETWORK, testKeypair } from "./utils";
 
 (async () => {
     const client = new SuiClient({ url: getFullnodeUrl(NETWORK) });
-    const user = await User.init(client, testKeypair.toSuiAddress(), AccountType.MULTISIG);
+    const user = await User.init(client, AccountType.MULTISIG, testKeypair.toSuiAddress());
 
     const tx = new Transaction();
 
