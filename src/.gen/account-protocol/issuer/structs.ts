@@ -1,4 +1,3 @@
-import {String} from "../../_dependencies/source/0x1/string/structs";
 import {TypeName} from "../../_dependencies/source/0x1/type-name/structs";
 import {PhantomReified, Reified, StructClass, ToField, ToTypeStr, decodeFromFields, decodeFromFieldsWithTypes, decodeFromJSONField, phantom} from "../../_framework/reified";
 import {FieldsWithTypes, composeSuiType, compressSuiType} from "../../_framework/util";
@@ -11,7 +10,7 @@ import {fromB64, fromHEX, toHEX} from "@mysten/sui/utils";
 
 export function isIssuer(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::issuer::Issuer`; }
 
-export interface IssuerFields { accountAddr: ToField<"address">; roleType: ToField<TypeName>; roleName: ToField<String> }
+export interface IssuerFields { accountAddr: ToField<"address">; intentType: ToField<TypeName> }
 
 export type IssuerReified = Reified< Issuer, IssuerFields >;
 
@@ -21,11 +20,11 @@ export class Issuer implements StructClass { __StructClass = true as const;
 
  readonly $typeName = Issuer.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::issuer::Issuer`; readonly $typeArgs: []; readonly $isPhantom = Issuer.$isPhantom;
 
- readonly accountAddr: ToField<"address">; readonly roleType: ToField<TypeName>; readonly roleName: ToField<String>
+ readonly accountAddr: ToField<"address">; readonly intentType: ToField<TypeName>
 
  private constructor(typeArgs: [], fields: IssuerFields, ) { this.$fullTypeName = composeSuiType( Issuer.$typeName, ...typeArgs ) as `${typeof PKG_V1}::issuer::Issuer`; this.$typeArgs = typeArgs;
 
- this.accountAddr = fields.accountAddr;; this.roleType = fields.roleType;; this.roleName = fields.roleName; }
+ this.accountAddr = fields.accountAddr;; this.intentType = fields.intentType; }
 
  static reified( ): IssuerReified { return { typeName: Issuer.$typeName, fullTypeName: composeSuiType( Issuer.$typeName, ...[] ) as `${typeof PKG_V1}::issuer::Issuer`, typeArgs: [ ] as [], isPhantom: Issuer.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => Issuer.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => Issuer.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => Issuer.fromBcs( data, ), bcs: Issuer.bcs, fromJSONField: (field: any) => Issuer.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => Issuer.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => Issuer.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => Issuer.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => Issuer.fetch( client, id, ), new: ( fields: IssuerFields, ) => { return new Issuer( [], fields ) }, kind: "StructClassReified", } }
 
@@ -35,29 +34,29 @@ export class Issuer implements StructClass { __StructClass = true as const;
 
  static get bcs() { return bcs.struct("Issuer", {
 
- account_addr: bcs.bytes(32).transform({ input: (val: string) => fromHEX(val), output: (val: Uint8Array) => toHEX(val), }), role_type: TypeName.bcs, role_name: String.bcs
+ account_addr: bcs.bytes(32).transform({ input: (val: string) => fromHEX(val), output: (val: Uint8Array) => toHEX(val), }), intent_type: TypeName.bcs
 
 }) };
 
- static fromFields( fields: Record<string, any> ): Issuer { return Issuer.reified( ).new( { accountAddr: decodeFromFields("address", fields.account_addr), roleType: decodeFromFields(TypeName.reified(), fields.role_type), roleName: decodeFromFields(String.reified(), fields.role_name) } ) }
+ static fromFields( fields: Record<string, any> ): Issuer { return Issuer.reified( ).new( { accountAddr: decodeFromFields("address", fields.account_addr), intentType: decodeFromFields(TypeName.reified(), fields.intent_type) } ) }
 
  static fromFieldsWithTypes( item: FieldsWithTypes ): Issuer { if (!isIssuer(item.type)) { throw new Error("not a Issuer type");
 
  }
 
- return Issuer.reified( ).new( { accountAddr: decodeFromFieldsWithTypes("address", item.fields.account_addr), roleType: decodeFromFieldsWithTypes(TypeName.reified(), item.fields.role_type), roleName: decodeFromFieldsWithTypes(String.reified(), item.fields.role_name) } ) }
+ return Issuer.reified( ).new( { accountAddr: decodeFromFieldsWithTypes("address", item.fields.account_addr), intentType: decodeFromFieldsWithTypes(TypeName.reified(), item.fields.intent_type) } ) }
 
  static fromBcs( data: Uint8Array ): Issuer { return Issuer.fromFields( Issuer.bcs.parse(data) ) }
 
  toJSONField() { return {
 
- accountAddr: this.accountAddr,roleType: this.roleType.toJSONField(),roleName: this.roleName,
+ accountAddr: this.accountAddr,intentType: this.intentType.toJSONField(),
 
 } }
 
  toJSON() { return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() } }
 
- static fromJSONField( field: any ): Issuer { return Issuer.reified( ).new( { accountAddr: decodeFromJSONField("address", field.accountAddr), roleType: decodeFromJSONField(TypeName.reified(), field.roleType), roleName: decodeFromJSONField(String.reified(), field.roleName) } ) }
+ static fromJSONField( field: any ): Issuer { return Issuer.reified( ).new( { accountAddr: decodeFromJSONField("address", field.accountAddr), intentType: decodeFromJSONField(TypeName.reified(), field.intentType) } ) }
 
  static fromJSON( json: Record<string, any> ): Issuer { if (json.$typeName !== Issuer.$typeName) { throw new Error("not a WithTwoGenerics json object") };
 

@@ -1,21 +1,21 @@
 import { SuiClient, getFullnodeUrl } from "@mysten/sui/client";
 import { Transaction, TransactionObjectInput, TransactionResult } from "@mysten/sui/transactions";
-import { FRAMEWORK, ACCOUNT_CONFIG, MULTISIG_GENERICS, TRANSFER_POLICY_RULES } from "./types/constants";
+import { SUI_FRAMEWORK, ACCOUNT_CONFIG, MULTISIG_GENERICS, TRANSFER_POLICY_RULES } from "./types/constants";
 import { AccountType } from "./types/account-types";
 import { User } from "./lib/user";
 import { Member, Multisig, Threshold } from "./lib/account/configs/multisig";
 import { TransactionPureInput } from "./types/helper-types";
 import * as commands from "./lib/commands";
-import { ActionsArgs, ProposalArgs, proposalRegistry, ProposalType } from "./types/proposal-types";
-import { Proposal } from "./lib/proposals/proposal";
+import { ActionsArgs, IntentArgs, intentRegistry, IntentType } from "./types/intent-types";
 import { Extensions } from "./lib/extensions";
-import { Approvals } from "./lib/proposals/outcomes/approvals";
-import { ConfigDepsProposal } from "./lib/proposals/account-actions/config";
-import { BurnProposal, MintProposal, UpdateProposal } from "./lib/proposals/account-actions/currency";
-import { CommandTypes } from "./types/command-types";
-import { ConfigMultisigProposal } from "./lib/proposals/account-actions/multisig";
-import { roleWithName } from "./lib/helpers";
+import { Approvals } from "./lib/outcomes/variants/approvals";
+import { ConfigDepsIntent } from "./lib/intents/account-actions/config";
+import { WithdrawAndBurnIntent, UpdateMetadataIntent } from "./lib/intents/account-actions/currency";
+// import { CommandTypes } from "./types/command-types";
+import { ConfigMultisigIntent } from "./lib/intents/account-actions/multisig";
 import { Dep } from "./lib/account/account";
+import { IntentStatus } from "./lib/intents/intent";
+// import { RoleTypes, roleUtils } from "./lib/roles";
 
 export class MultisigClient {
 
@@ -24,13 +24,13 @@ export class MultisigClient {
 		public user: User,
 		public multisig: Multisig,
 		public extensions: Extensions,
-	) {}
-	
+	) { }
+
 	static async init(
 		network: "mainnet" | "testnet" | "devnet" | "localnet" | string,
-        userAddr: string, 
+		userAddr: string,
 		multisigId?: string,
-    ): Promise<MultisigClient> {
+	): Promise<MultisigClient> {
 		const url = (network == "mainnet" || network == "testnet" || network == "devnet" || network == "localnet") ? getFullnodeUrl(network) : network;
 		const client = new SuiClient({ url });
 
@@ -50,7 +50,7 @@ export class MultisigClient {
 
 	/// Creates a multisig with default weights of 1 (1 member = 1 voice)
 	createMultisig(
-		tx: Transaction, 
+		tx: Transaction,
 		name: string,
 		newAccount?: { username: string, profilePicture: string },
 		memberAddresses?: string[],
@@ -63,24 +63,26 @@ export class MultisigClient {
 			if (!newAccount) throw new Error("User must create an user before creating a multisig");
 			createdAccount = this.user.createUser(tx); // TODO: add optional params for username and avatar 
 			accountId = tx.moveCall({
-				target: `${FRAMEWORK}::object::id`,
+				target: `${SUI_FRAMEWORK}::object::id`,
 				typeArguments: [`${ACCOUNT_CONFIG.V1}::user::User`],
 				arguments: [tx.object(createdAccount)],
 			});
 		}
 		// create the multisig
-		const multisig = this.multisig?.newMultisig(tx, name);
+		const multisig = this.multisig?.newMultisig(tx);
+		// add name
+		this.modifyName(tx, name);
 		// update multisig rules if members are provided
 		if (memberAddresses) {
 			const members = memberAddresses.map((address: string) => ({ address, weight: 1, roles: [] }));
 			members.push({ address: this.user.address!, weight: 1, roles: [] }); // add creator to the members
-			
+
 			this.multisig.configMultisig(
 				tx,
 				{ key: "init_members" },
 				{ members, thresholds: { global: globalThreshold ?? 1, roles: [] } },
 				multisig
-			); // atomic proposal
+			); // atomic intent
 		}
 		// creator register the multisig in his user
 		this.multisig.joinMultisig(tx, createdAccount ? createdAccount : accountId, multisig);
@@ -92,50 +94,94 @@ export class MultisigClient {
 		return this.multisig?.shareMultisig(tx, multisig);
 	}
 
-	/// Factory function to call the appropriate propose function
-	propose(
+	/// Factory function to call the appropriate request function
+	request(
 		tx: Transaction,
-		proposalType: ProposalType,
-		proposalArgs: ProposalArgs,
+		proposalType: IntentType,
+		proposalArgs: IntentArgs,
 		actionsArgs: ActionsArgs,
 		role?: string,
 	): TransactionResult {
 		const auth = this.multisig.authenticate(tx, role ?? "");
 		const outcome = this.multisig.emptyOutcome(tx);
 
-		const proposalClass = proposalRegistry[proposalType];
-		const method = proposalClass.prototype.propose;
+		const proposalClass = intentRegistry[proposalType];
+		const method = proposalClass.prototype.request;
 		method.call(proposalClass, tx, MULTISIG_GENERICS, auth, outcome, this.multisig.id, proposalArgs, actionsArgs);
 		// directly approve after proposing
-		return this.multisig.approveProposal(tx, proposalArgs.key, this.multisig.id);
+		return this.multisig.approveIntent(tx, proposalArgs.key, this.multisig.id);
 	}
 
-	/// Calls the execute function for the proposal
+	/// Approves a intent
+	approve(
+		tx: Transaction,
+		intentKey: string
+	): TransactionResult {
+		return this.multisig.approveIntent(tx, intentKey, this.multisig.id);
+	}
+
+	/// Removes approval from a intent
+	disapprove(
+		tx: Transaction,
+		intentKey: string
+	): TransactionResult {
+		return this.multisig.disapproveIntent(tx, intentKey, this.multisig.id);
+	}
+
+	/// Calls the execute function for the intent, approve if not already done
 	execute(
 		tx: Transaction,
 		caller: string,
-		proposalKey: string
+		intentKey: string
 	): TransactionResult {
-		const proposal = this.proposal(proposalKey);
-		if (!proposal) throw new Error("Proposal not found");
+		const intent = this.multisig.intent(intentKey);
+		if (!intent) throw new Error("Proposal not found");
 
-		(proposal.outcome as Approvals).maybeApprove(tx, caller);
-		const executable = (proposal.outcome as Approvals).constructExecutable(tx);
-		return proposal.execute(tx, MULTISIG_GENERICS, executable);
+		(intent.outcome as Approvals).maybeApprove(tx, caller);
+		const executable = (intent.outcome as Approvals).constructExecutable(tx);
+		
+		let result;
+		result = intent.execute(tx, MULTISIG_GENERICS, executable);
+		// if no more executions scheduled after this one, destroy intent
+		if (intent.fields.executionTimes.length == 1) {
+			result = intent.clearEmpty(tx, MULTISIG_GENERICS, this.multisig.id, intentKey);
+		}
+		return result;
 	}
 
-	/// Deletes a proposal if it has expired
+	/// Deletes a intent if it has expired
 	delete(
 		tx: Transaction,
-		proposalKey: string,
+		intentKey: string,
 	) {
-		const proposal = this.proposal(proposalKey);
-		if (!proposal) throw new Error("Proposal not found");
-		if (!proposal.hasExpired()) throw new Error("Proposal has not expired");
+		const intent = this.multisig.intent(intentKey);
+		if (!intent) throw new Error("Proposal not found");
+		if (!intent.hasExpired()) throw new Error("Proposal has not expired");
 
-		let expired = this.multisig.deleteProposal(tx, proposalKey);
-		proposal.delete(tx, MULTISIG_GENERICS, expired);
-		return this.multisig.deleteExpiredOutcome(tx, expired);
+		intent.deleteExpired(tx, MULTISIG_GENERICS, this.multisig.id, intentKey);
+	}
+
+	/// Returns true if the intent can be executed after potential approval
+	canExecute(key: string): boolean {
+		const intent = this.multisig.intent(key);
+		const outcome = intent?.outcome as Approvals;
+		const member = this.multisig.member(this.user.address!);
+
+		switch (this.multisig.intentStatus(key)) {
+			case IntentStatus.Executable:
+				return true;
+			case IntentStatus.Pending:
+				const hasRole = member.roles.includes(intent.fields.role);
+
+				const thresholdReachedAfterApproval =
+					(outcome.totalWeight + member.weight) >= this.multisig.global.threshold ||
+					(hasRole ? outcome.roleWeight + member.weight : outcome.roleWeight) >= this.multisig.roles[intent.fields.role].threshold;
+				const executionTimeReached = intent!.fields.executionTimes[0] <= Date.now();
+
+				return thresholdReachedAfterApproval && executionTimeReached;
+			default:
+				return false;
+		}
 	}
 
 	// === Commands ===
@@ -146,7 +192,7 @@ export class MultisigClient {
 		capType: string,
 		capObject: TransactionObjectInput,
 	): TransactionResult {
-		const auth = this.multisig.authenticate(tx, CommandTypes.LockCap);
+		const auth = this.multisig.authenticate(tx);
 		return commands.depositCap(tx, MULTISIG_GENERICS, capType, auth, this.multisig.id, capObject);
 	}
 
@@ -155,9 +201,9 @@ export class MultisigClient {
 		tx: Transaction,
 		newName: string,
 	): TransactionResult {
-		const auth = this.multisig.authenticate(tx, CommandTypes.ConfigMetadata);	
+		const auth = this.multisig.authenticate(tx);
 		return commands.replaceMetadata(tx, MULTISIG_GENERICS, auth, this.multisig.id, ["name"], [newName]);
-	}	
+	}
 
 	/// Deposits and locks a TreasuryCap object in the Account
 	depositTreasuryCap(
@@ -165,7 +211,7 @@ export class MultisigClient {
 		coinType: string,
 		treasuryCap: TransactionObjectInput,
 	): TransactionResult {
-		const auth = this.multisig.authenticate(tx, CommandTypes.LockTreasuryCap);
+		const auth = this.multisig.authenticate(tx);
 		return commands.depositTreasuryCap(tx, MULTISIG_GENERICS, coinType, auth, this.multisig.id, treasuryCap);
 	}
 
@@ -174,7 +220,7 @@ export class MultisigClient {
 		tx: Transaction,
 		kioskName: string,
 	): TransactionResult {
-		const auth = this.multisig.authenticate(tx, CommandTypes.Kiosk);
+		const auth = this.multisig.authenticate(tx);
 		return commands.openKiosk(tx, MULTISIG_GENERICS, auth, this.multisig.id, kioskName);
 	}
 
@@ -196,19 +242,19 @@ export class MultisigClient {
 			policyId = policies[0].id;
 		} else {
 			// Find first policy that only contains known rules
-			const validPolicy = policies.find(policy => 
+			const validPolicy = policies.find(policy =>
 				policy.rules.every(rule => TRANSFER_POLICY_RULES.includes(rule))
 			);
 			if (!validPolicy) throw new Error("No transfer policy found with only known rules");
 			policyId = validPolicy.id;
 		}
-		
+
 		// get the account kiosk from its name 
 		const accountKioskId = this.multisig.managedAssets.kiosks[kioskName].id;
-		const auth = this.multisig.authenticate(tx, roleWithName(CommandTypes.Place, kioskName));
+		const auth = this.multisig.authenticate(tx);
 		const request = commands.placeInKiosk(tx, MULTISIG_GENERICS, nftType, auth, this.multisig.id, accountKioskId, senderKiosk, senderCap, policyId, kioskName, nftId);
 		return tx.moveCall({
-			target: `${FRAMEWORK}::transfer_policy::confirm_request`,
+			target: `${SUI_FRAMEWORK}::transfer_policy::confirm_request`,
 			typeArguments: [nftType],
 			arguments: [tx.object(policyId), request],
 		});
@@ -225,7 +271,7 @@ export class MultisigClient {
 		// get the nft type from the nft id
 		const nftType = this.multisig.managedAssets.kiosks[kioskName].items.find(item => item.id === nftId)?.type;
 		if (!nftType) throw new Error("NFT not found in kiosk");
-		const auth = this.multisig.authenticate(tx, roleWithName(CommandTypes.Delist, kioskName));
+		const auth = this.multisig.authenticate(tx);
 		return commands.delistFromKiosk(tx, MULTISIG_GENERICS, nftType, auth, this.multisig.id, accountKioskId, kioskName, nftId);
 	}
 
@@ -236,7 +282,7 @@ export class MultisigClient {
 	): TransactionResult {
 		// get the account kiosk from its name 
 		const accountKioskId = this.multisig.managedAssets.kiosks[kioskName].id;
-		const auth = this.multisig.authenticate(tx, CommandTypes.Kiosk);
+		const auth = this.multisig.authenticate(tx);
 		return commands.withdrawProfitsFromKiosk(tx, MULTISIG_GENERICS, auth, this.multisig.id, accountKioskId, kioskName);
 	}
 
@@ -247,7 +293,7 @@ export class MultisigClient {
 	): TransactionResult {
 		// get the account kiosk from its name 
 		const accountKioskId = this.multisig.managedAssets.kiosks[kioskName].id;
-		const auth = this.multisig.authenticate(tx, CommandTypes.Kiosk);
+		const auth = this.multisig.authenticate(tx);
 		return commands.closeKiosk(tx, MULTISIG_GENERICS, auth, this.multisig.id, accountKioskId, kioskName);
 	}
 
@@ -256,7 +302,7 @@ export class MultisigClient {
 		tx: Transaction,
 		treasuryName: string,
 	): TransactionResult {
-		const auth = this.multisig.authenticate(tx, CommandTypes.Treasury);
+		const auth = this.multisig.authenticate(tx);
 		return commands.openTreasury(tx, MULTISIG_GENERICS, auth, this.multisig.id, treasuryName);
 	}
 
@@ -268,7 +314,7 @@ export class MultisigClient {
 	): TransactionResult {
 		// get the coinType from the coin id 
 		const coinType = ""; // TODO: ./objects/owned.ts
-		const auth = this.multisig.authenticate(tx, roleWithName(CommandTypes.Deposit, treasuryName));
+		const auth = this.multisig.authenticate(tx);
 		return commands.depositFromAccount(tx, MULTISIG_GENERICS, coinType, auth, this.multisig.id, treasuryName, coin);
 	}
 
@@ -279,7 +325,7 @@ export class MultisigClient {
 		treasuryName: string,
 		coin: TransactionObjectInput,
 	): TransactionResult {
-		const auth = this.multisig.authenticate(tx, roleWithName(CommandTypes.Deposit, treasuryName));
+		const auth = this.multisig.authenticate(tx);
 		return commands.depositFromWallet(tx, MULTISIG_GENERICS, coinType, auth, this.multisig.id, treasuryName, coin);
 	}
 
@@ -288,7 +334,7 @@ export class MultisigClient {
 		tx: Transaction,
 		treasuryName: string,
 	): TransactionResult {
-		const auth = this.multisig.authenticate(tx, CommandTypes.Treasury);
+		const auth = this.multisig.authenticate(tx);
 		return commands.closeTreasury(tx, MULTISIG_GENERICS, auth, this.multisig.id, treasuryName);
 	}
 
@@ -298,114 +344,89 @@ export class MultisigClient {
 		packageName: string,
 		upgradeCap: TransactionObjectInput,
 	): TransactionResult {
-		const auth = this.multisig.authenticate(tx, CommandTypes.LockUpgradeCap);
+		const auth = this.multisig.authenticate(tx);
 		return commands.depositUpgradeCap(tx, MULTISIG_GENERICS, auth, this.multisig.id, upgradeCap, packageName, 0);
 	}
 
-	// === Proposals ===
+	// === Intents ===
 
-	proposeConfigMultisig(
+	requestConfigMultisig(
 		tx: Transaction,
 		globalThreshold: number,
 		roleThresholds: Threshold[],
 		members: Member[],
 		key: string,
 		description?: string, // default is empty
-		executionTime?: number, // default is now
-		expirationTime?: number, // default is 1 week
+		executionTime?: bigint, // default is now
+		expirationTime?: bigint, // default is 1 week
 	) {
 		const auth = this.multisig.authenticate(tx, "");
 		const outcome = this.multisig.emptyOutcome(tx);
 
-		ConfigMultisigProposal.prototype.propose(
+		ConfigMultisigIntent.prototype.request(
 			tx,
 			MULTISIG_GENERICS,
 			auth,
 			outcome,
 			this.multisig.id,
-			{ key, description, executionTime, expirationTime },
+			{ key, description, executionTimes: [executionTime ?? 0n], expirationTime },
 			{ members, thresholds: { global: globalThreshold, roles: roleThresholds } },
 		);
 
-		return this.multisig.approveProposal(tx, key, this.multisig.id);
+		return this.multisig.approveIntent(tx, key, this.multisig.id);
 	}
-	
-	proposeConfigDeps(
+
+	requestConfigDeps(
 		tx: Transaction,
 		deps: Dep[],
 		key: string,
 		description?: string, // default is empty
-		executionTime?: number, // default is now
-		expirationTime?: number, // default is 1 week
+		executionTime?: bigint, // default is now
+		expirationTime?: bigint, // default is 1 week
 	) {
 		const auth = this.multisig.authenticate(tx, "");
 		const outcome = this.multisig.emptyOutcome(tx);
-		
-		ConfigDepsProposal.prototype.propose(
+
+		ConfigDepsIntent.prototype.request(
 			tx,
 			MULTISIG_GENERICS,
 			auth,
 			outcome,
 			this.multisig.id,
-			{ key, description, executionTime, expirationTime },
+			{ key, description, executionTimes: [executionTime ?? 0n], expirationTime },
 			{ deps },
 		);
-		
-		return this.multisig.approveProposal(tx, key, this.multisig.id);
+
+		return this.multisig.approveIntent(tx, key, this.multisig.id);
 	}
 
-	proposeMint(
-		tx: Transaction,
-		coinType: string,
-		amount: number,
-		key: string,
-		description?: string, // default is empty
-		executionTime?: number, // default is now
-		expirationTime?: number, // default is 1 week
-	) {
-		const auth = this.multisig.authenticate(tx, "");
-		const outcome = this.multisig.emptyOutcome(tx);
-
-		MintProposal.prototype.propose(
-			tx,
-			MULTISIG_GENERICS,
-			auth,
-			outcome,
-			this.multisig.id,
-			{ key, description, executionTime, expirationTime },
-			{ coinType, amount },
-		);
-
-		return this.multisig.approveProposal(tx, key, this.multisig.id);
-	}
-
-	proposeBurn(
+	requestWithdrawAndBurn(
 		tx: Transaction,
 		coinType: string,
 		coinId: string,
-		amount: number,
+		amount: bigint,
 		key: string,
 		description?: string, // default is empty
-		executionTime?: number, // default is now
-		expirationTime?: number, // default is 1 week
+		executionTime?: bigint, // default is now
+		expirationTime?: bigint, // default is 1 week
 	) {
 		const auth = this.multisig.authenticate(tx, "");
 		const outcome = this.multisig.emptyOutcome(tx);
 
-		BurnProposal.prototype.propose(
+		WithdrawAndBurnIntent.prototype.request(
 			tx,
 			MULTISIG_GENERICS,
 			auth,
 			outcome,
 			this.multisig.id,
-			{ key, description, executionTime, expirationTime },
+			{ key, description, executionTimes: [executionTime ?? 0n], expirationTime },
 			{ coinType, coinId, amount },
 		);
 
-		return this.multisig.approveProposal(tx, key, this.multisig.id);
+		return this.multisig.approveIntent(tx, key, this.multisig.id);
 	}
 
-	proposeUpdate(
+	requestUpdateMetadata(
 		tx: Transaction,
 		coinType: string,
 		newName: string | null,
@@ -414,38 +435,23 @@ export class MultisigClient {
 		newIcon: string | null,
 		key: string,
 		description?: string, // default is empty
-		executionTime?: number, // default is now
-		expirationTime?: number, // default is 1 week
+		executionTime?: bigint, // default is now
+		expirationTime?: bigint, // default is 1 week
 	) {
 		const auth = this.multisig.authenticate(tx, "");
 		const outcome = this.multisig.emptyOutcome(tx);
 
-		UpdateProposal.prototype.propose(
+		UpdateMetadataIntent.prototype.request(
 			tx,
 			MULTISIG_GENERICS,
 			auth,
 			outcome,
 			this.multisig.id,
-			{ key, description, executionTime, expirationTime },
+			{ key, description, executionTimes: [executionTime ?? 0n], expirationTime },
 			{ coinType, name: newName, symbol: newSymbol, description: newDescription, icon: newIcon },
 		);
 
-		return this.multisig.approveProposal(tx, key, this.multisig.id);
-	}
-
-	
-	
-	// === Helpers ===
-
-	proposal(key: string): Proposal | undefined {
-		return this.multisig?.getProposal(key);
-	}
-
-	hasApproved(key: string, userAddr: string = this.user.address!): boolean {
-		if (!userAddr && !this.user.address) throw new Error("No user address provided to check approval status");
-		const has = (this.proposal(key)?.outcome as Approvals).approved?.includes(userAddr);
-		if (!has) throw new Error("Proposal not found");
-		return has;
+		return this.multisig.approveIntent(tx, key, this.multisig.id);
 	}
 }
 

@@ -1,19 +1,18 @@
 import {PUBLISHED_AT} from "..";
 import {String} from "../../_dependencies/source/0x1/string/structs";
+import {ID} from "../../_dependencies/source/0x2/object/structs";
 import {GenericArg, generic, obj, pure} from "../../_framework/util";
 import {Transaction, TransactionArgument, TransactionObjectInput} from "@mysten/sui/transactions";
 
-export interface NewArgs { extensions: TransactionObjectInput; name: string | TransactionArgument; config: GenericArg }
+export interface NewArgs { extensions: TransactionObjectInput; config: GenericArg; unverifiedDepsAllowed: boolean | TransactionArgument }
 
-export function new_( tx: Transaction, typeArgs: [string, string], args: NewArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::account::new`, typeArguments: typeArgs, arguments: [ obj(tx, args.extensions), pure(tx, args.name, `${String.$typeName}`), generic(tx, `${typeArgs[0]}`, args.config) ], }) }
+export function new_( tx: Transaction, typeArgs: [string, string], args: NewArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::account::new`, typeArguments: typeArgs, arguments: [ obj(tx, args.extensions), generic(tx, `${typeArgs[0]}`, args.config), pure(tx, args.unverifiedDepsAllowed, `bool`) ], }) }
 
-export interface ReceiveArgs { account: TransactionObjectInput; receiving: TransactionObjectInput; version: TransactionObjectInput }
+export interface ReceiveArgs { account: TransactionObjectInput; receiving: TransactionObjectInput }
 
-export function receive( tx: Transaction, typeArgs: [string, string, string], args: ReceiveArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::account::receive`, typeArguments: typeArgs, arguments: [ obj(tx, args.account), obj(tx, args.receiving), obj(tx, args.version) ], }) }
+export function receive( tx: Transaction, typeArgs: [string, string, string], args: ReceiveArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::account::receive`, typeArguments: typeArgs, arguments: [ obj(tx, args.account), obj(tx, args.receiving) ], }) }
 
 export function config( tx: Transaction, typeArgs: [string, string], account: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::account::config`, typeArguments: typeArgs, arguments: [ obj(tx, account) ], }) }
-
-export function share( tx: Transaction, typeArgs: [string, string], account: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::account::share`, typeArguments: typeArgs, arguments: [ obj(tx, account) ], }) }
 
 export function addr( tx: Transaction, typeArgs: [string, string], account: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::account::addr`, typeArguments: typeArgs, arguments: [ obj(tx, account) ], }) }
 
@@ -23,63 +22,73 @@ export interface KeepArgs { account: TransactionObjectInput; obj: GenericArg }
 
 export function keep( tx: Transaction, typeArgs: [string, string, string], args: KeepArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::account::keep`, typeArguments: typeArgs, arguments: [ obj(tx, args.account), generic(tx, `${typeArgs[2]}`, args.obj) ], }) }
 
-export function proposals( tx: Transaction, typeArgs: [string, string], account: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::account::proposals`, typeArguments: typeArgs, arguments: [ obj(tx, account) ], }) }
-
-export interface ProposalArgs { account: TransactionObjectInput; key: string | TransactionArgument }
-
-export function proposal( tx: Transaction, typeArgs: [string, string], args: ProposalArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::account::proposal`, typeArguments: typeArgs, arguments: [ obj(tx, args.account), pure(tx, args.key, `${String.$typeName}`) ], }) }
-
 export function init( tx: Transaction, otw: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::account::init`, arguments: [ obj(tx, otw) ], }) }
+
+export function intents( tx: Transaction, typeArgs: [string, string], account: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::account::intents`, typeArguments: typeArgs, arguments: [ obj(tx, account) ], }) }
+
+export interface AddActionArgs { account: TransactionObjectInput; intent: TransactionObjectInput; action: GenericArg; versionWitness: TransactionObjectInput; intentWitness: GenericArg }
+
+export function addAction( tx: Transaction, typeArgs: [string, string, string, string], args: AddActionArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::account::add_action`, typeArguments: typeArgs, arguments: [ obj(tx, args.account), obj(tx, args.intent), generic(tx, `${typeArgs[2]}`, args.action), obj(tx, args.versionWitness), generic(tx, `${typeArgs[3]}`, args.intentWitness) ], }) }
+
+export interface AddIntentArgs { account: TransactionObjectInput; intent: TransactionObjectInput; versionWitness: TransactionObjectInput; intentWitness: GenericArg }
+
+export function addIntent( tx: Transaction, typeArgs: [string, string, string], args: AddIntentArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::account::add_intent`, typeArguments: typeArgs, arguments: [ obj(tx, args.account), obj(tx, args.intent), obj(tx, args.versionWitness), generic(tx, `${typeArgs[2]}`, args.intentWitness) ], }) }
 
 export function deps( tx: Transaction, typeArgs: [string, string], account: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::account::deps`, typeArguments: typeArgs, arguments: [ obj(tx, account) ], }) }
 
-export interface AddManagedObjectArgs { account: TransactionObjectInput; key: GenericArg; obj: GenericArg; version: TransactionObjectInput }
+export interface AddManagedObjectArgs { account: TransactionObjectInput; key: GenericArg; obj: GenericArg; versionWitness: TransactionObjectInput }
 
-export function addManagedObject( tx: Transaction, typeArgs: [string, string, string, string], args: AddManagedObjectArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::account::add_managed_object`, typeArguments: typeArgs, arguments: [ obj(tx, args.account), generic(tx, `${typeArgs[2]}`, args.key), generic(tx, `${typeArgs[3]}`, args.obj), obj(tx, args.version) ], }) }
+export function addManagedObject( tx: Transaction, typeArgs: [string, string, string, string], args: AddManagedObjectArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::account::add_managed_object`, typeArguments: typeArgs, arguments: [ obj(tx, args.account), generic(tx, `${typeArgs[2]}`, args.key), generic(tx, `${typeArgs[3]}`, args.obj), obj(tx, args.versionWitness) ], }) }
 
-export interface AddManagedStructArgs { account: TransactionObjectInput; key: GenericArg; struct: GenericArg; version: TransactionObjectInput }
+export interface AddManagedStructArgs { account: TransactionObjectInput; key: GenericArg; struct: GenericArg; versionWitness: TransactionObjectInput }
 
-export function addManagedStruct( tx: Transaction, typeArgs: [string, string, string, string], args: AddManagedStructArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::account::add_managed_struct`, typeArguments: typeArgs, arguments: [ obj(tx, args.account), generic(tx, `${typeArgs[2]}`, args.key), generic(tx, `${typeArgs[3]}`, args.struct), obj(tx, args.version) ], }) }
+export function addManagedStruct( tx: Transaction, typeArgs: [string, string, string, string], args: AddManagedStructArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::account::add_managed_struct`, typeArguments: typeArgs, arguments: [ obj(tx, args.account), generic(tx, `${typeArgs[2]}`, args.key), generic(tx, `${typeArgs[3]}`, args.struct), obj(tx, args.versionWitness) ], }) }
 
-export interface AddProposalArgs { account: TransactionObjectInput; proposal: TransactionObjectInput; version: TransactionObjectInput; witness: GenericArg }
+export function assertIsConfigModule( tx: Transaction, typeArgs: [string, string], ) { return tx.moveCall({ target: `${PUBLISHED_AT}::account::assert_is_config_module`, typeArguments: typeArgs, arguments: [ ], }) }
 
-export function addProposal( tx: Transaction, typeArgs: [string, string, string], args: AddProposalArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::account::add_proposal`, typeArguments: typeArgs, arguments: [ obj(tx, args.account), obj(tx, args.proposal), obj(tx, args.version), generic(tx, `${typeArgs[2]}`, args.witness) ], }) }
+export interface BorrowManagedObjectArgs { account: TransactionObjectInput; key: GenericArg; versionWitness: TransactionObjectInput }
 
-export interface BorrowManagedObjectArgs { account: TransactionObjectInput; key: GenericArg; version: TransactionObjectInput }
+export function borrowManagedObject( tx: Transaction, typeArgs: [string, string, string, string], args: BorrowManagedObjectArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::account::borrow_managed_object`, typeArguments: typeArgs, arguments: [ obj(tx, args.account), generic(tx, `${typeArgs[2]}`, args.key), obj(tx, args.versionWitness) ], }) }
 
-export function borrowManagedObject( tx: Transaction, typeArgs: [string, string, string, string], args: BorrowManagedObjectArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::account::borrow_managed_object`, typeArguments: typeArgs, arguments: [ obj(tx, args.account), generic(tx, `${typeArgs[2]}`, args.key), obj(tx, args.version) ], }) }
+export interface BorrowManagedObjectMutArgs { account: TransactionObjectInput; key: GenericArg; versionWitness: TransactionObjectInput }
 
-export interface BorrowManagedObjectMutArgs { account: TransactionObjectInput; key: GenericArg; version: TransactionObjectInput }
+export function borrowManagedObjectMut( tx: Transaction, typeArgs: [string, string, string, string], args: BorrowManagedObjectMutArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::account::borrow_managed_object_mut`, typeArguments: typeArgs, arguments: [ obj(tx, args.account), generic(tx, `${typeArgs[2]}`, args.key), obj(tx, args.versionWitness) ], }) }
 
-export function borrowManagedObjectMut( tx: Transaction, typeArgs: [string, string, string, string], args: BorrowManagedObjectMutArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::account::borrow_managed_object_mut`, typeArguments: typeArgs, arguments: [ obj(tx, args.account), generic(tx, `${typeArgs[2]}`, args.key), obj(tx, args.version) ], }) }
+export interface BorrowManagedStructArgs { account: TransactionObjectInput; key: GenericArg; versionWitness: TransactionObjectInput }
 
-export interface BorrowManagedStructArgs { account: TransactionObjectInput; key: GenericArg; version: TransactionObjectInput }
+export function borrowManagedStruct( tx: Transaction, typeArgs: [string, string, string, string], args: BorrowManagedStructArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::account::borrow_managed_struct`, typeArguments: typeArgs, arguments: [ obj(tx, args.account), generic(tx, `${typeArgs[2]}`, args.key), obj(tx, args.versionWitness) ], }) }
 
-export function borrowManagedStruct( tx: Transaction, typeArgs: [string, string, string, string], args: BorrowManagedStructArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::account::borrow_managed_struct`, typeArguments: typeArgs, arguments: [ obj(tx, args.account), generic(tx, `${typeArgs[2]}`, args.key), obj(tx, args.version) ], }) }
+export interface BorrowManagedStructMutArgs { account: TransactionObjectInput; key: GenericArg; versionWitness: TransactionObjectInput }
 
-export interface BorrowManagedStructMutArgs { account: TransactionObjectInput; key: GenericArg; version: TransactionObjectInput }
+export function borrowManagedStructMut( tx: Transaction, typeArgs: [string, string, string, string], args: BorrowManagedStructMutArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::account::borrow_managed_struct_mut`, typeArguments: typeArgs, arguments: [ obj(tx, args.account), generic(tx, `${typeArgs[2]}`, args.key), obj(tx, args.versionWitness) ], }) }
 
-export function borrowManagedStructMut( tx: Transaction, typeArgs: [string, string, string, string], args: BorrowManagedStructMutArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::account::borrow_managed_struct_mut`, typeArguments: typeArgs, arguments: [ obj(tx, args.account), generic(tx, `${typeArgs[2]}`, args.key), obj(tx, args.version) ], }) }
+export interface ConfigMutArgs { account: TransactionObjectInput; versionWitness: TransactionObjectInput; configWitness: GenericArg }
 
-export interface ConfigMutArgs { account: TransactionObjectInput; version: TransactionObjectInput }
+export function configMut( tx: Transaction, typeArgs: [string, string, string], args: ConfigMutArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::account::config_mut`, typeArguments: typeArgs, arguments: [ obj(tx, args.account), obj(tx, args.versionWitness), generic(tx, `${typeArgs[2]}`, args.configWitness) ], }) }
 
-export function configMut( tx: Transaction, typeArgs: [string, string], args: ConfigMutArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::account::config_mut`, typeArguments: typeArgs, arguments: [ obj(tx, args.account), obj(tx, args.version) ], }) }
+export interface ConfirmExecutionArgs { account: TransactionObjectInput; executable: TransactionObjectInput; versionWitness: TransactionObjectInput; intentWitness: GenericArg }
 
-export interface CreateProposalArgs { account: TransactionObjectInput; auth: TransactionObjectInput; outcome: GenericArg; version: TransactionObjectInput; witness: GenericArg; wName: string | TransactionArgument; key: string | TransactionArgument; description: string | TransactionArgument; executionTime: bigint | TransactionArgument; expirationTime: bigint | TransactionArgument }
+export function confirmExecution( tx: Transaction, typeArgs: [string, string, string], args: ConfirmExecutionArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::account::confirm_execution`, typeArguments: typeArgs, arguments: [ obj(tx, args.account), obj(tx, args.executable), obj(tx, args.versionWitness), generic(tx, `${typeArgs[2]}`, args.intentWitness) ], }) }
 
-export function createProposal( tx: Transaction, typeArgs: [string, string, string], args: CreateProposalArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::account::create_proposal`, typeArguments: typeArgs, arguments: [ obj(tx, args.account), obj(tx, args.auth), generic(tx, `${typeArgs[1]}`, args.outcome), obj(tx, args.version), generic(tx, `${typeArgs[2]}`, args.witness), pure(tx, args.wName, `${String.$typeName}`), pure(tx, args.key, `${String.$typeName}`), pure(tx, args.description, `${String.$typeName}`), pure(tx, args.executionTime, `u64`), pure(tx, args.expirationTime, `u64`) ], }) }
+export interface CreateIntentArgs { account: TransactionObjectInput; key: string | TransactionArgument; description: string | TransactionArgument; executionTimes: Array<bigint | TransactionArgument> | TransactionArgument; expirationTime: bigint | TransactionArgument; managedName: string | TransactionArgument; outcome: GenericArg; versionWitness: TransactionObjectInput; intentWitness: GenericArg }
 
-export interface DeleteProposalArgs { account: TransactionObjectInput; key: string | TransactionArgument; version: TransactionObjectInput; clock: TransactionObjectInput }
+export function createIntent( tx: Transaction, typeArgs: [string, string, string], args: CreateIntentArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::account::create_intent`, typeArguments: typeArgs, arguments: [ obj(tx, args.account), pure(tx, args.key, `${String.$typeName}`), pure(tx, args.description, `${String.$typeName}`), pure(tx, args.executionTimes, `vector<u64>`), pure(tx, args.expirationTime, `u64`), pure(tx, args.managedName, `${String.$typeName}`), generic(tx, `${typeArgs[1]}`, args.outcome), obj(tx, args.versionWitness), generic(tx, `${typeArgs[2]}`, args.intentWitness) ], }) }
 
-export function deleteProposal( tx: Transaction, typeArgs: [string, string], args: DeleteProposalArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::account::delete_proposal`, typeArguments: typeArgs, arguments: [ obj(tx, args.account), pure(tx, args.key, `${String.$typeName}`), obj(tx, args.version), obj(tx, args.clock) ], }) }
+export interface DeleteExpiredIntentArgs { account: TransactionObjectInput; key: string | TransactionArgument; clock: TransactionObjectInput }
 
-export interface DepsMutArgs { account: TransactionObjectInput; version: TransactionObjectInput }
+export function deleteExpiredIntent( tx: Transaction, typeArgs: [string, string], args: DeleteExpiredIntentArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::account::delete_expired_intent`, typeArguments: typeArgs, arguments: [ obj(tx, args.account), pure(tx, args.key, `${String.$typeName}`), obj(tx, args.clock) ], }) }
 
-export function depsMut( tx: Transaction, typeArgs: [string, string], args: DepsMutArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::account::deps_mut`, typeArguments: typeArgs, arguments: [ obj(tx, args.account), obj(tx, args.version) ], }) }
+export interface DepsMutArgs { account: TransactionObjectInput; versionWitness: TransactionObjectInput }
 
-export interface ExecuteProposalArgs { account: TransactionObjectInput; key: string | TransactionArgument; clock: TransactionObjectInput; version: TransactionObjectInput }
+export function depsMut( tx: Transaction, typeArgs: [string, string], args: DepsMutArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::account::deps_mut`, typeArguments: typeArgs, arguments: [ obj(tx, args.account), obj(tx, args.versionWitness) ], }) }
 
-export function executeProposal( tx: Transaction, typeArgs: [string, string], args: ExecuteProposalArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::account::execute_proposal`, typeArguments: typeArgs, arguments: [ obj(tx, args.account), pure(tx, args.key, `${String.$typeName}`), obj(tx, args.clock), obj(tx, args.version) ], }) }
+export interface DestroyEmptyIntentArgs { account: TransactionObjectInput; key: string | TransactionArgument }
+
+export function destroyEmptyIntent( tx: Transaction, typeArgs: [string, string], args: DestroyEmptyIntentArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::account::destroy_empty_intent`, typeArguments: typeArgs, arguments: [ obj(tx, args.account), pure(tx, args.key, `${String.$typeName}`) ], }) }
+
+export interface ExecuteIntentArgs { account: TransactionObjectInput; key: string | TransactionArgument; clock: TransactionObjectInput; versionWitness: TransactionObjectInput; configWitness: GenericArg }
+
+export function executeIntent( tx: Transaction, typeArgs: [string, string, string], args: ExecuteIntentArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::account::execute_intent`, typeArguments: typeArgs, arguments: [ obj(tx, args.account), pure(tx, args.key, `${String.$typeName}`), obj(tx, args.clock), obj(tx, args.versionWitness), generic(tx, `${typeArgs[2]}`, args.configWitness) ], }) }
 
 export interface HasManagedObjectArgs { account: TransactionObjectInput; key: GenericArg }
 
@@ -89,22 +98,38 @@ export interface HasManagedStructArgs { account: TransactionObjectInput; key: Ge
 
 export function hasManagedStruct( tx: Transaction, typeArgs: [string, string, string], args: HasManagedStructArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::account::has_managed_struct`, typeArguments: typeArgs, arguments: [ obj(tx, args.account), generic(tx, `${typeArgs[2]}`, args.key) ], }) }
 
-export interface MetadataMutArgs { account: TransactionObjectInput; version: TransactionObjectInput }
+export interface IntentsMutArgs { account: TransactionObjectInput; versionWitness: TransactionObjectInput; configWitness: GenericArg }
 
-export function metadataMut( tx: Transaction, typeArgs: [string, string], args: MetadataMutArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::account::metadata_mut`, typeArguments: typeArgs, arguments: [ obj(tx, args.account), obj(tx, args.version) ], }) }
+export function intentsMut( tx: Transaction, typeArgs: [string, string, string], args: IntentsMutArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::account::intents_mut`, typeArguments: typeArgs, arguments: [ obj(tx, args.account), obj(tx, args.versionWitness), generic(tx, `${typeArgs[2]}`, args.configWitness) ], }) }
 
-export interface ProposalMutArgs { account: TransactionObjectInput; idx: bigint | TransactionArgument; version: TransactionObjectInput }
+export interface LockObjectArgs { account: TransactionObjectInput; id: string | TransactionArgument }
 
-export function proposalMut( tx: Transaction, typeArgs: [string, string], args: ProposalMutArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::account::proposal_mut`, typeArguments: typeArgs, arguments: [ obj(tx, args.account), pure(tx, args.idx, `u64`), obj(tx, args.version) ], }) }
+export function lockObject( tx: Transaction, typeArgs: [string, string], args: LockObjectArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::account::lock_object`, typeArguments: typeArgs, arguments: [ obj(tx, args.account), pure(tx, args.id, `${ID.$typeName}`) ], }) }
 
-export interface ProposalsMutArgs { account: TransactionObjectInput; version: TransactionObjectInput }
+export interface MetadataMutArgs { account: TransactionObjectInput; versionWitness: TransactionObjectInput }
 
-export function proposalsMut( tx: Transaction, typeArgs: [string, string], args: ProposalsMutArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::account::proposals_mut`, typeArguments: typeArgs, arguments: [ obj(tx, args.account), obj(tx, args.version) ], }) }
+export function metadataMut( tx: Transaction, typeArgs: [string, string], args: MetadataMutArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::account::metadata_mut`, typeArguments: typeArgs, arguments: [ obj(tx, args.account), obj(tx, args.versionWitness) ], }) }
 
-export interface RemoveManagedObjectArgs { account: TransactionObjectInput; key: GenericArg; version: TransactionObjectInput }
+export interface NewAuthArgs { account: TransactionObjectInput; configWitness: GenericArg }
 
-export function removeManagedObject( tx: Transaction, typeArgs: [string, string, string, string], args: RemoveManagedObjectArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::account::remove_managed_object`, typeArguments: typeArgs, arguments: [ obj(tx, args.account), generic(tx, `${typeArgs[2]}`, args.key), obj(tx, args.version) ], }) }
+export function newAuth( tx: Transaction, typeArgs: [string, string, string], args: NewAuthArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::account::new_auth`, typeArguments: typeArgs, arguments: [ obj(tx, args.account), generic(tx, `${typeArgs[2]}`, args.configWitness) ], }) }
 
-export interface RemoveManagedStructArgs { account: TransactionObjectInput; key: GenericArg; version: TransactionObjectInput }
+export interface ProcessActionArgs { account: TransactionObjectInput; executable: TransactionObjectInput; versionWitness: TransactionObjectInput; intentWitness: GenericArg }
 
-export function removeManagedStruct( tx: Transaction, typeArgs: [string, string, string, string], args: RemoveManagedStructArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::account::remove_managed_struct`, typeArguments: typeArgs, arguments: [ obj(tx, args.account), generic(tx, `${typeArgs[2]}`, args.key), obj(tx, args.version) ], }) }
+export function processAction( tx: Transaction, typeArgs: [string, string, string, string], args: ProcessActionArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::account::process_action`, typeArguments: typeArgs, arguments: [ obj(tx, args.account), obj(tx, args.executable), obj(tx, args.versionWitness), generic(tx, `${typeArgs[3]}`, args.intentWitness) ], }) }
+
+export interface RemoveManagedObjectArgs { account: TransactionObjectInput; key: GenericArg; versionWitness: TransactionObjectInput }
+
+export function removeManagedObject( tx: Transaction, typeArgs: [string, string, string, string], args: RemoveManagedObjectArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::account::remove_managed_object`, typeArguments: typeArgs, arguments: [ obj(tx, args.account), generic(tx, `${typeArgs[2]}`, args.key), obj(tx, args.versionWitness) ], }) }
+
+export interface RemoveManagedStructArgs { account: TransactionObjectInput; key: GenericArg; versionWitness: TransactionObjectInput }
+
+export function removeManagedStruct( tx: Transaction, typeArgs: [string, string, string, string], args: RemoveManagedStructArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::account::remove_managed_struct`, typeArguments: typeArgs, arguments: [ obj(tx, args.account), generic(tx, `${typeArgs[2]}`, args.key), obj(tx, args.versionWitness) ], }) }
+
+export interface UnlockObjectArgs { account: TransactionObjectInput; id: string | TransactionArgument }
+
+export function unlockObject( tx: Transaction, typeArgs: [string, string], args: UnlockObjectArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::account::unlock_object`, typeArguments: typeArgs, arguments: [ obj(tx, args.account), pure(tx, args.id, `${ID.$typeName}`) ], }) }
+
+export interface VerifyArgs { account: TransactionObjectInput; auth: TransactionObjectInput }
+
+export function verify( tx: Transaction, typeArgs: [string, string], args: VerifyArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::account::verify`, typeArguments: typeArgs, arguments: [ obj(tx, args.account), obj(tx, args.auth) ], }) }

@@ -8,210 +8,6 @@ import {bcs} from "@mysten/sui/bcs";
 import {SuiClient, SuiObjectData, SuiParsedData} from "@mysten/sui/client";
 import {fromB64} from "@mysten/sui/utils";
 
-/* ============================== LockCommand =============================== */
-
-export function isLockCommand(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::currency::LockCommand`; }
-
-export interface LockCommandFields { dummyField: ToField<"bool"> }
-
-export type LockCommandReified = Reified< LockCommand, LockCommandFields >;
-
-export class LockCommand implements StructClass { __StructClass = true as const;
-
- static readonly $typeName = `${PKG_V1}::currency::LockCommand`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
-
- readonly $typeName = LockCommand.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::currency::LockCommand`; readonly $typeArgs: []; readonly $isPhantom = LockCommand.$isPhantom;
-
- readonly dummyField: ToField<"bool">
-
- private constructor(typeArgs: [], fields: LockCommandFields, ) { this.$fullTypeName = composeSuiType( LockCommand.$typeName, ...typeArgs ) as `${typeof PKG_V1}::currency::LockCommand`; this.$typeArgs = typeArgs;
-
- this.dummyField = fields.dummyField; }
-
- static reified( ): LockCommandReified { return { typeName: LockCommand.$typeName, fullTypeName: composeSuiType( LockCommand.$typeName, ...[] ) as `${typeof PKG_V1}::currency::LockCommand`, typeArgs: [ ] as [], isPhantom: LockCommand.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => LockCommand.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => LockCommand.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => LockCommand.fromBcs( data, ), bcs: LockCommand.bcs, fromJSONField: (field: any) => LockCommand.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => LockCommand.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => LockCommand.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => LockCommand.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => LockCommand.fetch( client, id, ), new: ( fields: LockCommandFields, ) => { return new LockCommand( [], fields ) }, kind: "StructClassReified", } }
-
- static get r() { return LockCommand.reified() }
-
- static phantom( ): PhantomReified<ToTypeStr<LockCommand>> { return phantom(LockCommand.reified( )); } static get p() { return LockCommand.phantom() }
-
- static get bcs() { return bcs.struct("LockCommand", {
-
- dummy_field: bcs.bool()
-
-}) };
-
- static fromFields( fields: Record<string, any> ): LockCommand { return LockCommand.reified( ).new( { dummyField: decodeFromFields("bool", fields.dummy_field) } ) }
-
- static fromFieldsWithTypes( item: FieldsWithTypes ): LockCommand { if (!isLockCommand(item.type)) { throw new Error("not a LockCommand type");
-
- }
-
- return LockCommand.reified( ).new( { dummyField: decodeFromFieldsWithTypes("bool", item.fields.dummy_field) } ) }
-
- static fromBcs( data: Uint8Array ): LockCommand { return LockCommand.fromFields( LockCommand.bcs.parse(data) ) }
-
- toJSONField() { return {
-
- dummyField: this.dummyField,
-
-} }
-
- toJSON() { return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() } }
-
- static fromJSONField( field: any ): LockCommand { return LockCommand.reified( ).new( { dummyField: decodeFromJSONField("bool", field.dummyField) } ) }
-
- static fromJSON( json: Record<string, any> ): LockCommand { if (json.$typeName !== LockCommand.$typeName) { throw new Error("not a WithTwoGenerics json object") };
-
- return LockCommand.fromJSONField( json, ) }
-
- static fromSuiParsedData( content: SuiParsedData ): LockCommand { if (content.dataType !== "moveObject") { throw new Error("not an object"); } if (!isLockCommand(content.type)) { throw new Error(`object at ${(content.fields as any).id} is not a LockCommand object`); } return LockCommand.fromFieldsWithTypes( content ); }
-
- static fromSuiObjectData( data: SuiObjectData ): LockCommand { if (data.bcs) { if (data.bcs.dataType !== "moveObject" || !isLockCommand(data.bcs.type)) { throw new Error(`object at is not a LockCommand object`); }
-
- return LockCommand.fromBcs( fromB64(data.bcs.bcsBytes) ); } if (data.content) { return LockCommand.fromSuiParsedData( data.content ) } throw new Error( "Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request." ); }
-
- static async fetch( client: SuiClient, id: string ): Promise<LockCommand> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching LockCommand object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isLockCommand(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a LockCommand object`); }
-
- return LockCommand.fromSuiObjectData( res.data ); }
-
- }
-
-/* ============================== PayProposal =============================== */
-
-export function isPayProposal(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::currency::PayProposal`; }
-
-export interface PayProposalFields { dummyField: ToField<"bool"> }
-
-export type PayProposalReified = Reified< PayProposal, PayProposalFields >;
-
-export class PayProposal implements StructClass { __StructClass = true as const;
-
- static readonly $typeName = `${PKG_V1}::currency::PayProposal`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
-
- readonly $typeName = PayProposal.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::currency::PayProposal`; readonly $typeArgs: []; readonly $isPhantom = PayProposal.$isPhantom;
-
- readonly dummyField: ToField<"bool">
-
- private constructor(typeArgs: [], fields: PayProposalFields, ) { this.$fullTypeName = composeSuiType( PayProposal.$typeName, ...typeArgs ) as `${typeof PKG_V1}::currency::PayProposal`; this.$typeArgs = typeArgs;
-
- this.dummyField = fields.dummyField; }
-
- static reified( ): PayProposalReified { return { typeName: PayProposal.$typeName, fullTypeName: composeSuiType( PayProposal.$typeName, ...[] ) as `${typeof PKG_V1}::currency::PayProposal`, typeArgs: [ ] as [], isPhantom: PayProposal.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => PayProposal.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => PayProposal.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => PayProposal.fromBcs( data, ), bcs: PayProposal.bcs, fromJSONField: (field: any) => PayProposal.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => PayProposal.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => PayProposal.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => PayProposal.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => PayProposal.fetch( client, id, ), new: ( fields: PayProposalFields, ) => { return new PayProposal( [], fields ) }, kind: "StructClassReified", } }
-
- static get r() { return PayProposal.reified() }
-
- static phantom( ): PhantomReified<ToTypeStr<PayProposal>> { return phantom(PayProposal.reified( )); } static get p() { return PayProposal.phantom() }
-
- static get bcs() { return bcs.struct("PayProposal", {
-
- dummy_field: bcs.bool()
-
-}) };
-
- static fromFields( fields: Record<string, any> ): PayProposal { return PayProposal.reified( ).new( { dummyField: decodeFromFields("bool", fields.dummy_field) } ) }
-
- static fromFieldsWithTypes( item: FieldsWithTypes ): PayProposal { if (!isPayProposal(item.type)) { throw new Error("not a PayProposal type");
-
- }
-
- return PayProposal.reified( ).new( { dummyField: decodeFromFieldsWithTypes("bool", item.fields.dummy_field) } ) }
-
- static fromBcs( data: Uint8Array ): PayProposal { return PayProposal.fromFields( PayProposal.bcs.parse(data) ) }
-
- toJSONField() { return {
-
- dummyField: this.dummyField,
-
-} }
-
- toJSON() { return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() } }
-
- static fromJSONField( field: any ): PayProposal { return PayProposal.reified( ).new( { dummyField: decodeFromJSONField("bool", field.dummyField) } ) }
-
- static fromJSON( json: Record<string, any> ): PayProposal { if (json.$typeName !== PayProposal.$typeName) { throw new Error("not a WithTwoGenerics json object") };
-
- return PayProposal.fromJSONField( json, ) }
-
- static fromSuiParsedData( content: SuiParsedData ): PayProposal { if (content.dataType !== "moveObject") { throw new Error("not an object"); } if (!isPayProposal(content.type)) { throw new Error(`object at ${(content.fields as any).id} is not a PayProposal object`); } return PayProposal.fromFieldsWithTypes( content ); }
-
- static fromSuiObjectData( data: SuiObjectData ): PayProposal { if (data.bcs) { if (data.bcs.dataType !== "moveObject" || !isPayProposal(data.bcs.type)) { throw new Error(`object at is not a PayProposal object`); }
-
- return PayProposal.fromBcs( fromB64(data.bcs.bcsBytes) ); } if (data.content) { return PayProposal.fromSuiParsedData( data.content ) } throw new Error( "Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request." ); }
-
- static async fetch( client: SuiClient, id: string ): Promise<PayProposal> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching PayProposal object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isPayProposal(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a PayProposal object`); }
-
- return PayProposal.fromSuiObjectData( res.data ); }
-
- }
-
-/* ============================== TransferProposal =============================== */
-
-export function isTransferProposal(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::currency::TransferProposal`; }
-
-export interface TransferProposalFields { dummyField: ToField<"bool"> }
-
-export type TransferProposalReified = Reified< TransferProposal, TransferProposalFields >;
-
-export class TransferProposal implements StructClass { __StructClass = true as const;
-
- static readonly $typeName = `${PKG_V1}::currency::TransferProposal`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
-
- readonly $typeName = TransferProposal.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::currency::TransferProposal`; readonly $typeArgs: []; readonly $isPhantom = TransferProposal.$isPhantom;
-
- readonly dummyField: ToField<"bool">
-
- private constructor(typeArgs: [], fields: TransferProposalFields, ) { this.$fullTypeName = composeSuiType( TransferProposal.$typeName, ...typeArgs ) as `${typeof PKG_V1}::currency::TransferProposal`; this.$typeArgs = typeArgs;
-
- this.dummyField = fields.dummyField; }
-
- static reified( ): TransferProposalReified { return { typeName: TransferProposal.$typeName, fullTypeName: composeSuiType( TransferProposal.$typeName, ...[] ) as `${typeof PKG_V1}::currency::TransferProposal`, typeArgs: [ ] as [], isPhantom: TransferProposal.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => TransferProposal.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => TransferProposal.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => TransferProposal.fromBcs( data, ), bcs: TransferProposal.bcs, fromJSONField: (field: any) => TransferProposal.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => TransferProposal.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => TransferProposal.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => TransferProposal.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => TransferProposal.fetch( client, id, ), new: ( fields: TransferProposalFields, ) => { return new TransferProposal( [], fields ) }, kind: "StructClassReified", } }
-
- static get r() { return TransferProposal.reified() }
-
- static phantom( ): PhantomReified<ToTypeStr<TransferProposal>> { return phantom(TransferProposal.reified( )); } static get p() { return TransferProposal.phantom() }
-
- static get bcs() { return bcs.struct("TransferProposal", {
-
- dummy_field: bcs.bool()
-
-}) };
-
- static fromFields( fields: Record<string, any> ): TransferProposal { return TransferProposal.reified( ).new( { dummyField: decodeFromFields("bool", fields.dummy_field) } ) }
-
- static fromFieldsWithTypes( item: FieldsWithTypes ): TransferProposal { if (!isTransferProposal(item.type)) { throw new Error("not a TransferProposal type");
-
- }
-
- return TransferProposal.reified( ).new( { dummyField: decodeFromFieldsWithTypes("bool", item.fields.dummy_field) } ) }
-
- static fromBcs( data: Uint8Array ): TransferProposal { return TransferProposal.fromFields( TransferProposal.bcs.parse(data) ) }
-
- toJSONField() { return {
-
- dummyField: this.dummyField,
-
-} }
-
- toJSON() { return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() } }
-
- static fromJSONField( field: any ): TransferProposal { return TransferProposal.reified( ).new( { dummyField: decodeFromJSONField("bool", field.dummyField) } ) }
-
- static fromJSON( json: Record<string, any> ): TransferProposal { if (json.$typeName !== TransferProposal.$typeName) { throw new Error("not a WithTwoGenerics json object") };
-
- return TransferProposal.fromJSONField( json, ) }
-
- static fromSuiParsedData( content: SuiParsedData ): TransferProposal { if (content.dataType !== "moveObject") { throw new Error("not an object"); } if (!isTransferProposal(content.type)) { throw new Error(`object at ${(content.fields as any).id} is not a TransferProposal object`); } return TransferProposal.fromFieldsWithTypes( content ); }
-
- static fromSuiObjectData( data: SuiObjectData ): TransferProposal { if (data.bcs) { if (data.bcs.dataType !== "moveObject" || !isTransferProposal(data.bcs.type)) { throw new Error(`object at is not a TransferProposal object`); }
-
- return TransferProposal.fromBcs( fromB64(data.bcs.bcsBytes) ); } if (data.content) { return TransferProposal.fromSuiParsedData( data.content ) } throw new Error( "Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request." ); }
-
- static async fetch( client: SuiClient, id: string ): Promise<TransferProposal> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching TransferProposal object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isTransferProposal(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a TransferProposal object`); }
-
- return TransferProposal.fromSuiObjectData( res.data ); }
-
- }
-
 /* ============================== BurnAction =============================== */
 
 export function isBurnAction(type: string): boolean { type = compressSuiType(type); return type.startsWith(`${PKG_V1}::currency::BurnAction` + '<'); }
@@ -282,79 +78,11 @@ export class BurnAction<CoinType extends PhantomTypeArgument> implements StructC
 
  }
 
-/* ============================== BurnProposal =============================== */
-
-export function isBurnProposal(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::currency::BurnProposal`; }
-
-export interface BurnProposalFields { dummyField: ToField<"bool"> }
-
-export type BurnProposalReified = Reified< BurnProposal, BurnProposalFields >;
-
-export class BurnProposal implements StructClass { __StructClass = true as const;
-
- static readonly $typeName = `${PKG_V1}::currency::BurnProposal`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
-
- readonly $typeName = BurnProposal.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::currency::BurnProposal`; readonly $typeArgs: []; readonly $isPhantom = BurnProposal.$isPhantom;
-
- readonly dummyField: ToField<"bool">
-
- private constructor(typeArgs: [], fields: BurnProposalFields, ) { this.$fullTypeName = composeSuiType( BurnProposal.$typeName, ...typeArgs ) as `${typeof PKG_V1}::currency::BurnProposal`; this.$typeArgs = typeArgs;
-
- this.dummyField = fields.dummyField; }
-
- static reified( ): BurnProposalReified { return { typeName: BurnProposal.$typeName, fullTypeName: composeSuiType( BurnProposal.$typeName, ...[] ) as `${typeof PKG_V1}::currency::BurnProposal`, typeArgs: [ ] as [], isPhantom: BurnProposal.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => BurnProposal.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => BurnProposal.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => BurnProposal.fromBcs( data, ), bcs: BurnProposal.bcs, fromJSONField: (field: any) => BurnProposal.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => BurnProposal.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => BurnProposal.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => BurnProposal.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => BurnProposal.fetch( client, id, ), new: ( fields: BurnProposalFields, ) => { return new BurnProposal( [], fields ) }, kind: "StructClassReified", } }
-
- static get r() { return BurnProposal.reified() }
-
- static phantom( ): PhantomReified<ToTypeStr<BurnProposal>> { return phantom(BurnProposal.reified( )); } static get p() { return BurnProposal.phantom() }
-
- static get bcs() { return bcs.struct("BurnProposal", {
-
- dummy_field: bcs.bool()
-
-}) };
-
- static fromFields( fields: Record<string, any> ): BurnProposal { return BurnProposal.reified( ).new( { dummyField: decodeFromFields("bool", fields.dummy_field) } ) }
-
- static fromFieldsWithTypes( item: FieldsWithTypes ): BurnProposal { if (!isBurnProposal(item.type)) { throw new Error("not a BurnProposal type");
-
- }
-
- return BurnProposal.reified( ).new( { dummyField: decodeFromFieldsWithTypes("bool", item.fields.dummy_field) } ) }
-
- static fromBcs( data: Uint8Array ): BurnProposal { return BurnProposal.fromFields( BurnProposal.bcs.parse(data) ) }
-
- toJSONField() { return {
-
- dummyField: this.dummyField,
-
-} }
-
- toJSON() { return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() } }
-
- static fromJSONField( field: any ): BurnProposal { return BurnProposal.reified( ).new( { dummyField: decodeFromJSONField("bool", field.dummyField) } ) }
-
- static fromJSON( json: Record<string, any> ): BurnProposal { if (json.$typeName !== BurnProposal.$typeName) { throw new Error("not a WithTwoGenerics json object") };
-
- return BurnProposal.fromJSONField( json, ) }
-
- static fromSuiParsedData( content: SuiParsedData ): BurnProposal { if (content.dataType !== "moveObject") { throw new Error("not an object"); } if (!isBurnProposal(content.type)) { throw new Error(`object at ${(content.fields as any).id} is not a BurnProposal object`); } return BurnProposal.fromFieldsWithTypes( content ); }
-
- static fromSuiObjectData( data: SuiObjectData ): BurnProposal { if (data.bcs) { if (data.bcs.dataType !== "moveObject" || !isBurnProposal(data.bcs.type)) { throw new Error(`object at is not a BurnProposal object`); }
-
- return BurnProposal.fromBcs( fromB64(data.bcs.bcsBytes) ); } if (data.content) { return BurnProposal.fromSuiParsedData( data.content ) } throw new Error( "Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request." ); }
-
- static async fetch( client: SuiClient, id: string ): Promise<BurnProposal> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching BurnProposal object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isBurnProposal(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a BurnProposal object`); }
-
- return BurnProposal.fromSuiObjectData( res.data ); }
-
- }
-
 /* ============================== CurrencyRules =============================== */
 
 export function isCurrencyRules(type: string): boolean { type = compressSuiType(type); return type.startsWith(`${PKG_V1}::currency::CurrencyRules` + '<'); }
 
-export interface CurrencyRulesFields<CoinType extends PhantomTypeArgument> { maxSupply: ToField<Option<"u64">>; totalMinted: ToField<"u64">; totalBurnt: ToField<"u64">; canMint: ToField<"bool">; canBurn: ToField<"bool">; canUpdateSymbol: ToField<"bool">; canUpdateName: ToField<"bool">; canUpdateDescription: ToField<"bool">; canUpdateIcon: ToField<"bool"> }
+export interface CurrencyRulesFields<CoinType extends PhantomTypeArgument> { maxSupply: ToField<Option<"u64">>; totalMinted: ToField<"u64">; totalBurned: ToField<"u64">; canMint: ToField<"bool">; canBurn: ToField<"bool">; canUpdateSymbol: ToField<"bool">; canUpdateName: ToField<"bool">; canUpdateDescription: ToField<"bool">; canUpdateIcon: ToField<"bool"> }
 
 export type CurrencyRulesReified<CoinType extends PhantomTypeArgument> = Reified< CurrencyRules<CoinType>, CurrencyRulesFields<CoinType> >;
 
@@ -364,11 +92,11 @@ export class CurrencyRules<CoinType extends PhantomTypeArgument> implements Stru
 
  readonly $typeName = CurrencyRules.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::currency::CurrencyRules<${PhantomToTypeStr<CoinType>}>`; readonly $typeArgs: [PhantomToTypeStr<CoinType>]; readonly $isPhantom = CurrencyRules.$isPhantom;
 
- readonly maxSupply: ToField<Option<"u64">>; readonly totalMinted: ToField<"u64">; readonly totalBurnt: ToField<"u64">; readonly canMint: ToField<"bool">; readonly canBurn: ToField<"bool">; readonly canUpdateSymbol: ToField<"bool">; readonly canUpdateName: ToField<"bool">; readonly canUpdateDescription: ToField<"bool">; readonly canUpdateIcon: ToField<"bool">
+ readonly maxSupply: ToField<Option<"u64">>; readonly totalMinted: ToField<"u64">; readonly totalBurned: ToField<"u64">; readonly canMint: ToField<"bool">; readonly canBurn: ToField<"bool">; readonly canUpdateSymbol: ToField<"bool">; readonly canUpdateName: ToField<"bool">; readonly canUpdateDescription: ToField<"bool">; readonly canUpdateIcon: ToField<"bool">
 
  private constructor(typeArgs: [PhantomToTypeStr<CoinType>], fields: CurrencyRulesFields<CoinType>, ) { this.$fullTypeName = composeSuiType( CurrencyRules.$typeName, ...typeArgs ) as `${typeof PKG_V1}::currency::CurrencyRules<${PhantomToTypeStr<CoinType>}>`; this.$typeArgs = typeArgs;
 
- this.maxSupply = fields.maxSupply;; this.totalMinted = fields.totalMinted;; this.totalBurnt = fields.totalBurnt;; this.canMint = fields.canMint;; this.canBurn = fields.canBurn;; this.canUpdateSymbol = fields.canUpdateSymbol;; this.canUpdateName = fields.canUpdateName;; this.canUpdateDescription = fields.canUpdateDescription;; this.canUpdateIcon = fields.canUpdateIcon; }
+ this.maxSupply = fields.maxSupply;; this.totalMinted = fields.totalMinted;; this.totalBurned = fields.totalBurned;; this.canMint = fields.canMint;; this.canBurn = fields.canBurn;; this.canUpdateSymbol = fields.canUpdateSymbol;; this.canUpdateName = fields.canUpdateName;; this.canUpdateDescription = fields.canUpdateDescription;; this.canUpdateIcon = fields.canUpdateIcon; }
 
  static reified<CoinType extends PhantomReified<PhantomTypeArgument>>( CoinType: CoinType ): CurrencyRulesReified<ToPhantomTypeArgument<CoinType>> { return { typeName: CurrencyRules.$typeName, fullTypeName: composeSuiType( CurrencyRules.$typeName, ...[extractType(CoinType)] ) as `${typeof PKG_V1}::currency::CurrencyRules<${PhantomToTypeStr<ToPhantomTypeArgument<CoinType>>}>`, typeArgs: [ extractType(CoinType) ] as [PhantomToTypeStr<ToPhantomTypeArgument<CoinType>>], isPhantom: CurrencyRules.$isPhantom, reifiedTypeArgs: [CoinType], fromFields: (fields: Record<string, any>) => CurrencyRules.fromFields( CoinType, fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => CurrencyRules.fromFieldsWithTypes( CoinType, item, ), fromBcs: (data: Uint8Array) => CurrencyRules.fromBcs( CoinType, data, ), bcs: CurrencyRules.bcs, fromJSONField: (field: any) => CurrencyRules.fromJSONField( CoinType, field, ), fromJSON: (json: Record<string, any>) => CurrencyRules.fromJSON( CoinType, json, ), fromSuiParsedData: (content: SuiParsedData) => CurrencyRules.fromSuiParsedData( CoinType, content, ), fromSuiObjectData: (content: SuiObjectData) => CurrencyRules.fromSuiObjectData( CoinType, content, ), fetch: async (client: SuiClient, id: string) => CurrencyRules.fetch( client, CoinType, id, ), new: ( fields: CurrencyRulesFields<ToPhantomTypeArgument<CoinType>>, ) => { return new CurrencyRules( [extractType(CoinType)], fields ) }, kind: "StructClassReified", } }
 
@@ -378,29 +106,29 @@ export class CurrencyRules<CoinType extends PhantomTypeArgument> implements Stru
 
  static get bcs() { return bcs.struct("CurrencyRules", {
 
- max_supply: Option.bcs(bcs.u64()), total_minted: bcs.u64(), total_burnt: bcs.u64(), can_mint: bcs.bool(), can_burn: bcs.bool(), can_update_symbol: bcs.bool(), can_update_name: bcs.bool(), can_update_description: bcs.bool(), can_update_icon: bcs.bool()
+ max_supply: Option.bcs(bcs.u64()), total_minted: bcs.u64(), total_burned: bcs.u64(), can_mint: bcs.bool(), can_burn: bcs.bool(), can_update_symbol: bcs.bool(), can_update_name: bcs.bool(), can_update_description: bcs.bool(), can_update_icon: bcs.bool()
 
 }) };
 
- static fromFields<CoinType extends PhantomReified<PhantomTypeArgument>>( typeArg: CoinType, fields: Record<string, any> ): CurrencyRules<ToPhantomTypeArgument<CoinType>> { return CurrencyRules.reified( typeArg, ).new( { maxSupply: decodeFromFields(Option.reified("u64"), fields.max_supply), totalMinted: decodeFromFields("u64", fields.total_minted), totalBurnt: decodeFromFields("u64", fields.total_burnt), canMint: decodeFromFields("bool", fields.can_mint), canBurn: decodeFromFields("bool", fields.can_burn), canUpdateSymbol: decodeFromFields("bool", fields.can_update_symbol), canUpdateName: decodeFromFields("bool", fields.can_update_name), canUpdateDescription: decodeFromFields("bool", fields.can_update_description), canUpdateIcon: decodeFromFields("bool", fields.can_update_icon) } ) }
+ static fromFields<CoinType extends PhantomReified<PhantomTypeArgument>>( typeArg: CoinType, fields: Record<string, any> ): CurrencyRules<ToPhantomTypeArgument<CoinType>> { return CurrencyRules.reified( typeArg, ).new( { maxSupply: decodeFromFields(Option.reified("u64"), fields.max_supply), totalMinted: decodeFromFields("u64", fields.total_minted), totalBurned: decodeFromFields("u64", fields.total_burned), canMint: decodeFromFields("bool", fields.can_mint), canBurn: decodeFromFields("bool", fields.can_burn), canUpdateSymbol: decodeFromFields("bool", fields.can_update_symbol), canUpdateName: decodeFromFields("bool", fields.can_update_name), canUpdateDescription: decodeFromFields("bool", fields.can_update_description), canUpdateIcon: decodeFromFields("bool", fields.can_update_icon) } ) }
 
  static fromFieldsWithTypes<CoinType extends PhantomReified<PhantomTypeArgument>>( typeArg: CoinType, item: FieldsWithTypes ): CurrencyRules<ToPhantomTypeArgument<CoinType>> { if (!isCurrencyRules(item.type)) { throw new Error("not a CurrencyRules type");
 
  } assertFieldsWithTypesArgsMatch(item, [typeArg]);
 
- return CurrencyRules.reified( typeArg, ).new( { maxSupply: decodeFromFieldsWithTypes(Option.reified("u64"), item.fields.max_supply), totalMinted: decodeFromFieldsWithTypes("u64", item.fields.total_minted), totalBurnt: decodeFromFieldsWithTypes("u64", item.fields.total_burnt), canMint: decodeFromFieldsWithTypes("bool", item.fields.can_mint), canBurn: decodeFromFieldsWithTypes("bool", item.fields.can_burn), canUpdateSymbol: decodeFromFieldsWithTypes("bool", item.fields.can_update_symbol), canUpdateName: decodeFromFieldsWithTypes("bool", item.fields.can_update_name), canUpdateDescription: decodeFromFieldsWithTypes("bool", item.fields.can_update_description), canUpdateIcon: decodeFromFieldsWithTypes("bool", item.fields.can_update_icon) } ) }
+ return CurrencyRules.reified( typeArg, ).new( { maxSupply: decodeFromFieldsWithTypes(Option.reified("u64"), item.fields.max_supply), totalMinted: decodeFromFieldsWithTypes("u64", item.fields.total_minted), totalBurned: decodeFromFieldsWithTypes("u64", item.fields.total_burned), canMint: decodeFromFieldsWithTypes("bool", item.fields.can_mint), canBurn: decodeFromFieldsWithTypes("bool", item.fields.can_burn), canUpdateSymbol: decodeFromFieldsWithTypes("bool", item.fields.can_update_symbol), canUpdateName: decodeFromFieldsWithTypes("bool", item.fields.can_update_name), canUpdateDescription: decodeFromFieldsWithTypes("bool", item.fields.can_update_description), canUpdateIcon: decodeFromFieldsWithTypes("bool", item.fields.can_update_icon) } ) }
 
  static fromBcs<CoinType extends PhantomReified<PhantomTypeArgument>>( typeArg: CoinType, data: Uint8Array ): CurrencyRules<ToPhantomTypeArgument<CoinType>> { return CurrencyRules.fromFields( typeArg, CurrencyRules.bcs.parse(data) ) }
 
  toJSONField() { return {
 
- maxSupply: fieldToJSON<Option<"u64">>(`${Option.$typeName}<u64>`, this.maxSupply),totalMinted: this.totalMinted.toString(),totalBurnt: this.totalBurnt.toString(),canMint: this.canMint,canBurn: this.canBurn,canUpdateSymbol: this.canUpdateSymbol,canUpdateName: this.canUpdateName,canUpdateDescription: this.canUpdateDescription,canUpdateIcon: this.canUpdateIcon,
+ maxSupply: fieldToJSON<Option<"u64">>(`${Option.$typeName}<u64>`, this.maxSupply),totalMinted: this.totalMinted.toString(),totalBurned: this.totalBurned.toString(),canMint: this.canMint,canBurn: this.canBurn,canUpdateSymbol: this.canUpdateSymbol,canUpdateName: this.canUpdateName,canUpdateDescription: this.canUpdateDescription,canUpdateIcon: this.canUpdateIcon,
 
 } }
 
  toJSON() { return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() } }
 
- static fromJSONField<CoinType extends PhantomReified<PhantomTypeArgument>>( typeArg: CoinType, field: any ): CurrencyRules<ToPhantomTypeArgument<CoinType>> { return CurrencyRules.reified( typeArg, ).new( { maxSupply: decodeFromJSONField(Option.reified("u64"), field.maxSupply), totalMinted: decodeFromJSONField("u64", field.totalMinted), totalBurnt: decodeFromJSONField("u64", field.totalBurnt), canMint: decodeFromJSONField("bool", field.canMint), canBurn: decodeFromJSONField("bool", field.canBurn), canUpdateSymbol: decodeFromJSONField("bool", field.canUpdateSymbol), canUpdateName: decodeFromJSONField("bool", field.canUpdateName), canUpdateDescription: decodeFromJSONField("bool", field.canUpdateDescription), canUpdateIcon: decodeFromJSONField("bool", field.canUpdateIcon) } ) }
+ static fromJSONField<CoinType extends PhantomReified<PhantomTypeArgument>>( typeArg: CoinType, field: any ): CurrencyRules<ToPhantomTypeArgument<CoinType>> { return CurrencyRules.reified( typeArg, ).new( { maxSupply: decodeFromJSONField(Option.reified("u64"), field.maxSupply), totalMinted: decodeFromJSONField("u64", field.totalMinted), totalBurned: decodeFromJSONField("u64", field.totalBurned), canMint: decodeFromJSONField("bool", field.canMint), canBurn: decodeFromJSONField("bool", field.canBurn), canUpdateSymbol: decodeFromJSONField("bool", field.canUpdateSymbol), canUpdateName: decodeFromJSONField("bool", field.canUpdateName), canUpdateDescription: decodeFromJSONField("bool", field.canUpdateDescription), canUpdateIcon: decodeFromJSONField("bool", field.canUpdateIcon) } ) }
 
  static fromJSON<CoinType extends PhantomReified<PhantomTypeArgument>>( typeArg: CoinType, json: Record<string, any> ): CurrencyRules<ToPhantomTypeArgument<CoinType>> { if (json.$typeName !== CurrencyRules.$typeName) { throw new Error("not a WithTwoGenerics json object") }; assertReifiedTypeArgsMatch( composeSuiType(CurrencyRules.$typeName, extractType(typeArg)), json.$typeArgs, [typeArg], )
 
@@ -560,74 +288,6 @@ export class DisableAction<CoinType extends PhantomTypeArgument> implements Stru
 
  }
 
-/* ============================== DisableProposal =============================== */
-
-export function isDisableProposal(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::currency::DisableProposal`; }
-
-export interface DisableProposalFields { dummyField: ToField<"bool"> }
-
-export type DisableProposalReified = Reified< DisableProposal, DisableProposalFields >;
-
-export class DisableProposal implements StructClass { __StructClass = true as const;
-
- static readonly $typeName = `${PKG_V1}::currency::DisableProposal`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
-
- readonly $typeName = DisableProposal.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::currency::DisableProposal`; readonly $typeArgs: []; readonly $isPhantom = DisableProposal.$isPhantom;
-
- readonly dummyField: ToField<"bool">
-
- private constructor(typeArgs: [], fields: DisableProposalFields, ) { this.$fullTypeName = composeSuiType( DisableProposal.$typeName, ...typeArgs ) as `${typeof PKG_V1}::currency::DisableProposal`; this.$typeArgs = typeArgs;
-
- this.dummyField = fields.dummyField; }
-
- static reified( ): DisableProposalReified { return { typeName: DisableProposal.$typeName, fullTypeName: composeSuiType( DisableProposal.$typeName, ...[] ) as `${typeof PKG_V1}::currency::DisableProposal`, typeArgs: [ ] as [], isPhantom: DisableProposal.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => DisableProposal.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => DisableProposal.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => DisableProposal.fromBcs( data, ), bcs: DisableProposal.bcs, fromJSONField: (field: any) => DisableProposal.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => DisableProposal.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => DisableProposal.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => DisableProposal.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => DisableProposal.fetch( client, id, ), new: ( fields: DisableProposalFields, ) => { return new DisableProposal( [], fields ) }, kind: "StructClassReified", } }
-
- static get r() { return DisableProposal.reified() }
-
- static phantom( ): PhantomReified<ToTypeStr<DisableProposal>> { return phantom(DisableProposal.reified( )); } static get p() { return DisableProposal.phantom() }
-
- static get bcs() { return bcs.struct("DisableProposal", {
-
- dummy_field: bcs.bool()
-
-}) };
-
- static fromFields( fields: Record<string, any> ): DisableProposal { return DisableProposal.reified( ).new( { dummyField: decodeFromFields("bool", fields.dummy_field) } ) }
-
- static fromFieldsWithTypes( item: FieldsWithTypes ): DisableProposal { if (!isDisableProposal(item.type)) { throw new Error("not a DisableProposal type");
-
- }
-
- return DisableProposal.reified( ).new( { dummyField: decodeFromFieldsWithTypes("bool", item.fields.dummy_field) } ) }
-
- static fromBcs( data: Uint8Array ): DisableProposal { return DisableProposal.fromFields( DisableProposal.bcs.parse(data) ) }
-
- toJSONField() { return {
-
- dummyField: this.dummyField,
-
-} }
-
- toJSON() { return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() } }
-
- static fromJSONField( field: any ): DisableProposal { return DisableProposal.reified( ).new( { dummyField: decodeFromJSONField("bool", field.dummyField) } ) }
-
- static fromJSON( json: Record<string, any> ): DisableProposal { if (json.$typeName !== DisableProposal.$typeName) { throw new Error("not a WithTwoGenerics json object") };
-
- return DisableProposal.fromJSONField( json, ) }
-
- static fromSuiParsedData( content: SuiParsedData ): DisableProposal { if (content.dataType !== "moveObject") { throw new Error("not an object"); } if (!isDisableProposal(content.type)) { throw new Error(`object at ${(content.fields as any).id} is not a DisableProposal object`); } return DisableProposal.fromFieldsWithTypes( content ); }
-
- static fromSuiObjectData( data: SuiObjectData ): DisableProposal { if (data.bcs) { if (data.bcs.dataType !== "moveObject" || !isDisableProposal(data.bcs.type)) { throw new Error(`object at is not a DisableProposal object`); }
-
- return DisableProposal.fromBcs( fromB64(data.bcs.bcsBytes) ); } if (data.content) { return DisableProposal.fromSuiParsedData( data.content ) } throw new Error( "Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request." ); }
-
- static async fetch( client: SuiClient, id: string ): Promise<DisableProposal> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching DisableProposal object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isDisableProposal(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a DisableProposal object`); }
-
- return DisableProposal.fromSuiObjectData( res.data ); }
-
- }
-
 /* ============================== MintAction =============================== */
 
 export function isMintAction(type: string): boolean { type = compressSuiType(type); return type.startsWith(`${PKG_V1}::currency::MintAction` + '<'); }
@@ -695,74 +355,6 @@ export class MintAction<CoinType extends PhantomTypeArgument> implements StructC
  static async fetch<CoinType extends PhantomReified<PhantomTypeArgument>>( client: SuiClient, typeArg: CoinType, id: string ): Promise<MintAction<ToPhantomTypeArgument<CoinType>>> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching MintAction object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isMintAction(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a MintAction object`); }
 
  return MintAction.fromSuiObjectData( typeArg, res.data ); }
-
- }
-
-/* ============================== MintProposal =============================== */
-
-export function isMintProposal(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::currency::MintProposal`; }
-
-export interface MintProposalFields { dummyField: ToField<"bool"> }
-
-export type MintProposalReified = Reified< MintProposal, MintProposalFields >;
-
-export class MintProposal implements StructClass { __StructClass = true as const;
-
- static readonly $typeName = `${PKG_V1}::currency::MintProposal`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
-
- readonly $typeName = MintProposal.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::currency::MintProposal`; readonly $typeArgs: []; readonly $isPhantom = MintProposal.$isPhantom;
-
- readonly dummyField: ToField<"bool">
-
- private constructor(typeArgs: [], fields: MintProposalFields, ) { this.$fullTypeName = composeSuiType( MintProposal.$typeName, ...typeArgs ) as `${typeof PKG_V1}::currency::MintProposal`; this.$typeArgs = typeArgs;
-
- this.dummyField = fields.dummyField; }
-
- static reified( ): MintProposalReified { return { typeName: MintProposal.$typeName, fullTypeName: composeSuiType( MintProposal.$typeName, ...[] ) as `${typeof PKG_V1}::currency::MintProposal`, typeArgs: [ ] as [], isPhantom: MintProposal.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => MintProposal.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => MintProposal.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => MintProposal.fromBcs( data, ), bcs: MintProposal.bcs, fromJSONField: (field: any) => MintProposal.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => MintProposal.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => MintProposal.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => MintProposal.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => MintProposal.fetch( client, id, ), new: ( fields: MintProposalFields, ) => { return new MintProposal( [], fields ) }, kind: "StructClassReified", } }
-
- static get r() { return MintProposal.reified() }
-
- static phantom( ): PhantomReified<ToTypeStr<MintProposal>> { return phantom(MintProposal.reified( )); } static get p() { return MintProposal.phantom() }
-
- static get bcs() { return bcs.struct("MintProposal", {
-
- dummy_field: bcs.bool()
-
-}) };
-
- static fromFields( fields: Record<string, any> ): MintProposal { return MintProposal.reified( ).new( { dummyField: decodeFromFields("bool", fields.dummy_field) } ) }
-
- static fromFieldsWithTypes( item: FieldsWithTypes ): MintProposal { if (!isMintProposal(item.type)) { throw new Error("not a MintProposal type");
-
- }
-
- return MintProposal.reified( ).new( { dummyField: decodeFromFieldsWithTypes("bool", item.fields.dummy_field) } ) }
-
- static fromBcs( data: Uint8Array ): MintProposal { return MintProposal.fromFields( MintProposal.bcs.parse(data) ) }
-
- toJSONField() { return {
-
- dummyField: this.dummyField,
-
-} }
-
- toJSON() { return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() } }
-
- static fromJSONField( field: any ): MintProposal { return MintProposal.reified( ).new( { dummyField: decodeFromJSONField("bool", field.dummyField) } ) }
-
- static fromJSON( json: Record<string, any> ): MintProposal { if (json.$typeName !== MintProposal.$typeName) { throw new Error("not a WithTwoGenerics json object") };
-
- return MintProposal.fromJSONField( json, ) }
-
- static fromSuiParsedData( content: SuiParsedData ): MintProposal { if (content.dataType !== "moveObject") { throw new Error("not an object"); } if (!isMintProposal(content.type)) { throw new Error(`object at ${(content.fields as any).id} is not a MintProposal object`); } return MintProposal.fromFieldsWithTypes( content ); }
-
- static fromSuiObjectData( data: SuiObjectData ): MintProposal { if (data.bcs) { if (data.bcs.dataType !== "moveObject" || !isMintProposal(data.bcs.type)) { throw new Error(`object at is not a MintProposal object`); }
-
- return MintProposal.fromBcs( fromB64(data.bcs.bcsBytes) ); } if (data.content) { return MintProposal.fromSuiParsedData( data.content ) } throw new Error( "Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request." ); }
-
- static async fetch( client: SuiClient, id: string ): Promise<MintProposal> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching MintProposal object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isMintProposal(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a MintProposal object`); }
-
- return MintProposal.fromSuiObjectData( res.data ); }
 
  }
 
@@ -903,73 +495,5 @@ export class UpdateAction<CoinType extends PhantomTypeArgument> implements Struc
  static async fetch<CoinType extends PhantomReified<PhantomTypeArgument>>( client: SuiClient, typeArg: CoinType, id: string ): Promise<UpdateAction<ToPhantomTypeArgument<CoinType>>> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching UpdateAction object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isUpdateAction(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a UpdateAction object`); }
 
  return UpdateAction.fromSuiObjectData( typeArg, res.data ); }
-
- }
-
-/* ============================== UpdateProposal =============================== */
-
-export function isUpdateProposal(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::currency::UpdateProposal`; }
-
-export interface UpdateProposalFields { dummyField: ToField<"bool"> }
-
-export type UpdateProposalReified = Reified< UpdateProposal, UpdateProposalFields >;
-
-export class UpdateProposal implements StructClass { __StructClass = true as const;
-
- static readonly $typeName = `${PKG_V1}::currency::UpdateProposal`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
-
- readonly $typeName = UpdateProposal.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::currency::UpdateProposal`; readonly $typeArgs: []; readonly $isPhantom = UpdateProposal.$isPhantom;
-
- readonly dummyField: ToField<"bool">
-
- private constructor(typeArgs: [], fields: UpdateProposalFields, ) { this.$fullTypeName = composeSuiType( UpdateProposal.$typeName, ...typeArgs ) as `${typeof PKG_V1}::currency::UpdateProposal`; this.$typeArgs = typeArgs;
-
- this.dummyField = fields.dummyField; }
-
- static reified( ): UpdateProposalReified { return { typeName: UpdateProposal.$typeName, fullTypeName: composeSuiType( UpdateProposal.$typeName, ...[] ) as `${typeof PKG_V1}::currency::UpdateProposal`, typeArgs: [ ] as [], isPhantom: UpdateProposal.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => UpdateProposal.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => UpdateProposal.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => UpdateProposal.fromBcs( data, ), bcs: UpdateProposal.bcs, fromJSONField: (field: any) => UpdateProposal.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => UpdateProposal.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => UpdateProposal.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => UpdateProposal.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => UpdateProposal.fetch( client, id, ), new: ( fields: UpdateProposalFields, ) => { return new UpdateProposal( [], fields ) }, kind: "StructClassReified", } }
-
- static get r() { return UpdateProposal.reified() }
-
- static phantom( ): PhantomReified<ToTypeStr<UpdateProposal>> { return phantom(UpdateProposal.reified( )); } static get p() { return UpdateProposal.phantom() }
-
- static get bcs() { return bcs.struct("UpdateProposal", {
-
- dummy_field: bcs.bool()
-
-}) };
-
- static fromFields( fields: Record<string, any> ): UpdateProposal { return UpdateProposal.reified( ).new( { dummyField: decodeFromFields("bool", fields.dummy_field) } ) }
-
- static fromFieldsWithTypes( item: FieldsWithTypes ): UpdateProposal { if (!isUpdateProposal(item.type)) { throw new Error("not a UpdateProposal type");
-
- }
-
- return UpdateProposal.reified( ).new( { dummyField: decodeFromFieldsWithTypes("bool", item.fields.dummy_field) } ) }
-
- static fromBcs( data: Uint8Array ): UpdateProposal { return UpdateProposal.fromFields( UpdateProposal.bcs.parse(data) ) }
-
- toJSONField() { return {
-
- dummyField: this.dummyField,
-
-} }
-
- toJSON() { return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() } }
-
- static fromJSONField( field: any ): UpdateProposal { return UpdateProposal.reified( ).new( { dummyField: decodeFromJSONField("bool", field.dummyField) } ) }
-
- static fromJSON( json: Record<string, any> ): UpdateProposal { if (json.$typeName !== UpdateProposal.$typeName) { throw new Error("not a WithTwoGenerics json object") };
-
- return UpdateProposal.fromJSONField( json, ) }
-
- static fromSuiParsedData( content: SuiParsedData ): UpdateProposal { if (content.dataType !== "moveObject") { throw new Error("not an object"); } if (!isUpdateProposal(content.type)) { throw new Error(`object at ${(content.fields as any).id} is not a UpdateProposal object`); } return UpdateProposal.fromFieldsWithTypes( content ); }
-
- static fromSuiObjectData( data: SuiObjectData ): UpdateProposal { if (data.bcs) { if (data.bcs.dataType !== "moveObject" || !isUpdateProposal(data.bcs.type)) { throw new Error(`object at is not a UpdateProposal object`); }
-
- return UpdateProposal.fromBcs( fromB64(data.bcs.bcsBytes) ); } if (data.content) { return UpdateProposal.fromSuiParsedData( data.content ) } throw new Error( "Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request." ); }
-
- static async fetch( client: SuiClient, id: string ): Promise<UpdateProposal> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching UpdateProposal object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isUpdateProposal(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a UpdateProposal object`); }
-
- return UpdateProposal.fromSuiObjectData( res.data ); }
 
  }

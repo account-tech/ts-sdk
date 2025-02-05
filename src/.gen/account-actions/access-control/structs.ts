@@ -5,47 +5,117 @@ import {bcs} from "@mysten/sui/bcs";
 import {SuiClient, SuiObjectData, SuiParsedData} from "@mysten/sui/client";
 import {fromB64, fromHEX, toHEX} from "@mysten/sui/utils";
 
-/* ============================== Borrow =============================== */
+/* ============================== BorrowAction =============================== */
 
-export function isBorrow(type: string): boolean { type = compressSuiType(type); return type.startsWith(`${PKG_V1}::access_control::Borrow` + '<'); }
+export function isBorrowAction(type: string): boolean { type = compressSuiType(type); return type.startsWith(`${PKG_V1}::access_control::BorrowAction` + '<'); }
 
-export interface BorrowFields<Cap extends PhantomTypeArgument> { accountAddr: ToField<"address"> }
+export interface BorrowActionFields<Cap extends PhantomTypeArgument> { dummyField: ToField<"bool"> }
 
-export type BorrowReified<Cap extends PhantomTypeArgument> = Reified< Borrow<Cap>, BorrowFields<Cap> >;
+export type BorrowActionReified<Cap extends PhantomTypeArgument> = Reified< BorrowAction<Cap>, BorrowActionFields<Cap> >;
 
-export class Borrow<Cap extends PhantomTypeArgument> implements StructClass { __StructClass = true as const;
+export class BorrowAction<Cap extends PhantomTypeArgument> implements StructClass { __StructClass = true as const;
 
- static readonly $typeName = `${PKG_V1}::access_control::Borrow`; static readonly $numTypeParams = 1; static readonly $isPhantom = [true,] as const;
+ static readonly $typeName = `${PKG_V1}::access_control::BorrowAction`; static readonly $numTypeParams = 1; static readonly $isPhantom = [true,] as const;
 
- readonly $typeName = Borrow.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::access_control::Borrow<${PhantomToTypeStr<Cap>}>`; readonly $typeArgs: [PhantomToTypeStr<Cap>]; readonly $isPhantom = Borrow.$isPhantom;
+ readonly $typeName = BorrowAction.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::access_control::BorrowAction<${PhantomToTypeStr<Cap>}>`; readonly $typeArgs: [PhantomToTypeStr<Cap>]; readonly $isPhantom = BorrowAction.$isPhantom;
+
+ readonly dummyField: ToField<"bool">
+
+ private constructor(typeArgs: [PhantomToTypeStr<Cap>], fields: BorrowActionFields<Cap>, ) { this.$fullTypeName = composeSuiType( BorrowAction.$typeName, ...typeArgs ) as `${typeof PKG_V1}::access_control::BorrowAction<${PhantomToTypeStr<Cap>}>`; this.$typeArgs = typeArgs;
+
+ this.dummyField = fields.dummyField; }
+
+ static reified<Cap extends PhantomReified<PhantomTypeArgument>>( Cap: Cap ): BorrowActionReified<ToPhantomTypeArgument<Cap>> { return { typeName: BorrowAction.$typeName, fullTypeName: composeSuiType( BorrowAction.$typeName, ...[extractType(Cap)] ) as `${typeof PKG_V1}::access_control::BorrowAction<${PhantomToTypeStr<ToPhantomTypeArgument<Cap>>}>`, typeArgs: [ extractType(Cap) ] as [PhantomToTypeStr<ToPhantomTypeArgument<Cap>>], isPhantom: BorrowAction.$isPhantom, reifiedTypeArgs: [Cap], fromFields: (fields: Record<string, any>) => BorrowAction.fromFields( Cap, fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => BorrowAction.fromFieldsWithTypes( Cap, item, ), fromBcs: (data: Uint8Array) => BorrowAction.fromBcs( Cap, data, ), bcs: BorrowAction.bcs, fromJSONField: (field: any) => BorrowAction.fromJSONField( Cap, field, ), fromJSON: (json: Record<string, any>) => BorrowAction.fromJSON( Cap, json, ), fromSuiParsedData: (content: SuiParsedData) => BorrowAction.fromSuiParsedData( Cap, content, ), fromSuiObjectData: (content: SuiObjectData) => BorrowAction.fromSuiObjectData( Cap, content, ), fetch: async (client: SuiClient, id: string) => BorrowAction.fetch( client, Cap, id, ), new: ( fields: BorrowActionFields<ToPhantomTypeArgument<Cap>>, ) => { return new BorrowAction( [extractType(Cap)], fields ) }, kind: "StructClassReified", } }
+
+ static get r() { return BorrowAction.reified }
+
+ static phantom<Cap extends PhantomReified<PhantomTypeArgument>>( Cap: Cap ): PhantomReified<ToTypeStr<BorrowAction<ToPhantomTypeArgument<Cap>>>> { return phantom(BorrowAction.reified( Cap )); } static get p() { return BorrowAction.phantom }
+
+ static get bcs() { return bcs.struct("BorrowAction", {
+
+ dummy_field: bcs.bool()
+
+}) };
+
+ static fromFields<Cap extends PhantomReified<PhantomTypeArgument>>( typeArg: Cap, fields: Record<string, any> ): BorrowAction<ToPhantomTypeArgument<Cap>> { return BorrowAction.reified( typeArg, ).new( { dummyField: decodeFromFields("bool", fields.dummy_field) } ) }
+
+ static fromFieldsWithTypes<Cap extends PhantomReified<PhantomTypeArgument>>( typeArg: Cap, item: FieldsWithTypes ): BorrowAction<ToPhantomTypeArgument<Cap>> { if (!isBorrowAction(item.type)) { throw new Error("not a BorrowAction type");
+
+ } assertFieldsWithTypesArgsMatch(item, [typeArg]);
+
+ return BorrowAction.reified( typeArg, ).new( { dummyField: decodeFromFieldsWithTypes("bool", item.fields.dummy_field) } ) }
+
+ static fromBcs<Cap extends PhantomReified<PhantomTypeArgument>>( typeArg: Cap, data: Uint8Array ): BorrowAction<ToPhantomTypeArgument<Cap>> { return BorrowAction.fromFields( typeArg, BorrowAction.bcs.parse(data) ) }
+
+ toJSONField() { return {
+
+ dummyField: this.dummyField,
+
+} }
+
+ toJSON() { return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() } }
+
+ static fromJSONField<Cap extends PhantomReified<PhantomTypeArgument>>( typeArg: Cap, field: any ): BorrowAction<ToPhantomTypeArgument<Cap>> { return BorrowAction.reified( typeArg, ).new( { dummyField: decodeFromJSONField("bool", field.dummyField) } ) }
+
+ static fromJSON<Cap extends PhantomReified<PhantomTypeArgument>>( typeArg: Cap, json: Record<string, any> ): BorrowAction<ToPhantomTypeArgument<Cap>> { if (json.$typeName !== BorrowAction.$typeName) { throw new Error("not a WithTwoGenerics json object") }; assertReifiedTypeArgsMatch( composeSuiType(BorrowAction.$typeName, extractType(typeArg)), json.$typeArgs, [typeArg], )
+
+ return BorrowAction.fromJSONField( typeArg, json, ) }
+
+ static fromSuiParsedData<Cap extends PhantomReified<PhantomTypeArgument>>( typeArg: Cap, content: SuiParsedData ): BorrowAction<ToPhantomTypeArgument<Cap>> { if (content.dataType !== "moveObject") { throw new Error("not an object"); } if (!isBorrowAction(content.type)) { throw new Error(`object at ${(content.fields as any).id} is not a BorrowAction object`); } return BorrowAction.fromFieldsWithTypes( typeArg, content ); }
+
+ static fromSuiObjectData<Cap extends PhantomReified<PhantomTypeArgument>>( typeArg: Cap, data: SuiObjectData ): BorrowAction<ToPhantomTypeArgument<Cap>> { if (data.bcs) { if (data.bcs.dataType !== "moveObject" || !isBorrowAction(data.bcs.type)) { throw new Error(`object at is not a BorrowAction object`); }
+
+ const gotTypeArgs = parseTypeName(data.bcs.type).typeArgs; if (gotTypeArgs.length !== 1) { throw new Error(`type argument mismatch: expected 1 type argument but got '${gotTypeArgs.length}'`); }; const gotTypeArg = compressSuiType(gotTypeArgs[0]); const expectedTypeArg = compressSuiType(extractType(typeArg)); if (gotTypeArg !== compressSuiType(extractType(typeArg))) { throw new Error(`type argument mismatch: expected '${expectedTypeArg}' but got '${gotTypeArg}'`); };
+
+ return BorrowAction.fromBcs( typeArg, fromB64(data.bcs.bcsBytes) ); } if (data.content) { return BorrowAction.fromSuiParsedData( typeArg, data.content ) } throw new Error( "Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request." ); }
+
+ static async fetch<Cap extends PhantomReified<PhantomTypeArgument>>( client: SuiClient, typeArg: Cap, id: string ): Promise<BorrowAction<ToPhantomTypeArgument<Cap>>> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching BorrowAction object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isBorrowAction(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a BorrowAction object`); }
+
+ return BorrowAction.fromSuiObjectData( typeArg, res.data ); }
+
+ }
+
+/* ============================== Borrowed =============================== */
+
+export function isBorrowed(type: string): boolean { type = compressSuiType(type); return type.startsWith(`${PKG_V1}::access_control::Borrowed` + '<'); }
+
+export interface BorrowedFields<Cap extends PhantomTypeArgument> { accountAddr: ToField<"address"> }
+
+export type BorrowedReified<Cap extends PhantomTypeArgument> = Reified< Borrowed<Cap>, BorrowedFields<Cap> >;
+
+export class Borrowed<Cap extends PhantomTypeArgument> implements StructClass { __StructClass = true as const;
+
+ static readonly $typeName = `${PKG_V1}::access_control::Borrowed`; static readonly $numTypeParams = 1; static readonly $isPhantom = [true,] as const;
+
+ readonly $typeName = Borrowed.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::access_control::Borrowed<${PhantomToTypeStr<Cap>}>`; readonly $typeArgs: [PhantomToTypeStr<Cap>]; readonly $isPhantom = Borrowed.$isPhantom;
 
  readonly accountAddr: ToField<"address">
 
- private constructor(typeArgs: [PhantomToTypeStr<Cap>], fields: BorrowFields<Cap>, ) { this.$fullTypeName = composeSuiType( Borrow.$typeName, ...typeArgs ) as `${typeof PKG_V1}::access_control::Borrow<${PhantomToTypeStr<Cap>}>`; this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [PhantomToTypeStr<Cap>], fields: BorrowedFields<Cap>, ) { this.$fullTypeName = composeSuiType( Borrowed.$typeName, ...typeArgs ) as `${typeof PKG_V1}::access_control::Borrowed<${PhantomToTypeStr<Cap>}>`; this.$typeArgs = typeArgs;
 
  this.accountAddr = fields.accountAddr; }
 
- static reified<Cap extends PhantomReified<PhantomTypeArgument>>( Cap: Cap ): BorrowReified<ToPhantomTypeArgument<Cap>> { return { typeName: Borrow.$typeName, fullTypeName: composeSuiType( Borrow.$typeName, ...[extractType(Cap)] ) as `${typeof PKG_V1}::access_control::Borrow<${PhantomToTypeStr<ToPhantomTypeArgument<Cap>>}>`, typeArgs: [ extractType(Cap) ] as [PhantomToTypeStr<ToPhantomTypeArgument<Cap>>], isPhantom: Borrow.$isPhantom, reifiedTypeArgs: [Cap], fromFields: (fields: Record<string, any>) => Borrow.fromFields( Cap, fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => Borrow.fromFieldsWithTypes( Cap, item, ), fromBcs: (data: Uint8Array) => Borrow.fromBcs( Cap, data, ), bcs: Borrow.bcs, fromJSONField: (field: any) => Borrow.fromJSONField( Cap, field, ), fromJSON: (json: Record<string, any>) => Borrow.fromJSON( Cap, json, ), fromSuiParsedData: (content: SuiParsedData) => Borrow.fromSuiParsedData( Cap, content, ), fromSuiObjectData: (content: SuiObjectData) => Borrow.fromSuiObjectData( Cap, content, ), fetch: async (client: SuiClient, id: string) => Borrow.fetch( client, Cap, id, ), new: ( fields: BorrowFields<ToPhantomTypeArgument<Cap>>, ) => { return new Borrow( [extractType(Cap)], fields ) }, kind: "StructClassReified", } }
+ static reified<Cap extends PhantomReified<PhantomTypeArgument>>( Cap: Cap ): BorrowedReified<ToPhantomTypeArgument<Cap>> { return { typeName: Borrowed.$typeName, fullTypeName: composeSuiType( Borrowed.$typeName, ...[extractType(Cap)] ) as `${typeof PKG_V1}::access_control::Borrowed<${PhantomToTypeStr<ToPhantomTypeArgument<Cap>>}>`, typeArgs: [ extractType(Cap) ] as [PhantomToTypeStr<ToPhantomTypeArgument<Cap>>], isPhantom: Borrowed.$isPhantom, reifiedTypeArgs: [Cap], fromFields: (fields: Record<string, any>) => Borrowed.fromFields( Cap, fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => Borrowed.fromFieldsWithTypes( Cap, item, ), fromBcs: (data: Uint8Array) => Borrowed.fromBcs( Cap, data, ), bcs: Borrowed.bcs, fromJSONField: (field: any) => Borrowed.fromJSONField( Cap, field, ), fromJSON: (json: Record<string, any>) => Borrowed.fromJSON( Cap, json, ), fromSuiParsedData: (content: SuiParsedData) => Borrowed.fromSuiParsedData( Cap, content, ), fromSuiObjectData: (content: SuiObjectData) => Borrowed.fromSuiObjectData( Cap, content, ), fetch: async (client: SuiClient, id: string) => Borrowed.fetch( client, Cap, id, ), new: ( fields: BorrowedFields<ToPhantomTypeArgument<Cap>>, ) => { return new Borrowed( [extractType(Cap)], fields ) }, kind: "StructClassReified", } }
 
- static get r() { return Borrow.reified }
+ static get r() { return Borrowed.reified }
 
- static phantom<Cap extends PhantomReified<PhantomTypeArgument>>( Cap: Cap ): PhantomReified<ToTypeStr<Borrow<ToPhantomTypeArgument<Cap>>>> { return phantom(Borrow.reified( Cap )); } static get p() { return Borrow.phantom }
+ static phantom<Cap extends PhantomReified<PhantomTypeArgument>>( Cap: Cap ): PhantomReified<ToTypeStr<Borrowed<ToPhantomTypeArgument<Cap>>>> { return phantom(Borrowed.reified( Cap )); } static get p() { return Borrowed.phantom }
 
- static get bcs() { return bcs.struct("Borrow", {
+ static get bcs() { return bcs.struct("Borrowed", {
 
  account_addr: bcs.bytes(32).transform({ input: (val: string) => fromHEX(val), output: (val: Uint8Array) => toHEX(val), })
 
 }) };
 
- static fromFields<Cap extends PhantomReified<PhantomTypeArgument>>( typeArg: Cap, fields: Record<string, any> ): Borrow<ToPhantomTypeArgument<Cap>> { return Borrow.reified( typeArg, ).new( { accountAddr: decodeFromFields("address", fields.account_addr) } ) }
+ static fromFields<Cap extends PhantomReified<PhantomTypeArgument>>( typeArg: Cap, fields: Record<string, any> ): Borrowed<ToPhantomTypeArgument<Cap>> { return Borrowed.reified( typeArg, ).new( { accountAddr: decodeFromFields("address", fields.account_addr) } ) }
 
- static fromFieldsWithTypes<Cap extends PhantomReified<PhantomTypeArgument>>( typeArg: Cap, item: FieldsWithTypes ): Borrow<ToPhantomTypeArgument<Cap>> { if (!isBorrow(item.type)) { throw new Error("not a Borrow type");
+ static fromFieldsWithTypes<Cap extends PhantomReified<PhantomTypeArgument>>( typeArg: Cap, item: FieldsWithTypes ): Borrowed<ToPhantomTypeArgument<Cap>> { if (!isBorrowed(item.type)) { throw new Error("not a Borrowed type");
 
  } assertFieldsWithTypesArgsMatch(item, [typeArg]);
 
- return Borrow.reified( typeArg, ).new( { accountAddr: decodeFromFieldsWithTypes("address", item.fields.account_addr) } ) }
+ return Borrowed.reified( typeArg, ).new( { accountAddr: decodeFromFieldsWithTypes("address", item.fields.account_addr) } ) }
 
- static fromBcs<Cap extends PhantomReified<PhantomTypeArgument>>( typeArg: Cap, data: Uint8Array ): Borrow<ToPhantomTypeArgument<Cap>> { return Borrow.fromFields( typeArg, Borrow.bcs.parse(data) ) }
+ static fromBcs<Cap extends PhantomReified<PhantomTypeArgument>>( typeArg: Cap, data: Uint8Array ): Borrowed<ToPhantomTypeArgument<Cap>> { return Borrowed.fromFields( typeArg, Borrowed.bcs.parse(data) ) }
 
  toJSONField() { return {
 
@@ -55,161 +125,23 @@ export class Borrow<Cap extends PhantomTypeArgument> implements StructClass { __
 
  toJSON() { return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() } }
 
- static fromJSONField<Cap extends PhantomReified<PhantomTypeArgument>>( typeArg: Cap, field: any ): Borrow<ToPhantomTypeArgument<Cap>> { return Borrow.reified( typeArg, ).new( { accountAddr: decodeFromJSONField("address", field.accountAddr) } ) }
+ static fromJSONField<Cap extends PhantomReified<PhantomTypeArgument>>( typeArg: Cap, field: any ): Borrowed<ToPhantomTypeArgument<Cap>> { return Borrowed.reified( typeArg, ).new( { accountAddr: decodeFromJSONField("address", field.accountAddr) } ) }
 
- static fromJSON<Cap extends PhantomReified<PhantomTypeArgument>>( typeArg: Cap, json: Record<string, any> ): Borrow<ToPhantomTypeArgument<Cap>> { if (json.$typeName !== Borrow.$typeName) { throw new Error("not a WithTwoGenerics json object") }; assertReifiedTypeArgsMatch( composeSuiType(Borrow.$typeName, extractType(typeArg)), json.$typeArgs, [typeArg], )
+ static fromJSON<Cap extends PhantomReified<PhantomTypeArgument>>( typeArg: Cap, json: Record<string, any> ): Borrowed<ToPhantomTypeArgument<Cap>> { if (json.$typeName !== Borrowed.$typeName) { throw new Error("not a WithTwoGenerics json object") }; assertReifiedTypeArgsMatch( composeSuiType(Borrowed.$typeName, extractType(typeArg)), json.$typeArgs, [typeArg], )
 
- return Borrow.fromJSONField( typeArg, json, ) }
+ return Borrowed.fromJSONField( typeArg, json, ) }
 
- static fromSuiParsedData<Cap extends PhantomReified<PhantomTypeArgument>>( typeArg: Cap, content: SuiParsedData ): Borrow<ToPhantomTypeArgument<Cap>> { if (content.dataType !== "moveObject") { throw new Error("not an object"); } if (!isBorrow(content.type)) { throw new Error(`object at ${(content.fields as any).id} is not a Borrow object`); } return Borrow.fromFieldsWithTypes( typeArg, content ); }
+ static fromSuiParsedData<Cap extends PhantomReified<PhantomTypeArgument>>( typeArg: Cap, content: SuiParsedData ): Borrowed<ToPhantomTypeArgument<Cap>> { if (content.dataType !== "moveObject") { throw new Error("not an object"); } if (!isBorrowed(content.type)) { throw new Error(`object at ${(content.fields as any).id} is not a Borrowed object`); } return Borrowed.fromFieldsWithTypes( typeArg, content ); }
 
- static fromSuiObjectData<Cap extends PhantomReified<PhantomTypeArgument>>( typeArg: Cap, data: SuiObjectData ): Borrow<ToPhantomTypeArgument<Cap>> { if (data.bcs) { if (data.bcs.dataType !== "moveObject" || !isBorrow(data.bcs.type)) { throw new Error(`object at is not a Borrow object`); }
-
- const gotTypeArgs = parseTypeName(data.bcs.type).typeArgs; if (gotTypeArgs.length !== 1) { throw new Error(`type argument mismatch: expected 1 type argument but got '${gotTypeArgs.length}'`); }; const gotTypeArg = compressSuiType(gotTypeArgs[0]); const expectedTypeArg = compressSuiType(extractType(typeArg)); if (gotTypeArg !== compressSuiType(extractType(typeArg))) { throw new Error(`type argument mismatch: expected '${expectedTypeArg}' but got '${gotTypeArg}'`); };
-
- return Borrow.fromBcs( typeArg, fromB64(data.bcs.bcsBytes) ); } if (data.content) { return Borrow.fromSuiParsedData( typeArg, data.content ) } throw new Error( "Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request." ); }
-
- static async fetch<Cap extends PhantomReified<PhantomTypeArgument>>( client: SuiClient, typeArg: Cap, id: string ): Promise<Borrow<ToPhantomTypeArgument<Cap>>> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching Borrow object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isBorrow(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a Borrow object`); }
-
- return Borrow.fromSuiObjectData( typeArg, res.data ); }
-
- }
-
-/* ============================== AccessAction =============================== */
-
-export function isAccessAction(type: string): boolean { type = compressSuiType(type); return type.startsWith(`${PKG_V1}::access_control::AccessAction` + '<'); }
-
-export interface AccessActionFields<Cap extends PhantomTypeArgument> { dummyField: ToField<"bool"> }
-
-export type AccessActionReified<Cap extends PhantomTypeArgument> = Reified< AccessAction<Cap>, AccessActionFields<Cap> >;
-
-export class AccessAction<Cap extends PhantomTypeArgument> implements StructClass { __StructClass = true as const;
-
- static readonly $typeName = `${PKG_V1}::access_control::AccessAction`; static readonly $numTypeParams = 1; static readonly $isPhantom = [true,] as const;
-
- readonly $typeName = AccessAction.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::access_control::AccessAction<${PhantomToTypeStr<Cap>}>`; readonly $typeArgs: [PhantomToTypeStr<Cap>]; readonly $isPhantom = AccessAction.$isPhantom;
-
- readonly dummyField: ToField<"bool">
-
- private constructor(typeArgs: [PhantomToTypeStr<Cap>], fields: AccessActionFields<Cap>, ) { this.$fullTypeName = composeSuiType( AccessAction.$typeName, ...typeArgs ) as `${typeof PKG_V1}::access_control::AccessAction<${PhantomToTypeStr<Cap>}>`; this.$typeArgs = typeArgs;
-
- this.dummyField = fields.dummyField; }
-
- static reified<Cap extends PhantomReified<PhantomTypeArgument>>( Cap: Cap ): AccessActionReified<ToPhantomTypeArgument<Cap>> { return { typeName: AccessAction.$typeName, fullTypeName: composeSuiType( AccessAction.$typeName, ...[extractType(Cap)] ) as `${typeof PKG_V1}::access_control::AccessAction<${PhantomToTypeStr<ToPhantomTypeArgument<Cap>>}>`, typeArgs: [ extractType(Cap) ] as [PhantomToTypeStr<ToPhantomTypeArgument<Cap>>], isPhantom: AccessAction.$isPhantom, reifiedTypeArgs: [Cap], fromFields: (fields: Record<string, any>) => AccessAction.fromFields( Cap, fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => AccessAction.fromFieldsWithTypes( Cap, item, ), fromBcs: (data: Uint8Array) => AccessAction.fromBcs( Cap, data, ), bcs: AccessAction.bcs, fromJSONField: (field: any) => AccessAction.fromJSONField( Cap, field, ), fromJSON: (json: Record<string, any>) => AccessAction.fromJSON( Cap, json, ), fromSuiParsedData: (content: SuiParsedData) => AccessAction.fromSuiParsedData( Cap, content, ), fromSuiObjectData: (content: SuiObjectData) => AccessAction.fromSuiObjectData( Cap, content, ), fetch: async (client: SuiClient, id: string) => AccessAction.fetch( client, Cap, id, ), new: ( fields: AccessActionFields<ToPhantomTypeArgument<Cap>>, ) => { return new AccessAction( [extractType(Cap)], fields ) }, kind: "StructClassReified", } }
-
- static get r() { return AccessAction.reified }
-
- static phantom<Cap extends PhantomReified<PhantomTypeArgument>>( Cap: Cap ): PhantomReified<ToTypeStr<AccessAction<ToPhantomTypeArgument<Cap>>>> { return phantom(AccessAction.reified( Cap )); } static get p() { return AccessAction.phantom }
-
- static get bcs() { return bcs.struct("AccessAction", {
-
- dummy_field: bcs.bool()
-
-}) };
-
- static fromFields<Cap extends PhantomReified<PhantomTypeArgument>>( typeArg: Cap, fields: Record<string, any> ): AccessAction<ToPhantomTypeArgument<Cap>> { return AccessAction.reified( typeArg, ).new( { dummyField: decodeFromFields("bool", fields.dummy_field) } ) }
-
- static fromFieldsWithTypes<Cap extends PhantomReified<PhantomTypeArgument>>( typeArg: Cap, item: FieldsWithTypes ): AccessAction<ToPhantomTypeArgument<Cap>> { if (!isAccessAction(item.type)) { throw new Error("not a AccessAction type");
-
- } assertFieldsWithTypesArgsMatch(item, [typeArg]);
-
- return AccessAction.reified( typeArg, ).new( { dummyField: decodeFromFieldsWithTypes("bool", item.fields.dummy_field) } ) }
-
- static fromBcs<Cap extends PhantomReified<PhantomTypeArgument>>( typeArg: Cap, data: Uint8Array ): AccessAction<ToPhantomTypeArgument<Cap>> { return AccessAction.fromFields( typeArg, AccessAction.bcs.parse(data) ) }
-
- toJSONField() { return {
-
- dummyField: this.dummyField,
-
-} }
-
- toJSON() { return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() } }
-
- static fromJSONField<Cap extends PhantomReified<PhantomTypeArgument>>( typeArg: Cap, field: any ): AccessAction<ToPhantomTypeArgument<Cap>> { return AccessAction.reified( typeArg, ).new( { dummyField: decodeFromJSONField("bool", field.dummyField) } ) }
-
- static fromJSON<Cap extends PhantomReified<PhantomTypeArgument>>( typeArg: Cap, json: Record<string, any> ): AccessAction<ToPhantomTypeArgument<Cap>> { if (json.$typeName !== AccessAction.$typeName) { throw new Error("not a WithTwoGenerics json object") }; assertReifiedTypeArgsMatch( composeSuiType(AccessAction.$typeName, extractType(typeArg)), json.$typeArgs, [typeArg], )
-
- return AccessAction.fromJSONField( typeArg, json, ) }
-
- static fromSuiParsedData<Cap extends PhantomReified<PhantomTypeArgument>>( typeArg: Cap, content: SuiParsedData ): AccessAction<ToPhantomTypeArgument<Cap>> { if (content.dataType !== "moveObject") { throw new Error("not an object"); } if (!isAccessAction(content.type)) { throw new Error(`object at ${(content.fields as any).id} is not a AccessAction object`); } return AccessAction.fromFieldsWithTypes( typeArg, content ); }
-
- static fromSuiObjectData<Cap extends PhantomReified<PhantomTypeArgument>>( typeArg: Cap, data: SuiObjectData ): AccessAction<ToPhantomTypeArgument<Cap>> { if (data.bcs) { if (data.bcs.dataType !== "moveObject" || !isAccessAction(data.bcs.type)) { throw new Error(`object at is not a AccessAction object`); }
+ static fromSuiObjectData<Cap extends PhantomReified<PhantomTypeArgument>>( typeArg: Cap, data: SuiObjectData ): Borrowed<ToPhantomTypeArgument<Cap>> { if (data.bcs) { if (data.bcs.dataType !== "moveObject" || !isBorrowed(data.bcs.type)) { throw new Error(`object at is not a Borrowed object`); }
 
  const gotTypeArgs = parseTypeName(data.bcs.type).typeArgs; if (gotTypeArgs.length !== 1) { throw new Error(`type argument mismatch: expected 1 type argument but got '${gotTypeArgs.length}'`); }; const gotTypeArg = compressSuiType(gotTypeArgs[0]); const expectedTypeArg = compressSuiType(extractType(typeArg)); if (gotTypeArg !== compressSuiType(extractType(typeArg))) { throw new Error(`type argument mismatch: expected '${expectedTypeArg}' but got '${gotTypeArg}'`); };
 
- return AccessAction.fromBcs( typeArg, fromB64(data.bcs.bcsBytes) ); } if (data.content) { return AccessAction.fromSuiParsedData( typeArg, data.content ) } throw new Error( "Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request." ); }
+ return Borrowed.fromBcs( typeArg, fromB64(data.bcs.bcsBytes) ); } if (data.content) { return Borrowed.fromSuiParsedData( typeArg, data.content ) } throw new Error( "Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request." ); }
 
- static async fetch<Cap extends PhantomReified<PhantomTypeArgument>>( client: SuiClient, typeArg: Cap, id: string ): Promise<AccessAction<ToPhantomTypeArgument<Cap>>> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching AccessAction object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isAccessAction(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a AccessAction object`); }
+ static async fetch<Cap extends PhantomReified<PhantomTypeArgument>>( client: SuiClient, typeArg: Cap, id: string ): Promise<Borrowed<ToPhantomTypeArgument<Cap>>> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching Borrowed object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isBorrowed(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a Borrowed object`); }
 
- return AccessAction.fromSuiObjectData( typeArg, res.data ); }
-
- }
-
-/* ============================== AccessProposal =============================== */
-
-export function isAccessProposal(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::access_control::AccessProposal`; }
-
-export interface AccessProposalFields { dummyField: ToField<"bool"> }
-
-export type AccessProposalReified = Reified< AccessProposal, AccessProposalFields >;
-
-export class AccessProposal implements StructClass { __StructClass = true as const;
-
- static readonly $typeName = `${PKG_V1}::access_control::AccessProposal`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
-
- readonly $typeName = AccessProposal.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::access_control::AccessProposal`; readonly $typeArgs: []; readonly $isPhantom = AccessProposal.$isPhantom;
-
- readonly dummyField: ToField<"bool">
-
- private constructor(typeArgs: [], fields: AccessProposalFields, ) { this.$fullTypeName = composeSuiType( AccessProposal.$typeName, ...typeArgs ) as `${typeof PKG_V1}::access_control::AccessProposal`; this.$typeArgs = typeArgs;
-
- this.dummyField = fields.dummyField; }
-
- static reified( ): AccessProposalReified { return { typeName: AccessProposal.$typeName, fullTypeName: composeSuiType( AccessProposal.$typeName, ...[] ) as `${typeof PKG_V1}::access_control::AccessProposal`, typeArgs: [ ] as [], isPhantom: AccessProposal.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => AccessProposal.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => AccessProposal.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => AccessProposal.fromBcs( data, ), bcs: AccessProposal.bcs, fromJSONField: (field: any) => AccessProposal.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => AccessProposal.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => AccessProposal.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => AccessProposal.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => AccessProposal.fetch( client, id, ), new: ( fields: AccessProposalFields, ) => { return new AccessProposal( [], fields ) }, kind: "StructClassReified", } }
-
- static get r() { return AccessProposal.reified() }
-
- static phantom( ): PhantomReified<ToTypeStr<AccessProposal>> { return phantom(AccessProposal.reified( )); } static get p() { return AccessProposal.phantom() }
-
- static get bcs() { return bcs.struct("AccessProposal", {
-
- dummy_field: bcs.bool()
-
-}) };
-
- static fromFields( fields: Record<string, any> ): AccessProposal { return AccessProposal.reified( ).new( { dummyField: decodeFromFields("bool", fields.dummy_field) } ) }
-
- static fromFieldsWithTypes( item: FieldsWithTypes ): AccessProposal { if (!isAccessProposal(item.type)) { throw new Error("not a AccessProposal type");
-
- }
-
- return AccessProposal.reified( ).new( { dummyField: decodeFromFieldsWithTypes("bool", item.fields.dummy_field) } ) }
-
- static fromBcs( data: Uint8Array ): AccessProposal { return AccessProposal.fromFields( AccessProposal.bcs.parse(data) ) }
-
- toJSONField() { return {
-
- dummyField: this.dummyField,
-
-} }
-
- toJSON() { return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() } }
-
- static fromJSONField( field: any ): AccessProposal { return AccessProposal.reified( ).new( { dummyField: decodeFromJSONField("bool", field.dummyField) } ) }
-
- static fromJSON( json: Record<string, any> ): AccessProposal { if (json.$typeName !== AccessProposal.$typeName) { throw new Error("not a WithTwoGenerics json object") };
-
- return AccessProposal.fromJSONField( json, ) }
-
- static fromSuiParsedData( content: SuiParsedData ): AccessProposal { if (content.dataType !== "moveObject") { throw new Error("not an object"); } if (!isAccessProposal(content.type)) { throw new Error(`object at ${(content.fields as any).id} is not a AccessProposal object`); } return AccessProposal.fromFieldsWithTypes( content ); }
-
- static fromSuiObjectData( data: SuiObjectData ): AccessProposal { if (data.bcs) { if (data.bcs.dataType !== "moveObject" || !isAccessProposal(data.bcs.type)) { throw new Error(`object at is not a AccessProposal object`); }
-
- return AccessProposal.fromBcs( fromB64(data.bcs.bcsBytes) ); } if (data.content) { return AccessProposal.fromSuiParsedData( data.content ) } throw new Error( "Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request." ); }
-
- static async fetch( client: SuiClient, id: string ): Promise<AccessProposal> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching AccessProposal object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isAccessProposal(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a AccessProposal object`); }
-
- return AccessProposal.fromSuiObjectData( res.data ); }
+ return Borrowed.fromSuiObjectData( typeArg, res.data ); }
 
  }
 
@@ -280,73 +212,5 @@ export class CapKey<Cap extends PhantomTypeArgument> implements StructClass { __
  static async fetch<Cap extends PhantomReified<PhantomTypeArgument>>( client: SuiClient, typeArg: Cap, id: string ): Promise<CapKey<ToPhantomTypeArgument<Cap>>> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching CapKey object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isCapKey(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a CapKey object`); }
 
  return CapKey.fromSuiObjectData( typeArg, res.data ); }
-
- }
-
-/* ============================== LockCommand =============================== */
-
-export function isLockCommand(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::access_control::LockCommand`; }
-
-export interface LockCommandFields { dummyField: ToField<"bool"> }
-
-export type LockCommandReified = Reified< LockCommand, LockCommandFields >;
-
-export class LockCommand implements StructClass { __StructClass = true as const;
-
- static readonly $typeName = `${PKG_V1}::access_control::LockCommand`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
-
- readonly $typeName = LockCommand.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::access_control::LockCommand`; readonly $typeArgs: []; readonly $isPhantom = LockCommand.$isPhantom;
-
- readonly dummyField: ToField<"bool">
-
- private constructor(typeArgs: [], fields: LockCommandFields, ) { this.$fullTypeName = composeSuiType( LockCommand.$typeName, ...typeArgs ) as `${typeof PKG_V1}::access_control::LockCommand`; this.$typeArgs = typeArgs;
-
- this.dummyField = fields.dummyField; }
-
- static reified( ): LockCommandReified { return { typeName: LockCommand.$typeName, fullTypeName: composeSuiType( LockCommand.$typeName, ...[] ) as `${typeof PKG_V1}::access_control::LockCommand`, typeArgs: [ ] as [], isPhantom: LockCommand.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => LockCommand.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => LockCommand.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => LockCommand.fromBcs( data, ), bcs: LockCommand.bcs, fromJSONField: (field: any) => LockCommand.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => LockCommand.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => LockCommand.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => LockCommand.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => LockCommand.fetch( client, id, ), new: ( fields: LockCommandFields, ) => { return new LockCommand( [], fields ) }, kind: "StructClassReified", } }
-
- static get r() { return LockCommand.reified() }
-
- static phantom( ): PhantomReified<ToTypeStr<LockCommand>> { return phantom(LockCommand.reified( )); } static get p() { return LockCommand.phantom() }
-
- static get bcs() { return bcs.struct("LockCommand", {
-
- dummy_field: bcs.bool()
-
-}) };
-
- static fromFields( fields: Record<string, any> ): LockCommand { return LockCommand.reified( ).new( { dummyField: decodeFromFields("bool", fields.dummy_field) } ) }
-
- static fromFieldsWithTypes( item: FieldsWithTypes ): LockCommand { if (!isLockCommand(item.type)) { throw new Error("not a LockCommand type");
-
- }
-
- return LockCommand.reified( ).new( { dummyField: decodeFromFieldsWithTypes("bool", item.fields.dummy_field) } ) }
-
- static fromBcs( data: Uint8Array ): LockCommand { return LockCommand.fromFields( LockCommand.bcs.parse(data) ) }
-
- toJSONField() { return {
-
- dummyField: this.dummyField,
-
-} }
-
- toJSON() { return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() } }
-
- static fromJSONField( field: any ): LockCommand { return LockCommand.reified( ).new( { dummyField: decodeFromJSONField("bool", field.dummyField) } ) }
-
- static fromJSON( json: Record<string, any> ): LockCommand { if (json.$typeName !== LockCommand.$typeName) { throw new Error("not a WithTwoGenerics json object") };
-
- return LockCommand.fromJSONField( json, ) }
-
- static fromSuiParsedData( content: SuiParsedData ): LockCommand { if (content.dataType !== "moveObject") { throw new Error("not an object"); } if (!isLockCommand(content.type)) { throw new Error(`object at ${(content.fields as any).id} is not a LockCommand object`); } return LockCommand.fromFieldsWithTypes( content ); }
-
- static fromSuiObjectData( data: SuiObjectData ): LockCommand { if (data.bcs) { if (data.bcs.dataType !== "moveObject" || !isLockCommand(data.bcs.type)) { throw new Error(`object at is not a LockCommand object`); }
-
- return LockCommand.fromBcs( fromB64(data.bcs.bcsBytes) ); } if (data.content) { return LockCommand.fromSuiParsedData( data.content ) } throw new Error( "Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request." ); }
-
- static async fetch( client: SuiClient, id: string ): Promise<LockCommand> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching LockCommand object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isLockCommand(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a LockCommand object`); }
-
- return LockCommand.fromSuiObjectData( res.data ); }
 
  }

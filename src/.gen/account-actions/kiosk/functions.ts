@@ -20,49 +20,29 @@ export interface CloseArgs { auth: TransactionObjectInput; account: TransactionO
 
 export function close( tx: Transaction, typeArgs: [string, string], args: CloseArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::kiosk::close`, typeArguments: typeArgs, arguments: [ obj(tx, args.auth), obj(tx, args.account), pure(tx, args.name, `${String.$typeName}`), obj(tx, args.kiosk) ], }) }
 
-export function completeList( tx: Transaction, executable: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::kiosk::complete_list`, arguments: [ obj(tx, executable) ], }) }
+export function deleteList( tx: Transaction, expired: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::kiosk::delete_list`, arguments: [ obj(tx, expired) ], }) }
 
-export function completeTake( tx: Transaction, executable: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::kiosk::complete_take`, arguments: [ obj(tx, executable) ], }) }
+export function deleteTake( tx: Transaction, expired: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::kiosk::delete_take`, arguments: [ obj(tx, expired) ], }) }
 
-export function deleteListAction( tx: Transaction, typeArg: string, expired: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::kiosk::delete_list_action`, typeArguments: [typeArg], arguments: [ obj(tx, expired) ], }) }
+export interface DoListArgs { executable: TransactionObjectInput; account: TransactionObjectInput; kiosk: TransactionObjectInput; versionWitness: TransactionObjectInput; intentWitness: GenericArg }
 
-export function deleteTakeAction( tx: Transaction, typeArg: string, expired: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::kiosk::delete_take_action`, typeArguments: [typeArg], arguments: [ obj(tx, expired) ], }) }
+export function doList( tx: Transaction, typeArgs: [string, string, string, string], args: DoListArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::kiosk::do_list`, typeArguments: typeArgs, arguments: [ obj(tx, args.executable), obj(tx, args.account), obj(tx, args.kiosk), obj(tx, args.versionWitness), generic(tx, `${typeArgs[3]}`, args.intentWitness) ], }) }
 
-export interface DoListArgs { executable: TransactionObjectInput; account: TransactionObjectInput; kiosk: TransactionObjectInput; version: TransactionObjectInput; witness: GenericArg }
+export interface DoTakeArgs { executable: TransactionObjectInput; account: TransactionObjectInput; accountKiosk: TransactionObjectInput; recipientKiosk: TransactionObjectInput; recipientCap: TransactionObjectInput; policy: TransactionObjectInput; versionWitness: TransactionObjectInput; intentWitness: GenericArg }
 
-export function doList( tx: Transaction, typeArgs: [string, string, string, string], args: DoListArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::kiosk::do_list`, typeArguments: typeArgs, arguments: [ obj(tx, args.executable), obj(tx, args.account), obj(tx, args.kiosk), obj(tx, args.version), generic(tx, `${typeArgs[3]}`, args.witness) ], }) }
+export function doTake( tx: Transaction, typeArgs: [string, string, string, string], args: DoTakeArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::kiosk::do_take`, typeArguments: typeArgs, arguments: [ obj(tx, args.executable), obj(tx, args.account), obj(tx, args.accountKiosk), obj(tx, args.recipientKiosk), obj(tx, args.recipientCap), obj(tx, args.policy), obj(tx, args.versionWitness), generic(tx, `${typeArgs[3]}`, args.intentWitness) ], }) }
 
-export interface DoTakeArgs { executable: TransactionObjectInput; account: TransactionObjectInput; accountKiosk: TransactionObjectInput; recipientKiosk: TransactionObjectInput; recipientCap: TransactionObjectInput; policy: TransactionObjectInput; version: TransactionObjectInput; witness: GenericArg }
+export interface NewListArgs { intent: TransactionObjectInput; account: TransactionObjectInput; name: string | TransactionArgument; nftId: string | TransactionArgument; price: bigint | TransactionArgument; versionWitness: TransactionObjectInput; intentWitness: GenericArg }
 
-export function doTake( tx: Transaction, typeArgs: [string, string, string, string], args: DoTakeArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::kiosk::do_take`, typeArguments: typeArgs, arguments: [ obj(tx, args.executable), obj(tx, args.account), obj(tx, args.accountKiosk), obj(tx, args.recipientKiosk), obj(tx, args.recipientCap), obj(tx, args.policy), obj(tx, args.version), generic(tx, `${typeArgs[3]}`, args.witness) ], }) }
+export function newList( tx: Transaction, typeArgs: [string, string, string], args: NewListArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::kiosk::new_list`, typeArguments: typeArgs, arguments: [ obj(tx, args.intent), obj(tx, args.account), pure(tx, args.name, `${String.$typeName}`), pure(tx, args.nftId, `${ID.$typeName}`), pure(tx, args.price, `u64`), obj(tx, args.versionWitness), generic(tx, `${typeArgs[2]}`, args.intentWitness) ], }) }
 
-export interface ExecuteListArgs { executable: TransactionObjectInput; account: TransactionObjectInput; kiosk: TransactionObjectInput }
+export interface NewTakeArgs { intent: TransactionObjectInput; account: TransactionObjectInput; name: string | TransactionArgument; nftId: string | TransactionArgument; recipient: string | TransactionArgument; versionWitness: TransactionObjectInput; intentWitness: GenericArg }
 
-export function executeList( tx: Transaction, typeArgs: [string, string, string], args: ExecuteListArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::kiosk::execute_list`, typeArguments: typeArgs, arguments: [ obj(tx, args.executable), obj(tx, args.account), obj(tx, args.kiosk) ], }) }
-
-export interface ExecuteTakeArgs { executable: TransactionObjectInput; account: TransactionObjectInput; accountKiosk: TransactionObjectInput; recipientKiosk: TransactionObjectInput; recipientCap: TransactionObjectInput; policy: TransactionObjectInput }
-
-export function executeTake( tx: Transaction, typeArgs: [string, string, string], args: ExecuteTakeArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::kiosk::execute_take`, typeArguments: typeArgs, arguments: [ obj(tx, args.executable), obj(tx, args.account), obj(tx, args.accountKiosk), obj(tx, args.recipientKiosk), obj(tx, args.recipientCap), obj(tx, args.policy) ], }) }
-
-export interface NewListArgs { proposal: TransactionObjectInput; nftId: string | TransactionArgument; price: bigint | TransactionArgument; witness: GenericArg }
-
-export function newList( tx: Transaction, typeArgs: [string, string], args: NewListArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::kiosk::new_list`, typeArguments: typeArgs, arguments: [ obj(tx, args.proposal), pure(tx, args.nftId, `${ID.$typeName}`), pure(tx, args.price, `u64`), generic(tx, `${typeArgs[1]}`, args.witness) ], }) }
-
-export interface NewTakeArgs { proposal: TransactionObjectInput; nftId: string | TransactionArgument; recipient: string | TransactionArgument; witness: GenericArg }
-
-export function newTake( tx: Transaction, typeArgs: [string, string], args: NewTakeArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::kiosk::new_take`, typeArguments: typeArgs, arguments: [ obj(tx, args.proposal), pure(tx, args.nftId, `${ID.$typeName}`), pure(tx, args.recipient, `address`), generic(tx, `${typeArgs[1]}`, args.witness) ], }) }
+export function newTake( tx: Transaction, typeArgs: [string, string, string], args: NewTakeArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::kiosk::new_take`, typeArguments: typeArgs, arguments: [ obj(tx, args.intent), obj(tx, args.account), pure(tx, args.name, `${String.$typeName}`), pure(tx, args.nftId, `${ID.$typeName}`), pure(tx, args.recipient, `address`), obj(tx, args.versionWitness), generic(tx, `${typeArgs[2]}`, args.intentWitness) ], }) }
 
 export interface OpenArgs { auth: TransactionObjectInput; account: TransactionObjectInput; name: string | TransactionArgument }
 
 export function open( tx: Transaction, typeArgs: [string, string], args: OpenArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::kiosk::open`, typeArguments: typeArgs, arguments: [ obj(tx, args.auth), obj(tx, args.account), pure(tx, args.name, `${String.$typeName}`) ], }) }
-
-export interface ProposeListArgs { auth: TransactionObjectInput; account: TransactionObjectInput; outcome: GenericArg; key: string | TransactionArgument; description: string | TransactionArgument; executionTime: bigint | TransactionArgument; expirationTime: bigint | TransactionArgument; kioskName: string | TransactionArgument; nftIds: Array<string | TransactionArgument> | TransactionArgument; prices: Array<bigint | TransactionArgument> | TransactionArgument }
-
-export function proposeList( tx: Transaction, typeArgs: [string, string], args: ProposeListArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::kiosk::propose_list`, typeArguments: typeArgs, arguments: [ obj(tx, args.auth), obj(tx, args.account), generic(tx, `${typeArgs[1]}`, args.outcome), pure(tx, args.key, `${String.$typeName}`), pure(tx, args.description, `${String.$typeName}`), pure(tx, args.executionTime, `u64`), pure(tx, args.expirationTime, `u64`), pure(tx, args.kioskName, `${String.$typeName}`), pure(tx, args.nftIds, `vector<${ID.$typeName}>`), pure(tx, args.prices, `vector<u64>`) ], }) }
-
-export interface ProposeTakeArgs { auth: TransactionObjectInput; account: TransactionObjectInput; outcome: GenericArg; key: string | TransactionArgument; description: string | TransactionArgument; executionTime: bigint | TransactionArgument; expirationTime: bigint | TransactionArgument; kioskName: string | TransactionArgument; nftIds: Array<string | TransactionArgument> | TransactionArgument; recipient: string | TransactionArgument }
-
-export function proposeTake( tx: Transaction, typeArgs: [string, string], args: ProposeTakeArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::kiosk::propose_take`, typeArguments: typeArgs, arguments: [ obj(tx, args.auth), obj(tx, args.account), generic(tx, `${typeArgs[1]}`, args.outcome), pure(tx, args.key, `${String.$typeName}`), pure(tx, args.description, `${String.$typeName}`), pure(tx, args.executionTime, `u64`), pure(tx, args.expirationTime, `u64`), pure(tx, args.kioskName, `${String.$typeName}`), pure(tx, args.nftIds, `vector<${ID.$typeName}>`), pure(tx, args.recipient, `address`) ], }) }
 
 export interface WithdrawProfitsArgs { auth: TransactionObjectInput; account: TransactionObjectInput; kiosk: TransactionObjectInput; name: string | TransactionArgument }
 

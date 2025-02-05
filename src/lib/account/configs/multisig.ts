@@ -2,34 +2,39 @@ import { Transaction, TransactionArgument, TransactionObjectInput, TransactionRe
 import { SuiClient } from "@mysten/sui/client";
 import { Account as AccountRaw } from "../../../.gen/account-protocol/account/structs";
 import { Multisig as MultisigRaw, Approvals as ApprovalsRaw } from "../../../.gen/account-config/multisig/structs";
-import { deleteExpiredOutcome, deleteProposal, newAccount } from "../../../.gen/account-config/multisig/functions";
-import { share } from "../../../.gen/account-protocol/account/functions";
+import { newAccount } from "../../../.gen/account-config/multisig/functions";
 import * as configMultisig from "../../../.gen/account-config/multisig/functions";
-import * as config from "../../../.gen/account-actions/config/functions";
-import { approveProposal, disapproveProposal, executeProposal, authenticate, emptyOutcome, join, leave } from "../../../.gen/account-config/multisig/functions"
+import * as config from "../../../.gen/account-protocol/config/functions";
+import { approveIntent, disapproveIntent, executeIntent, authenticate, emptyOutcome, join, leave } from "../../../.gen/account-config/multisig/functions"
 import { DepFields } from "../../../.gen/account-protocol/deps/structs";
 import { MemberFields, RoleFields } from "../../../.gen/account-config/multisig/structs";
-import { ProposalFields as ProposalFieldsRaw } from "../../../.gen/account-protocol/proposals/structs";
-import { CLOCK, EXTENSIONS, MULTISIG_GENERICS } from "../../../types/constants";
+import { IntentFields as IntentFieldsRaw } from "../../../.gen/account-protocol/intents/structs";
+import { CLOCK, EXTENSIONS, MULTISIG_GENERICS, SUI_FRAMEWORK } from "../../../types/constants";
 import { User } from "../../user";
-import { Proposal } from "../../proposals/proposal";
-import { ConfigDepsProposal } from "../../proposals/account-actions/config";
+import { Intent, IntentStatus } from "../../intents/intent";
 import { AccountType } from "../../../types/account-types";
-import { ConfigDepsArgs, ConfigMultisigArgs, ProposalArgs, ProposalFields, ProposalTypes } from "../../../types/proposal-types";
+import { ConfigDepsArgs, ConfigMultisigArgs, IntentArgs, IntentFields, IntentTypes } from "../../../types/intent-types";
 import { TransactionPureInput } from "src/types/helper-types";
-import { BurnProposal, MintProposal, UpdateProposal } from "../../proposals/account-actions/currency";
+// import { BurnProposal, MintProposal, UpdateProposal } from "../../intents/account-actions/currency";
 import { Account, Dep } from "../account";
-import { Outcome } from "src/lib/proposals/outcome";
-import { Approvals } from "src/lib/proposals/outcomes/approvals";
-import { ConfigMultisigProposal } from "src/lib/proposals/account-actions/multisig";
+import { Outcome } from "src/lib/outcomes/variants/outcome";
+import { Approvals } from "src/lib/outcomes/variants/approvals";
+import { ConfigMultisigIntent } from "src/lib/intents/account-actions/multisig";
+import { ConfigDepsIntent } from "../../intents/account-actions/config";
 import { AccountData } from "../account";
 import { Managed } from "src/lib/objects/managed";
+import { BorrowCapIntent } from "src/lib/intents/account-actions/access-control";
+import { DisableRulesIntent, MintAndTransferIntent, MintAndVestIntent, UpdateMetadataIntent, WithdrawAndBurnIntent } from "src/lib/intents/account-actions/currency";
+import { TakeNftsIntent, ListNftsIntent } from "src/lib/intents/account-actions/kiosk";
+import { WithdrawAndTransferIntent, WithdrawAndTransferToVaultIntent, WithdrawAndVestIntent } from "src/lib/intents/account-actions/owned";
+import { SpendAndTransferIntent, SpendAndVestIntent } from "src/lib/intents/account-actions/vault";
+import { UpgradePackageIntent, RestrictPolicyIntent } from "src/lib/intents/account-actions/package-upgrade";
 
 export type MultisigData = AccountData & {
     global: Role;
     roles: Record<string, Role>;
     members: MemberUser[];
-    proposals: Proposal[];
+    intents: Intent[];
 }
 
 export type Role = {
@@ -121,22 +126,22 @@ export class Multisig extends Account implements MultisigData {
             roles[role.name] = { threshold: Number(role.threshold), totalWeight: roleWeights[role.name] || 0 };
         });
         // get Proposals with actions
-        const proposals = await Promise.all(multisigAccount!.proposals.inner.map(async (fieldsRaw: ProposalFieldsRaw<ApprovalsRaw>) => {
+        const intents = await Promise.all(multisigAccount!.intents.inner.map(async (fieldsRaw: IntentFieldsRaw<ApprovalsRaw>) => {
             const outcome = new Approvals(id, fieldsRaw.key, Number(fieldsRaw.outcome.totalWeight), Number(fieldsRaw.outcome.roleWeight), fieldsRaw.outcome.approved.contents);
-            const fields: ProposalFields = {
+            const fields: IntentFields = {
                 issuer: {
                     accountAddr: fieldsRaw.issuer.accountAddr,
-                    roleType: fieldsRaw.issuer.roleType.name,
-                    roleName: fieldsRaw.issuer.roleName,
+                    intentType: fieldsRaw.issuer.intentType.name,
                 },
                 key: fieldsRaw.key,
                 description: fieldsRaw.description,
-                executionTime: Number(fieldsRaw.executionTime),
-                expirationTime: Number(fieldsRaw.expirationTime),
+                executionTimes: fieldsRaw.executionTimes,
+                expirationTime: fieldsRaw.expirationTime,
+                role: fieldsRaw.role,
                 actionsId: fieldsRaw.actions.id,
             }
 
-            return await this.initProposalWithActions(this.client, outcome, fields);
+            return await this.fetchIntentWithActions(this.client, outcome, fields);
         }));
 
         // get managed assets
@@ -149,7 +154,7 @@ export class Multisig extends Account implements MultisigData {
             global,
             roles,
             members,
-            proposals,
+            intents,
             managedAssets,
         }
     }
@@ -165,7 +170,7 @@ export class Multisig extends Account implements MultisigData {
         this.global = multisig.global;
         this.roles = multisig.roles;
         this.members = multisig.members;
-        this.proposals = multisig.proposals;
+        this.intents = multisig.intents;
         this.managedAssets = multisig.managedAssets;
     }
 
@@ -177,39 +182,70 @@ export class Multisig extends Account implements MultisigData {
             global: this.global,
             roles: this.roles,
             members: this.members,
-            proposals: this.proposals,
+            intents: this.intents,
             managedAssets: this.managedAssets,
         }
     }
 
-    getProposal(key: string): Proposal {
-        const proposal = this.proposals?.find(p => p.fields.key == key);
-        if (!proposal) {
-            throw new Error(`Proposal with key ${key} not found.`);
-        }
-        return proposal;
-    }
-
-    getMemberWeight(addr: string): number {
+    member(addr: string): MemberUser {
         const member = this.members?.find(m => m.address == addr);
         if (!member) {
             throw new Error(`Member with address ${addr} not found.`);
         }
-        return member.weight;
+        return member;
     }
+
+    intent(key: string): Intent {
+        const intent = this.intents?.find(p => p.fields.key == key);
+        if (!intent) {
+            throw new Error(`Intent with key ${key} not found.`);
+        }
+        return intent;
+    }
+
+    intentStatus(key: string): IntentStatus {
+        const intent = this.intent(key);
+        const now = Date.now();
+
+        // Check expiration first
+        if (intent.fields.expirationTime < now) {
+            return IntentStatus.Expired;
+        }
+
+        // Check if intent has reached threshold
+        const approvals = intent.outcome as Approvals;
+        const hasReachedThreshold =
+            approvals.totalWeight >= this.global.threshold ||
+            approvals.roleWeight >= this.roles[intent.fields.role].threshold;
+
+        // If threshold is reached, check execution time
+        if (hasReachedThreshold) {
+            return intent.fields.executionTimes[0] <= now
+                ? IntentStatus.Executable
+                : IntentStatus.Approved;
+        }
+
+        return IntentStatus.Pending;
+    }
+
 
     newMultisig(
         tx: Transaction,
-        name: string,
     ): TransactionResult {
         return newAccount(
             tx,
-            { extensions: EXTENSIONS, name }
+            EXTENSIONS
         );
     }
 
     shareMultisig(tx: Transaction, account: TransactionArgument): TransactionResult {
-        return share(tx, MULTISIG_GENERICS, account);
+        return tx.moveCall({
+            package: SUI_FRAMEWORK,
+            module: "transfer",
+            function: "public_share",
+            typeArguments: MULTISIG_GENERICS,
+            arguments: [account],
+        });
     }
 
     joinMultisig(tx: Transaction, user: TransactionPureInput, account: TransactionObjectInput): TransactionResult {
@@ -220,69 +256,52 @@ export class Multisig extends Account implements MultisigData {
         return leave(tx, { user, account });
     }
 
-    authenticate(tx: Transaction, role: string, account: TransactionObjectInput = this.id): TransactionResult {
+    authenticate(tx: Transaction, account: TransactionObjectInput = this.id): TransactionResult {
         if (!account && !this.id) throw new Error("No multisig account provided");
-        return authenticate(tx, { extensions: EXTENSIONS, account, role });
+        return authenticate(tx, account);
     }
 
-    emptyOutcome(tx: Transaction, account: TransactionObjectInput = this.id): TransactionResult {
-        if (!account && !this.id) throw new Error("No multisig account provided");
-        return emptyOutcome(tx, account);
+    emptyOutcome(tx: Transaction): TransactionResult {
+        return emptyOutcome(tx);
     }
 
-    approveProposal(
+    approveIntent(
         tx: Transaction,
         key: string,
         account: TransactionObjectInput = this.id,
     ): TransactionResult {
         if (!account && !this.id) throw new Error("No multisig account provided");
-        return approveProposal(tx, { account, key });
+        return approveIntent(tx, { account, key });
     }
 
-    disapproveProposal(
+    disapproveIntent(
         tx: Transaction,
         key: string,
         account: TransactionObjectInput = this.id,
     ): TransactionResult {
         if (!account && !this.id) throw new Error("No multisig account provided");
-        return disapproveProposal(tx, { account, key });
+        return disapproveIntent(tx, { account, key });
     }
 
-    executeProposal(
+    executeIntent(
         tx: Transaction,
         key: string,
         account: TransactionObjectInput = this.id,
     ): TransactionResult {
         if (!account && !this.id) throw new Error("No multisig account provided");
-        return executeProposal(tx, { account, key, clock: CLOCK });
-    }
-    
-    deleteProposal(
-        tx: Transaction,
-        key: string,
-        account: TransactionObjectInput = this.id,
-    ): TransactionResult {
-        if (!account && !this.id) throw new Error("No multisig account provided");
-        return deleteProposal(tx, { account, key, clock: CLOCK });
-    }
-
-    deleteExpiredOutcome(
-        tx: Transaction,
-        expired: TransactionObjectInput,
-    ): TransactionResult {
-        return deleteExpiredOutcome(tx, expired);
+        return executeIntent(tx, { account, key, clock: CLOCK });
     }
 
     // === Atomic Proposals ===
 
     configMultisig(
         tx: Transaction,
-        proposalArgs: ProposalArgs,
+        intentArgs: IntentArgs,
         actionsArgs: ConfigMultisigArgs,
         account: TransactionObjectInput = this.id, // need for adding members upon creation
     ): TransactionResult {
         this.assertMultisig();
-        this.assertKey(proposalArgs);
+        this.assertKey(intentArgs);
 
         let addresses: string[] = [];
         let weights: bigint[] = [];
@@ -306,19 +325,19 @@ export class Multisig extends Account implements MultisigData {
             });
         }
 
-        const auth = this.authenticate(tx, "", account);
-        const outcome = this.emptyOutcome(tx, account);
+        const auth = this.authenticate(tx, account);
+        const outcome = this.emptyOutcome(tx);
 
-        configMultisig.proposeConfigMultisig(
+        configMultisig.requestConfigMultisig(
             tx,
             {
                 auth,
                 account,
                 outcome,
-                key: proposalArgs.key,
-                description: proposalArgs.description ?? "",
-                executionTime: BigInt(proposalArgs.executionTime ?? 0),
-                expirationTime: BigInt(proposalArgs.expirationTime ?? Math.floor(Date.now()) + 7*24*60*60*1000),
+                key: intentArgs.key,
+                description: intentArgs.description ?? "",
+                executionTime: intentArgs.executionTimes?.[0] ?? 0n,
+                expirationTime: intentArgs.expirationTime ?? BigInt(Math.floor(Date.now()) + 7 * 24 * 60 * 60 * 1000),
                 addresses,
                 weights,
                 roles,
@@ -328,9 +347,9 @@ export class Multisig extends Account implements MultisigData {
             }
         );
 
-        this.approveProposal(tx, proposalArgs.key, account);
-        const executable = this.executeProposal(tx, proposalArgs.key, account);
-        
+        this.approveIntent(tx, intentArgs.key, account);
+        const executable = this.executeIntent(tx, intentArgs.key, account);
+
         return configMultisig.executeConfigMultisig(tx, { executable, account });
     }
 
@@ -338,12 +357,12 @@ export class Multisig extends Account implements MultisigData {
         tx: Transaction,
         auth: TransactionObjectInput,
         outcome: TransactionObjectInput,
-        proposalArgs: ProposalArgs,
+        intentArgs: IntentArgs,
         actionsArgs: ConfigDepsArgs,
         account: TransactionObjectInput = this.id, // need for adding deps upon creation
     ): TransactionResult {
         this.assertMultisig();
-        this.assertKey(proposalArgs);
+        this.assertKey(intentArgs);
 
         const names: string[] = [];
         const addresses: string[] = [];
@@ -354,17 +373,17 @@ export class Multisig extends Account implements MultisigData {
             versions.push(BigInt(dep.version));
         });
 
-        config.proposeConfigDeps(
+        config.requestConfigDeps(
             tx,
             MULTISIG_GENERICS,
             {
                 auth,
                 account,
                 outcome,
-                key: proposalArgs.key,
-                description: proposalArgs.description ?? "",
-                executionTime: BigInt(proposalArgs.executionTime ?? 0),
-                expirationTime: BigInt(proposalArgs.expirationTime ?? Math.floor(Date.now()) + 7*24*60*60*1000),
+                key: intentArgs.key,
+                description: intentArgs.description ?? "",
+                executionTime: intentArgs.executionTimes?.[0] ?? 0n,
+                expirationTime: intentArgs.expirationTime ?? BigInt(Math.floor(Date.now()) + 7 * 24 * 60 * 60 * 1000),
                 extensions: EXTENSIONS,
                 names,
                 addresses,
@@ -372,86 +391,86 @@ export class Multisig extends Account implements MultisigData {
             }
         );
 
-        this.approveProposal(tx, proposalArgs.key);
-        const executable = this.executeProposal(tx, proposalArgs.key);
+        this.approveIntent(tx, intentArgs.key);
+        const executable = this.executeIntent(tx, intentArgs.key);
 
         return config.executeConfigDeps(tx, MULTISIG_GENERICS, { executable, account });
     }
 
     // mint(
     //     tx: Transaction,
-    //     proposalArgs: ProposalArgs,
+    //     intentArgs: IntentArgs,
     //     actionsArgs: MintArgs,
     //     multisig: TransactionObjectInput = this.id,
     // ): TransactionResult {
     //     this.assertMultisig();
-    //     this.assertKey(proposalArgs);
+    //     this.assertKey(intentArgs);
 
     //     currency.proposeMint(
     //         tx,
     //         actionsArgs.coinType,
     //         {
     //             multisig: this.id,
-    //             key: proposalArgs.key,
-    //             description: proposalArgs.description ?? "",
-    //             executionTime: BigInt(proposalArgs.executionTime ?? 0),
-    //             expirationEpoch: BigInt(proposalArgs.expirationEpoch ?? this.epoch + 7),
+    //             key: intentArgs.key,
+    //             description: intentArgs.description ?? "",
+    //             executionTime: BigInt(intentArgs.executionTime ?? 0),
+    //             expirationEpoch: BigInt(intentArgs.expirationEpoch ?? this.epoch + 7),
     //             amount: BigInt(actionsArgs.amount),
     //         }
     //     );
 
-    //     this.approveProposal(tx, proposalArgs.key);
-    //     const executable = this.executeProposal(tx, proposalArgs.key);
+    //     this.approveIntent(tx, intentArgs.key);
+    //     const executable = this.executeIntent(tx, intentArgs.key);
 
     //     return currency.executeMint(tx, actionsArgs.coinType, { executable, multisig });
     // }
 
     // burn(
     //     tx: Transaction,
-    //     proposalArgs: ProposalArgs,
+    //     intentArgs: IntentArgs,
     //     actionsArgs: BurnArgs,
     // ): TransactionResult {
     //     this.assertMultisig();
-    //     this.assertKey(proposalArgs);
+    //     this.assertKey(intentArgs);
 
     //     currency.proposeBurn(
     //         tx,
     //         actionsArgs.coinType,
     //         {
     //             multisig: this.id,
-    //             key: proposalArgs.key,
-    //             description: proposalArgs.description ?? "",
-    //             executionTime: BigInt(proposalArgs.executionTime ?? 0),
-    //             expirationEpoch: BigInt(proposalArgs.expirationEpoch ?? this.epoch + 7),
+    //             key: intentArgs.key,
+    //             description: intentArgs.description ?? "",
+    //             executionTime: BigInt(intentArgs.executionTime ?? 0),
+    //             expirationEpoch: BigInt(intentArgs.expirationEpoch ?? this.epoch + 7),
     //             coinId: actionsArgs.coinId,
     //             amount: BigInt(actionsArgs.amount),
     //         }
     //     );
 
-    //     this.approveProposal(tx, proposalArgs.key);
-    //     const executable = this.executeProposal(tx, proposalArgs.key);
+    //     this.approveIntent(tx, intentArgs.key);
+    //     const executable = this.executeIntent(tx, intentArgs.key);
 
     //     return currency.executeBurn(tx, actionsArgs.coinType, { executable, multisig: this.id, receiving: actionsArgs.coinId });
     // }
 
     // update(
     //     tx: Transaction,
-    //     proposalArgs: ProposalArgs,
+    //     intentArgs: IntentArgs,
     //     actionsArgs: UpdateArgs,
     //     metadata: string, // CoinMetadata<CoinType> ID
     // ): TransactionResult {
     //     this.assertMultisig();
-    //     this.assertKey(proposalArgs);
+    //     this.assertKey(intentArgs);
 
     //     currency.proposeUpdate(
     //         tx,
     //         actionsArgs.coinType,
     //         {
     //             multisig: this.id,
-    //             key: proposalArgs.key,
-    //             description: proposalArgs.description ?? "",
-    //             executionTime: BigInt(proposalArgs.executionTime ?? 0),
-    //             expirationEpoch: BigInt(proposalArgs.expirationEpoch ?? this.epoch + 7),
+    //             key: intentArgs.key,
+    //             description: intentArgs.description ?? "",
+    //             executionTime: BigInt(intentArgs.executionTime ?? 0),
+    //             expirationEpoch: BigInt(intentArgs.expirationEpoch ?? this.epoch + 7),
     //             mdName: actionsArgs.name,
     //             mdSymbol: actionsArgs.symbol,
     //             mdDescription: actionsArgs.description,
@@ -459,8 +478,8 @@ export class Multisig extends Account implements MultisigData {
     //         }
     //     );
 
-    //     this.approveProposal(tx, proposalArgs.key);
-    //     const executable = this.executeProposal(tx, proposalArgs.key);
+    //     this.approveIntent(tx, intentArgs.key);
+    //     const executable = this.executeIntent(tx, intentArgs.key);
 
     //     return currency.executeUpdate(tx, actionsArgs.coinType, { executable, multisig: this.id, metadata });
     // }
@@ -486,8 +505,8 @@ export class Multisig extends Account implements MultisigData {
     // 		}
     // 	);
 
-    // 	this.approveProposal(tx, args.key);
-    // 	const executable = this.executeProposal(tx, args.key);
+    // 	this.approveIntent(tx, args.key);
+    // 	const executable = this.executeIntent(tx, args.key);
 
     // 	return kiosk.executeTake(tx, { executable, multisig: this.id });
     // }
@@ -500,30 +519,53 @@ export class Multisig extends Account implements MultisigData {
         }
     }
 
-    assertKey(args: ProposalArgs) {
+    assertKey(args: IntentArgs) {
         if (!args.key) throw new Error("Key is required.");
     }
 
-    // Factory function to create the appropriate proposal type
-    async initProposalWithActions(
+    // Factory function to create the appropriate intent type
+    async fetchIntentWithActions(
         client: SuiClient,
         outcome: Outcome,
-        fields: ProposalFields
-    ): Promise<Proposal> {
-        switch (fields.issuer.roleType) {
-            case ProposalTypes.ConfigMultisig:
-                return await ConfigMultisigProposal.init(client, this.id, outcome, fields);
-            case ProposalTypes.ConfigDeps:
-                return await ConfigDepsProposal.init(client, this.id, outcome, fields);
-            case ProposalTypes.Mint:
-                return await MintProposal.init(client, this.id, outcome, fields);
-            case ProposalTypes.Burn:
-                return await BurnProposal.init(client, this.id, outcome, fields);
-            case ProposalTypes.Update:
-                return await UpdateProposal.init(client, this.id, outcome, fields);
-            // ... other cases for different proposal types
+        fields: IntentFields
+    ): Promise<Intent> {
+        switch (fields.issuer.intentType) {
+            case IntentTypes.ConfigDeps:
+                return await ConfigDepsIntent.init(client, this.id, outcome, fields);
+            case IntentTypes.ConfigMultisig:
+                return await ConfigMultisigIntent.init(client, this.id, outcome, fields);
+            case IntentTypes.BorrowCap:
+                return await BorrowCapIntent.init(client, this.id, outcome, fields);
+            case IntentTypes.DisableRules:
+                return await DisableRulesIntent.init(client, this.id, outcome, fields);
+            case IntentTypes.UpdateMetadata:
+                return await UpdateMetadataIntent.init(client, this.id, outcome, fields);
+            case IntentTypes.MintAndTransfer:
+                return await MintAndTransferIntent.init(client, this.id, outcome, fields);
+            case IntentTypes.MintAndVest:
+                return await MintAndVestIntent.init(client, this.id, outcome, fields);
+            case IntentTypes.WithdrawAndBurn:
+                return await WithdrawAndBurnIntent.init(client, this.id, outcome, fields);
+            case IntentTypes.TakeNfts:
+                return await TakeNftsIntent.init(client, this.id, outcome, fields);
+            case IntentTypes.ListNfts:
+                return await ListNftsIntent.init(client, this.id, outcome, fields);
+            case IntentTypes.WithdrawAndTransferToVault:
+                return await WithdrawAndTransferToVaultIntent.init(client, this.id, outcome, fields);
+            case IntentTypes.WithdrawAndTransfer:
+                return await WithdrawAndTransferIntent.init(client, this.id, outcome, fields);
+            case IntentTypes.WithdrawAndVest:
+                return await WithdrawAndVestIntent.init(client, this.id, outcome, fields);
+            case IntentTypes.UpgradePackage:
+                return await UpgradePackageIntent.init(client, this.id, outcome, fields);
+            case IntentTypes.RestrictPolicy:
+                return await RestrictPolicyIntent.init(client, this.id, outcome, fields);
+            case IntentTypes.SpendAndTransfer:
+                return await SpendAndTransferIntent.init(client, this.id, outcome, fields);
+            case IntentTypes.SpendAndVest:
+                return await SpendAndVestIntent.init(client, this.id, outcome, fields);
             default:
-                throw new Error(`Proposal type ${fields.issuer.roleType} not supported.`);
+                throw new Error(`Intent type ${fields.issuer.intentType} not supported.`);
         }
     }
 }

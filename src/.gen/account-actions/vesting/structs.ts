@@ -145,47 +145,47 @@ export class Stream<CoinType extends PhantomTypeArgument> implements StructClass
 
  }
 
-/* ============================== VestingAction =============================== */
+/* ============================== VestAction =============================== */
 
-export function isVestingAction(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::vesting::VestingAction`; }
+export function isVestAction(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::vesting::VestAction`; }
 
-export interface VestingActionFields { startTimestamp: ToField<"u64">; endTimestamp: ToField<"u64">; recipient: ToField<"address"> }
+export interface VestActionFields { startTimestamp: ToField<"u64">; endTimestamp: ToField<"u64">; recipient: ToField<"address"> }
 
-export type VestingActionReified = Reified< VestingAction, VestingActionFields >;
+export type VestActionReified = Reified< VestAction, VestActionFields >;
 
-export class VestingAction implements StructClass { __StructClass = true as const;
+export class VestAction implements StructClass { __StructClass = true as const;
 
- static readonly $typeName = `${PKG_V1}::vesting::VestingAction`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
+ static readonly $typeName = `${PKG_V1}::vesting::VestAction`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
 
- readonly $typeName = VestingAction.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::vesting::VestingAction`; readonly $typeArgs: []; readonly $isPhantom = VestingAction.$isPhantom;
+ readonly $typeName = VestAction.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::vesting::VestAction`; readonly $typeArgs: []; readonly $isPhantom = VestAction.$isPhantom;
 
  readonly startTimestamp: ToField<"u64">; readonly endTimestamp: ToField<"u64">; readonly recipient: ToField<"address">
 
- private constructor(typeArgs: [], fields: VestingActionFields, ) { this.$fullTypeName = composeSuiType( VestingAction.$typeName, ...typeArgs ) as `${typeof PKG_V1}::vesting::VestingAction`; this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [], fields: VestActionFields, ) { this.$fullTypeName = composeSuiType( VestAction.$typeName, ...typeArgs ) as `${typeof PKG_V1}::vesting::VestAction`; this.$typeArgs = typeArgs;
 
  this.startTimestamp = fields.startTimestamp;; this.endTimestamp = fields.endTimestamp;; this.recipient = fields.recipient; }
 
- static reified( ): VestingActionReified { return { typeName: VestingAction.$typeName, fullTypeName: composeSuiType( VestingAction.$typeName, ...[] ) as `${typeof PKG_V1}::vesting::VestingAction`, typeArgs: [ ] as [], isPhantom: VestingAction.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => VestingAction.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => VestingAction.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => VestingAction.fromBcs( data, ), bcs: VestingAction.bcs, fromJSONField: (field: any) => VestingAction.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => VestingAction.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => VestingAction.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => VestingAction.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => VestingAction.fetch( client, id, ), new: ( fields: VestingActionFields, ) => { return new VestingAction( [], fields ) }, kind: "StructClassReified", } }
+ static reified( ): VestActionReified { return { typeName: VestAction.$typeName, fullTypeName: composeSuiType( VestAction.$typeName, ...[] ) as `${typeof PKG_V1}::vesting::VestAction`, typeArgs: [ ] as [], isPhantom: VestAction.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => VestAction.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => VestAction.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => VestAction.fromBcs( data, ), bcs: VestAction.bcs, fromJSONField: (field: any) => VestAction.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => VestAction.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => VestAction.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => VestAction.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => VestAction.fetch( client, id, ), new: ( fields: VestActionFields, ) => { return new VestAction( [], fields ) }, kind: "StructClassReified", } }
 
- static get r() { return VestingAction.reified() }
+ static get r() { return VestAction.reified() }
 
- static phantom( ): PhantomReified<ToTypeStr<VestingAction>> { return phantom(VestingAction.reified( )); } static get p() { return VestingAction.phantom() }
+ static phantom( ): PhantomReified<ToTypeStr<VestAction>> { return phantom(VestAction.reified( )); } static get p() { return VestAction.phantom() }
 
- static get bcs() { return bcs.struct("VestingAction", {
+ static get bcs() { return bcs.struct("VestAction", {
 
  start_timestamp: bcs.u64(), end_timestamp: bcs.u64(), recipient: bcs.bytes(32).transform({ input: (val: string) => fromHEX(val), output: (val: Uint8Array) => toHEX(val), })
 
 }) };
 
- static fromFields( fields: Record<string, any> ): VestingAction { return VestingAction.reified( ).new( { startTimestamp: decodeFromFields("u64", fields.start_timestamp), endTimestamp: decodeFromFields("u64", fields.end_timestamp), recipient: decodeFromFields("address", fields.recipient) } ) }
+ static fromFields( fields: Record<string, any> ): VestAction { return VestAction.reified( ).new( { startTimestamp: decodeFromFields("u64", fields.start_timestamp), endTimestamp: decodeFromFields("u64", fields.end_timestamp), recipient: decodeFromFields("address", fields.recipient) } ) }
 
- static fromFieldsWithTypes( item: FieldsWithTypes ): VestingAction { if (!isVestingAction(item.type)) { throw new Error("not a VestingAction type");
+ static fromFieldsWithTypes( item: FieldsWithTypes ): VestAction { if (!isVestAction(item.type)) { throw new Error("not a VestAction type");
 
  }
 
- return VestingAction.reified( ).new( { startTimestamp: decodeFromFieldsWithTypes("u64", item.fields.start_timestamp), endTimestamp: decodeFromFieldsWithTypes("u64", item.fields.end_timestamp), recipient: decodeFromFieldsWithTypes("address", item.fields.recipient) } ) }
+ return VestAction.reified( ).new( { startTimestamp: decodeFromFieldsWithTypes("u64", item.fields.start_timestamp), endTimestamp: decodeFromFieldsWithTypes("u64", item.fields.end_timestamp), recipient: decodeFromFieldsWithTypes("address", item.fields.recipient) } ) }
 
- static fromBcs( data: Uint8Array ): VestingAction { return VestingAction.fromFields( VestingAction.bcs.parse(data) ) }
+ static fromBcs( data: Uint8Array ): VestAction { return VestAction.fromFields( VestAction.bcs.parse(data) ) }
 
  toJSONField() { return {
 
@@ -195,20 +195,20 @@ export class VestingAction implements StructClass { __StructClass = true as cons
 
  toJSON() { return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() } }
 
- static fromJSONField( field: any ): VestingAction { return VestingAction.reified( ).new( { startTimestamp: decodeFromJSONField("u64", field.startTimestamp), endTimestamp: decodeFromJSONField("u64", field.endTimestamp), recipient: decodeFromJSONField("address", field.recipient) } ) }
+ static fromJSONField( field: any ): VestAction { return VestAction.reified( ).new( { startTimestamp: decodeFromJSONField("u64", field.startTimestamp), endTimestamp: decodeFromJSONField("u64", field.endTimestamp), recipient: decodeFromJSONField("address", field.recipient) } ) }
 
- static fromJSON( json: Record<string, any> ): VestingAction { if (json.$typeName !== VestingAction.$typeName) { throw new Error("not a WithTwoGenerics json object") };
+ static fromJSON( json: Record<string, any> ): VestAction { if (json.$typeName !== VestAction.$typeName) { throw new Error("not a WithTwoGenerics json object") };
 
- return VestingAction.fromJSONField( json, ) }
+ return VestAction.fromJSONField( json, ) }
 
- static fromSuiParsedData( content: SuiParsedData ): VestingAction { if (content.dataType !== "moveObject") { throw new Error("not an object"); } if (!isVestingAction(content.type)) { throw new Error(`object at ${(content.fields as any).id} is not a VestingAction object`); } return VestingAction.fromFieldsWithTypes( content ); }
+ static fromSuiParsedData( content: SuiParsedData ): VestAction { if (content.dataType !== "moveObject") { throw new Error("not an object"); } if (!isVestAction(content.type)) { throw new Error(`object at ${(content.fields as any).id} is not a VestAction object`); } return VestAction.fromFieldsWithTypes( content ); }
 
- static fromSuiObjectData( data: SuiObjectData ): VestingAction { if (data.bcs) { if (data.bcs.dataType !== "moveObject" || !isVestingAction(data.bcs.type)) { throw new Error(`object at is not a VestingAction object`); }
+ static fromSuiObjectData( data: SuiObjectData ): VestAction { if (data.bcs) { if (data.bcs.dataType !== "moveObject" || !isVestAction(data.bcs.type)) { throw new Error(`object at is not a VestAction object`); }
 
- return VestingAction.fromBcs( fromB64(data.bcs.bcsBytes) ); } if (data.content) { return VestingAction.fromSuiParsedData( data.content ) } throw new Error( "Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request." ); }
+ return VestAction.fromBcs( fromB64(data.bcs.bcsBytes) ); } if (data.content) { return VestAction.fromSuiParsedData( data.content ) } throw new Error( "Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request." ); }
 
- static async fetch( client: SuiClient, id: string ): Promise<VestingAction> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching VestingAction object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isVestingAction(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a VestingAction object`); }
+ static async fetch( client: SuiClient, id: string ): Promise<VestAction> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching VestAction object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isVestAction(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a VestAction object`); }
 
- return VestingAction.fromSuiObjectData( res.data ); }
+ return VestAction.fromSuiObjectData( res.data ); }
 
  }

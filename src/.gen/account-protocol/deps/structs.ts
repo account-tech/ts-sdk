@@ -80,7 +80,7 @@ export class Dep implements StructClass { __StructClass = true as const;
 
 export function isDeps(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::deps::Deps`; }
 
-export interface DepsFields { inner: ToField<Vector<Dep>> }
+export interface DepsFields { inner: ToField<Vector<Dep>>; unverifiedAllowed: ToField<"bool"> }
 
 export type DepsReified = Reified< Deps, DepsFields >;
 
@@ -90,11 +90,11 @@ export class Deps implements StructClass { __StructClass = true as const;
 
  readonly $typeName = Deps.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::deps::Deps`; readonly $typeArgs: []; readonly $isPhantom = Deps.$isPhantom;
 
- readonly inner: ToField<Vector<Dep>>
+ readonly inner: ToField<Vector<Dep>>; readonly unverifiedAllowed: ToField<"bool">
 
  private constructor(typeArgs: [], fields: DepsFields, ) { this.$fullTypeName = composeSuiType( Deps.$typeName, ...typeArgs ) as `${typeof PKG_V1}::deps::Deps`; this.$typeArgs = typeArgs;
 
- this.inner = fields.inner; }
+ this.inner = fields.inner;; this.unverifiedAllowed = fields.unverifiedAllowed; }
 
  static reified( ): DepsReified { return { typeName: Deps.$typeName, fullTypeName: composeSuiType( Deps.$typeName, ...[] ) as `${typeof PKG_V1}::deps::Deps`, typeArgs: [ ] as [], isPhantom: Deps.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => Deps.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => Deps.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => Deps.fromBcs( data, ), bcs: Deps.bcs, fromJSONField: (field: any) => Deps.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => Deps.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => Deps.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => Deps.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => Deps.fetch( client, id, ), new: ( fields: DepsFields, ) => { return new Deps( [], fields ) }, kind: "StructClassReified", } }
 
@@ -104,29 +104,29 @@ export class Deps implements StructClass { __StructClass = true as const;
 
  static get bcs() { return bcs.struct("Deps", {
 
- inner: bcs.vector(Dep.bcs)
+ inner: bcs.vector(Dep.bcs), unverified_allowed: bcs.bool()
 
 }) };
 
- static fromFields( fields: Record<string, any> ): Deps { return Deps.reified( ).new( { inner: decodeFromFields(reified.vector(Dep.reified()), fields.inner) } ) }
+ static fromFields( fields: Record<string, any> ): Deps { return Deps.reified( ).new( { inner: decodeFromFields(reified.vector(Dep.reified()), fields.inner), unverifiedAllowed: decodeFromFields("bool", fields.unverified_allowed) } ) }
 
  static fromFieldsWithTypes( item: FieldsWithTypes ): Deps { if (!isDeps(item.type)) { throw new Error("not a Deps type");
 
  }
 
- return Deps.reified( ).new( { inner: decodeFromFieldsWithTypes(reified.vector(Dep.reified()), item.fields.inner) } ) }
+ return Deps.reified( ).new( { inner: decodeFromFieldsWithTypes(reified.vector(Dep.reified()), item.fields.inner), unverifiedAllowed: decodeFromFieldsWithTypes("bool", item.fields.unverified_allowed) } ) }
 
  static fromBcs( data: Uint8Array ): Deps { return Deps.fromFields( Deps.bcs.parse(data) ) }
 
  toJSONField() { return {
 
- inner: fieldToJSON<Vector<Dep>>(`vector<${Dep.$typeName}>`, this.inner),
+ inner: fieldToJSON<Vector<Dep>>(`vector<${Dep.$typeName}>`, this.inner),unverifiedAllowed: this.unverifiedAllowed,
 
 } }
 
  toJSON() { return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() } }
 
- static fromJSONField( field: any ): Deps { return Deps.reified( ).new( { inner: decodeFromJSONField(reified.vector(Dep.reified()), field.inner) } ) }
+ static fromJSONField( field: any ): Deps { return Deps.reified( ).new( { inner: decodeFromJSONField(reified.vector(Dep.reified()), field.inner), unverifiedAllowed: decodeFromJSONField("bool", field.unverifiedAllowed) } ) }
 
  static fromJSON( json: Record<string, any> ): Deps { if (json.$typeName !== Deps.$typeName) { throw new Error("not a WithTwoGenerics json object") };
 

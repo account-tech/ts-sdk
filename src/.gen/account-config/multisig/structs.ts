@@ -10,74 +10,6 @@ import {bcs} from "@mysten/sui/bcs";
 import {SuiClient, SuiObjectData, SuiParsedData} from "@mysten/sui/client";
 import {fromB64, fromHEX, toHEX} from "@mysten/sui/utils";
 
-/* ============================== Role =============================== */
-
-export function isRole(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::multisig::Role`; }
-
-export interface RoleFields { name: ToField<String>; threshold: ToField<"u64"> }
-
-export type RoleReified = Reified< Role, RoleFields >;
-
-export class Role implements StructClass { __StructClass = true as const;
-
- static readonly $typeName = `${PKG_V1}::multisig::Role`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
-
- readonly $typeName = Role.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::multisig::Role`; readonly $typeArgs: []; readonly $isPhantom = Role.$isPhantom;
-
- readonly name: ToField<String>; readonly threshold: ToField<"u64">
-
- private constructor(typeArgs: [], fields: RoleFields, ) { this.$fullTypeName = composeSuiType( Role.$typeName, ...typeArgs ) as `${typeof PKG_V1}::multisig::Role`; this.$typeArgs = typeArgs;
-
- this.name = fields.name;; this.threshold = fields.threshold; }
-
- static reified( ): RoleReified { return { typeName: Role.$typeName, fullTypeName: composeSuiType( Role.$typeName, ...[] ) as `${typeof PKG_V1}::multisig::Role`, typeArgs: [ ] as [], isPhantom: Role.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => Role.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => Role.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => Role.fromBcs( data, ), bcs: Role.bcs, fromJSONField: (field: any) => Role.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => Role.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => Role.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => Role.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => Role.fetch( client, id, ), new: ( fields: RoleFields, ) => { return new Role( [], fields ) }, kind: "StructClassReified", } }
-
- static get r() { return Role.reified() }
-
- static phantom( ): PhantomReified<ToTypeStr<Role>> { return phantom(Role.reified( )); } static get p() { return Role.phantom() }
-
- static get bcs() { return bcs.struct("Role", {
-
- name: String.bcs, threshold: bcs.u64()
-
-}) };
-
- static fromFields( fields: Record<string, any> ): Role { return Role.reified( ).new( { name: decodeFromFields(String.reified(), fields.name), threshold: decodeFromFields("u64", fields.threshold) } ) }
-
- static fromFieldsWithTypes( item: FieldsWithTypes ): Role { if (!isRole(item.type)) { throw new Error("not a Role type");
-
- }
-
- return Role.reified( ).new( { name: decodeFromFieldsWithTypes(String.reified(), item.fields.name), threshold: decodeFromFieldsWithTypes("u64", item.fields.threshold) } ) }
-
- static fromBcs( data: Uint8Array ): Role { return Role.fromFields( Role.bcs.parse(data) ) }
-
- toJSONField() { return {
-
- name: this.name,threshold: this.threshold.toString(),
-
-} }
-
- toJSON() { return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() } }
-
- static fromJSONField( field: any ): Role { return Role.reified( ).new( { name: decodeFromJSONField(String.reified(), field.name), threshold: decodeFromJSONField("u64", field.threshold) } ) }
-
- static fromJSON( json: Record<string, any> ): Role { if (json.$typeName !== Role.$typeName) { throw new Error("not a WithTwoGenerics json object") };
-
- return Role.fromJSONField( json, ) }
-
- static fromSuiParsedData( content: SuiParsedData ): Role { if (content.dataType !== "moveObject") { throw new Error("not an object"); } if (!isRole(content.type)) { throw new Error(`object at ${(content.fields as any).id} is not a Role object`); } return Role.fromFieldsWithTypes( content ); }
-
- static fromSuiObjectData( data: SuiObjectData ): Role { if (data.bcs) { if (data.bcs.dataType !== "moveObject" || !isRole(data.bcs.type)) { throw new Error(`object at is not a Role object`); }
-
- return Role.fromBcs( fromB64(data.bcs.bcsBytes) ); } if (data.content) { return Role.fromSuiParsedData( data.content ) } throw new Error( "Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request." ); }
-
- static async fetch( client: SuiClient, id: string ): Promise<Role> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching Role object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isRole(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a Role object`); }
-
- return Role.fromSuiObjectData( res.data ); }
-
- }
-
 /* ============================== Approvals =============================== */
 
 export function isApprovals(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::multisig::Approvals`; }
@@ -214,47 +146,47 @@ export class ConfigMultisigAction implements StructClass { __StructClass = true 
 
  }
 
-/* ============================== ConfigMultisigProposal =============================== */
+/* ============================== ConfigMultisigIntent =============================== */
 
-export function isConfigMultisigProposal(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::multisig::ConfigMultisigProposal`; }
+export function isConfigMultisigIntent(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::multisig::ConfigMultisigIntent`; }
 
-export interface ConfigMultisigProposalFields { dummyField: ToField<"bool"> }
+export interface ConfigMultisigIntentFields { dummyField: ToField<"bool"> }
 
-export type ConfigMultisigProposalReified = Reified< ConfigMultisigProposal, ConfigMultisigProposalFields >;
+export type ConfigMultisigIntentReified = Reified< ConfigMultisigIntent, ConfigMultisigIntentFields >;
 
-export class ConfigMultisigProposal implements StructClass { __StructClass = true as const;
+export class ConfigMultisigIntent implements StructClass { __StructClass = true as const;
 
- static readonly $typeName = `${PKG_V1}::multisig::ConfigMultisigProposal`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
+ static readonly $typeName = `${PKG_V1}::multisig::ConfigMultisigIntent`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
 
- readonly $typeName = ConfigMultisigProposal.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::multisig::ConfigMultisigProposal`; readonly $typeArgs: []; readonly $isPhantom = ConfigMultisigProposal.$isPhantom;
+ readonly $typeName = ConfigMultisigIntent.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::multisig::ConfigMultisigIntent`; readonly $typeArgs: []; readonly $isPhantom = ConfigMultisigIntent.$isPhantom;
 
  readonly dummyField: ToField<"bool">
 
- private constructor(typeArgs: [], fields: ConfigMultisigProposalFields, ) { this.$fullTypeName = composeSuiType( ConfigMultisigProposal.$typeName, ...typeArgs ) as `${typeof PKG_V1}::multisig::ConfigMultisigProposal`; this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [], fields: ConfigMultisigIntentFields, ) { this.$fullTypeName = composeSuiType( ConfigMultisigIntent.$typeName, ...typeArgs ) as `${typeof PKG_V1}::multisig::ConfigMultisigIntent`; this.$typeArgs = typeArgs;
 
  this.dummyField = fields.dummyField; }
 
- static reified( ): ConfigMultisigProposalReified { return { typeName: ConfigMultisigProposal.$typeName, fullTypeName: composeSuiType( ConfigMultisigProposal.$typeName, ...[] ) as `${typeof PKG_V1}::multisig::ConfigMultisigProposal`, typeArgs: [ ] as [], isPhantom: ConfigMultisigProposal.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => ConfigMultisigProposal.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => ConfigMultisigProposal.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => ConfigMultisigProposal.fromBcs( data, ), bcs: ConfigMultisigProposal.bcs, fromJSONField: (field: any) => ConfigMultisigProposal.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => ConfigMultisigProposal.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => ConfigMultisigProposal.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => ConfigMultisigProposal.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => ConfigMultisigProposal.fetch( client, id, ), new: ( fields: ConfigMultisigProposalFields, ) => { return new ConfigMultisigProposal( [], fields ) }, kind: "StructClassReified", } }
+ static reified( ): ConfigMultisigIntentReified { return { typeName: ConfigMultisigIntent.$typeName, fullTypeName: composeSuiType( ConfigMultisigIntent.$typeName, ...[] ) as `${typeof PKG_V1}::multisig::ConfigMultisigIntent`, typeArgs: [ ] as [], isPhantom: ConfigMultisigIntent.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => ConfigMultisigIntent.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => ConfigMultisigIntent.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => ConfigMultisigIntent.fromBcs( data, ), bcs: ConfigMultisigIntent.bcs, fromJSONField: (field: any) => ConfigMultisigIntent.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => ConfigMultisigIntent.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => ConfigMultisigIntent.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => ConfigMultisigIntent.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => ConfigMultisigIntent.fetch( client, id, ), new: ( fields: ConfigMultisigIntentFields, ) => { return new ConfigMultisigIntent( [], fields ) }, kind: "StructClassReified", } }
 
- static get r() { return ConfigMultisigProposal.reified() }
+ static get r() { return ConfigMultisigIntent.reified() }
 
- static phantom( ): PhantomReified<ToTypeStr<ConfigMultisigProposal>> { return phantom(ConfigMultisigProposal.reified( )); } static get p() { return ConfigMultisigProposal.phantom() }
+ static phantom( ): PhantomReified<ToTypeStr<ConfigMultisigIntent>> { return phantom(ConfigMultisigIntent.reified( )); } static get p() { return ConfigMultisigIntent.phantom() }
 
- static get bcs() { return bcs.struct("ConfigMultisigProposal", {
+ static get bcs() { return bcs.struct("ConfigMultisigIntent", {
 
  dummy_field: bcs.bool()
 
 }) };
 
- static fromFields( fields: Record<string, any> ): ConfigMultisigProposal { return ConfigMultisigProposal.reified( ).new( { dummyField: decodeFromFields("bool", fields.dummy_field) } ) }
+ static fromFields( fields: Record<string, any> ): ConfigMultisigIntent { return ConfigMultisigIntent.reified( ).new( { dummyField: decodeFromFields("bool", fields.dummy_field) } ) }
 
- static fromFieldsWithTypes( item: FieldsWithTypes ): ConfigMultisigProposal { if (!isConfigMultisigProposal(item.type)) { throw new Error("not a ConfigMultisigProposal type");
+ static fromFieldsWithTypes( item: FieldsWithTypes ): ConfigMultisigIntent { if (!isConfigMultisigIntent(item.type)) { throw new Error("not a ConfigMultisigIntent type");
 
  }
 
- return ConfigMultisigProposal.reified( ).new( { dummyField: decodeFromFieldsWithTypes("bool", item.fields.dummy_field) } ) }
+ return ConfigMultisigIntent.reified( ).new( { dummyField: decodeFromFieldsWithTypes("bool", item.fields.dummy_field) } ) }
 
- static fromBcs( data: Uint8Array ): ConfigMultisigProposal { return ConfigMultisigProposal.fromFields( ConfigMultisigProposal.bcs.parse(data) ) }
+ static fromBcs( data: Uint8Array ): ConfigMultisigIntent { return ConfigMultisigIntent.fromFields( ConfigMultisigIntent.bcs.parse(data) ) }
 
  toJSONField() { return {
 
@@ -264,21 +196,21 @@ export class ConfigMultisigProposal implements StructClass { __StructClass = tru
 
  toJSON() { return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() } }
 
- static fromJSONField( field: any ): ConfigMultisigProposal { return ConfigMultisigProposal.reified( ).new( { dummyField: decodeFromJSONField("bool", field.dummyField) } ) }
+ static fromJSONField( field: any ): ConfigMultisigIntent { return ConfigMultisigIntent.reified( ).new( { dummyField: decodeFromJSONField("bool", field.dummyField) } ) }
 
- static fromJSON( json: Record<string, any> ): ConfigMultisigProposal { if (json.$typeName !== ConfigMultisigProposal.$typeName) { throw new Error("not a WithTwoGenerics json object") };
+ static fromJSON( json: Record<string, any> ): ConfigMultisigIntent { if (json.$typeName !== ConfigMultisigIntent.$typeName) { throw new Error("not a WithTwoGenerics json object") };
 
- return ConfigMultisigProposal.fromJSONField( json, ) }
+ return ConfigMultisigIntent.fromJSONField( json, ) }
 
- static fromSuiParsedData( content: SuiParsedData ): ConfigMultisigProposal { if (content.dataType !== "moveObject") { throw new Error("not an object"); } if (!isConfigMultisigProposal(content.type)) { throw new Error(`object at ${(content.fields as any).id} is not a ConfigMultisigProposal object`); } return ConfigMultisigProposal.fromFieldsWithTypes( content ); }
+ static fromSuiParsedData( content: SuiParsedData ): ConfigMultisigIntent { if (content.dataType !== "moveObject") { throw new Error("not an object"); } if (!isConfigMultisigIntent(content.type)) { throw new Error(`object at ${(content.fields as any).id} is not a ConfigMultisigIntent object`); } return ConfigMultisigIntent.fromFieldsWithTypes( content ); }
 
- static fromSuiObjectData( data: SuiObjectData ): ConfigMultisigProposal { if (data.bcs) { if (data.bcs.dataType !== "moveObject" || !isConfigMultisigProposal(data.bcs.type)) { throw new Error(`object at is not a ConfigMultisigProposal object`); }
+ static fromSuiObjectData( data: SuiObjectData ): ConfigMultisigIntent { if (data.bcs) { if (data.bcs.dataType !== "moveObject" || !isConfigMultisigIntent(data.bcs.type)) { throw new Error(`object at is not a ConfigMultisigIntent object`); }
 
- return ConfigMultisigProposal.fromBcs( fromB64(data.bcs.bcsBytes) ); } if (data.content) { return ConfigMultisigProposal.fromSuiParsedData( data.content ) } throw new Error( "Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request." ); }
+ return ConfigMultisigIntent.fromBcs( fromB64(data.bcs.bcsBytes) ); } if (data.content) { return ConfigMultisigIntent.fromSuiParsedData( data.content ) } throw new Error( "Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request." ); }
 
- static async fetch( client: SuiClient, id: string ): Promise<ConfigMultisigProposal> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching ConfigMultisigProposal object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isConfigMultisigProposal(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a ConfigMultisigProposal object`); }
+ static async fetch( client: SuiClient, id: string ): Promise<ConfigMultisigIntent> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching ConfigMultisigIntent object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isConfigMultisigIntent(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a ConfigMultisigIntent object`); }
 
- return ConfigMultisigProposal.fromSuiObjectData( res.data ); }
+ return ConfigMultisigIntent.fromSuiObjectData( res.data ); }
 
  }
 
@@ -483,5 +415,141 @@ export class Multisig implements StructClass { __StructClass = true as const;
  static async fetch( client: SuiClient, id: string ): Promise<Multisig> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching Multisig object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isMultisig(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a Multisig object`); }
 
  return Multisig.fromSuiObjectData( res.data ); }
+
+ }
+
+/* ============================== Role =============================== */
+
+export function isRole(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::multisig::Role`; }
+
+export interface RoleFields { name: ToField<String>; threshold: ToField<"u64"> }
+
+export type RoleReified = Reified< Role, RoleFields >;
+
+export class Role implements StructClass { __StructClass = true as const;
+
+ static readonly $typeName = `${PKG_V1}::multisig::Role`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
+
+ readonly $typeName = Role.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::multisig::Role`; readonly $typeArgs: []; readonly $isPhantom = Role.$isPhantom;
+
+ readonly name: ToField<String>; readonly threshold: ToField<"u64">
+
+ private constructor(typeArgs: [], fields: RoleFields, ) { this.$fullTypeName = composeSuiType( Role.$typeName, ...typeArgs ) as `${typeof PKG_V1}::multisig::Role`; this.$typeArgs = typeArgs;
+
+ this.name = fields.name;; this.threshold = fields.threshold; }
+
+ static reified( ): RoleReified { return { typeName: Role.$typeName, fullTypeName: composeSuiType( Role.$typeName, ...[] ) as `${typeof PKG_V1}::multisig::Role`, typeArgs: [ ] as [], isPhantom: Role.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => Role.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => Role.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => Role.fromBcs( data, ), bcs: Role.bcs, fromJSONField: (field: any) => Role.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => Role.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => Role.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => Role.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => Role.fetch( client, id, ), new: ( fields: RoleFields, ) => { return new Role( [], fields ) }, kind: "StructClassReified", } }
+
+ static get r() { return Role.reified() }
+
+ static phantom( ): PhantomReified<ToTypeStr<Role>> { return phantom(Role.reified( )); } static get p() { return Role.phantom() }
+
+ static get bcs() { return bcs.struct("Role", {
+
+ name: String.bcs, threshold: bcs.u64()
+
+}) };
+
+ static fromFields( fields: Record<string, any> ): Role { return Role.reified( ).new( { name: decodeFromFields(String.reified(), fields.name), threshold: decodeFromFields("u64", fields.threshold) } ) }
+
+ static fromFieldsWithTypes( item: FieldsWithTypes ): Role { if (!isRole(item.type)) { throw new Error("not a Role type");
+
+ }
+
+ return Role.reified( ).new( { name: decodeFromFieldsWithTypes(String.reified(), item.fields.name), threshold: decodeFromFieldsWithTypes("u64", item.fields.threshold) } ) }
+
+ static fromBcs( data: Uint8Array ): Role { return Role.fromFields( Role.bcs.parse(data) ) }
+
+ toJSONField() { return {
+
+ name: this.name,threshold: this.threshold.toString(),
+
+} }
+
+ toJSON() { return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() } }
+
+ static fromJSONField( field: any ): Role { return Role.reified( ).new( { name: decodeFromJSONField(String.reified(), field.name), threshold: decodeFromJSONField("u64", field.threshold) } ) }
+
+ static fromJSON( json: Record<string, any> ): Role { if (json.$typeName !== Role.$typeName) { throw new Error("not a WithTwoGenerics json object") };
+
+ return Role.fromJSONField( json, ) }
+
+ static fromSuiParsedData( content: SuiParsedData ): Role { if (content.dataType !== "moveObject") { throw new Error("not an object"); } if (!isRole(content.type)) { throw new Error(`object at ${(content.fields as any).id} is not a Role object`); } return Role.fromFieldsWithTypes( content ); }
+
+ static fromSuiObjectData( data: SuiObjectData ): Role { if (data.bcs) { if (data.bcs.dataType !== "moveObject" || !isRole(data.bcs.type)) { throw new Error(`object at is not a Role object`); }
+
+ return Role.fromBcs( fromB64(data.bcs.bcsBytes) ); } if (data.content) { return Role.fromSuiParsedData( data.content ) } throw new Error( "Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request." ); }
+
+ static async fetch( client: SuiClient, id: string ): Promise<Role> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching Role object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isRole(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a Role object`); }
+
+ return Role.fromSuiObjectData( res.data ); }
+
+ }
+
+/* ============================== Witness =============================== */
+
+export function isWitness(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::multisig::Witness`; }
+
+export interface WitnessFields { dummyField: ToField<"bool"> }
+
+export type WitnessReified = Reified< Witness, WitnessFields >;
+
+export class Witness implements StructClass { __StructClass = true as const;
+
+ static readonly $typeName = `${PKG_V1}::multisig::Witness`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
+
+ readonly $typeName = Witness.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::multisig::Witness`; readonly $typeArgs: []; readonly $isPhantom = Witness.$isPhantom;
+
+ readonly dummyField: ToField<"bool">
+
+ private constructor(typeArgs: [], fields: WitnessFields, ) { this.$fullTypeName = composeSuiType( Witness.$typeName, ...typeArgs ) as `${typeof PKG_V1}::multisig::Witness`; this.$typeArgs = typeArgs;
+
+ this.dummyField = fields.dummyField; }
+
+ static reified( ): WitnessReified { return { typeName: Witness.$typeName, fullTypeName: composeSuiType( Witness.$typeName, ...[] ) as `${typeof PKG_V1}::multisig::Witness`, typeArgs: [ ] as [], isPhantom: Witness.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => Witness.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => Witness.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => Witness.fromBcs( data, ), bcs: Witness.bcs, fromJSONField: (field: any) => Witness.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => Witness.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => Witness.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => Witness.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => Witness.fetch( client, id, ), new: ( fields: WitnessFields, ) => { return new Witness( [], fields ) }, kind: "StructClassReified", } }
+
+ static get r() { return Witness.reified() }
+
+ static phantom( ): PhantomReified<ToTypeStr<Witness>> { return phantom(Witness.reified( )); } static get p() { return Witness.phantom() }
+
+ static get bcs() { return bcs.struct("Witness", {
+
+ dummy_field: bcs.bool()
+
+}) };
+
+ static fromFields( fields: Record<string, any> ): Witness { return Witness.reified( ).new( { dummyField: decodeFromFields("bool", fields.dummy_field) } ) }
+
+ static fromFieldsWithTypes( item: FieldsWithTypes ): Witness { if (!isWitness(item.type)) { throw new Error("not a Witness type");
+
+ }
+
+ return Witness.reified( ).new( { dummyField: decodeFromFieldsWithTypes("bool", item.fields.dummy_field) } ) }
+
+ static fromBcs( data: Uint8Array ): Witness { return Witness.fromFields( Witness.bcs.parse(data) ) }
+
+ toJSONField() { return {
+
+ dummyField: this.dummyField,
+
+} }
+
+ toJSON() { return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() } }
+
+ static fromJSONField( field: any ): Witness { return Witness.reified( ).new( { dummyField: decodeFromJSONField("bool", field.dummyField) } ) }
+
+ static fromJSON( json: Record<string, any> ): Witness { if (json.$typeName !== Witness.$typeName) { throw new Error("not a WithTwoGenerics json object") };
+
+ return Witness.fromJSONField( json, ) }
+
+ static fromSuiParsedData( content: SuiParsedData ): Witness { if (content.dataType !== "moveObject") { throw new Error("not an object"); } if (!isWitness(content.type)) { throw new Error(`object at ${(content.fields as any).id} is not a Witness object`); } return Witness.fromFieldsWithTypes( content ); }
+
+ static fromSuiObjectData( data: SuiObjectData ): Witness { if (data.bcs) { if (data.bcs.dataType !== "moveObject" || !isWitness(data.bcs.type)) { throw new Error(`object at is not a Witness object`); }
+
+ return Witness.fromBcs( fromB64(data.bcs.bcsBytes) ); } if (data.content) { return Witness.fromSuiParsedData( data.content ) } throw new Error( "Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request." ); }
+
+ static async fetch( client: SuiClient, id: string ): Promise<Witness> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching Witness object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isWitness(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a Witness object`); }
+
+ return Witness.fromSuiObjectData( res.data ); }
 
  }
