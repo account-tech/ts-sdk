@@ -7,7 +7,7 @@ export function depositTreasuryCap(
     accountGenerics: [string, string],
     coinType: string,
     auth: TransactionObjectInput,
-    account: string,
+    account: TransactionObjectInput,
     treasuryCap: TransactionObjectInput,
     maxSupply?: number,
 ): TransactionResult {
@@ -23,7 +23,7 @@ export function burnCoins(
     tx: Transaction,
     accountGenerics: [string, string],
     coinType: string,
-    account: string,
+    account: TransactionObjectInput,
     coin: TransactionObjectInput,
 ): TransactionResult {
     // caller should check if TreasuryCap exist and can_burn is enabled

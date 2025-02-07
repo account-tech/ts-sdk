@@ -7,7 +7,7 @@ export function openKiosk(
     tx: Transaction,
     accountGenerics: [string, string],
     auth: TransactionObjectInput,
-    account: string,
+    account: TransactionObjectInput,
     name: string,
 ): TransactionResult {
     return open(
@@ -23,7 +23,7 @@ export function placeInKiosk(
     accountGenerics: [string, string],
     nftType: string,
     auth: TransactionObjectInput,
-    account: string,
+    account: TransactionObjectInput,
     accountKiosk: TransactionObjectInput,
     senderKiosk: TransactionObjectInput,
     senderCap: TransactionObjectInput,
@@ -44,7 +44,7 @@ export function delistFromKiosk(
     accountGenerics: [string, string],
     nftType: string,
     auth: TransactionObjectInput,
-    account: string,
+    account: TransactionObjectInput,
     kiosk: TransactionObjectInput,
     name: string,
     nftId: TransactionPureInput,
@@ -61,7 +61,7 @@ export function withdrawProfitsFromKiosk(
     tx: Transaction,
     accountGenerics: [string, string],
     auth: TransactionObjectInput,
-    account: string,
+    account: TransactionObjectInput,
     kiosk: TransactionObjectInput,
     name: string,
 ): TransactionResult {
@@ -77,7 +77,7 @@ export function closeKiosk(
     tx: Transaction,
     accountGenerics: [string, string],
     auth: TransactionObjectInput,
-    account: string,
+    account: TransactionObjectInput,
     kiosk: TransactionObjectInput,
     name: string,
 ): TransactionResult {

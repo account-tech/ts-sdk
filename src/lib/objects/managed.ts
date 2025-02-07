@@ -2,8 +2,9 @@
 
 import { KioskClient, Network } from "@mysten/kiosk";
 import { DynamicFieldInfo, SuiClient } from "@mysten/sui/client";
+import { UpgradeCap } from "src/.gen/_dependencies/source/0x2/package/structs";
 import { CurrencyRules } from "src/.gen/account-actions/currency/structs";
-import { UpgradeRules } from "src/.gen/account-actions/upgrade-policies/structs";
+import { UpgradeRules } from "src/.gen/account-actions/package-upgrade/structs";
 import { Kiosk } from "./kiosk";
 import { ManagedKeyTypes } from "src/types/managed-types";
 import { phantom } from "src/.gen/_framework/reified";
@@ -32,17 +33,17 @@ export type Currency = {
 export type UpgradePolicy = {
     packageId: string;
     capId: string;
-    delayMs: number;
+    delayMs: bigint;
 }
 
-export class Managed {
+export class Managed implements ManagedData {
     kioskClient: KioskClient;
     caps: string[] = []; // cap types
     currencies: Record<string, Currency> = {}; // coinType -> currency
     kiosks: Record<string, Kiosk> = {}; // name -> Kiosk
     treasuries: Record<string, Treasury> = {}; // coinType -> Treasury
     upgradePolicies: Record<string, UpgradePolicy> = {}; // name -> packageId
-    
+
     private constructor(
         public client: SuiClient,
         public accountId: string,
@@ -68,7 +69,7 @@ export class Managed {
         let nextCursor: string | null = null;
         let hasNextPage = true;
         while (hasNextPage) {
-            ({ data, nextCursor, hasNextPage } = await this.client.getDynamicFields({ 
+            ({ data, nextCursor, hasNextPage } = await this.client.getDynamicFields({
                 parentId: accountId,
                 cursor: nextCursor
             }));
@@ -77,13 +78,14 @@ export class Managed {
         }
 
         let currencyRulesIds: string[] = [];
-        let upgradeRulesIdToPackageId: Record<string, string> = {};
-        let treasuryIdsToName: Record<string, string> = {};
-        let treasuryIdsToBagId: Record<string, string> = {};
+        let upgradeNameToRulesId: Record<string, string> = {};
+        let upgradeNameToCapId: Record<string, string> = {};
+        let vaultIdsToName: Record<string, string> = {};
+        let vaultIdsToBagId: Record<string, string> = {};
         let kioskIdsToName: Record<string, string> = {};
         let kioskIdsToCap: Record<string, string> = {};
         let kioskCapToKiosk: Record<string, string> = {};
-        
+
         dfs.forEach(async df => {
             switch (df.name.type.split("<")[0]) { // keep only package::module::structname
                 case ManagedKeyTypes.Cap:
@@ -99,17 +101,17 @@ export class Managed {
                 case ManagedKeyTypes.KioskOwner:
                     kioskIdsToName[df.objectId] = (df.name.value as any).name;
                     break;
-                case ManagedKeyTypes.Treasury:
-                    treasuryIdsToName[df.objectId] = (df.name.value as any).name;
-                    break;
-                case ManagedKeyTypes.UpgradeCap:
-                    // do nothing
+                case ManagedKeyTypes.Vault:
+                    vaultIdsToName[df.objectId] = (df.name.value as any).name;
                     break;
                 case ManagedKeyTypes.UpgradeRules:
-                    upgradeRulesIdToPackageId[df.objectId] = (df.name.value as any).package;
+                    upgradeNameToRulesId[(df.name.value as any).name] = df.objectId;
+                    break;
+                case ManagedKeyTypes.UpgradeCap:
+                    upgradeNameToCapId[(df.name.value as any).name] = df.objectId;
                     break;
                 default:
-                    console.log("Unknown dynamic field type:", df.name.type);
+                    console.log("Unknown dynamic field type: ", df.name.type);
             }
         });
 
@@ -124,7 +126,7 @@ export class Managed {
             this.currencies[coinType] = {
                 maxSupply: currencyRules.maxSupply ? Number(currencyRules.maxSupply) : null,
                 totalMinted: Number(currencyRules.totalMinted),
-                totalBurned: Number(currencyRules.totalBurnt),
+                totalBurned: Number(currencyRules.totalBurned),
                 canMint: currencyRules.canMint,
                 canBurn: currencyRules.canBurn,
                 canUpdateSymbol: currencyRules.canUpdateSymbol,
@@ -136,29 +138,37 @@ export class Managed {
 
         // get the upgrade rules
         const upgradeRulesObjs = await this.client.multiGetObjects({
-            ids: Object.keys(upgradeRulesIdToPackageId),
+            ids: Object.values(upgradeNameToRulesId),
             options: { showContent: true }
         });
-        upgradeRulesObjs.forEach((obj: any) => {
-            const upgradeRules = UpgradeRules.fromFieldsWithTypes(obj.data.content.fields.value);
-            this.upgradePolicies[upgradeRules.name] = {
-                packageId: upgradeRulesIdToPackageId[upgradeRules.capId],
-                capId: upgradeRules.capId,
-                delayMs: Number(upgradeRules.delayMs),
+        const upgradeCapsObjs = await this.client.multiGetObjects({
+            ids: Object.values(upgradeNameToCapId),
+            options: { showContent: true }
+        });
+        Object.keys(upgradeNameToCapId).forEach((name: string) => {
+            let ruleIdx = Object.keys(upgradeNameToCapId).findIndex(n => n === name);
+            let capIdx = Object.keys(upgradeNameToCapId).findIndex(n => n === name);
+
+            const upgradeCap = UpgradeCap.fromFieldsWithTypes((upgradeCapsObjs[capIdx].data?.content as any).fields.value);
+            const upgradeRules = UpgradeRules.fromFieldsWithTypes((upgradeRulesObjs[ruleIdx].data?.content as any).fields.value);
+            this.upgradePolicies[name] = {
+                packageId: upgradeCap.package,
+                capId: upgradeCap.id,
+                delayMs: upgradeRules.delayMs,
             }
         });
 
-        // get the treasuries with their bags of coins
-        const treasuriesStructs = await this.client.multiGetObjects({
-            ids: Object.keys(treasuryIdsToName),
+        // get the vaults with their bags of coins
+        const vaultStructs = await this.client.multiGetObjects({
+            ids: Object.keys(vaultIdsToName),
             options: { showContent: true }
         });
-        treasuriesStructs.forEach(t => treasuryIdsToBagId[t.data!.objectId] = (t.data?.content as any).fields.value.fields.bag.fields.id.id);
-        const treasuries = await Promise.all(Object.values(treasuryIdsToBagId).map(async bagId => {
+        vaultStructs.forEach(v => vaultIdsToBagId[v.data!.objectId] = (v.data?.content as any).fields.value.fields.bag.fields.id.id);
+        const vaults = await Promise.all(Object.values(vaultIdsToBagId).map(async bagId => {
             return await Treasury.init(this.client, bagId);
         }));
-        treasuries.forEach(treasury => {
-            this.treasuries[treasuryIdsToName[treasury.bagId]] = treasury;
+        vaults.forEach(vault => {
+            this.treasuries[vaultIdsToName[vault.bagId]] = vault;
         });
 
         // get the kiosks and construct the classes

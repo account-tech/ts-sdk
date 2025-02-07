@@ -1,12 +1,12 @@
-import { open, depositOwned, deposit, close } from "src/.gen/account-actions/treasury/functions";
+import { open, deposit, close } from "src/.gen/account-actions/vault/functions";
 import { Transaction, TransactionObjectInput, TransactionResult } from "@mysten/sui/transactions";
 
-/// Opens a Treasury managed by the Account
-export function openTreasury(
+/// Opens a Vault managed by the Account
+export function openVault(
     tx: Transaction,
     accountGenerics: [string, string],
     auth: TransactionObjectInput,
-    account: string,
+    account: TransactionObjectInput,
     name: string,
 ): TransactionResult {
     return open(
@@ -16,30 +16,13 @@ export function openTreasury(
     );
 }
 
-/// Deposits an object owned by the Account into the Treasury
-export function depositFromAccount(
-    tx: Transaction,
-    accountGenerics: [string, string],
-    coinType: string,
-    auth: TransactionObjectInput,
-    account: string,
-    name: string,
-    coin: TransactionObjectInput,
-): TransactionResult {
-    return depositOwned(
-        tx,
-        [...accountGenerics, coinType],
-        { auth, account, name, receiving: coin },
-    );
-}
-
-/// Deposits an object into the Treasury from the caller wallet
+/// Deposits an object into the Vault from the caller wallet
 export function depositFromWallet(
     tx: Transaction,
     accountGenerics: [string, string],
     coinType: string,
     auth: TransactionObjectInput,
-    account: string,
+    account: TransactionObjectInput,
     name: string,
     coin: TransactionObjectInput,
 ): TransactionResult {
@@ -50,12 +33,12 @@ export function depositFromWallet(
     );
 }
 
-/// Closes the Treasury if empty
-export function closeTreasury(
+/// Closes the Vault if empty
+export function closeVault(
     tx: Transaction,
     accountGenerics: [string, string],
     auth: TransactionObjectInput,
-    account: string,
+    account: TransactionObjectInput,
     name: string,
 ): TransactionResult {
     return close(

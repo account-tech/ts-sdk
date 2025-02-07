@@ -7,7 +7,7 @@ export function depositCap(
     accountGenerics: [string, string],
     capType: string,
     auth: TransactionObjectInput,
-    account: string,
+    account: TransactionObjectInput,
     capObject: TransactionObjectInput,
 ): TransactionResult {
     return lockCap(
