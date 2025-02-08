@@ -1,6 +1,7 @@
 import { SuiClient } from "@mysten/sui/client";
 import { ExtensionFields, Extensions as ExtensionsRaw, History } from "../.gen/account-extensions/extensions/structs";
 import { EXTENSIONS } from "../types/constants";
+import { Dep } from "./account/account";
 
 export type ExtensionData = {
     name: string;
@@ -51,6 +52,17 @@ export class Extensions {
 
     getData(): ExtensionData[] {
         return this.extensions;
+    }
+
+    getLatestDeps(): Dep[] {
+        return this.extensions.map((extension) => {
+            const len = extension.history.length;
+            return {
+                name: extension.name,
+                addr: extension.history[len - 1].package,
+                version: extension.history[len - 1].version,
+            }
+        });
     }
 }
 

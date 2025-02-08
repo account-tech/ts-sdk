@@ -5,7 +5,8 @@ import { Multisig as MultisigRaw, Approvals as ApprovalsRaw } from "../../../.ge
 import { newAccount } from "../../../.gen/account-config/multisig/functions";
 import * as configMultisig from "../../../.gen/account-config/multisig/functions";
 import * as config from "../../../.gen/account-protocol/config/functions";
-import { approveIntent, disapproveIntent, executeIntent, authenticate, emptyOutcome, join, leave } from "../../../.gen/account-config/multisig/functions"
+import { approveIntent, disapproveIntent, executeIntent, authenticate, emptyOutcome, join, leave, destroyEmptyIntent } from "../../../.gen/account-config/multisig/functions";
+import { destroyEmptyExpired } from "../../../.gen/account-protocol/intents/functions";
 import { DepFields } from "../../../.gen/account-protocol/deps/structs";
 import { MemberFields, RoleFields } from "../../../.gen/account-config/multisig/structs";
 import { IntentFields as IntentFieldsRaw } from "../../../.gen/account-protocol/intents/structs";
@@ -13,22 +14,13 @@ import { CLOCK, EXTENSIONS, MULTISIG_GENERICS, SUI_FRAMEWORK } from "../../../ty
 import { User } from "../../user";
 import { Intent, IntentStatus } from "../../intents/intent";
 import { AccountType } from "../../../types/account-types";
-import { ConfigDepsArgs, ConfigMultisigArgs, IntentArgs, IntentFields, IntentTypes } from "../../../types/intent-types";
+import { ConfigDepsArgs, ConfigMultisigArgs, IntentFields } from "../../../types/intent-types";
 import { TransactionPureInput } from "src/types/helper-types";
 // import { BurnProposal, MintProposal, UpdateProposal } from "../../intents/account-actions/currency";
 import { Account, Dep } from "../account";
-import { Outcome } from "src/lib/outcomes/variants/outcome";
 import { Approvals } from "src/lib/outcomes/variants/approvals";
-import { ConfigMultisigIntent } from "src/lib/intents/account-actions/multisig";
-import { ConfigDepsIntent } from "../../intents/account-actions/config";
 import { AccountData } from "../account";
 import { Managed } from "src/lib/objects/managed";
-import { BorrowCapIntent } from "src/lib/intents/account-actions/access-control";
-import { DisableRulesIntent, MintAndTransferIntent, MintAndVestIntent, UpdateMetadataIntent, WithdrawAndBurnIntent } from "src/lib/intents/account-actions/currency";
-import { TakeNftsIntent, ListNftsIntent } from "src/lib/intents/account-actions/kiosk";
-import { WithdrawAndTransferIntent, WithdrawAndTransferToVaultIntent, WithdrawAndVestIntent } from "src/lib/intents/account-actions/owned";
-import { SpendAndTransferIntent, SpendAndVestIntent } from "src/lib/intents/account-actions/vault";
-import { UpgradePackageIntent, RestrictPolicyIntent } from "src/lib/intents/account-actions/package-upgrade";
 
 export type MultisigData = AccountData & {
     global: Role;
@@ -238,57 +230,93 @@ export class Multisig extends Account implements MultisigData {
         );
     }
 
-    shareMultisig(tx: Transaction, account: TransactionArgument): TransactionResult {
+    shareMultisig(
+        tx: Transaction,
+        multisig: TransactionArgument,
+    ): TransactionResult {
         return tx.moveCall({
             package: SUI_FRAMEWORK,
             module: "transfer",
             function: "public_share",
             typeArguments: MULTISIG_GENERICS,
-            arguments: [account],
+            arguments: [multisig],
         });
     }
 
-    joinMultisig(tx: Transaction, user: TransactionPureInput, account: TransactionObjectInput): TransactionResult {
+    joinMultisig(
+        tx: Transaction,
+        user: TransactionPureInput,
+        multisig?: TransactionObjectInput,
+    ): TransactionResult {
+        const account = multisig ?? this.id;
+        if (!account) {
+            throw new Error("No account provided and no default account set");
+        }
         return join(tx, { user, account });
     }
 
-    leaveMultisig(tx: Transaction, user: TransactionObjectInput, account: TransactionObjectInput): TransactionResult {
+    leaveMultisig(
+        tx: Transaction,
+        user: TransactionObjectInput,
+        multisig?: TransactionObjectInput,
+    ): TransactionResult {
+        const account = multisig ?? this.id;
+        if (!account) {
+            throw new Error("No account provided and no default account set");
+        }
         return leave(tx, { user, account });
     }
 
-    authenticate(tx: Transaction, account: TransactionObjectInput = this.id): TransactionResult {
-        if (!account && !this.id) throw new Error("No multisig account provided");
+    authenticate(
+        tx: Transaction,
+        multisig?: TransactionObjectInput,
+    ): TransactionResult {
+        const account = multisig ?? this.id;
+        if (!account) {
+            throw new Error("No account provided and no default account set");
+        }
         return authenticate(tx, account);
     }
 
-    emptyOutcome(tx: Transaction): TransactionResult {
+    emptyApprovalsOutcome(
+        tx: Transaction
+    ): TransactionResult {
         return emptyOutcome(tx);
     }
 
     approveIntent(
         tx: Transaction,
         key: string,
-        account: TransactionObjectInput = this.id,
+        multisig?: TransactionObjectInput,
     ): TransactionResult {
-        if (!account && !this.id) throw new Error("No multisig account provided");
+        const account = multisig ?? this.id;
+        if (!account) {
+            throw new Error("No account provided and no default account set");
+        }
         return approveIntent(tx, { account, key });
     }
 
     disapproveIntent(
         tx: Transaction,
         key: string,
-        account: TransactionObjectInput = this.id,
+        multisig?: TransactionObjectInput,
     ): TransactionResult {
-        if (!account && !this.id) throw new Error("No multisig account provided");
+        const account = multisig ?? this.id;
+        if (!account) {
+            throw new Error("No account provided and no default account set");
+        }
         return disapproveIntent(tx, { account, key });
     }
 
     executeIntent(
         tx: Transaction,
         key: string,
-        account: TransactionObjectInput = this.id,
+        multisig?: TransactionObjectInput,
     ): TransactionResult {
-        if (!account && !this.id) throw new Error("No multisig account provided");
+        const account = multisig ?? this.id;
+        if (!account) {
+            throw new Error("No account provided and no default account set");
+        }
         return executeIntent(tx, { account, key, clock: CLOCK });
     }
 
@@ -296,12 +324,13 @@ export class Multisig extends Account implements MultisigData {
 
     configMultisig(
         tx: Transaction,
-        intentArgs: IntentArgs,
         actionsArgs: ConfigMultisigArgs,
-        account: TransactionObjectInput = this.id, // need for adding members upon creation
+        multisig?: TransactionObjectInput, // need for adding members upon creation
     ): TransactionResult {
-        this.assertMultisig();
-        this.assertKey(intentArgs);
+        const account = multisig ?? this.id;
+        if (!account) {
+            throw new Error("No account provided and no default account set");
+        }
 
         let addresses: string[] = [];
         let weights: bigint[] = [];
@@ -326,7 +355,7 @@ export class Multisig extends Account implements MultisigData {
         }
 
         const auth = this.authenticate(tx, account);
-        const outcome = this.emptyOutcome(tx);
+        const outcome = this.emptyApprovalsOutcome(tx);
 
         configMultisig.requestConfigMultisig(
             tx,
@@ -334,10 +363,10 @@ export class Multisig extends Account implements MultisigData {
                 auth,
                 account,
                 outcome,
-                key: intentArgs.key,
-                description: intentArgs.description ?? "",
-                executionTime: intentArgs.executionTimes?.[0] ?? 0n,
-                expirationTime: intentArgs.expirationTime ?? BigInt(Math.floor(Date.now()) + 7 * 24 * 60 * 60 * 1000),
+                key: "config-multisig",
+                description: "",
+                executionTime: 0n,
+                expirationTime: 0n, 
                 addresses,
                 weights,
                 roles,
@@ -347,22 +376,59 @@ export class Multisig extends Account implements MultisigData {
             }
         );
 
-        this.approveIntent(tx, intentArgs.key, account);
-        const executable = this.executeIntent(tx, intentArgs.key, account);
+        this.approveIntent(tx, "config-multisig", account);
+        const executable = this.executeIntent(tx, "config-multisig", account);
+        configMultisig.executeConfigMultisig(tx, { executable, account });
 
-        return configMultisig.executeConfigMultisig(tx, { executable, account });
+        const expired = destroyEmptyIntent(tx, { account, key: "config-multisig" });
+        configMultisig.deleteConfigMultisig(tx, expired);
+        return destroyEmptyExpired(tx, expired);
+    }
+
+    toggleUnverifiedDepsAllowed(
+        tx: Transaction,
+        multisig?: TransactionObjectInput,
+    ): TransactionResult {
+        const account = multisig ?? this.id;
+        if (!account) {
+            throw new Error("No account provided and no default account set");
+        }
+
+        const auth = this.authenticate(tx);
+        const outcome = this.emptyApprovalsOutcome(tx);
+
+        config.requestToggleUnverifiedAllowed(
+            tx, 
+            MULTISIG_GENERICS,
+            {
+                auth,
+                account,
+                outcome,
+                key: "toggle-unverified-deps",
+                description: "",
+                executionTime: 0n,
+                expirationTime: 0n,
+            }
+        );
+
+        this.approveIntent(tx, "toggle-unverified-deps");
+        const executable = this.executeIntent(tx, "toggle-unverified-deps");
+        config.executeToggleUnverifiedAllowed(tx, MULTISIG_GENERICS, { executable, account });
+
+        const expired = destroyEmptyIntent(tx, { account, key: "toggle-unverified-deps" });
+        config.deleteToggleUnverifiedAllowed(tx, expired);
+        return destroyEmptyExpired(tx, expired);
     }
 
     configDeps(
         tx: Transaction,
-        auth: TransactionObjectInput,
-        outcome: TransactionObjectInput,
-        intentArgs: IntentArgs,
         actionsArgs: ConfigDepsArgs,
-        account: TransactionObjectInput = this.id, // need for adding deps upon creation
+        multisig?: TransactionObjectInput,
     ): TransactionResult {
-        this.assertMultisig();
-        this.assertKey(intentArgs);
+        const account = multisig ?? this.id;
+        if (!account) {
+            throw new Error("No account provided and no default account set");
+        }
 
         const names: string[] = [];
         const addresses: string[] = [];
@@ -373,6 +439,9 @@ export class Multisig extends Account implements MultisigData {
             versions.push(BigInt(dep.version));
         });
 
+        const auth = this.authenticate(tx);
+        const outcome = this.emptyApprovalsOutcome(tx);
+
         config.requestConfigDeps(
             tx,
             MULTISIG_GENERICS,
@@ -380,10 +449,10 @@ export class Multisig extends Account implements MultisigData {
                 auth,
                 account,
                 outcome,
-                key: intentArgs.key,
-                description: intentArgs.description ?? "",
-                executionTime: intentArgs.executionTimes?.[0] ?? 0n,
-                expirationTime: intentArgs.expirationTime ?? BigInt(Math.floor(Date.now()) + 7 * 24 * 60 * 60 * 1000),
+                key: "config-deps",
+                description: "",
+                executionTime: 0n,
+                expirationTime: 0n,
                 extensions: EXTENSIONS,
                 names,
                 addresses,
@@ -391,10 +460,13 @@ export class Multisig extends Account implements MultisigData {
             }
         );
 
-        this.approveIntent(tx, intentArgs.key);
-        const executable = this.executeIntent(tx, intentArgs.key);
+        this.approveIntent(tx, "config-deps");
+        const executable = this.executeIntent(tx, "config-deps");
+        config.executeConfigDeps(tx, MULTISIG_GENERICS, { executable, account });
 
-        return config.executeConfigDeps(tx, MULTISIG_GENERICS, { executable, account });
+        const expired = destroyEmptyIntent(tx, { account, key: "config-deps" });
+        config.deleteConfigDeps(tx, expired);
+        return destroyEmptyExpired(tx, expired);
     }
 
     // mint(
@@ -510,63 +582,5 @@ export class Multisig extends Account implements MultisigData {
 
     // 	return kiosk.executeTake(tx, { executable, multisig: this.id });
     // }
-
-    // === Helpers ===
-
-    assertMultisig() {
-        if (this.id === "") {
-            throw new Error("Multisig id is not set. Please fetch the multisig before calling this method.");
-        }
-    }
-
-    assertKey(args: IntentArgs) {
-        if (!args.key) throw new Error("Key is required.");
-    }
-
-    // Factory function to create the appropriate intent type
-    async fetchIntentWithActions(
-        client: SuiClient,
-        outcome: Outcome,
-        fields: IntentFields
-    ): Promise<Intent> {
-        switch (fields.issuer.intentType) {
-            case IntentTypes.ConfigDeps:
-                return await ConfigDepsIntent.init(client, this.id, outcome, fields);
-            case IntentTypes.ConfigMultisig:
-                return await ConfigMultisigIntent.init(client, this.id, outcome, fields);
-            case IntentTypes.BorrowCap:
-                return await BorrowCapIntent.init(client, this.id, outcome, fields);
-            case IntentTypes.DisableRules:
-                return await DisableRulesIntent.init(client, this.id, outcome, fields);
-            case IntentTypes.UpdateMetadata:
-                return await UpdateMetadataIntent.init(client, this.id, outcome, fields);
-            case IntentTypes.MintAndTransfer:
-                return await MintAndTransferIntent.init(client, this.id, outcome, fields);
-            case IntentTypes.MintAndVest:
-                return await MintAndVestIntent.init(client, this.id, outcome, fields);
-            case IntentTypes.WithdrawAndBurn:
-                return await WithdrawAndBurnIntent.init(client, this.id, outcome, fields);
-            case IntentTypes.TakeNfts:
-                return await TakeNftsIntent.init(client, this.id, outcome, fields);
-            case IntentTypes.ListNfts:
-                return await ListNftsIntent.init(client, this.id, outcome, fields);
-            case IntentTypes.WithdrawAndTransferToVault:
-                return await WithdrawAndTransferToVaultIntent.init(client, this.id, outcome, fields);
-            case IntentTypes.WithdrawAndTransfer:
-                return await WithdrawAndTransferIntent.init(client, this.id, outcome, fields);
-            case IntentTypes.WithdrawAndVest:
-                return await WithdrawAndVestIntent.init(client, this.id, outcome, fields);
-            case IntentTypes.UpgradePackage:
-                return await UpgradePackageIntent.init(client, this.id, outcome, fields);
-            case IntentTypes.RestrictPolicy:
-                return await RestrictPolicyIntent.init(client, this.id, outcome, fields);
-            case IntentTypes.SpendAndTransfer:
-                return await SpendAndTransferIntent.init(client, this.id, outcome, fields);
-            case IntentTypes.SpendAndVest:
-                return await SpendAndVestIntent.init(client, this.id, outcome, fields);
-            default:
-                throw new Error(`Intent type ${fields.issuer.intentType} not supported.`);
-        }
-    }
 }
 
