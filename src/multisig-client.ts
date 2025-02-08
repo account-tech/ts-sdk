@@ -70,8 +70,8 @@ export class MultisigClient {
 		}
 		// create the multisig
 		const multisig = this.multisig?.newMultisig(tx);
-		// add verified dependencies
-		this.multisig.configDeps(tx, { deps: this.extensions.getLatestDeps() }, multisig); // atomic intent
+		// add verified dependencies (AccountProtocol at idx 0 is already added)
+		this.multisig.atomicConfigDeps(tx, { deps: this.extensions.getLatestDeps().slice(1) }, multisig); // atomic intent
 		// add name
 		const auth = this.multisig.authenticate(tx, multisig);
 		commands.replaceMetadata(tx, MULTISIG_GENERICS, auth, multisig, ["name"], [name]);
@@ -80,7 +80,7 @@ export class MultisigClient {
 			const members = memberAddresses.map((address: string) => ({ address, weight: 1, roles: [] }));
 			members.push({ address: this.user.address!, weight: 1, roles: [] }); // add creator to the members
 
-			this.multisig.configMultisig(
+			this.multisig.atomicConfigMultisig(
 				tx,
 				{ members, thresholds: { global: globalThreshold ?? 1, roles: [] } },
 				multisig
@@ -89,7 +89,7 @@ export class MultisigClient {
 		// creator register the multisig in his user
 		this.multisig.joinMultisig(tx, createdAccount ? createdAccount : accountId, multisig);
 		// send invites to added members
-		memberAddresses?.forEach(address => { this.user?.sendInvite(tx, multisig, address) });
+		memberAddresses?.forEach(address => { this.multisig.sendInvite(tx, address, multisig) });
 		// transfer the user if just created
 		if (createdAccount) this.user.transferUser(tx, createdAccount, this.user.address!);
 		// share the multisig

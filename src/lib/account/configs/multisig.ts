@@ -5,7 +5,7 @@ import { Multisig as MultisigRaw, Approvals as ApprovalsRaw } from "../../../.ge
 import { newAccount } from "../../../.gen/account-config/multisig/functions";
 import * as configMultisig from "../../../.gen/account-config/multisig/functions";
 import * as config from "../../../.gen/account-protocol/config/functions";
-import { approveIntent, disapproveIntent, executeIntent, authenticate, emptyOutcome, join, leave, destroyEmptyIntent } from "../../../.gen/account-config/multisig/functions";
+import { approveIntent, disapproveIntent, executeIntent, authenticate, emptyOutcome, sendInvite, join, leave, destroyEmptyIntent } from "../../../.gen/account-config/multisig/functions";
 import { destroyEmptyExpired } from "../../../.gen/account-protocol/intents/functions";
 import { DepFields } from "../../../.gen/account-protocol/deps/structs";
 import { MemberFields, RoleFields } from "../../../.gen/account-config/multisig/structs";
@@ -232,25 +232,24 @@ export class Multisig extends Account implements MultisigData {
 
     shareMultisig(
         tx: Transaction,
-        multisig: TransactionArgument,
+        account: TransactionArgument,
     ): TransactionResult {
         return tx.moveCall({
             package: SUI_FRAMEWORK,
             module: "transfer",
             function: "public_share",
             typeArguments: MULTISIG_GENERICS,
-            arguments: [multisig],
+            arguments: [account],
         });
     }
 
     joinMultisig(
         tx: Transaction,
         user: TransactionPureInput,
-        multisig?: TransactionObjectInput,
+        account: TransactionObjectInput = this.id,
     ): TransactionResult {
-        const account = multisig ?? this.id;
         if (!account) {
-            throw new Error("No account provided and no default account set");
+            throw new Error("No account available: this.id is not set and no account was provided");
         }
         return join(tx, { user, account });
     }
@@ -258,22 +257,31 @@ export class Multisig extends Account implements MultisigData {
     leaveMultisig(
         tx: Transaction,
         user: TransactionObjectInput,
-        multisig?: TransactionObjectInput,
+        account: TransactionObjectInput = this.id,
     ): TransactionResult {
-        const account = multisig ?? this.id;
         if (!account) {
-            throw new Error("No account provided and no default account set");
+            throw new Error("No account available: this.id is not set and no account was provided");
         }
         return leave(tx, { user, account });
     }
 
+    sendInvite(
+        tx: Transaction,
+        recipient: string,
+        account: TransactionObjectInput = this.id,
+    ): TransactionResult {
+        if (!account) {
+            throw new Error("No account available: this.id is not set and no account was provided");
+        }
+        return sendInvite(tx, { account, recipient });
+    }
+
     authenticate(
         tx: Transaction,
-        multisig?: TransactionObjectInput,
+        account: TransactionObjectInput = this.id,
     ): TransactionResult {
-        const account = multisig ?? this.id;
         if (!account) {
-            throw new Error("No account provided and no default account set");
+            throw new Error("No account available: this.id is not set and no account was provided");
         }
         return authenticate(tx, account);
     }
@@ -287,11 +295,10 @@ export class Multisig extends Account implements MultisigData {
     approveIntent(
         tx: Transaction,
         key: string,
-        multisig?: TransactionObjectInput,
+        account: TransactionObjectInput = this.id,
     ): TransactionResult {
-        const account = multisig ?? this.id;
         if (!account) {
-            throw new Error("No account provided and no default account set");
+            throw new Error("No account available: this.id is not set and no account was provided");
         }
         return approveIntent(tx, { account, key });
     }
@@ -299,11 +306,10 @@ export class Multisig extends Account implements MultisigData {
     disapproveIntent(
         tx: Transaction,
         key: string,
-        multisig?: TransactionObjectInput,
+        account: TransactionObjectInput = this.id,
     ): TransactionResult {
-        const account = multisig ?? this.id;
         if (!account) {
-            throw new Error("No account provided and no default account set");
+            throw new Error("No account available: this.id is not set and no account was provided");
         }
         return disapproveIntent(tx, { account, key });
     }
@@ -311,25 +317,23 @@ export class Multisig extends Account implements MultisigData {
     executeIntent(
         tx: Transaction,
         key: string,
-        multisig?: TransactionObjectInput,
+        account: TransactionObjectInput = this.id,
     ): TransactionResult {
-        const account = multisig ?? this.id;
         if (!account) {
-            throw new Error("No account provided and no default account set");
+            throw new Error("No account available: this.id is not set and no account was provided");
         }
         return executeIntent(tx, { account, key, clock: CLOCK });
     }
 
-    // === Atomic Proposals ===
+    // === Atomic Intents ===
 
-    configMultisig(
+    atomicConfigMultisig(
         tx: Transaction,
         actionsArgs: ConfigMultisigArgs,
-        multisig?: TransactionObjectInput, // need for adding members upon creation
+        account: TransactionObjectInput = this.id,
     ): TransactionResult {
-        const account = multisig ?? this.id;
         if (!account) {
-            throw new Error("No account provided and no default account set");
+            throw new Error("No account available: this.id is not set and no account was provided");
         }
 
         let addresses: string[] = [];
@@ -385,16 +389,11 @@ export class Multisig extends Account implements MultisigData {
         return destroyEmptyExpired(tx, expired);
     }
 
-    toggleUnverifiedDepsAllowed(
+    atomicToggleUnverifiedDepsAllowed(
         tx: Transaction,
-        multisig?: TransactionObjectInput,
+        account: TransactionObjectInput,
     ): TransactionResult {
-        const account = multisig ?? this.id;
-        if (!account) {
-            throw new Error("No account provided and no default account set");
-        }
-
-        const auth = this.authenticate(tx);
+        const auth = this.authenticate(tx, account);
         const outcome = this.emptyApprovalsOutcome(tx);
 
         config.requestToggleUnverifiedAllowed(
@@ -411,8 +410,8 @@ export class Multisig extends Account implements MultisigData {
             }
         );
 
-        this.approveIntent(tx, "toggle-unverified-deps");
-        const executable = this.executeIntent(tx, "toggle-unverified-deps");
+        this.approveIntent(tx, "toggle-unverified-deps", account);
+        const executable = this.executeIntent(tx, "toggle-unverified-deps", account);
         config.executeToggleUnverifiedAllowed(tx, MULTISIG_GENERICS, { executable, account });
 
         const expired = destroyEmptyIntent(tx, { account, key: "toggle-unverified-deps" });
@@ -420,14 +419,13 @@ export class Multisig extends Account implements MultisigData {
         return destroyEmptyExpired(tx, expired);
     }
 
-    configDeps(
+    atomicConfigDeps(
         tx: Transaction,
         actionsArgs: ConfigDepsArgs,
-        multisig?: TransactionObjectInput,
+        account: TransactionObjectInput = this.id,
     ): TransactionResult {
-        const account = multisig ?? this.id;
         if (!account) {
-            throw new Error("No account provided and no default account set");
+            throw new Error("No account available: this.id is not set and no account was provided");
         }
 
         const names: string[] = [];
@@ -439,7 +437,7 @@ export class Multisig extends Account implements MultisigData {
             versions.push(BigInt(dep.version));
         });
 
-        const auth = this.authenticate(tx);
+        const auth = this.authenticate(tx, account);
         const outcome = this.emptyApprovalsOutcome(tx);
 
         config.requestConfigDeps(
@@ -460,8 +458,8 @@ export class Multisig extends Account implements MultisigData {
             }
         );
 
-        this.approveIntent(tx, "config-deps");
-        const executable = this.executeIntent(tx, "config-deps");
+        this.approveIntent(tx, "config-deps", account);
+        const executable = this.executeIntent(tx, "config-deps", account);
         config.executeConfigDeps(tx, MULTISIG_GENERICS, { executable, account });
 
         const expired = destroyEmptyIntent(tx, { account, key: "config-deps" });

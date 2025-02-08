@@ -1,9 +1,9 @@
 import { Transaction, TransactionObjectInput, TransactionResult } from "@mysten/sui/transactions";
 import { SuiClient, SuiObjectResponse } from "@mysten/sui/client";
 import { SuinsClient } from '@mysten/suins-toolkit';
-import { User as UserRaw } from "../.gen/account-config/user/structs";
-import { sendInvite, acceptInvite, refuseInvite } from "../.gen/account-config/multisig/functions";
-import { new_, transfer, destroy } from "../.gen/account-config/user/functions";
+import { User as UserRaw } from "../.gen/account-protocol/user/structs";
+import { acceptInvite, refuseInvite } from "../.gen/account-protocol/user/functions";
+import { new_, transfer, destroy } from "../.gen/account-protocol/user/functions";
 import { USER_REGISTRY, ACCOUNT_CONFIG, contractObjects } from "../types/constants";
 // import { TransactionPureInput } from "src/types/helper-types";
 import { AccountType } from "src/types/account-types";
@@ -129,10 +129,6 @@ export class User implements UserData {
 
 	deleteUser(tx: Transaction, user: TransactionObjectInput): TransactionResult {
 		return destroy(tx, { registry: USER_REGISTRY, user });
-	}
-
-	sendInvite(tx: Transaction, account: TransactionObjectInput, recipient: string): TransactionResult {
-		return sendInvite(tx, { account, recipient });
 	}
 
 	acceptInvite(tx: Transaction, user: TransactionObjectInput, invite: TransactionObjectInput): TransactionResult {

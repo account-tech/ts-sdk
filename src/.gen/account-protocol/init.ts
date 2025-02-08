@@ -6,6 +6,7 @@ import * as intents from "./intents/structs";
 import * as issuer from "./issuer/structs";
 import * as metadata from "./metadata/structs";
 import * as owned from "./owned/structs";
+import * as user from "./user/structs";
 import * as versionWitness from "./version-witness/structs";
 import * as version from "./version/structs";
 import {StructClassLoader} from "../_framework/loader";
@@ -28,4 +29,7 @@ loader.register(config.ConfigDepsIntent);
 loader.register(config.ToggleUnverifiedAllowedAction);
 loader.register(config.ToggleUnverifiedAllowedIntent);
 loader.register(owned.WithdrawAction);
+loader.register(user.Invite);
+loader.register(user.Registry);
+loader.register(user.User);
  }

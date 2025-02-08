@@ -4,9 +4,9 @@ import {ID} from "../../_dependencies/source/0x2/object/structs";
 import {GenericArg, generic, obj, pure} from "../../_framework/util";
 import {Transaction, TransactionArgument, TransactionObjectInput} from "@mysten/sui/transactions";
 
-export interface NewArgs { extensions: TransactionObjectInput; config: GenericArg; unverifiedDepsAllowed: boolean | TransactionArgument }
+export interface NewArgs { extensions: TransactionObjectInput; config: GenericArg; unverifiedDepsAllowed: boolean | TransactionArgument; names: Array<string | TransactionArgument> | TransactionArgument; addresses: Array<string | TransactionArgument> | TransactionArgument; versions: Array<bigint | TransactionArgument> | TransactionArgument }
 
-export function new_( tx: Transaction, typeArgs: [string, string], args: NewArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::account::new`, typeArguments: typeArgs, arguments: [ obj(tx, args.extensions), generic(tx, `${typeArgs[0]}`, args.config), pure(tx, args.unverifiedDepsAllowed, `bool`) ], }) }
+export function new_( tx: Transaction, typeArgs: [string, string], args: NewArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::account::new`, typeArguments: typeArgs, arguments: [ obj(tx, args.extensions), generic(tx, `${typeArgs[0]}`, args.config), pure(tx, args.unverifiedDepsAllowed, `bool`), pure(tx, args.names, `vector<${String.$typeName}>`), pure(tx, args.addresses, `vector<address>`), pure(tx, args.versions, `vector<u64>`) ], }) }
 
 export interface ReceiveArgs { account: TransactionObjectInput; receiving: TransactionObjectInput }
 
@@ -110,9 +110,9 @@ export interface MetadataMutArgs { account: TransactionObjectInput; versionWitne
 
 export function metadataMut( tx: Transaction, typeArgs: [string, string], args: MetadataMutArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::account::metadata_mut`, typeArguments: typeArgs, arguments: [ obj(tx, args.account), obj(tx, args.versionWitness) ], }) }
 
-export interface NewAuthArgs { account: TransactionObjectInput; configWitness: GenericArg }
+export interface NewAuthArgs { account: TransactionObjectInput; versionWitness: TransactionObjectInput; configWitness: GenericArg }
 
-export function newAuth( tx: Transaction, typeArgs: [string, string, string], args: NewAuthArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::account::new_auth`, typeArguments: typeArgs, arguments: [ obj(tx, args.account), generic(tx, `${typeArgs[2]}`, args.configWitness) ], }) }
+export function newAuth( tx: Transaction, typeArgs: [string, string, string], args: NewAuthArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::account::new_auth`, typeArguments: typeArgs, arguments: [ obj(tx, args.account), obj(tx, args.versionWitness), generic(tx, `${typeArgs[2]}`, args.configWitness) ], }) }
 
 export interface ProcessActionArgs { account: TransactionObjectInput; executable: TransactionObjectInput; versionWitness: TransactionObjectInput; intentWitness: GenericArg }
 

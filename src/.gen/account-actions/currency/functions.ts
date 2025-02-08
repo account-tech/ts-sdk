@@ -5,6 +5,8 @@ import {String as String1} from "../../_dependencies/source/0x1/string/structs";
 import {GenericArg, generic, obj, pure} from "../../_framework/util";
 import {Transaction, TransactionArgument, TransactionObjectInput} from "@mysten/sui/transactions";
 
+export function maxSupply( tx: Transaction, typeArg: string, lock: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::currency::max_supply`, typeArguments: [typeArg], arguments: [ obj(tx, lock) ], }) }
+
 export interface LockCapArgs { auth: TransactionObjectInput; account: TransactionObjectInput; treasuryCap: TransactionObjectInput; maxSupply: (bigint | TransactionArgument | TransactionArgument | null) }
 
 export function lockCap( tx: Transaction, typeArgs: [string, string, string], args: LockCapArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::currency::lock_cap`, typeArguments: typeArgs, arguments: [ obj(tx, args.auth), obj(tx, args.account), obj(tx, args.treasuryCap), pure(tx, args.maxSupply, `${Option.$typeName}<u64>`) ], }) }
@@ -50,8 +52,6 @@ export interface DoUpdateArgs { executable: TransactionObjectInput; account: Tra
 export function doUpdate( tx: Transaction, typeArgs: [string, string, string, string], args: DoUpdateArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::currency::do_update`, typeArguments: typeArgs, arguments: [ obj(tx, args.executable), obj(tx, args.account), obj(tx, args.metadata), obj(tx, args.versionWitness), generic(tx, `${typeArgs[3]}`, args.intentWitness) ], }) }
 
 export function hasCap( tx: Transaction, typeArgs: [string, string, string], account: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::currency::has_cap`, typeArguments: typeArgs, arguments: [ obj(tx, account) ], }) }
-
-export function maxSupply( tx: Transaction, typeArg: string, lock: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::currency::max_supply`, typeArguments: [typeArg], arguments: [ obj(tx, lock) ], }) }
 
 export interface NewBurnArgs { intent: TransactionObjectInput; account: TransactionObjectInput; amount: bigint | TransactionArgument; versionWitness: TransactionObjectInput; intentWitness: GenericArg }
 
