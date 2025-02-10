@@ -4,7 +4,7 @@ import * as accountProtocol from "../../../.gen/account-protocol/account/functio
 import * as intents from "../../../.gen/account-protocol/intents/functions";
 import * as accessControlIntent from "../../../.gen/account-actions/access-control-intents/functions";
 import * as accessControl from "../../../.gen/account-actions/access-control/functions";
-import { BorrowCapArgs, IntentArgs, IntentFields } from "../../../types/intent-types";
+import { BorrowCapArgs, IntentArgs, IntentFields } from "../types";
 import { Intent } from "../intent";
 import { Outcome } from "../../outcomes/variants/outcome";
 import { CLOCK } from "src/types/constants";

@@ -4,7 +4,7 @@ import * as multisig from "../../../.gen/account-config/multisig/functions";
 import * as accountProtocol from "../../../.gen/account-protocol/account/functions";
 import * as intents from "../../../.gen/account-protocol/intents/functions";
 import { ConfigMultisigAction } from "../../../.gen/account-config/multisig/structs";
-import { ConfigMultisigArgs, IntentArgs, IntentFields } from "../../../types/intent-types";
+import { ConfigMultisigArgs, IntentArgs, IntentFields } from "../types";
 import { Intent } from "../intent";
 import { Outcome } from "../../outcomes/variants/outcome";
 import { CLOCK } from "src/types/constants";

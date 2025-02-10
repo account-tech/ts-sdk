@@ -7,6 +7,8 @@ export interface JoinArgs { user: TransactionObjectInput; account: TransactionOb
 
 export function join( tx: Transaction, args: JoinArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::multisig::join`, arguments: [ obj(tx, args.user), obj(tx, args.account) ], }) }
 
+export function addresses( tx: Transaction, multisig: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::multisig::addresses`, arguments: [ obj(tx, multisig) ], }) }
+
 export interface DeleteExpiredIntentArgs { account: TransactionObjectInput; key: string | TransactionArgument; clock: TransactionObjectInput }
 
 export function deleteExpiredIntent( tx: Transaction, args: DeleteExpiredIntentArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::multisig::delete_expired_intent`, arguments: [ obj(tx, args.account), pure(tx, args.key, `${String.$typeName}`), obj(tx, args.clock) ], }) }
@@ -18,8 +20,6 @@ export function destroyEmptyIntent( tx: Transaction, args: DestroyEmptyIntentArg
 export interface ExecuteIntentArgs { account: TransactionObjectInput; key: string | TransactionArgument; clock: TransactionObjectInput }
 
 export function executeIntent( tx: Transaction, args: ExecuteIntentArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::multisig::execute_intent`, arguments: [ obj(tx, args.account), pure(tx, args.key, `${String.$typeName}`), obj(tx, args.clock) ], }) }
-
-export function addresses( tx: Transaction, multisig: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::multisig::addresses`, arguments: [ obj(tx, multisig) ], }) }
 
 export interface SendInviteArgs { account: TransactionObjectInput; recipient: string | TransactionArgument }
 

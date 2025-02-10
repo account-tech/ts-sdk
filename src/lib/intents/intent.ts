@@ -1,14 +1,7 @@
 import { Transaction, TransactionObjectInput, TransactionResult } from "@mysten/sui/transactions";
 import { SuiClient } from "@mysten/sui/client";
-import { ActionsArgs, IntentArgs, IntentFields } from "src/types/intent-types";
+import { ActionsArgs, IntentArgs, IntentFields } from "src/lib/intents/types";
 import { Outcome } from "../outcomes/variants/outcome";
-
-export enum IntentStatus {
-    Pending, // can be approved
-    Approved, // has been approved by user but cannot be executed because execution time not reached
-    Executable, // can be executed because execution time reached, and threshold reached or reachable by user
-    Expired, // can be deleted because expiration time reached 
-}
 
 export abstract class Intent {
     args?: ActionsArgs;

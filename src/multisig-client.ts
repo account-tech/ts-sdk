@@ -1,12 +1,12 @@
 import { SuiClient, getFullnodeUrl } from "@mysten/sui/client";
 import { Transaction, TransactionObjectInput, TransactionResult } from "@mysten/sui/transactions";
-import { SUI_FRAMEWORK, ACCOUNT_CONFIG, MULTISIG_GENERICS, TRANSFER_POLICY_RULES } from "./types/constants";
+import { SUI_FRAMEWORK, ACCOUNT_CONFIG, MULTISIG_GENERICS, TRANSFER_POLICY_RULES, ACCOUNT_PROTOCOL } from "./types/constants";
 import { AccountType } from "./types/account-types";
 import { User } from "./lib/user";
 import { Member, Multisig, Threshold } from "./lib/account/configs/multisig";
 import { TransactionPureInput } from "./types/helper-types";
 import * as commands from "./lib/commands";
-import { ActionsArgs, IntentArgs, intentRegistry, IntentType } from "./types/intent-types";
+import { ActionsArgs, IntentArgs, intentRegistry, IntentType } from "./lib/intents/types";
 import { Extensions } from "./lib/extensions";
 import { Approvals } from "./lib/outcomes/variants/approvals";
 import { ConfigDepsIntent } from "./lib/intents/account-actions/config";
@@ -64,14 +64,14 @@ export class MultisigClient {
 			createdAccount = this.user.createUser(tx); // TODO: add optional params for username and avatar 
 			accountId = tx.moveCall({
 				target: `${SUI_FRAMEWORK}::object::id`,
-				typeArguments: [`${ACCOUNT_CONFIG.V1}::user::User`],
+				typeArguments: [`${ACCOUNT_PROTOCOL.V1}::user::User`],
 				arguments: [tx.object(createdAccount)],
 			});
 		}
 		// create the multisig
 		const multisig = this.multisig?.newMultisig(tx);
-		// add verified dependencies (AccountProtocol at idx 0 is already added)
-		this.multisig.atomicConfigDeps(tx, { deps: this.extensions.getLatestDeps().slice(1) }, multisig); // atomic intent
+		// add AccountProtocol, AccountConfig and AccountActions dependency (AccountProtocol and AccountConfig are already added)
+		this.multisig.atomicConfigDeps(tx, { deps: this.extensions.getLatestDeps().slice(0, 3) }, multisig); // atomic intent
 		// add name
 		const auth = this.multisig.authenticate(tx, multisig);
 		commands.replaceMetadata(tx, MULTISIG_GENERICS, auth, multisig, ["name"], [name]);
@@ -102,9 +102,8 @@ export class MultisigClient {
 		proposalType: IntentType,
 		proposalArgs: IntentArgs,
 		actionsArgs: ActionsArgs,
-		role?: string,
 	): TransactionResult {
-		const auth = this.multisig.authenticate(tx, role ?? "");
+		const auth = this.multisig.authenticate(tx);
 		const outcome = this.multisig.emptyApprovalsOutcome(tx);
 
 		const proposalClass = intentRegistry[proposalType];
@@ -141,7 +140,7 @@ export class MultisigClient {
 
 		(intent.outcome as Approvals).maybeApprove(tx, caller);
 		const executable = (intent.outcome as Approvals).constructExecutable(tx);
-		
+
 		let result;
 		result = intent.execute(tx, MULTISIG_GENERICS, executable);
 		// if no more executions scheduled after this one, destroy intent

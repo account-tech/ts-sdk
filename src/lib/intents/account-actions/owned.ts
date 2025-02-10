@@ -7,7 +7,7 @@ import * as ownedIntents from "../../../.gen/account-actions/owned-intents/funct
 import * as transfer from "../../../.gen/account-actions/transfer/functions";
 import * as vesting from "../../../.gen/account-actions/vesting/functions";
 import * as vault from "../../../.gen/account-actions/vault/functions";
-import { IntentArgs, IntentFields, WithdrawAndTransferArgs, WithdrawAndTransferToVaultArgs, WithdrawAndVestArgs } from "../../../types/intent-types";
+import { IntentArgs, IntentFields, WithdrawAndTransferArgs, WithdrawAndTransferToVaultArgs, WithdrawAndVestArgs } from "../types";
 import { Intent } from "../intent";
 import { Outcome } from "../../outcomes/variants/outcome";
 import { WithdrawAction } from "src/.gen/account-protocol/owned/structs";
@@ -369,7 +369,7 @@ export class WithdrawAndVestIntent extends Intent {
                 account,
                 key,
             }
-        ); 
+        );
         owned.deleteWithdraw(
             tx,
             accountGenerics,
@@ -402,7 +402,7 @@ export class WithdrawAndVestIntent extends Intent {
                 key,
                 clock: CLOCK,
             }
-        ); 
+        );
         owned.deleteWithdraw(
             tx,
             accountGenerics,

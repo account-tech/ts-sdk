@@ -9,7 +9,7 @@ import * as vesting from "../../../.gen/account-actions/vesting/functions";
 import * as accountProtocol from "../../../.gen/account-protocol/account/functions";
 import * as intents from "../../../.gen/account-protocol/intents/functions";
 import { MintAction, BurnAction, UpdateAction, DisableAction } from "../../../.gen/account-actions/currency/structs";
-import { UpdateMetadataArgs, WithdrawAndBurnArgs, IntentArgs, IntentFields, DisableRulesArgs, MintAndTransferArgs, MintAndVestArgs } from "../../../types/intent-types";
+import { UpdateMetadataArgs, WithdrawAndBurnArgs, IntentArgs, IntentFields, DisableRulesArgs, MintAndTransferArgs, MintAndVestArgs } from "../types";
 import { Intent } from "../intent";
 import { Outcome } from "../../outcomes/variants/outcome";
 import { WithdrawAction } from "src/.gen/account-protocol/owned/structs";

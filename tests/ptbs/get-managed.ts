@@ -5,5 +5,5 @@ import { MULTISIG, NETWORK } from "./utils";
 (async () => {
     const client = new SuiClient({ url: getFullnodeUrl(NETWORK) });
     const managed = await Managed.init(client, MULTISIG);
-    console.log(managed.treasuries);
+    console.log(managed.getData());
 })();

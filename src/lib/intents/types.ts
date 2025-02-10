@@ -1,15 +1,15 @@
-import { Intent } from "../lib/intents/intent";
-import { BorrowCapIntent } from "../lib/intents/account-actions/access-control";
-import { ConfigDepsIntent } from "../lib/intents/account-actions/config";
-import { DisableRulesIntent, UpdateMetadataIntent, MintAndTransferIntent, MintAndVestIntent, WithdrawAndBurnIntent } from "../lib/intents/account-actions/currency";
-import { ConfigMultisigIntent } from "../lib/intents/account-actions/multisig";
-import { ACCOUNT_ACTIONS, ACCOUNT_CONFIG, ACCOUNT_PROTOCOL } from "./constants";
-import { ListNftsIntent, TakeNftsIntent } from "../lib/intents/account-actions/kiosk";
-import { WithdrawAndTransferIntent, WithdrawAndTransferToVaultIntent, WithdrawAndVestIntent } from "../lib/intents/account-actions/owned";
-import { SpendAndTransferIntent, SpendAndVestIntent } from "../lib/intents/account-actions/vault";
-import { UpgradePackageIntent, RestrictPolicyIntent } from "../lib/intents/account-actions/package-upgrade";
-import { Dep } from "../lib/account/account";
-import { Threshold, Member } from "../lib/account/configs/multisig";
+import { Intent } from "./intent";
+import { BorrowCapIntent } from "./account-actions/access-control";
+import { ConfigDepsIntent } from "./account-actions/config";
+import { DisableRulesIntent, UpdateMetadataIntent, MintAndTransferIntent, MintAndVestIntent, WithdrawAndBurnIntent } from "./account-actions/currency";
+import { ConfigMultisigIntent } from "./account-actions/multisig";
+import { ACCOUNT_ACTIONS, ACCOUNT_CONFIG, ACCOUNT_PROTOCOL } from "../../types/constants";
+import { ListNftsIntent, TakeNftsIntent } from "./account-actions/kiosk";
+import { WithdrawAndTransferIntent, WithdrawAndTransferToVaultIntent, WithdrawAndVestIntent } from "./account-actions/owned";
+import { SpendAndTransferIntent, SpendAndVestIntent } from "./account-actions/vault";
+import { UpgradePackageIntent, RestrictPolicyIntent } from "./account-actions/package-upgrade";
+import { Dep } from "../account/account";
+import { Threshold, Member } from "../account/configs/multisig";
 
 export type IntentType = typeof IntentTypes[keyof typeof IntentTypes];
 
@@ -66,6 +66,13 @@ export const intentRegistry: Record<IntentType, typeof Intent> = {
     [IntentTypes.SpendAndTransfer]: SpendAndTransferIntent,
     [IntentTypes.SpendAndVest]: SpendAndVestIntent,
 } as const;
+
+export enum IntentStatus {
+    Pending, // can be approved
+    Approved, // has been approved by user but cannot be executed because execution time not reached
+    Executable, // can be executed because execution time reached, and threshold reached or reachable by user
+    Expired, // can be deleted because expiration time reached 
+}
 
 export type Issuer = {
     accountAddr: string;

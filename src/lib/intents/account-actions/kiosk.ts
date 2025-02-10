@@ -5,7 +5,7 @@ import * as kiosk from "../../../.gen/account-actions/kiosk/functions";
 import * as kioskIntent from "../../../.gen/account-actions/kiosk-intents/functions";
 import * as accountProtocol from "../../../.gen/account-protocol/account/functions";
 import * as intents from "../../../.gen/account-protocol/intents/functions";
-import { ListNftsArgs, TakeNftsArgs, IntentArgs, IntentFields } from "../../../types/intent-types";
+import { ListNftsArgs, TakeNftsArgs, IntentArgs, IntentFields } from "../types";
 import { Intent } from "../intent";
 import { Outcome } from "../../outcomes/variants/outcome";
 import { CLOCK } from "src/types/constants";

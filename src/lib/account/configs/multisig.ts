@@ -10,11 +10,11 @@ import { destroyEmptyExpired } from "../../../.gen/account-protocol/intents/func
 import { DepFields } from "../../../.gen/account-protocol/deps/structs";
 import { MemberFields, RoleFields } from "../../../.gen/account-config/multisig/structs";
 import { IntentFields as IntentFieldsRaw } from "../../../.gen/account-protocol/intents/structs";
-import { CLOCK, EXTENSIONS, MULTISIG_GENERICS, SUI_FRAMEWORK } from "../../../types/constants";
+import { ACCOUNT_PROTOCOL, CLOCK, EXTENSIONS, MULTISIG_GENERICS, SUI_FRAMEWORK } from "../../../types/constants";
 import { User } from "../../user";
 import { Intent, IntentStatus } from "../../intents/intent";
 import { AccountType } from "../../../types/account-types";
-import { ConfigDepsArgs, ConfigMultisigArgs, IntentFields } from "../../../types/intent-types";
+import { ConfigDepsArgs, ConfigMultisigArgs, IntentFields } from "../../intents/types";
 import { TransactionPureInput } from "src/types/helper-types";
 // import { BurnProposal, MintProposal, UpdateProposal } from "../../intents/account-actions/currency";
 import { Account, Dep } from "../account";
@@ -237,8 +237,8 @@ export class Multisig extends Account implements MultisigData {
         return tx.moveCall({
             package: SUI_FRAMEWORK,
             module: "transfer",
-            function: "public_share",
-            typeArguments: MULTISIG_GENERICS,
+            function: "public_share_object",
+            typeArguments: [`${ACCOUNT_PROTOCOL.V1}::account::Account<${MULTISIG_GENERICS}>`],
             arguments: [account],
         });
     }
@@ -370,7 +370,7 @@ export class Multisig extends Account implements MultisigData {
                 key: "config-multisig",
                 description: "",
                 executionTime: 0n,
-                expirationTime: 0n, 
+                expirationTime: 0n,
                 addresses,
                 weights,
                 roles,
@@ -397,7 +397,7 @@ export class Multisig extends Account implements MultisigData {
         const outcome = this.emptyApprovalsOutcome(tx);
 
         config.requestToggleUnverifiedAllowed(
-            tx, 
+            tx,
             MULTISIG_GENERICS,
             {
                 auth,

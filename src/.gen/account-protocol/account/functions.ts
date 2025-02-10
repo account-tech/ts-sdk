@@ -22,8 +22,6 @@ export interface KeepArgs { account: TransactionObjectInput; obj: GenericArg }
 
 export function keep( tx: Transaction, typeArgs: [string, string, string], args: KeepArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::account::keep`, typeArguments: typeArgs, arguments: [ obj(tx, args.account), generic(tx, `${typeArgs[2]}`, args.obj) ], }) }
 
-export function init( tx: Transaction, otw: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::account::init`, arguments: [ obj(tx, otw) ], }) }
-
 export function intents( tx: Transaction, typeArgs: [string, string], account: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::account::intents`, typeArguments: typeArgs, arguments: [ obj(tx, account) ], }) }
 
 export interface AddActionArgs { account: TransactionObjectInput; intent: TransactionObjectInput; action: GenericArg; versionWitness: TransactionObjectInput; intentWitness: GenericArg }
@@ -33,6 +31,8 @@ export function addAction( tx: Transaction, typeArgs: [string, string, string, s
 export interface AddIntentArgs { account: TransactionObjectInput; intent: TransactionObjectInput; versionWitness: TransactionObjectInput; intentWitness: GenericArg }
 
 export function addIntent( tx: Transaction, typeArgs: [string, string, string], args: AddIntentArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::account::add_intent`, typeArguments: typeArgs, arguments: [ obj(tx, args.account), obj(tx, args.intent), obj(tx, args.versionWitness), generic(tx, `${typeArgs[2]}`, args.intentWitness) ], }) }
+
+export function init( tx: Transaction, otw: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::account::init`, arguments: [ obj(tx, otw) ], }) }
 
 export function deps( tx: Transaction, typeArgs: [string, string], account: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::account::deps`, typeArguments: typeArgs, arguments: [ obj(tx, account) ], }) }
 

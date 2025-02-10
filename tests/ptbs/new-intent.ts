@@ -1,7 +1,7 @@
 import { Transaction } from "@mysten/sui/transactions";
 import { MultisigClient } from "../../src/multisig-client";
 import { Ed25519Keypair } from "@mysten/sui/keypairs/ed25519";
-import { ProposalTypes, AccessArgs } from "../../src/types/proposal-types";
+import { IntentTypes, BorrowCapArgs } from "../../src/types/intent-types";
 import { NETWORK, MULTISIG, testKeypair, executeTx } from "./utils";
 
 (async () => {
@@ -12,14 +12,13 @@ import { NETWORK, MULTISIG, testKeypair, executeTx } from "./utils";
     );
     const tx = new Transaction();
 
-    ms.propose(
+    ms.request(
         tx, 
-        ProposalTypes.Access,
+        IntentTypes.BorrowCap,
         { key: "Lock Coin" }, // proposalArgs 
         { 
             capType: "0x2::package::UpgradeCap",
-            capId: "0x1077c3b838f82dc89585715a1460e6bd99cb7b67c11e470988ada077a5b0340a",
-        } as AccessArgs // actionsArgs
+        } as BorrowCapArgs // actionsArgs
     );
     
     executeTx(tx);

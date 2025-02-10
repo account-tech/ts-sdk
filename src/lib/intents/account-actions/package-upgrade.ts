@@ -4,7 +4,7 @@ import * as accountProtocol from "../../../.gen/account-protocol/account/functio
 import * as intents from "../../../.gen/account-protocol/intents/functions";
 import * as upgradePolicies from "src/.gen/account-actions/package-upgrade/functions";
 import * as upgradePoliciesIntents from "src/.gen/account-actions/package-upgrade-intents/functions";
-import { IntentArgs, IntentFields, RestrictPolicyArgs, UpgradePackageArgs } from "../../../types/intent-types";
+import { IntentArgs, IntentFields, RestrictPolicyArgs, UpgradePackageArgs } from "../types";
 import { Intent } from "../intent";
 import { Outcome } from "../../outcomes/variants/outcome";
 import { RestrictAction, UpgradeAction } from "src/.gen/account-actions/package-upgrade/structs";

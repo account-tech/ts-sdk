@@ -3,7 +3,7 @@ import { SuiClient } from "@mysten/sui/client";
 import * as config from "../../../.gen/account-protocol/config/functions";
 import * as accountProtocol from "../../../.gen/account-protocol/account/functions";
 import * as intents from "../../../.gen/account-protocol/intents/functions";
-import { ConfigDepsArgs, IntentArgs, IntentFields, ToggleUnverifiedAllowedArgs } from "../../../types/intent-types";
+import { ConfigDepsArgs, IntentArgs, IntentFields, ToggleUnverifiedAllowedArgs } from "../types";
 import { ConfigDepsAction, ToggleUnverifiedAllowedAction } from "../../../.gen/account-protocol/config/structs";
 import { CLOCK, EXTENSIONS } from "../../../types/constants";
 import { Intent } from "../intent";

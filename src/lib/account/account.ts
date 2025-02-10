@@ -1,6 +1,6 @@
 import { SuiClient } from "@mysten/sui/client";
 import { Intent } from "../intents/intent";
-import { IntentFields, IntentTypes } from "src/types/intent-types";
+import { IntentFields, IntentTypes } from "src/lib/intents/types";
 import { Outcome } from "../outcomes/variants/outcome";
 import { Managed } from "../objects/managed";
 import { BorrowCapIntent } from "../intents/account-actions/access-control";

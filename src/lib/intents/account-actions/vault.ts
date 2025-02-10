@@ -9,7 +9,7 @@ import * as vesting from "src/.gen/account-actions/vesting/functions";
 import { SpendAction } from "src/.gen/account-actions/vault/structs";
 import { TransferAction } from "src/.gen/account-actions/transfer/structs";
 import { VestAction } from "src/.gen/account-actions/vesting/structs";
-import { IntentArgs, IntentFields, SpendAndTransferArgs, SpendAndVestArgs } from "../../../types/intent-types";
+import { IntentArgs, IntentFields, SpendAndTransferArgs, SpendAndVestArgs } from "../types";
 import { Intent } from "../intent";
 import { Outcome } from "../../outcomes/variants/outcome";
 import { CLOCK } from "src/types/constants";
@@ -239,7 +239,7 @@ export class SpendAndVestIntent extends Intent {
             tx,
             this.args!.coinType,
             expired
-            );
+        );
         transfer.deleteTransfer(
             tx,
             expired
