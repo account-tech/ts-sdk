@@ -2,25 +2,6 @@ import { SuiMoveObject } from "@mysten/sui/client";
 import { KioskClient } from "@mysten/kiosk";
 import { Kiosk } from "../types";
 
-// // get the kiosks and construct the classes
-// const kioskCapObjs = await this.client.multiGetObjects({
-//     ids: Object.keys(kioskIdsToName),
-//     options: { showContent: true }
-// });
-// kioskCapObjs.forEach(obj => {
-//     const kioskCap = (obj.data!.content as any).fields;
-//     kioskIdsToCap[obj.data!.objectId] = kioskCap.id.id;
-//     kioskCapToKiosk[kioskCap.id.id] = kioskCap.for;
-// });
-// const kiosks = await Promise.all(Object.keys(kioskCapToKiosk).map(async kioskCapId => {
-//     return await Kiosk.init(this.kioskClient, kioskCapToKiosk[kioskCapId], kioskCapId);
-// }));
-// Object.keys(kioskIdsToName).forEach(kioskId => {
-//     const kiosk = kiosks.find(kiosk => kioskIdsToCap[kioskId] === kiosk.cap);
-//     if (!kiosk) throw new Error(`Kiosk not found for id ${kioskId}`);
-//     this.kiosks[kioskIdsToName[kioskId]] = kiosk;
-// });
-
 export async function processKiosks(
     client: KioskClient,
     kioskDfs: Map<string, string>

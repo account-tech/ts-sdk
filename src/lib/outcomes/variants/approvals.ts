@@ -1,7 +1,7 @@
 import { Transaction, TransactionResult } from "@mysten/sui/transactions";
 import { approveIntent, disapproveIntent, executeIntent } from "../../../.gen/account-config/multisig/functions";
 import { CLOCK } from "../../../types/constants";
-import { Outcome } from "./outcome";
+import { Outcome } from "../outcome";
 
 export class Approvals implements Outcome {
     constructor(

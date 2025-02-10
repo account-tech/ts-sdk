@@ -1,12 +1,8 @@
 import { SuiClient } from "@mysten/sui/client";
-import { ExtensionFields, Extensions as ExtensionsRaw, History } from "../.gen/account-extensions/extensions/structs";
-import { EXTENSIONS } from "../types/constants";
-import { Dep } from "./account/account";
-
-export type ExtensionData = {
-    name: string;
-    history: { package: string, version: number }[];
-}
+import { ExtensionFields, Extensions as ExtensionsRaw, History } from "../../.gen/account-extensions/extensions/structs";
+import { EXTENSIONS } from "../../types/constants";
+import { Dep } from "../account";
+import { ExtensionData } from "./types";
 
 export class Extensions {
     extensions: ExtensionData[] = [];
@@ -23,7 +19,7 @@ export class Extensions {
 
         return extensions;
     }
-    
+
     // get and format extensions data
     async fetch(): Promise<ExtensionData[]> {
         const extensionsRaw = await ExtensionsRaw.fetch(this.client, EXTENSIONS);
@@ -35,10 +31,10 @@ export class Extensions {
                     version: Number(entry.version),
                 }
             });
-            
+
             return { name: extension.name, history };
         });
-        
+
         return extensions;
     }
 

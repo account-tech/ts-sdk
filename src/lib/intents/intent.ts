@@ -1,10 +1,10 @@
 import { Transaction, TransactionObjectInput, TransactionResult } from "@mysten/sui/transactions";
 import { SuiClient } from "@mysten/sui/client";
-import { ActionsArgs, IntentArgs, IntentFields } from "src/lib/intents/types";
-import { Outcome } from "../outcomes/variants/outcome";
+import { ActionsArgs, IntentArgs, IntentFields } from "./types";
+import { Outcome } from "../outcomes";
 
 export abstract class Intent {
-    args?: ActionsArgs;
+    args!: ActionsArgs;
 
     constructor(
         public client: SuiClient,
@@ -42,9 +42,9 @@ export abstract class Intent {
         return actions;
     }
 
-    assertProposal() {
+    assertProposalExists() {
         if (!this.fields?.key) {
-            throw new Error("Intent is not set. Please set the proposal before calling this method.");
+            throw new Error(`Intent key does not exist: ${this.fields.key}`);
         }
     }
 
@@ -52,57 +52,3 @@ export abstract class Intent {
         return this.fields.expirationTime < Date.now();
     }
 }
-
-// // === Kiosk === 
-
-// proposeTake(
-//     tx: Transaction,
-//     args: TakeArgs,
-// ): TransactionResult {
-//     this.assertMultisig();
-//     return kiosk.proposeTake(
-//         tx,
-//         {
-//             account: this.account!,
-//             key: args.key,
-//             description: args.description,
-//             executionTime: BigInt(args.executionTime),
-//             expirationTime: BigInt(args.expirationTime),
-//             name: args.name,
-//             nftIds: args.nftIds,
-//             recipient: args.recipient,
-//         }
-//     );
-// }
-
-
-// === Transfers ===
-
-// proposeSend(
-//     tx: Transaction,
-//     key: string,
-//     executionTime: number,
-//     expirationTime: number,
-//     description: string,
-//     objects: string[],
-//     recipients: string[],
-// ) {
-//     if ((toAdd || weights) && (toAdd?.length !== weights?.length)) {
-//         throw new Error("The number of members to add does not match the number of weights provided.");
-//     }
-//     tx.moveCall({
-//         target: `${this.packageId}::config::propose_modify`,
-//         arguments: [
-//             typeof(this.account) === "string" ? tx.object(this.account) : this.account,
-//             tx.pure(key),
-//             tx.pure(executionTime),
-//             tx.pure(expirationTime),
-//             tx.pure(description),
-//             name ? tx.pure([name]) : tx.pure([]),
-//             threshold ? tx.pure([threshold]) : tx.pure([]),
-//             toRemove ? tx.pure(toRemove) : tx.pure([]),
-//             toAdd ? tx.pure(toAdd) : tx.pure([]),
-//             weights ? tx.pure(weights) : tx.pure([]),
-//         ],
-//     });
-// }

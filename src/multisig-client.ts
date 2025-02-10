@@ -1,21 +1,16 @@
 import { SuiClient, getFullnodeUrl } from "@mysten/sui/client";
 import { Transaction, TransactionObjectInput, TransactionResult } from "@mysten/sui/transactions";
-import { SUI_FRAMEWORK, ACCOUNT_CONFIG, MULTISIG_GENERICS, TRANSFER_POLICY_RULES, ACCOUNT_PROTOCOL } from "./types/constants";
-import { AccountType } from "./types/account-types";
-import { User } from "./lib/user";
-import { Member, Multisig, Threshold } from "./lib/account/configs/multisig";
-import { TransactionPureInput } from "./types/helper-types";
+import {
+	User, Extensions,
+	Multisig, Approvals, Member, Threshold, Dep,
+	IntentStatus, ActionsArgs, IntentArgs, intentRegistry, IntentType,
+	ConfigDepsIntent, WithdrawAndBurnIntent, UpdateMetadataIntent, ConfigMultisigIntent,
+} from "./lib";
+import {
+	SUI_FRAMEWORK, MULTISIG_GENERICS, TRANSFER_POLICY_RULES, ACCOUNT_PROTOCOL,
+	TransactionPureInput
+} from "./types";
 import * as commands from "./lib/commands";
-import { ActionsArgs, IntentArgs, intentRegistry, IntentType } from "./lib/intents/types";
-import { Extensions } from "./lib/extensions";
-import { Approvals } from "./lib/outcomes/variants/approvals";
-import { ConfigDepsIntent } from "./lib/intents/account-actions/config";
-import { WithdrawAndBurnIntent, UpdateMetadataIntent } from "./lib/intents/account-actions/currency";
-// import { CommandTypes } from "./types/command-types";
-import { ConfigMultisigIntent } from "./lib/intents/account-actions/multisig";
-import { Dep } from "./lib/account/account";
-import { IntentStatus } from "./lib/intents/intent";
-// import { RoleTypes, roleUtils } from "./lib/roles";
 
 export class MultisigClient {
 
@@ -34,7 +29,7 @@ export class MultisigClient {
 		const url = (network == "mainnet" || network == "testnet" || network == "devnet" || network == "localnet") ? getFullnodeUrl(network) : network;
 		const client = new SuiClient({ url });
 
-		const user = await User.init(client, AccountType.MULTISIG, userAddr);
+		const user = await User.init(client, userAddr);
 		const multisig = await Multisig.init(client, multisigId);
 		const extensions = await Extensions.init(client);
 
@@ -160,6 +155,11 @@ export class MultisigClient {
 		if (!intent.hasExpired()) throw new Error("Proposal has not expired");
 
 		intent.deleteExpired(tx, MULTISIG_GENERICS, this.multisig.id, intentKey);
+	}
+
+	canApprove(key: string): boolean {
+		const outcome = this.multisig.intent(key)?.outcome as Approvals;
+		return outcome.approved.includes(this.user.address!);
 	}
 
 	/// Returns true if the intent can be executed after potential approval

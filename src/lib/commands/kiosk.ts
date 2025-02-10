@@ -1,6 +1,6 @@
 import { open, place, delist, withdrawProfits, close } from "src/.gen/account-actions/kiosk/functions";
 import { Transaction, TransactionObjectInput, TransactionResult } from "@mysten/sui/transactions";
-import { TransactionPureInput } from "src/types/helper-types";
+import { TransactionPureInput } from "src/types/helpers";
 
 /// Opens a Kiosk managed by the Account
 export function openKiosk(

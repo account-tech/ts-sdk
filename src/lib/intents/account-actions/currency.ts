@@ -9,16 +9,17 @@ import * as vesting from "../../../.gen/account-actions/vesting/functions";
 import * as accountProtocol from "../../../.gen/account-protocol/account/functions";
 import * as intents from "../../../.gen/account-protocol/intents/functions";
 import { MintAction, BurnAction, UpdateAction, DisableAction } from "../../../.gen/account-actions/currency/structs";
+import { WithdrawAction } from "../../../.gen/account-protocol/owned/structs";
+import { TransferAction } from "../../../.gen/account-actions/transfer/structs";
+import { VestAction } from "../../../.gen/account-actions/vesting/structs";
+
 import { UpdateMetadataArgs, WithdrawAndBurnArgs, IntentArgs, IntentFields, DisableRulesArgs, MintAndTransferArgs, MintAndVestArgs } from "../types";
 import { Intent } from "../intent";
-import { Outcome } from "../../outcomes/variants/outcome";
-import { WithdrawAction } from "src/.gen/account-protocol/owned/structs";
-import { TransferAction } from "src/.gen/account-actions/transfer/structs";
-import { VestAction } from "src/.gen/account-actions/vesting/structs";
-import { CLOCK } from "src/types/constants";
+import { Outcome } from "../../outcomes";
+import { CLOCK } from "../../../types";
 
 export class DisableRulesIntent extends Intent {
-    declare args?: DisableRulesArgs;
+    declare args: DisableRulesArgs;
 
     static async init(
         client: SuiClient,
@@ -143,7 +144,7 @@ export class DisableRulesIntent extends Intent {
 }
 
 export class UpdateMetadataIntent extends Intent {
-    declare args?: UpdateMetadataArgs;
+    declare args: UpdateMetadataArgs;
     metadata?: CoinMetadata;
 
     static async init(
@@ -272,7 +273,7 @@ export class UpdateMetadataIntent extends Intent {
 }
 
 export class MintAndTransferIntent extends Intent {
-    declare args?: MintAndTransferArgs;
+    declare args: MintAndTransferArgs;
 
     static async init(
         client: SuiClient,
@@ -401,7 +402,7 @@ export class MintAndTransferIntent extends Intent {
 }
 
 export class MintAndVestIntent extends Intent {
-    declare args?: MintAndVestArgs;
+    declare args: MintAndVestArgs;
 
     static async init(
         client: SuiClient,
@@ -528,7 +529,7 @@ export class MintAndVestIntent extends Intent {
 }
 
 export class WithdrawAndBurnIntent extends Intent {
-    declare args?: WithdrawAndBurnArgs;
+    declare args: WithdrawAndBurnArgs;
 
     static async init(
         client: SuiClient,

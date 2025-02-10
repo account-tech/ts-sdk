@@ -1,7 +1,6 @@
 import { Transaction } from "@mysten/sui/transactions";
 import { MultisigClient } from "../../src/multisig-client";
-import { Ed25519Keypair } from "@mysten/sui/keypairs/ed25519";
-import { IntentTypes, BorrowCapArgs } from "../../src/types/intent-types";
+import { IntentTypes, BorrowCapArgs } from "../../src/lib/intents";
 import { NETWORK, MULTISIG, testKeypair, executeTx } from "./utils";
 
 (async () => {

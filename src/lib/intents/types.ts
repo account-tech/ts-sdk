@@ -1,21 +1,12 @@
-import { Intent } from "./intent";
-import { BorrowCapIntent } from "./account-actions/access-control";
-import { ConfigDepsIntent } from "./account-actions/config";
-import { DisableRulesIntent, UpdateMetadataIntent, MintAndTransferIntent, MintAndVestIntent, WithdrawAndBurnIntent } from "./account-actions/currency";
-import { ConfigMultisigIntent } from "./account-actions/multisig";
-import { ACCOUNT_ACTIONS, ACCOUNT_CONFIG, ACCOUNT_PROTOCOL } from "../../types/constants";
-import { ListNftsIntent, TakeNftsIntent } from "./account-actions/kiosk";
-import { WithdrawAndTransferIntent, WithdrawAndTransferToVaultIntent, WithdrawAndVestIntent } from "./account-actions/owned";
-import { SpendAndTransferIntent, SpendAndVestIntent } from "./account-actions/vault";
-import { UpgradePackageIntent, RestrictPolicyIntent } from "./account-actions/package-upgrade";
-import { Dep } from "../account/account";
-import { Threshold, Member } from "../account/configs/multisig";
+import { ACCOUNT_ACTIONS, ACCOUNT_CONFIG, ACCOUNT_PROTOCOL } from "../../types";
+import { Threshold, Member, Dep } from "../account";
 
 export type IntentType = typeof IntentTypes[keyof typeof IntentTypes];
 
 export const IntentTypes = {
     // Protocol
     ConfigDeps: `${ACCOUNT_PROTOCOL.V1.slice(2)}::config::ConfigDepsIntent`,
+    ToggleUnverifiedAllowed: `${ACCOUNT_PROTOCOL.V1.slice(2)}::config::ToggleUnverifiedAllowedIntent`,
     // Config
     ConfigMultisig: `${ACCOUNT_CONFIG.V1.slice(2)}::multisig::ConfigMultisigIntent`,
     // Actions
@@ -39,32 +30,6 @@ export const IntentTypes = {
 
     SpendAndTransfer: `${ACCOUNT_ACTIONS.V1.slice(2)}::vault_intents::SpendAndTransferIntent`,
     SpendAndVest: `${ACCOUNT_ACTIONS.V1.slice(2)}::vault_intents::SpendAndVestIntent`,
-} as const;
-
-export const intentRegistry: Record<IntentType, typeof Intent> = {
-    [IntentTypes.ConfigDeps]: ConfigDepsIntent,
-    [IntentTypes.ConfigMultisig]: ConfigMultisigIntent,
-
-    [IntentTypes.BorrowCap]: BorrowCapIntent,
-
-    [IntentTypes.DisableRules]: DisableRulesIntent,
-    [IntentTypes.UpdateMetadata]: UpdateMetadataIntent,
-    [IntentTypes.MintAndTransfer]: MintAndTransferIntent,
-    [IntentTypes.MintAndVest]: MintAndVestIntent,
-    [IntentTypes.WithdrawAndBurn]: WithdrawAndBurnIntent,
-
-    [IntentTypes.TakeNfts]: TakeNftsIntent,
-    [IntentTypes.ListNfts]: ListNftsIntent,
-
-    [IntentTypes.WithdrawAndTransferToVault]: WithdrawAndTransferToVaultIntent,
-    [IntentTypes.WithdrawAndTransfer]: WithdrawAndTransferIntent,
-    [IntentTypes.WithdrawAndVest]: WithdrawAndVestIntent,
-
-    [IntentTypes.UpgradePackage]: UpgradePackageIntent,
-    [IntentTypes.RestrictPolicy]: RestrictPolicyIntent,
-
-    [IntentTypes.SpendAndTransfer]: SpendAndTransferIntent,
-    [IntentTypes.SpendAndVest]: SpendAndVestIntent,
 } as const;
 
 export enum IntentStatus {

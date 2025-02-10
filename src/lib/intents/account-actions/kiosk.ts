@@ -5,13 +5,14 @@ import * as kiosk from "../../../.gen/account-actions/kiosk/functions";
 import * as kioskIntent from "../../../.gen/account-actions/kiosk-intents/functions";
 import * as accountProtocol from "../../../.gen/account-protocol/account/functions";
 import * as intents from "../../../.gen/account-protocol/intents/functions";
+
 import { ListNftsArgs, TakeNftsArgs, IntentArgs, IntentFields } from "../types";
 import { Intent } from "../intent";
-import { Outcome } from "../../outcomes/variants/outcome";
-import { CLOCK } from "src/types/constants";
+import { Outcome } from "../../outcomes";
+import { CLOCK } from "../../../types";
 
 export class TakeNftsIntent extends Intent {
-    declare args?: TakeNftsArgs;
+    declare args: TakeNftsArgs;
 
     static async init(
         client: SuiClient,
@@ -141,7 +142,7 @@ export class TakeNftsIntent extends Intent {
 }
 
 export class ListNftsIntent extends Intent {
-    declare args?: ListNftsArgs;
+    declare args: ListNftsArgs;
 
     static async init(
         client: SuiClient,

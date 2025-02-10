@@ -1,44 +1,22 @@
 import { SuiClient } from "@mysten/sui/client";
-import { Intent } from "../intents/intent";
-import { IntentFields, IntentTypes } from "src/lib/intents/types";
-import { Outcome } from "../outcomes/variants/outcome";
-import { Managed } from "../objects/managed";
-import { BorrowCapIntent } from "../intents/account-actions/access-control";
-import { ConfigDepsIntent } from "../intents/account-actions/config";
-import { DisableRulesIntent, UpdateMetadataIntent, MintAndTransferIntent, MintAndVestIntent, WithdrawAndBurnIntent } from "../intents/account-actions/currency";
-import { TakeNftsIntent, ListNftsIntent } from "../intents/account-actions/kiosk";
-import { ConfigMultisigIntent } from "../intents/account-actions/multisig";
-import { WithdrawAndTransferToVaultIntent, WithdrawAndTransferIntent, WithdrawAndVestIntent } from "../intents/account-actions/owned";
-import { UpgradePackageIntent, RestrictPolicyIntent } from "../intents/account-actions/package-upgrade";
-import { SpendAndTransferIntent, SpendAndVestIntent } from "../intents/account-actions/vault";
+import {
+	Intent, IntentFields, IntentTypes,
+	BorrowCapIntent, ConfigDepsIntent, DisableRulesIntent, UpdateMetadataIntent, MintAndTransferIntent, MintAndVestIntent, WithdrawAndBurnIntent,
+	TakeNftsIntent, ListNftsIntent, WithdrawAndTransferToVaultIntent, WithdrawAndTransferIntent, WithdrawAndVestIntent,
+	UpgradePackageIntent, RestrictPolicyIntent, SpendAndTransferIntent, SpendAndVestIntent, ConfigMultisigIntent
+} from "../intents";
+import { Outcome } from "../outcomes";
+import { Managed } from "../objects";
+import { AccountData, Metadata, Dep } from "./types";
 
-export type AccountData = {
-	id: string;
-	metadata: { key: string, value: string }[];
-	deps: Dep[];
-	managedAssets: Managed;
-}
-
-export type Dep = {
-	name: string,
-	addr: string,
-	version: number,
-}
-
-export interface Account extends AccountData {
+export abstract class Account implements AccountData {
 	// Account Data
-	id: string;
-	metadata: { key: string, value: string }[];
-	deps: Dep[];
-	intents: Intent[]; // different for each account type
-	managedAssets: Managed;
+	id: string = "";
+	metadata: Metadata[] = [];
+	deps: Dep[] = [];
+	intents: Intent[] = []; // different for each account type
+	public managedAssets!: Managed; 
 
-	init(client: SuiClient, userAddr: string, accountId?: string): Promise<Account>;
-	// Factory function to create the appropriate proposal type
-	fetchIntentWithActions(client: SuiClient, outcome: Outcome, fields: IntentFields): Promise<Intent>;
-}
-
-export class Account implements Account {
 	constructor(
 		public client: SuiClient,
 	) { }

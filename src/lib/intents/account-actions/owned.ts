@@ -7,17 +7,18 @@ import * as ownedIntents from "../../../.gen/account-actions/owned-intents/funct
 import * as transfer from "../../../.gen/account-actions/transfer/functions";
 import * as vesting from "../../../.gen/account-actions/vesting/functions";
 import * as vault from "../../../.gen/account-actions/vault/functions";
+import { WithdrawAction } from "../../../.gen/account-protocol/owned/structs";
+import { TransferAction } from "../../../.gen/account-actions/transfer/structs";
+import { VestAction } from "../../../.gen/account-actions/vesting/structs";
+import { DepositAction } from "../../../.gen/account-actions/vault/structs";
+
 import { IntentArgs, IntentFields, WithdrawAndTransferArgs, WithdrawAndTransferToVaultArgs, WithdrawAndVestArgs } from "../types";
 import { Intent } from "../intent";
-import { Outcome } from "../../outcomes/variants/outcome";
-import { WithdrawAction } from "src/.gen/account-protocol/owned/structs";
-import { TransferAction } from "src/.gen/account-actions/transfer/structs";
-import { VestAction } from "src/.gen/account-actions/vesting/structs";
-import { CLOCK } from "src/types/constants";
-import { DepositAction } from "src/.gen/account-actions/vault/structs";
+import { Outcome } from "../../outcomes";
+import { CLOCK } from "../../../types";
 
 export class WithdrawAndTransferToVaultIntent extends Intent {
-    declare args?: WithdrawAndTransferToVaultArgs;
+    declare args: WithdrawAndTransferToVaultArgs;
     // TODO: get object info from ./objects/owned.ts
 
     static async init(
@@ -152,7 +153,7 @@ export class WithdrawAndTransferToVaultIntent extends Intent {
 }
 
 export class WithdrawAndTransferIntent extends Intent {
-    declare args?: WithdrawAndTransferArgs;
+    declare args: WithdrawAndTransferArgs;
     // TODO: get object info from ./objects/owned.ts
 
     static async init(
@@ -291,7 +292,7 @@ export class WithdrawAndTransferIntent extends Intent {
 }
 
 export class WithdrawAndVestIntent extends Intent {
-    declare args?: WithdrawAndVestArgs;
+    declare args: WithdrawAndVestArgs;
 
     static async init(
         client: SuiClient,

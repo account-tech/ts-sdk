@@ -2,16 +2,17 @@ import { Transaction, TransactionObjectInput, TransactionResult } from "@mysten/
 import { SuiClient } from "@mysten/sui/client";
 import * as accountProtocol from "../../../.gen/account-protocol/account/functions";
 import * as intents from "../../../.gen/account-protocol/intents/functions";
-import * as upgradePolicies from "src/.gen/account-actions/package-upgrade/functions";
-import * as upgradePoliciesIntents from "src/.gen/account-actions/package-upgrade-intents/functions";
+import * as upgradePolicies from "../../../.gen/account-actions/package-upgrade/functions";
+import * as upgradePoliciesIntents from "../../../.gen/account-actions/package-upgrade-intents/functions";
+import { RestrictAction, UpgradeAction } from "../../../.gen/account-actions/package-upgrade/structs";
+
 import { IntentArgs, IntentFields, RestrictPolicyArgs, UpgradePackageArgs } from "../types";
 import { Intent } from "../intent";
-import { Outcome } from "../../outcomes/variants/outcome";
-import { RestrictAction, UpgradeAction } from "src/.gen/account-actions/package-upgrade/structs";
-import { CLOCK } from "src/types/constants";
+import { Outcome } from "../../outcomes";
+import { CLOCK } from "../../../types";
 
 export class UpgradePackageIntent extends Intent {
-    declare args?: UpgradePackageArgs;
+    declare args: UpgradePackageArgs;
 
     static async init(
         client: SuiClient,
@@ -125,7 +126,7 @@ export class UpgradePackageIntent extends Intent {
 }
 
 export class RestrictPolicyIntent extends Intent {
-    declare args?: RestrictPolicyArgs;
+    declare args: RestrictPolicyArgs;
 
     static async init(
         client: SuiClient,

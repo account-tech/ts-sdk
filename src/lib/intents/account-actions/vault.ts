@@ -2,20 +2,21 @@ import { Transaction, TransactionObjectInput, TransactionResult } from "@mysten/
 import { SuiClient } from "@mysten/sui/client";
 import * as accountProtocol from "../../../.gen/account-protocol/account/functions";
 import * as intents from "../../../.gen/account-protocol/intents/functions";
-import * as vault from "src/.gen/account-actions/vault/functions";
-import * as vaultIntents from "src/.gen/account-actions/vault-intents/functions";
-import * as transfer from "src/.gen/account-actions/transfer/functions";
-import * as vesting from "src/.gen/account-actions/vesting/functions";
-import { SpendAction } from "src/.gen/account-actions/vault/structs";
-import { TransferAction } from "src/.gen/account-actions/transfer/structs";
-import { VestAction } from "src/.gen/account-actions/vesting/structs";
+import * as vault from "../../../.gen/account-actions/vault/functions";
+import * as vaultIntents from "../../../.gen/account-actions/vault-intents/functions";
+import * as transfer from "../../../.gen/account-actions/transfer/functions";
+import * as vesting from "../../../.gen/account-actions/vesting/functions";
+import { SpendAction } from "../../../.gen/account-actions/vault/structs";
+import { TransferAction } from "../../../.gen/account-actions/transfer/structs";
+import { VestAction } from "../../../.gen/account-actions/vesting/structs";
+
 import { IntentArgs, IntentFields, SpendAndTransferArgs, SpendAndVestArgs } from "../types";
 import { Intent } from "../intent";
-import { Outcome } from "../../outcomes/variants/outcome";
-import { CLOCK } from "src/types/constants";
+import { Outcome } from "../../outcomes";
+import { CLOCK } from "../../../types";
 
 export class SpendAndTransferIntent extends Intent {
-    declare args?: SpendAndTransferArgs;
+    declare args: SpendAndTransferArgs;
 
     static async init(
         client: SuiClient,
@@ -150,7 +151,7 @@ export class SpendAndTransferIntent extends Intent {
 }
 
 export class SpendAndVestIntent extends Intent {
-    declare args?: SpendAndVestArgs;
+    declare args: SpendAndVestArgs;
 
     static async init(
         client: SuiClient,

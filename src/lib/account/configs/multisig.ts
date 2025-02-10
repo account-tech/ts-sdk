@@ -10,46 +10,14 @@ import { destroyEmptyExpired } from "../../../.gen/account-protocol/intents/func
 import { DepFields } from "../../../.gen/account-protocol/deps/structs";
 import { MemberFields, RoleFields } from "../../../.gen/account-config/multisig/structs";
 import { IntentFields as IntentFieldsRaw } from "../../../.gen/account-protocol/intents/structs";
-import { ACCOUNT_PROTOCOL, CLOCK, EXTENSIONS, MULTISIG_GENERICS, SUI_FRAMEWORK } from "../../../types/constants";
-import { User } from "../../user";
-import { Intent, IntentStatus } from "../../intents/intent";
-import { AccountType } from "../../../types/account-types";
-import { ConfigDepsArgs, ConfigMultisigArgs, IntentFields } from "../../intents/types";
-import { TransactionPureInput } from "src/types/helper-types";
-// import { BurnProposal, MintProposal, UpdateProposal } from "../../intents/account-actions/currency";
-import { Account, Dep } from "../account";
-import { Approvals } from "src/lib/outcomes/variants/approvals";
-import { AccountData } from "../account";
-import { Managed } from "src/lib/objects/managed";
 
-export type MultisigData = AccountData & {
-    global: Role;
-    roles: Record<string, Role>;
-    members: MemberUser[];
-    intents: Intent[];
-}
-
-export type Role = {
-    threshold: number,
-    totalWeight: number,
-}
-
-export type Threshold = {
-    name: string,
-    threshold: number,
-}
-
-export type Member = {
-    address: string,
-    weight: number,
-    roles: string[],
-};
-
-export type MemberUser = Member & {
-    accountId: string,
-    username: string,
-    avatar: string,
-};
+import { User } from "../../user/user";
+import { ACCOUNT_PROTOCOL, CLOCK, EXTENSIONS, MULTISIG_GENERICS, SUI_FRAMEWORK, TransactionPureInput } from "../../../types";
+import { Intent, IntentStatus, ConfigDepsArgs, ConfigMultisigArgs, IntentFields } from "../../intents";
+import { Dep, Role, MemberUser, MultisigData } from "../types";
+import { Account } from "../account";
+import { Approvals } from "../../outcomes";
+import { Managed } from "../../objects";
 
 export class Multisig extends Account implements MultisigData {
     global: Role = { threshold: 0, totalWeight: 0 };
@@ -89,7 +57,7 @@ export class Multisig extends Account implements MultisigData {
         const members = await Promise.all(membersAddress.map(async memberAddr => {
             const weight = multisigAccount.config.members.find((m: MemberFields) => m.addr == memberAddr)?.weight;
             const roles = multisigAccount.config.members.find((m: MemberFields) => m.addr == memberAddr)?.roles.contents;
-            const user = await User.init(this.client, AccountType.MULTISIG);
+            const user = await User.init(this.client);
             const userData = await user.fetch(memberAddr);
             return {
                 address: memberAddr,

@@ -1,18 +1,9 @@
 import { Transaction } from "@mysten/sui/transactions";
 import { MultisigClient } from "../../src/multisig-client";
-import { CommandTypes } from "../../src/types/command-types";
 import { NETWORK, testKeypair, MULTISIG, executeTx } from "./utils";
 
 let rolesToAdd = [
-    // CommandTypes.LockCap,
-    // CommandTypes.ConfigMetadata,
-    // CommandTypes.LockTreasuryCap,
-    // CommandTypes.Kiosk,
-    // CommandTypes.Place,
-    // CommandTypes.Delist,
-    // CommandTypes.Treasury,
-    CommandTypes.Deposit + "::Investment",
-    // CommandTypes.LockUpgradeCap,
+    
 ];
 
 (async () => {
@@ -40,7 +31,7 @@ let rolesToAdd = [
     }
 
     // propose the config multisig
-    ms.proposeConfigMultisig(
+    ms.requestConfigMultisig(
         tx,
         multisigData.global.threshold, // keep the current global threshold
         roles,

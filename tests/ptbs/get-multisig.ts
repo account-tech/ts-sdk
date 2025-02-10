@@ -1,4 +1,3 @@
-import { Ed25519Keypair } from "@mysten/sui/keypairs/ed25519";
 import { MultisigClient } from "../../src/multisig-client";
 import { MULTISIG, NETWORK, testKeypair } from "./utils";
 

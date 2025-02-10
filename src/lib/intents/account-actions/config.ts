@@ -3,14 +3,15 @@ import { SuiClient } from "@mysten/sui/client";
 import * as config from "../../../.gen/account-protocol/config/functions";
 import * as accountProtocol from "../../../.gen/account-protocol/account/functions";
 import * as intents from "../../../.gen/account-protocol/intents/functions";
-import { ConfigDepsArgs, IntentArgs, IntentFields, ToggleUnverifiedAllowedArgs } from "../types";
 import { ConfigDepsAction, ToggleUnverifiedAllowedAction } from "../../../.gen/account-protocol/config/structs";
-import { CLOCK, EXTENSIONS } from "../../../types/constants";
+
+import { CLOCK, EXTENSIONS } from "../../../types";
+import { Outcome } from "../../outcomes";
+import { ConfigDepsArgs, IntentArgs, IntentFields, ToggleUnverifiedAllowedArgs } from "../types";
 import { Intent } from "../intent";
-import { Outcome } from "../../outcomes/variants/outcome";
 
 export class ConfigDepsIntent extends Intent {
-    declare args?: ConfigDepsArgs;
+    declare args: ConfigDepsArgs;
 
     static async init(
         client: SuiClient,
@@ -136,7 +137,7 @@ export class ConfigDepsIntent extends Intent {
 }
 
 export class ToggleUnverifiedAllowedIntent extends Intent {
-    declare args?: ToggleUnverifiedAllowedArgs;
+    declare args: ToggleUnverifiedAllowedArgs;
 
     static async init(
         client: SuiClient,
