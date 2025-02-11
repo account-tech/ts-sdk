@@ -1,5 +1,38 @@
 import { ACCOUNT_ACTIONS } from "../../types/constants";
 
+export type OwnedData = {
+    coins: Coin[];
+    nfts: Nft[];
+    objects: OtherObj[];
+}
+
+export type Coin = {
+    type: string;
+    ids: string[];
+    amount: bigint;
+}
+
+export type Nft = {
+    type: string;
+    id: string;
+    name: string;
+    image: string;
+}
+
+export type OtherObj = {
+    type: string;
+    id: string;
+    fields: any;
+}
+
+export type ManagedData = {
+    caps: Cap[]; // cap types
+    currencies: Record<string, Currency>; // coinType -> currency
+    kiosks: Record<string, Kiosk>; // name -> Kiosk
+    vaults: Record<string, Vault>; // coinType -> Vault
+    upgradePolicies: Record<string, UpgradePolicy>; // name -> upgrade & package info
+}
+
 export type ManagedKeyType = typeof ManagedKeyTypes[keyof typeof ManagedKeyTypes];
 
 export const ManagedKeyTypes = {
@@ -16,14 +49,6 @@ export const ManagedKeyTypes = {
 export type Df = {
     capId: string;
     rulesId: string;
-}
-
-export type ManagedData = {
-    caps: Cap[]; // cap types
-    currencies: Record<string, Currency>; // coinType -> currency
-    kiosks: Record<string, Kiosk>; // name -> Kiosk
-    vaults: Record<string, Vault>; // coinType -> Vault
-    upgradePolicies: Record<string, UpgradePolicy>; // name -> upgrade & package info
 }
 
 export type Cap = {

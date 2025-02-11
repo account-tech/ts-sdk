@@ -6,16 +6,17 @@ import {
 	UpgradePackageIntent, RestrictPolicyIntent, SpendAndTransferIntent, SpendAndVestIntent, ConfigMultisigIntent
 } from "../intents";
 import { Outcome } from "../outcomes";
-import { Managed } from "../objects";
+import { Managed, Owned } from "../objects";
 import { AccountData, Metadata, Dep } from "./types";
 
 export abstract class Account implements AccountData {
-	// Account Data
-	id: string = "";
-	metadata: Metadata[] = [];
-	deps: Dep[] = [];
-	intents: Intent[] = []; // different for each account type
-	public managedAssets!: Managed; 
+	public id: string = "";
+	public metadata: Metadata[] = [];
+	public deps: Dep[] = [];
+	public intents: Intent[] = []; // different for each account type
+	// managed assets and owned objects
+	public managedAssets!: Managed;
+	public ownedObjects!: Owned;
 
 	constructor(
 		public client: SuiClient,

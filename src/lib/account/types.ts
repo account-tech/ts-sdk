@@ -1,6 +1,6 @@
 import { ACCOUNT_CONFIG } from "src/types/constants";
 import { Intent } from "../intents";
-import { Managed } from "../objects";
+import { Managed, Owned } from "../objects";
 
 export type AccountType = typeof AccountTypes[keyof typeof AccountTypes];
 
@@ -16,6 +16,7 @@ export type AccountData = {
     metadata: Metadata[];
     deps: Dep[];
     managedAssets: Managed;
+    ownedObjects: Owned;
 }
 
 export type Metadata = {

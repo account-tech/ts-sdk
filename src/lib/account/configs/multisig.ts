@@ -17,12 +17,12 @@ import { Intent, IntentStatus, ConfigDepsArgs, ConfigMultisigArgs, IntentFields 
 import { Dep, Role, MemberUser, MultisigData } from "../types";
 import { Account } from "../account";
 import { Approvals } from "../../outcomes";
-import { Managed } from "../../objects";
+import { Managed, Owned } from "../../objects";
 
 export class Multisig extends Account implements MultisigData {
-    global: Role = { threshold: 0, totalWeight: 0 };
-    roles: Record<string, Role> = {};
-    members: MemberUser[] = [];
+    public global: Role = { threshold: 0, totalWeight: 0 };
+    public roles: Record<string, Role> = {};
+    public members: MemberUser[] = [];
 
     static async init(
         client: SuiClient,
@@ -106,6 +106,7 @@ export class Multisig extends Account implements MultisigData {
 
         // get managed assets
         const managedAssets = await Managed.init(this.client, id);
+        const ownedObjects = await Owned.init(this.client, id);
 
         return {
             id: multisigAccount.id,
@@ -116,6 +117,7 @@ export class Multisig extends Account implements MultisigData {
             members,
             intents,
             managedAssets,
+            ownedObjects,
         }
     }
 
@@ -132,6 +134,7 @@ export class Multisig extends Account implements MultisigData {
         this.members = multisig.members;
         this.intents = multisig.intents;
         this.managedAssets = multisig.managedAssets;
+        this.ownedObjects = multisig.ownedObjects;
     }
 
     getData(): MultisigData {
@@ -144,6 +147,7 @@ export class Multisig extends Account implements MultisigData {
             members: this.members,
             intents: this.intents,
             managedAssets: this.managedAssets,
+            ownedObjects: this.ownedObjects,
         }
     }
 
