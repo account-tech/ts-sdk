@@ -4,7 +4,7 @@ import { SuinsClient } from '@mysten/suins-toolkit';
 import { User as UserRaw } from "../../.gen/account-protocol/user/structs";
 import { acceptInvite, refuseInvite } from "../../.gen/account-protocol/user/functions";
 import { new_, transfer, destroy } from "../../.gen/account-protocol/user/functions";
-import { USER_REGISTRY, ACCOUNT_CONFIG, contractObjects } from "../../types/constants";
+import { USER_REGISTRY, ACCOUNT_PROTOCOL, contractObjects } from "../../types/constants";
 import { UserData, AccountPreviews } from "./types";
 import { AccountTypes } from "../account/types";
 
@@ -35,14 +35,16 @@ export class User implements UserData {
 
 		const { data } = await this.client.getOwnedObjects({
 			owner,
-			filter: { StructType: `${ACCOUNT_CONFIG.V1}::user::User` },
+			filter: { StructType: `${ACCOUNT_PROTOCOL.V1}::user::User` },
 			options: { showContent: true }
 		});
 		const userRaw = data.length !== 0 ? UserRaw.fromSuiParsedData(data[0].data?.content!) : null;
 
 		if (userRaw) {
 			// get accounts objects depending on the account type
-			let accounts: AccountPreviews = {};
+			let accounts: AccountPreviews = {
+				[AccountTypes.Multisig]: []
+			};
 			if (userRaw.accounts.contents.length > 0) {
 				const allIds = userRaw.accounts.contents.flatMap((entry) => entry.value);
 
@@ -54,6 +56,7 @@ export class User implements UserData {
 				accountsObjs.forEach((acc: SuiObjectResponse) => {
 					if (!acc.data?.content) return;
 					const moveObj = acc.data?.content as SuiMoveObject;
+					
 					if (moveObj.type.includes(AccountTypes.Multisig)) {
 						accounts[AccountTypes.Multisig].push({
 							id: (moveObj.fields as any).id.id,

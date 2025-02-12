@@ -47,20 +47,20 @@ export class MultisigClient {
 	createMultisig(
 		tx: Transaction,
 		name: string,
-		newAccount?: { username: string, profilePicture: string },
+		newUser?: { username: string, profilePicture: string },
 		memberAddresses?: string[],
 		globalThreshold?: number,
 	): TransactionResult {
 		// create the user if the user doesn't have one
-		let accountId: TransactionPureInput = this.user.id;
-		let createdAccount: TransactionPureInput | null = null;
-		if (accountId === "") {
-			if (!newAccount) throw new Error("User must create an user before creating a multisig");
-			createdAccount = this.user.createUser(tx); // TODO: add optional params for username and avatar 
-			accountId = tx.moveCall({
+		let userId: TransactionPureInput = this.user.id;
+		let createdUser: TransactionPureInput | null = null;
+		if (userId === "") {
+			if (!newUser) throw new Error("User must create an user before creating a multisig");
+			createdUser = this.user.createUser(tx); // TODO: add optional params for username and avatar 
+			userId = tx.moveCall({
 				target: `${SUI_FRAMEWORK}::object::id`,
 				typeArguments: [`${ACCOUNT_PROTOCOL.V1}::user::User`],
-				arguments: [tx.object(createdAccount)],
+				arguments: [tx.object(createdUser)],
 			});
 		}
 		// create the multisig
@@ -82,11 +82,11 @@ export class MultisigClient {
 			); // atomic intent
 		}
 		// creator register the multisig in his user
-		this.multisig.joinMultisig(tx, createdAccount ? createdAccount : accountId, multisig);
+		this.multisig.joinMultisig(tx, createdUser ? createdUser : userId, multisig);
 		// send invites to added members
 		memberAddresses?.forEach(address => { this.multisig.sendInvite(tx, address, multisig) });
 		// transfer the user if just created
-		if (createdAccount) this.user.transferUser(tx, createdAccount, this.user.address!);
+		if (createdUser) this.user.transferUser(tx, createdUser, this.user.address!);
 		// share the multisig
 		return this.multisig?.shareMultisig(tx, multisig);
 	}
