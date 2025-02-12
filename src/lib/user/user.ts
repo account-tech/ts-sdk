@@ -5,8 +5,8 @@ import { User as UserRaw } from "../../.gen/account-protocol/user/structs";
 import { acceptInvite, refuseInvite } from "../../.gen/account-protocol/user/functions";
 import { new_, transfer, destroy } from "../../.gen/account-protocol/user/functions";
 import { USER_REGISTRY, ACCOUNT_PROTOCOL, contractObjects } from "../../types/constants";
-import { UserData, AccountPreviews } from "./types";
-import { AccountTypes } from "../account/types";
+import { UserData, AccountPreviews, AccountPreview } from "./types";
+import { AccountType, AccountTypes } from "../account/types";
 
 export class User implements UserData {
 	id: string = "";
@@ -116,6 +116,10 @@ export class User implements UserData {
 			avatar: this.avatar,
 			accounts: this.accounts
 		}
+	}
+
+	getAccounts(type: AccountType): AccountPreview[] {
+		return this.accounts[type];
 	}
 
 	// returns an account object that can be used in the ptb before being transferred

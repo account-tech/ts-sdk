@@ -5,12 +5,17 @@ import {
 	Multisig, Approvals, Member, Threshold, Dep,
 	IntentStatus, ActionsArgs, IntentArgs, intentRegistry, IntentType,
 	ConfigDepsIntent, WithdrawAndBurnIntent, UpdateMetadataIntent, ConfigMultisigIntent,
+	AccountPreview,
+	Intent,
+	ManagedData,
+	OwnedData,
 } from "./lib";
 import {
 	SUI_FRAMEWORK, MULTISIG_GENERICS, TRANSFER_POLICY_RULES, ACCOUNT_PROTOCOL,
-	TransactionPureInput
+	TransactionPureInput, DepStatus
 } from "./types";
 import * as commands from "./lib/commands";
+import { AccountTypes, MultisigData } from "./lib/account/types";
 
 export class MultisigClient {
 
@@ -157,13 +162,87 @@ export class MultisigClient {
 		intent.deleteExpired(tx, MULTISIG_GENERICS, this.multisig.id, intentKey);
 	}
 
-	canApprove(key: string): boolean {
+	/// Returns the latest deps from the extensions
+	getLatestExtensions(): Dep[] {
+		return this.extensions.getLatestDeps();
+	}
+
+	getUserInfo(): [string, string] {
+		return [this.user.username, this.user.avatar];
+	}
+
+	getUserMultisigs(): AccountPreview[] {
+		return this.user.getAccounts(AccountTypes.Multisig);
+	}
+
+	getMultisigName(): string {
+		return this.multisig.getName();
+	}
+
+	getMultisigDeps(): Dep[] {
+		return this.multisig.deps;
+	}
+
+	/// Returns deps that are in Multisig and in Extensions
+	getVerifiedDeps(): Dep[] {
+		const currentDeps = this.getMultisigDeps();
+		const latestDeps = this.getLatestExtensions();
+
+		return currentDeps.filter(dep => latestDeps.some(latestDep => latestDep.name === dep.name));
+	}
+
+	/// Returns deps that are in Multisig but not in Extensions
+	getUnverifiedDeps(): Dep[] {
+		const currentDeps = this.getMultisigDeps();
+		const latestDeps = this.getLatestExtensions();
+
+		return currentDeps.filter(dep => !latestDeps.some(latestDep => latestDep.name === dep.name));
+	}
+
+	/// Returns the status of verified deps, with the latest version available
+	getDepsStatus(): DepStatus[] {
+		const currentDeps = this.getVerifiedDeps();
+		const latestDeps = this.getLatestExtensions();
+
+		return currentDeps.map(dep => {
+			const latestDep = latestDeps.find(latestDep => latestDep.name === dep.name);
+			return {
+				name: dep.name,
+				currentAddr: dep.addr,
+				currentVersion: dep.version,
+				latestAddr: latestDep!.addr,
+				latestVersion: latestDep!.version,
+			};
+		});
+	}
+
+	getMultisigConfig(): Pick<MultisigData, "global" | "roles" | "members"> {
+		return {
+			global: this.multisig.global,
+			roles: this.multisig.roles,
+			members: this.multisig.members,
+		};
+	}
+
+	getIntents(): Intent[] {
+		return this.multisig.intents;
+	}
+
+	getIntent(key: string): Intent {
+		return this.multisig.intent(key);
+	}
+
+	getIntentStatus(key: string): IntentStatus {
+		return this.multisig.intentStatus(key);
+	}
+
+	canApproveIntent(key: string): boolean {
 		const outcome = this.multisig.intent(key)?.outcome as Approvals;
 		return outcome.approved.includes(this.user.address!);
 	}
 
 	/// Returns true if the intent can be executed after potential approval
-	canExecute(key: string): boolean {
+	canExecuteIntent(key: string): boolean {
 		const intent = this.multisig.intent(key);
 		const outcome = intent?.outcome as Approvals;
 		const member = this.multisig.member(this.user.address!);
@@ -183,6 +262,14 @@ export class MultisigClient {
 			default:
 				return false;
 		}
+	}
+
+	getManagedAssets(): ManagedData {
+		return this.multisig.managedAssets.getData();
+	}
+
+	getOwnedObjects(): OwnedData {
+		return this.multisig.ownedObjects.getData();
 	}
 
 	// === Commands ===
