@@ -16,6 +16,7 @@ import {
 } from "./types";
 import * as commands from "./lib/commands";
 import { AccountTypes, MultisigData } from "./lib/account/types";
+import { Invite, Profile } from "./lib/user/types";
 
 export class MultisigClient {
 
@@ -162,17 +163,31 @@ export class MultisigClient {
 		intent.deleteExpired(tx, MULTISIG_GENERICS, this.multisig.id, intentKey);
 	}
 
+	acceptInvite(tx: Transaction, invite: TransactionObjectInput): TransactionResult {
+		return this.user.acceptInvite(tx, this.user.id, invite);
+	}
+
+	refuseInvite(tx: Transaction, invite: TransactionObjectInput): TransactionResult {
+		return this.user.refuseInvite(tx, invite);
+	}
+
+	// === Getters ===
+
 	/// Returns the latest deps from the extensions
 	getLatestExtensions(): Dep[] {
 		return this.extensions.getLatestDeps();
 	}
 
-	getUserInfo(): [string, string] {
-		return [this.user.username, this.user.avatar];
+	getUserProfile(): Profile {
+		return this.user.profile;
 	}
 
 	getUserMultisigs(): AccountPreview[] {
 		return this.user.getAccounts(AccountTypes.Multisig);
+	}
+
+	getUserInvites(): Invite[] {
+		return this.user.getInvites(AccountTypes.Multisig);
 	}
 
 	getMultisigName(): string {

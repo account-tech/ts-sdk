@@ -1,6 +1,7 @@
 import { ACCOUNT_CONFIG } from "src/types/constants";
 import { Intent } from "../intents";
 import { Managed, Owned } from "../objects";
+import { Profile } from "../user/types";
 
 export type AccountType = typeof AccountTypes[keyof typeof AccountTypes];
 
@@ -35,7 +36,7 @@ export type Dep = {
 export type MultisigData = AccountData & {
     global: Role;
     roles: Record<string, Role>;
-    members: MemberUser[];
+    members: MemberProfile[];
     intents: Intent[];
 }
 
@@ -55,8 +56,4 @@ export type Member = {
     roles: string[],
 };
 
-export type MemberUser = Member & {
-    accountId: string,
-    username: string,
-    avatar: string,
-};
+export type MemberProfile = Member & Profile;

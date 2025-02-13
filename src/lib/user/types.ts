@@ -1,13 +1,26 @@
+export type Profile = {
+    username: string;
+    avatar: string;
+}
+
 export type AccountPreview = {
     id: string;
     name: string;
 };
 
-export type AccountPreviews = Record<string, AccountPreview[]>;
+export type AccountsByType = Record<string, AccountPreview[]>;
+
+export type Invite = {
+    id: string;
+    accountAddr: string;
+    accountName: string;
+}
+
+export type InvitesByType = Record<string, Invite[]>;
 
 export type UserData = {
     id: string;
-    username: string;
-    avatar: string;
-    accounts: AccountPreviews;
+    profile: Profile;
+    accounts: AccountsByType;
+    invites: InvitesByType;
 }

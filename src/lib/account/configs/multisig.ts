@@ -14,7 +14,7 @@ import { IntentFields as IntentFieldsRaw } from "../../../.gen/account-protocol/
 import { User } from "../../user/user";
 import { ACCOUNT_PROTOCOL, CLOCK, EXTENSIONS, MULTISIG_GENERICS, SUI_FRAMEWORK, TransactionPureInput } from "../../../types";
 import { Intent, IntentStatus, ConfigDepsArgs, ConfigMultisigArgs, IntentFields } from "../../intents";
-import { Dep, Role, MemberUser, MultisigData } from "../types";
+import { Dep, Role, MemberProfile, MultisigData } from "../types";
 import { Account } from "../account";
 import { Approvals } from "../../outcomes";
 import { Managed, Owned } from "../../objects";
@@ -22,7 +22,7 @@ import { Managed, Owned } from "../../objects";
 export class Multisig extends Account implements MultisigData {
     public global: Role = { threshold: 0, totalWeight: 0 };
     public roles: Record<string, Role> = {};
-    public members: MemberUser[] = [];
+    public members: MemberProfile[] = [];
 
     static async init(
         client: SuiClient,
@@ -54,16 +54,15 @@ export class Multisig extends Account implements MultisigData {
 
         // get all members" data (from account and member)
         const membersAddress: string[] = multisigAccount.config.members.map((member: MemberFields) => member.addr);
-        const members = await Promise.all(membersAddress.map(async memberAddr => {
-            const weight = multisigAccount.config.members.find((m: MemberFields) => m.addr == memberAddr)?.weight;
-            const roles = multisigAccount.config.members.find((m: MemberFields) => m.addr == memberAddr)?.roles.contents;
+        const members = await Promise.all(membersAddress.map(async address => {
+            const weight = multisigAccount.config.members.find((m: MemberFields) => m.addr == address)?.weight;
+            const roles = multisigAccount.config.members.find((m: MemberFields) => m.addr == address)?.roles.contents;
             const user = await User.init(this.client);
-            const userData = await user.fetch(memberAddr);
+            const { username, avatar } = await user.fetchProfile(address);
             return {
-                address: memberAddr,
-                accountId: userData?.id!,
-                username: userData?.username!,
-                avatar: userData?.avatar!,
+                address,
+                username,
+                avatar,
                 weight: Number(weight)!,
                 roles: roles!
             }
@@ -151,7 +150,7 @@ export class Multisig extends Account implements MultisigData {
         }
     }
 
-    member(addr: string): MemberUser {
+    member(addr: string): MemberProfile {
         const member = this.members?.find(m => m.address == addr);
         if (!member) {
             throw new Error(`Member with address ${addr} not found.`);
