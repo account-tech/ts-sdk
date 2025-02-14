@@ -153,7 +153,7 @@ export class User implements UserData {
 		// Group invites by account type
 		const invitesByType: InvitesByType = {};
 		invites.forEach(invite => {
-			const type = invite.accountType.toString();
+			const type = "0x" + invite.accountType.toString();
 			if (!invitesByType[type]) {
 				invitesByType[type] = [];
 			}
