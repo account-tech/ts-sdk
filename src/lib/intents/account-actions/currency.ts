@@ -36,12 +36,12 @@ export class DisableRulesIntent extends Intent {
 
         intent.args = {
             coinType,
-            mint: disableAction.mint,
-            burn: disableAction.burn,
-            updateSymbol: disableAction.updateSymbol,
-            updateName: disableAction.updateName,
-            updateDescription: disableAction.updateDescription,
-            updateIcon: disableAction.updateIcon,
+            disableMint: disableAction.mint,
+            disableBurn: disableAction.burn,
+            disableUpdateSymbol: disableAction.updateSymbol,
+            disableUpdateName: disableAction.updateName,
+            disableUpdateDescription: disableAction.updateDescription,
+            disableUpdateIcon: disableAction.updateIcon,
         };
         return intent;
     }
@@ -66,12 +66,12 @@ export class DisableRulesIntent extends Intent {
                 description: intentArgs.description ?? "",
                 executionTime: intentArgs.executionTimes?.[0] ?? 0n,
                 expirationTime: intentArgs.expirationTime ?? BigInt(Math.floor(Date.now()) + 7 * 24 * 60 * 60 * 1000),
-                disableMint: actionArgs.mint,
-                disableBurn: actionArgs.burn,
-                disableUpdateSymbol: actionArgs.updateSymbol,
-                disableUpdateName: actionArgs.updateName,
-                disableUpdateDescription: actionArgs.updateDescription,
-                disableUpdateIcon: actionArgs.updateIcon,
+                disableMint: actionArgs.disableMint,
+                disableBurn: actionArgs.disableBurn,
+                disableUpdateSymbol: actionArgs.disableUpdateSymbol,
+                disableUpdateName: actionArgs.disableUpdateName,
+                disableUpdateDescription: actionArgs.disableUpdateDescription,
+                disableUpdateIcon: actionArgs.disableUpdateIcon,
             }
         );
     }
@@ -162,10 +162,10 @@ export class UpdateMetadataIntent extends Intent {
 
         intent.args = {
             coinType,
-            name: updateAction.name,
-            symbol: updateAction.symbol,
-            description: updateAction.description,
-            icon: updateAction.iconUrl,
+            newName: updateAction.name,
+            newSymbol: updateAction.symbol,
+            newDescription: updateAction.description,
+            newIcon: updateAction.iconUrl,
         };
 
         intent.metadata = await getCoinMeta(client, intent.args.coinType);
@@ -192,10 +192,10 @@ export class UpdateMetadataIntent extends Intent {
                 description: intentArgs.description ?? "",
                 executionTime: intentArgs.executionTimes?.[0] ?? 0n,
                 expirationTime: intentArgs.expirationTime ?? BigInt(Math.floor(Date.now()) + 7 * 24 * 60 * 60 * 1000),
-                mdName: actionArgs.name,
-                mdSymbol: actionArgs.symbol,
-                mdDescription: actionArgs.description,
-                mdIcon: actionArgs.icon,
+                mdName: actionArgs.newName,
+                mdSymbol: actionArgs.newSymbol,
+                mdDescription: actionArgs.newDescription,
+                mdIcon: actionArgs.newIcon,
             }
         );
     }

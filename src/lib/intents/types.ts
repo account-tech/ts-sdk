@@ -89,20 +89,20 @@ export type BorrowCapArgs = {
 
 export type DisableRulesArgs = {
     coinType: string;
-    mint: boolean;
-    burn: boolean;
-    updateSymbol: boolean;
-    updateName: boolean;
-    updateDescription: boolean;
-    updateIcon: boolean;
+    disableMint: boolean;
+    disableBurn: boolean;
+    disableUpdateSymbol: boolean;
+    disableUpdateName: boolean;
+    disableUpdateDescription: boolean;
+    disableUpdateIcon: boolean;
 }
 
 export type UpdateMetadataArgs = {
     coinType: string;
-    name: string | null;
-    symbol: string | null;
-    description: string | null;
-    icon: string | null;
+    newName: string | null;
+    newSymbol: string | null;
+    newDescription: string | null;
+    newIcon: string | null;
 }
 
 export type MintAndTransferArgs = {
