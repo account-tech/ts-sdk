@@ -63,6 +63,10 @@ export class MultisigClient {
 		await this.extensions.refresh();
 	}
 
+	async switchMultisig(multisigId: string) {
+		await this.multisig.refresh(multisigId);
+	}
+
 	/// Creates a multisig with default weights of 1 (1 member = 1 voice)
 	createMultisig(
 		tx: Transaction,
