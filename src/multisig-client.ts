@@ -303,6 +303,19 @@ export class MultisigClient {
 
 	// === Commands ===
 
+	/// Automatically merges and splits coins, then returns the ids of the newly created coins to be used in an intent
+	mergeAndSplit(
+		tx: Transaction,
+		coinType: string,
+		toSplit: bigint[], // amounts
+	): TransactionResult {
+		const coin = this.multisig.ownedObjects.getCoin(coinType);
+		if (!coin || coin.amount < toSplit.reduce((acc, curr) => acc + curr, 0n)) throw new Error("Not enough coins");
+
+		const auth = this.multisig.authenticate(tx);
+		return commands.mergeAndSplit(tx, MULTISIG_GENERICS, coinType, auth, this.multisig.id, coin.ids.slice(0, 500), toSplit);
+	}
+
 	/// Deposits and locks a Cap object in the Account
 	depositCap(
 		tx: Transaction,
@@ -472,7 +485,7 @@ export class MultisigClient {
 		description?: string, // default is empty
 		executionTime?: bigint, // default is now
 		expirationTime?: bigint, // default is 1 week
-	) {
+	): TransactionResult {
 		const auth = this.multisig.authenticate(tx);
 		const outcome = this.multisig.emptyApprovalsOutcome(tx);
 
@@ -496,7 +509,7 @@ export class MultisigClient {
 		description?: string, // default is empty
 		executionTime?: bigint, // default is now
 		expirationTime?: bigint, // default is 1 week
-	) {
+	): TransactionResult {
 		const auth = this.multisig.authenticate(tx);
 		const outcome = this.multisig.emptyApprovalsOutcome(tx);
 
@@ -520,7 +533,7 @@ export class MultisigClient {
 		description?: string, // default is empty
 		executionTime?: bigint, // default is now
 		expirationTime?: bigint, // default is 1 week
-	) {
+	): TransactionResult {
 		const auth = this.multisig.authenticate(tx);
 		const outcome = this.multisig.emptyApprovalsOutcome(tx);
 
@@ -544,7 +557,7 @@ export class MultisigClient {
 		description?: string, // default is empty
 		executionTime?: bigint, // default is now
 		expirationTime?: bigint, // default is 1 week
-	) {
+	): TransactionResult {
 		const auth = this.multisig.authenticate(tx);
 		const outcome = this.multisig.emptyApprovalsOutcome(tx);
 
@@ -574,7 +587,7 @@ export class MultisigClient {
 		description?: string, // default is empty
 		executionTime?: bigint, // default is now
 		expirationTime?: bigint, // default is 1 week
-	) {
+	): TransactionResult {
 		const auth = this.multisig.authenticate(tx);
 		const outcome = this.multisig.emptyApprovalsOutcome(tx);
 
@@ -602,7 +615,7 @@ export class MultisigClient {
 		description?: string, // default is empty
 		executionTime?: bigint, // default is now
 		expirationTime?: bigint, // default is 1 week
-	) {
+	): TransactionResult {
 		const auth = this.multisig.authenticate(tx);
 		const outcome = this.multisig.emptyApprovalsOutcome(tx);
 
@@ -627,7 +640,7 @@ export class MultisigClient {
 		description?: string, // default is empty
 		executionTimes?: bigint[], // default is now
 		expirationTime?: bigint, // default is 1 week
-	) {
+	): TransactionResult {
 		const auth = this.multisig.authenticate(tx);
 		const outcome = this.multisig.emptyApprovalsOutcome(tx);
 
@@ -655,7 +668,7 @@ export class MultisigClient {
 		description?: string, // default is empty
 		executionTime?: bigint, // default is now
 		expirationTime?: bigint, // default is 1 week
-	) {
+	): TransactionResult {
 		const auth = this.multisig.authenticate(tx);
 		const outcome = this.multisig.emptyApprovalsOutcome(tx);
 
@@ -672,6 +685,33 @@ export class MultisigClient {
 		return this.multisig.approveIntent(tx, key, this.multisig.id);
 	}
 
+	requestWithdrawAndBurn(
+		tx: Transaction,
+		coinType: string,
+		amount: bigint,
+		key: string,
+		description?: string, // default is empty
+		executionTime?: bigint, // default is now
+		expirationTime?: bigint, // default is 1 week
+	): TransactionResult {
+		const auth = this.multisig.authenticate(tx);
+		const outcome = this.multisig.emptyApprovalsOutcome(tx);
+
+		const coinId = this.mergeAndSplit(tx, coinType, [amount]);
+
+		WithdrawAndBurnIntent.prototype.request(
+			tx,
+			MULTISIG_GENERICS,
+			auth,
+			outcome,
+			this.multisig.id,
+			{ key, description, executionTimes: [executionTime ?? 0n], expirationTime },
+			{ coinType, coinId, amount },
+		);
+
+		return this.multisig.approveIntent(tx, key, this.multisig.id);
+	}
+
 	requestTakeNfts(
 		tx: Transaction,
 		kioskName: string,
@@ -681,7 +721,7 @@ export class MultisigClient {
 		description?: string, // default is empty
 		executionTime?: bigint, // default is now
 		expirationTime?: bigint, // default is 1 week
-	) {
+	): TransactionResult {
 		const auth = this.multisig.authenticate(tx);
 		const outcome = this.multisig.emptyApprovalsOutcome(tx);
 
@@ -706,7 +746,7 @@ export class MultisigClient {
 		description?: string, // default is empty
 		executionTime?: bigint, // default is now
 		expirationTime?: bigint, // default is 1 week
-	) {
+	): TransactionResult {
 		const auth = this.multisig.authenticate(tx);
 		const outcome = this.multisig.emptyApprovalsOutcome(tx);
 
@@ -726,16 +766,17 @@ export class MultisigClient {
 	requestWithdrawAndTransferToVault(
 		tx: Transaction,
 		coinType: string,
-		coinId: string,
 		coinAmount: bigint,
 		vaultName: string,
 		key: string,
 		description?: string, // default is empty
 		executionTime?: bigint, // default is now
 		expirationTime?: bigint, // default is 1 week
-	) {
+	): TransactionResult {
 		const auth = this.multisig.authenticate(tx);
 		const outcome = this.multisig.emptyApprovalsOutcome(tx);
+
+		const coinId = this.mergeAndSplit(tx, coinType, [coinAmount]);
 
 		WithdrawAndTransferToVaultIntent.prototype.request(
 			tx,
@@ -752,14 +793,22 @@ export class MultisigClient {
 
 	requestWithdrawAndTransfer(
 		tx: Transaction,
-		transfers: { objectId: string, recipient: string }[],
+		coinTransfers: { coinType: string, coinAmount: bigint, recipient: string }[], 
+		objTransfers: { objectId: string, recipient: string }[], 
 		key: string,
 		description?: string, // default is empty
 		executionTime?: bigint, // default is now
 		expirationTime?: bigint, // default is 1 week
-	) {
+	): TransactionResult {
 		const auth = this.multisig.authenticate(tx);
 		const outcome = this.multisig.emptyApprovalsOutcome(tx);
+
+		let transfers: { objectId: TransactionPureInput, recipient: string }[] = objTransfers;
+
+		coinTransfers.forEach(transfer => {
+			const objectId = this.mergeAndSplit(tx, transfer.coinType, [transfer.coinAmount]);
+			transfers.push({ objectId, recipient: transfer.recipient });
+		});
 
 		WithdrawAndTransferIntent.prototype.request(
 			tx,
@@ -776,7 +825,8 @@ export class MultisigClient {
 
 	requestWithdrawAndVest(
 		tx: Transaction,
-		coinId: string,
+		coinType: string,
+		coinAmount: bigint,
 		start: bigint,
 		end: bigint,
 		recipient: string,
@@ -784,9 +834,11 @@ export class MultisigClient {
 		description?: string, // default is empty
 		executionTime?: bigint, // default is now
 		expirationTime?: bigint, // default is 1 week
-	) {
+	): TransactionResult {
 		const auth = this.multisig.authenticate(tx);
 		const outcome = this.multisig.emptyApprovalsOutcome(tx);
+
+		const coinId = this.mergeAndSplit(tx, coinType, [coinAmount]);
 
 		WithdrawAndVestIntent.prototype.request(
 			tx,
@@ -809,7 +861,7 @@ export class MultisigClient {
 		description?: string, // default is empty
 		executionTime?: bigint, // default is now
 		expirationTime?: bigint, // default is 1 week
-	) {
+	): TransactionResult {
 		const auth = this.multisig.authenticate(tx);
 		const outcome = this.multisig.emptyApprovalsOutcome(tx);
 
@@ -834,7 +886,7 @@ export class MultisigClient {
 		description?: string, // default is empty
 		executionTime?: bigint, // default is now
 		expirationTime?: bigint, // default is 1 week
-	) {
+	): TransactionResult {
 		const auth = this.multisig.authenticate(tx);
 		const outcome = this.multisig.emptyApprovalsOutcome(tx);
 
@@ -860,7 +912,7 @@ export class MultisigClient {
 		description?: string, // default is empty
 		executionTimes?: bigint[], // default is now
 		expirationTime?: bigint, // default is 1 week
-	) {
+	): TransactionResult {
 		const auth = this.multisig.authenticate(tx);
 		const outcome = this.multisig.emptyApprovalsOutcome(tx);
 
@@ -889,7 +941,7 @@ export class MultisigClient {
 		description?: string, // default is empty
 		executionTime?: bigint, // default is now
 		expirationTime?: bigint, // default is 1 week
-	) {
+	): TransactionResult {
 		const auth = this.multisig.authenticate(tx);
 		const outcome = this.multisig.emptyApprovalsOutcome(tx);
 

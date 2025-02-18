@@ -93,4 +93,16 @@ export class Owned implements OwnedData {
         this.nfts = data.nfts;
         this.objects = data.objects;
     }
+
+    getCoin(coinType: string): Coin | undefined {
+        return this.coins.find(c => c.type === coinType);
+    }
+
+    getNft(nftType: string): Nft | undefined {
+        return this.nfts.find(n => n.type === nftType);
+    }
+
+    getOtherObj(type: string): OtherObj | undefined {
+        return this.objects.find(o => o.type === type);
+    }
 }

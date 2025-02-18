@@ -1,4 +1,4 @@
-import { ACCOUNT_ACTIONS, ACCOUNT_CONFIG, ACCOUNT_PROTOCOL } from "../../types";
+import { ACCOUNT_ACTIONS, ACCOUNT_CONFIG, ACCOUNT_PROTOCOL, TransactionPureInput } from "../../types";
 import { Threshold, Member, Dep } from "../account";
 
 export type IntentType = typeof IntentTypes[keyof typeof IntentTypes];
@@ -120,7 +120,7 @@ export type MintAndVestArgs = {
 
 export type WithdrawAndBurnArgs = {
     coinType: string;
-    coinId: string;
+    coinId: TransactionPureInput;
     amount: bigint;
 }
 
@@ -137,17 +137,17 @@ export type ListNftsArgs = {
 
 export type WithdrawAndTransferToVaultArgs = {
     coinType: string;
-    coinId: string;
+    coinId: TransactionPureInput;
     coinAmount: bigint;
     vaultName: string;
 }
 
 export type WithdrawAndTransferArgs = {
-    transfers: { objectId: string, recipient: string }[];
+    transfers: { objectId: TransactionPureInput, recipient: string }[];
 }
 
 export type WithdrawAndVestArgs = {
-    coinId: string;
+    coinId: TransactionPureInput;
     start: bigint;
     end: bigint;
     recipient: string;
