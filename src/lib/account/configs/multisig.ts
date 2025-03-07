@@ -104,7 +104,7 @@ export class Multisig extends Account implements MultisigData {
         }));
 
         // get managed assets
-        const managedAssets = await Managed.init(this.client, id);
+        const managedAssets = await Managed.init(this.client, id, ['currencies', 'kiosks', 'vaults', 'upgradePolicies']);
         const ownedObjects = await Owned.init(this.client, id);
 
         return {

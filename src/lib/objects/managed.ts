@@ -25,13 +25,13 @@ export class Managed implements ManagedData {
         this.accountId = accountId;
     }
 
-    static async init(client: SuiClient, accountId: string): Promise<Managed> {
+    static async init(client: SuiClient, accountId: string, assets?: string[]): Promise<Managed> {
         const managed = new Managed(client, accountId);
-        await managed.refresh();
+        await managed.refresh(accountId, assets);
         return managed;
     }
 
-    async fetch(accountId: string = this.accountId): Promise<ManagedData> {
+    async fetch(accountId: string = this.accountId, assets?: string[]): Promise<ManagedData> {
         if (!accountId && !this.accountId) {
             throw new Error("Account id missing");
         }
@@ -111,6 +111,23 @@ export class Managed implements ManagedData {
             }
         });
 
+        if (assets && assets.length > 0) {
+            const result: Partial<ManagedData> = { caps };
+            if (assets.includes('currencies') && currencyDfs.size > 0) {
+                result.currencies = await processCurrencies(this.client, currencyDfs);
+            }
+            if (assets.includes('kiosks') && kioskDfs.size > 0) {
+                result.kiosks = await processKiosks(this.kioskClient, kioskDfs);
+            }
+            if (assets.includes('vaults') && vaultDfs.size > 0) {
+                result.vaults = await processVaults(this.client, vaultDfs);
+            }
+            if (assets.includes('upgradePolicies') && upgradePolicyDfs.size > 0) {
+                result.upgradePolicies = await processUpgradePolicies(this.client, upgradePolicyDfs);
+            }
+            return result as ManagedData;
+        }
+
         return {
             caps,
             currencies: await processCurrencies(this.client, currencyDfs),
@@ -120,8 +137,8 @@ export class Managed implements ManagedData {
         };
     }
 
-    async refresh(accountId: string = this.accountId) {
-        const managedData = await this.fetch(accountId);
+    async refresh(accountId: string = this.accountId, assets?: string[]) {
+        const managedData = await this.fetch(accountId, assets);
         this.setData(managedData);
     }
 
