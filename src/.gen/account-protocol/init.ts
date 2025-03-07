@@ -23,13 +23,13 @@ loader.register(deps.Deps);
 loader.register(account.ACCOUNT);
 loader.register(account.Account);
 loader.register(account.Auth);
-loader.register(user.Invite);
-loader.register(user.Registry);
-loader.register(user.User);
-loader.register(owned.WithdrawAction);
 loader.register(version.V1);
 loader.register(config.ConfigDepsAction);
 loader.register(config.ConfigDepsIntent);
 loader.register(config.ToggleUnverifiedAllowedAction);
 loader.register(config.ToggleUnverifiedAllowedIntent);
+loader.register(owned.WithdrawAction);
+loader.register(user.Invite);
+loader.register(user.Registry);
+loader.register(user.User);
  }

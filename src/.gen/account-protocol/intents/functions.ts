@@ -46,6 +46,8 @@ export interface AddIntentArgs { intents: TransactionObjectInput; intent: Transa
 
 export function addIntent( tx: Transaction, typeArg: string, args: AddIntentArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::intents::add_intent`, typeArguments: [typeArg], arguments: [ obj(tx, args.intents), obj(tx, args.intent) ], }) }
 
+export function creator( tx: Transaction, typeArg: string, intent: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::intents::creator`, typeArguments: [typeArg], arguments: [ obj(tx, intent) ], }) }
+
 export function destroyEmptyExpired( tx: Transaction, expired: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::intents::destroy_empty_expired`, arguments: [ obj(tx, expired) ], }) }
 
 export function executionTimes( tx: Transaction, typeArg: string, intent: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::intents::execution_times`, typeArguments: [typeArg], arguments: [ obj(tx, intent) ], }) }

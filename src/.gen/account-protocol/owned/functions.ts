@@ -17,7 +17,9 @@ export interface DoWithdrawArgs { executable: TransactionObjectInput; account: T
 
 export function doWithdraw( tx: Transaction, typeArgs: [string, string, string, string], args: DoWithdrawArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::owned::do_withdraw`, typeArguments: typeArgs, arguments: [ obj(tx, args.executable), obj(tx, args.account), obj(tx, args.receiving), obj(tx, args.versionWitness), generic(tx, `${typeArgs[3]}`, args.intentWitness) ], }) }
 
-export function merge( tx: Transaction, typeArg: string, coins: Array<TransactionObjectInput> | TransactionArgument ) { return tx.moveCall({ target: `${PUBLISHED_AT}::owned::merge`, typeArguments: [typeArg], arguments: [ vector(tx, `${Coin.$typeName}<${typeArg}>`, coins) ], }) }
+export interface MergeArgs { account: TransactionObjectInput; coins: Array<TransactionObjectInput> | TransactionArgument }
+
+export function merge( tx: Transaction, typeArgs: [string, string, string], args: MergeArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::owned::merge`, typeArguments: typeArgs, arguments: [ obj(tx, args.account), vector(tx, `${Coin.$typeName}<${typeArgs[2]}>`, args.coins) ], }) }
 
 export interface MergeAndSplitArgs { auth: TransactionObjectInput; account: TransactionObjectInput; toMerge: Array<TransactionObjectInput> | TransactionArgument; toSplit: Array<bigint | TransactionArgument> | TransactionArgument }
 

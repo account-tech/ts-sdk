@@ -1,5 +1,4 @@
 import {PUBLISHED_AT} from "..";
-import {String} from "../../_dependencies/source/0x1/string/structs";
 import {GenericArg, generic, obj, pure} from "../../_framework/util";
 import {Transaction, TransactionArgument, TransactionObjectInput} from "@mysten/sui/transactions";
 
@@ -25,15 +24,17 @@ export function addAccount( tx: Transaction, typeArgs: [string, string, string],
 
 export function allIds( tx: Transaction, user: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::user::all_ids`, arguments: [ obj(tx, user) ], }) }
 
-export interface IdsForTypeArgs { user: TransactionObjectInput; accountType: string | TransactionArgument }
-
-export function idsForType( tx: Transaction, args: IdsForTypeArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::user::ids_for_type`, arguments: [ obj(tx, args.user), pure(tx, args.accountType, `${String.$typeName}`) ], }) }
+export function idsForType( tx: Transaction, typeArg: string, user: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::user::ids_for_type`, typeArguments: [typeArg], arguments: [ obj(tx, user) ], }) }
 
 export function refuseInvite( tx: Transaction, invite: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::user::refuse_invite`, arguments: [ obj(tx, invite) ], }) }
 
 export interface RemoveAccountArgs { user: TransactionObjectInput; account: TransactionObjectInput; configWitness: GenericArg }
 
 export function removeAccount( tx: Transaction, typeArgs: [string, string, string], args: RemoveAccountArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::user::remove_account`, typeArguments: typeArgs, arguments: [ obj(tx, args.user), obj(tx, args.account), generic(tx, `${typeArgs[2]}`, args.configWitness) ], }) }
+
+export interface ReorderAccountsArgs { user: TransactionObjectInput; addrs: Array<string | TransactionArgument> | TransactionArgument }
+
+export function reorderAccounts( tx: Transaction, typeArg: string, args: ReorderAccountsArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::user::reorder_accounts`, typeArguments: [typeArg], arguments: [ obj(tx, args.user), pure(tx, args.addrs, `vector<address>`) ], }) }
 
 export interface SendInviteArgs { account: TransactionObjectInput; recipient: string | TransactionArgument; configWitness: GenericArg }
 

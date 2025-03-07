@@ -149,7 +149,7 @@ export class UpgradeAction implements StructClass { __StructClass = true as cons
 
 export function isUpgradeCapKey(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::package_upgrade::UpgradeCapKey`; }
 
-export interface UpgradeCapKeyFields { name: ToField<String> }
+export interface UpgradeCapKeyFields { pos0: ToField<String> }
 
 export type UpgradeCapKeyReified = Reified< UpgradeCapKey, UpgradeCapKeyFields >;
 
@@ -159,11 +159,11 @@ export class UpgradeCapKey implements StructClass { __StructClass = true as cons
 
  readonly $typeName = UpgradeCapKey.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::package_upgrade::UpgradeCapKey`; readonly $typeArgs: []; readonly $isPhantom = UpgradeCapKey.$isPhantom;
 
- readonly name: ToField<String>
+ readonly pos0: ToField<String>
 
  private constructor(typeArgs: [], fields: UpgradeCapKeyFields, ) { this.$fullTypeName = composeSuiType( UpgradeCapKey.$typeName, ...typeArgs ) as `${typeof PKG_V1}::package_upgrade::UpgradeCapKey`; this.$typeArgs = typeArgs;
 
- this.name = fields.name; }
+ this.pos0 = fields.pos0; }
 
  static reified( ): UpgradeCapKeyReified { return { typeName: UpgradeCapKey.$typeName, fullTypeName: composeSuiType( UpgradeCapKey.$typeName, ...[] ) as `${typeof PKG_V1}::package_upgrade::UpgradeCapKey`, typeArgs: [ ] as [], isPhantom: UpgradeCapKey.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => UpgradeCapKey.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => UpgradeCapKey.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => UpgradeCapKey.fromBcs( data, ), bcs: UpgradeCapKey.bcs, fromJSONField: (field: any) => UpgradeCapKey.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => UpgradeCapKey.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => UpgradeCapKey.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => UpgradeCapKey.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => UpgradeCapKey.fetch( client, id, ), new: ( fields: UpgradeCapKeyFields, ) => { return new UpgradeCapKey( [], fields ) }, kind: "StructClassReified", } }
 
@@ -173,29 +173,29 @@ export class UpgradeCapKey implements StructClass { __StructClass = true as cons
 
  static get bcs() { return bcs.struct("UpgradeCapKey", {
 
- name: String.bcs
+ pos0: String.bcs
 
 }) };
 
- static fromFields( fields: Record<string, any> ): UpgradeCapKey { return UpgradeCapKey.reified( ).new( { name: decodeFromFields(String.reified(), fields.name) } ) }
+ static fromFields( fields: Record<string, any> ): UpgradeCapKey { return UpgradeCapKey.reified( ).new( { pos0: decodeFromFields(String.reified(), fields.pos0) } ) }
 
  static fromFieldsWithTypes( item: FieldsWithTypes ): UpgradeCapKey { if (!isUpgradeCapKey(item.type)) { throw new Error("not a UpgradeCapKey type");
 
  }
 
- return UpgradeCapKey.reified( ).new( { name: decodeFromFieldsWithTypes(String.reified(), item.fields.name) } ) }
+ return UpgradeCapKey.reified( ).new( { pos0: decodeFromFieldsWithTypes(String.reified(), item.fields.pos0) } ) }
 
  static fromBcs( data: Uint8Array ): UpgradeCapKey { return UpgradeCapKey.fromFields( UpgradeCapKey.bcs.parse(data) ) }
 
  toJSONField() { return {
 
- name: this.name,
+ pos0: this.pos0,
 
 } }
 
  toJSON() { return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() } }
 
- static fromJSONField( field: any ): UpgradeCapKey { return UpgradeCapKey.reified( ).new( { name: decodeFromJSONField(String.reified(), field.name) } ) }
+ static fromJSONField( field: any ): UpgradeCapKey { return UpgradeCapKey.reified( ).new( { pos0: decodeFromJSONField(String.reified(), field.pos0) } ) }
 
  static fromJSON( json: Record<string, any> ): UpgradeCapKey { if (json.$typeName !== UpgradeCapKey.$typeName) { throw new Error("not a WithTwoGenerics json object") };
 
@@ -421,7 +421,7 @@ export class UpgradeRules implements StructClass { __StructClass = true as const
 
 export function isUpgradeRulesKey(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::package_upgrade::UpgradeRulesKey`; }
 
-export interface UpgradeRulesKeyFields { name: ToField<String> }
+export interface UpgradeRulesKeyFields { pos0: ToField<String> }
 
 export type UpgradeRulesKeyReified = Reified< UpgradeRulesKey, UpgradeRulesKeyFields >;
 
@@ -431,11 +431,11 @@ export class UpgradeRulesKey implements StructClass { __StructClass = true as co
 
  readonly $typeName = UpgradeRulesKey.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::package_upgrade::UpgradeRulesKey`; readonly $typeArgs: []; readonly $isPhantom = UpgradeRulesKey.$isPhantom;
 
- readonly name: ToField<String>
+ readonly pos0: ToField<String>
 
  private constructor(typeArgs: [], fields: UpgradeRulesKeyFields, ) { this.$fullTypeName = composeSuiType( UpgradeRulesKey.$typeName, ...typeArgs ) as `${typeof PKG_V1}::package_upgrade::UpgradeRulesKey`; this.$typeArgs = typeArgs;
 
- this.name = fields.name; }
+ this.pos0 = fields.pos0; }
 
  static reified( ): UpgradeRulesKeyReified { return { typeName: UpgradeRulesKey.$typeName, fullTypeName: composeSuiType( UpgradeRulesKey.$typeName, ...[] ) as `${typeof PKG_V1}::package_upgrade::UpgradeRulesKey`, typeArgs: [ ] as [], isPhantom: UpgradeRulesKey.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => UpgradeRulesKey.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => UpgradeRulesKey.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => UpgradeRulesKey.fromBcs( data, ), bcs: UpgradeRulesKey.bcs, fromJSONField: (field: any) => UpgradeRulesKey.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => UpgradeRulesKey.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => UpgradeRulesKey.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => UpgradeRulesKey.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => UpgradeRulesKey.fetch( client, id, ), new: ( fields: UpgradeRulesKeyFields, ) => { return new UpgradeRulesKey( [], fields ) }, kind: "StructClassReified", } }
 
@@ -445,29 +445,29 @@ export class UpgradeRulesKey implements StructClass { __StructClass = true as co
 
  static get bcs() { return bcs.struct("UpgradeRulesKey", {
 
- name: String.bcs
+ pos0: String.bcs
 
 }) };
 
- static fromFields( fields: Record<string, any> ): UpgradeRulesKey { return UpgradeRulesKey.reified( ).new( { name: decodeFromFields(String.reified(), fields.name) } ) }
+ static fromFields( fields: Record<string, any> ): UpgradeRulesKey { return UpgradeRulesKey.reified( ).new( { pos0: decodeFromFields(String.reified(), fields.pos0) } ) }
 
  static fromFieldsWithTypes( item: FieldsWithTypes ): UpgradeRulesKey { if (!isUpgradeRulesKey(item.type)) { throw new Error("not a UpgradeRulesKey type");
 
  }
 
- return UpgradeRulesKey.reified( ).new( { name: decodeFromFieldsWithTypes(String.reified(), item.fields.name) } ) }
+ return UpgradeRulesKey.reified( ).new( { pos0: decodeFromFieldsWithTypes(String.reified(), item.fields.pos0) } ) }
 
  static fromBcs( data: Uint8Array ): UpgradeRulesKey { return UpgradeRulesKey.fromFields( UpgradeRulesKey.bcs.parse(data) ) }
 
  toJSONField() { return {
 
- name: this.name,
+ pos0: this.pos0,
 
 } }
 
  toJSON() { return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() } }
 
- static fromJSONField( field: any ): UpgradeRulesKey { return UpgradeRulesKey.reified( ).new( { name: decodeFromJSONField(String.reified(), field.name) } ) }
+ static fromJSONField( field: any ): UpgradeRulesKey { return UpgradeRulesKey.reified( ).new( { pos0: decodeFromJSONField(String.reified(), field.pos0) } ) }
 
  static fromJSON( json: Record<string, any> ): UpgradeRulesKey { if (json.$typeName !== UpgradeRulesKey.$typeName) { throw new Error("not a WithTwoGenerics json object") };
 

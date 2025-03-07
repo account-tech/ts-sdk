@@ -11,7 +11,7 @@ import {fromB64, fromHEX, toHEX} from "@mysten/sui/utils";
 
 export function isKioskOwnerKey(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::kiosk::KioskOwnerKey`; }
 
-export interface KioskOwnerKeyFields { name: ToField<String> }
+export interface KioskOwnerKeyFields { pos0: ToField<String> }
 
 export type KioskOwnerKeyReified = Reified< KioskOwnerKey, KioskOwnerKeyFields >;
 
@@ -21,11 +21,11 @@ export class KioskOwnerKey implements StructClass { __StructClass = true as cons
 
  readonly $typeName = KioskOwnerKey.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::kiosk::KioskOwnerKey`; readonly $typeArgs: []; readonly $isPhantom = KioskOwnerKey.$isPhantom;
 
- readonly name: ToField<String>
+ readonly pos0: ToField<String>
 
  private constructor(typeArgs: [], fields: KioskOwnerKeyFields, ) { this.$fullTypeName = composeSuiType( KioskOwnerKey.$typeName, ...typeArgs ) as `${typeof PKG_V1}::kiosk::KioskOwnerKey`; this.$typeArgs = typeArgs;
 
- this.name = fields.name; }
+ this.pos0 = fields.pos0; }
 
  static reified( ): KioskOwnerKeyReified { return { typeName: KioskOwnerKey.$typeName, fullTypeName: composeSuiType( KioskOwnerKey.$typeName, ...[] ) as `${typeof PKG_V1}::kiosk::KioskOwnerKey`, typeArgs: [ ] as [], isPhantom: KioskOwnerKey.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => KioskOwnerKey.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => KioskOwnerKey.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => KioskOwnerKey.fromBcs( data, ), bcs: KioskOwnerKey.bcs, fromJSONField: (field: any) => KioskOwnerKey.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => KioskOwnerKey.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => KioskOwnerKey.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => KioskOwnerKey.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => KioskOwnerKey.fetch( client, id, ), new: ( fields: KioskOwnerKeyFields, ) => { return new KioskOwnerKey( [], fields ) }, kind: "StructClassReified", } }
 
@@ -35,29 +35,29 @@ export class KioskOwnerKey implements StructClass { __StructClass = true as cons
 
  static get bcs() { return bcs.struct("KioskOwnerKey", {
 
- name: String.bcs
+ pos0: String.bcs
 
 }) };
 
- static fromFields( fields: Record<string, any> ): KioskOwnerKey { return KioskOwnerKey.reified( ).new( { name: decodeFromFields(String.reified(), fields.name) } ) }
+ static fromFields( fields: Record<string, any> ): KioskOwnerKey { return KioskOwnerKey.reified( ).new( { pos0: decodeFromFields(String.reified(), fields.pos0) } ) }
 
  static fromFieldsWithTypes( item: FieldsWithTypes ): KioskOwnerKey { if (!isKioskOwnerKey(item.type)) { throw new Error("not a KioskOwnerKey type");
 
  }
 
- return KioskOwnerKey.reified( ).new( { name: decodeFromFieldsWithTypes(String.reified(), item.fields.name) } ) }
+ return KioskOwnerKey.reified( ).new( { pos0: decodeFromFieldsWithTypes(String.reified(), item.fields.pos0) } ) }
 
  static fromBcs( data: Uint8Array ): KioskOwnerKey { return KioskOwnerKey.fromFields( KioskOwnerKey.bcs.parse(data) ) }
 
  toJSONField() { return {
 
- name: this.name,
+ pos0: this.pos0,
 
 } }
 
  toJSON() { return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() } }
 
- static fromJSONField( field: any ): KioskOwnerKey { return KioskOwnerKey.reified( ).new( { name: decodeFromJSONField(String.reified(), field.name) } ) }
+ static fromJSONField( field: any ): KioskOwnerKey { return KioskOwnerKey.reified( ).new( { pos0: decodeFromJSONField(String.reified(), field.pos0) } ) }
 
  static fromJSON( json: Record<string, any> ): KioskOwnerKey { if (json.$typeName !== KioskOwnerKey.$typeName) { throw new Error("not a WithTwoGenerics json object") };
 

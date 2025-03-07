@@ -10,7 +10,7 @@ import {PKG_V1} from "../index";
 import {Issuer} from "../issuer/structs";
 import {BcsType, bcs} from "@mysten/sui/bcs";
 import {SuiClient, SuiObjectData, SuiParsedData} from "@mysten/sui/client";
-import {fromB64} from "@mysten/sui/utils";
+import {fromB64, fromHEX, toHEX} from "@mysten/sui/utils";
 
 /* ============================== Expired =============================== */
 
@@ -84,7 +84,7 @@ export class Expired implements StructClass { __StructClass = true as const;
 
 export function isIntent(type: string): boolean { type = compressSuiType(type); return type.startsWith(`${PKG_V1}::intents::Intent` + '<'); }
 
-export interface IntentFields<Outcome extends TypeArgument> { issuer: ToField<Issuer>; key: ToField<String>; description: ToField<String>; executionTimes: ToField<Vector<"u64">>; expirationTime: ToField<"u64">; role: ToField<String>; actions: ToField<Bag>; outcome: ToField<Outcome> }
+export interface IntentFields<Outcome extends TypeArgument> { issuer: ToField<Issuer>; key: ToField<String>; description: ToField<String>; creator: ToField<"address">; executionTimes: ToField<Vector<"u64">>; expirationTime: ToField<"u64">; role: ToField<String>; actions: ToField<Bag>; outcome: ToField<Outcome> }
 
 export type IntentReified<Outcome extends TypeArgument> = Reified< Intent<Outcome>, IntentFields<Outcome> >;
 
@@ -94,11 +94,11 @@ export class Intent<Outcome extends TypeArgument> implements StructClass { __Str
 
  readonly $typeName = Intent.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::intents::Intent<${ToTypeStr<Outcome>}>`; readonly $typeArgs: [ToTypeStr<Outcome>]; readonly $isPhantom = Intent.$isPhantom;
 
- readonly issuer: ToField<Issuer>; readonly key: ToField<String>; readonly description: ToField<String>; readonly executionTimes: ToField<Vector<"u64">>; readonly expirationTime: ToField<"u64">; readonly role: ToField<String>; readonly actions: ToField<Bag>; readonly outcome: ToField<Outcome>
+ readonly issuer: ToField<Issuer>; readonly key: ToField<String>; readonly description: ToField<String>; readonly creator: ToField<"address">; readonly executionTimes: ToField<Vector<"u64">>; readonly expirationTime: ToField<"u64">; readonly role: ToField<String>; readonly actions: ToField<Bag>; readonly outcome: ToField<Outcome>
 
  private constructor(typeArgs: [ToTypeStr<Outcome>], fields: IntentFields<Outcome>, ) { this.$fullTypeName = composeSuiType( Intent.$typeName, ...typeArgs ) as `${typeof PKG_V1}::intents::Intent<${ToTypeStr<Outcome>}>`; this.$typeArgs = typeArgs;
 
- this.issuer = fields.issuer;; this.key = fields.key;; this.description = fields.description;; this.executionTimes = fields.executionTimes;; this.expirationTime = fields.expirationTime;; this.role = fields.role;; this.actions = fields.actions;; this.outcome = fields.outcome; }
+ this.issuer = fields.issuer;; this.key = fields.key;; this.description = fields.description;; this.creator = fields.creator;; this.executionTimes = fields.executionTimes;; this.expirationTime = fields.expirationTime;; this.role = fields.role;; this.actions = fields.actions;; this.outcome = fields.outcome; }
 
  static reified<Outcome extends Reified<TypeArgument, any>>( Outcome: Outcome ): IntentReified<ToTypeArgument<Outcome>> { return { typeName: Intent.$typeName, fullTypeName: composeSuiType( Intent.$typeName, ...[extractType(Outcome)] ) as `${typeof PKG_V1}::intents::Intent<${ToTypeStr<ToTypeArgument<Outcome>>}>`, typeArgs: [ extractType(Outcome) ] as [ToTypeStr<ToTypeArgument<Outcome>>], isPhantom: Intent.$isPhantom, reifiedTypeArgs: [Outcome], fromFields: (fields: Record<string, any>) => Intent.fromFields( Outcome, fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => Intent.fromFieldsWithTypes( Outcome, item, ), fromBcs: (data: Uint8Array) => Intent.fromBcs( Outcome, data, ), bcs: Intent.bcs(toBcs(Outcome)), fromJSONField: (field: any) => Intent.fromJSONField( Outcome, field, ), fromJSON: (json: Record<string, any>) => Intent.fromJSON( Outcome, json, ), fromSuiParsedData: (content: SuiParsedData) => Intent.fromSuiParsedData( Outcome, content, ), fromSuiObjectData: (content: SuiObjectData) => Intent.fromSuiObjectData( Outcome, content, ), fetch: async (client: SuiClient, id: string) => Intent.fetch( client, Outcome, id, ), new: ( fields: IntentFields<ToTypeArgument<Outcome>>, ) => { return new Intent( [extractType(Outcome)], fields ) }, kind: "StructClassReified", } }
 
@@ -108,17 +108,17 @@ export class Intent<Outcome extends TypeArgument> implements StructClass { __Str
 
  static get bcs() { return <Outcome extends BcsType<any>>(Outcome: Outcome) => bcs.struct(`Intent<${Outcome.name}>`, {
 
- issuer: Issuer.bcs, key: String.bcs, description: String.bcs, execution_times: bcs.vector(bcs.u64()), expiration_time: bcs.u64(), role: String.bcs, actions: Bag.bcs, outcome: Outcome
+ issuer: Issuer.bcs, key: String.bcs, description: String.bcs, creator: bcs.bytes(32).transform({ input: (val: string) => fromHEX(val), output: (val: Uint8Array) => toHEX(val), }), execution_times: bcs.vector(bcs.u64()), expiration_time: bcs.u64(), role: String.bcs, actions: Bag.bcs, outcome: Outcome
 
 }) };
 
- static fromFields<Outcome extends Reified<TypeArgument, any>>( typeArg: Outcome, fields: Record<string, any> ): Intent<ToTypeArgument<Outcome>> { return Intent.reified( typeArg, ).new( { issuer: decodeFromFields(Issuer.reified(), fields.issuer), key: decodeFromFields(String.reified(), fields.key), description: decodeFromFields(String.reified(), fields.description), executionTimes: decodeFromFields(reified.vector("u64"), fields.execution_times), expirationTime: decodeFromFields("u64", fields.expiration_time), role: decodeFromFields(String.reified(), fields.role), actions: decodeFromFields(Bag.reified(), fields.actions), outcome: decodeFromFields(typeArg, fields.outcome) } ) }
+ static fromFields<Outcome extends Reified<TypeArgument, any>>( typeArg: Outcome, fields: Record<string, any> ): Intent<ToTypeArgument<Outcome>> { return Intent.reified( typeArg, ).new( { issuer: decodeFromFields(Issuer.reified(), fields.issuer), key: decodeFromFields(String.reified(), fields.key), description: decodeFromFields(String.reified(), fields.description), creator: decodeFromFields("address", fields.creator), executionTimes: decodeFromFields(reified.vector("u64"), fields.execution_times), expirationTime: decodeFromFields("u64", fields.expiration_time), role: decodeFromFields(String.reified(), fields.role), actions: decodeFromFields(Bag.reified(), fields.actions), outcome: decodeFromFields(typeArg, fields.outcome) } ) }
 
  static fromFieldsWithTypes<Outcome extends Reified<TypeArgument, any>>( typeArg: Outcome, item: FieldsWithTypes ): Intent<ToTypeArgument<Outcome>> { if (!isIntent(item.type)) { throw new Error("not a Intent type");
 
  } assertFieldsWithTypesArgsMatch(item, [typeArg]);
 
- return Intent.reified( typeArg, ).new( { issuer: decodeFromFieldsWithTypes(Issuer.reified(), item.fields.issuer), key: decodeFromFieldsWithTypes(String.reified(), item.fields.key), description: decodeFromFieldsWithTypes(String.reified(), item.fields.description), executionTimes: decodeFromFieldsWithTypes(reified.vector("u64"), item.fields.execution_times), expirationTime: decodeFromFieldsWithTypes("u64", item.fields.expiration_time), role: decodeFromFieldsWithTypes(String.reified(), item.fields.role), actions: decodeFromFieldsWithTypes(Bag.reified(), item.fields.actions), outcome: decodeFromFieldsWithTypes(typeArg, item.fields.outcome) } ) }
+ return Intent.reified( typeArg, ).new( { issuer: decodeFromFieldsWithTypes(Issuer.reified(), item.fields.issuer), key: decodeFromFieldsWithTypes(String.reified(), item.fields.key), description: decodeFromFieldsWithTypes(String.reified(), item.fields.description), creator: decodeFromFieldsWithTypes("address", item.fields.creator), executionTimes: decodeFromFieldsWithTypes(reified.vector("u64"), item.fields.execution_times), expirationTime: decodeFromFieldsWithTypes("u64", item.fields.expiration_time), role: decodeFromFieldsWithTypes(String.reified(), item.fields.role), actions: decodeFromFieldsWithTypes(Bag.reified(), item.fields.actions), outcome: decodeFromFieldsWithTypes(typeArg, item.fields.outcome) } ) }
 
  static fromBcs<Outcome extends Reified<TypeArgument, any>>( typeArg: Outcome, data: Uint8Array ): Intent<ToTypeArgument<Outcome>> { const typeArgs = [typeArg];
 
@@ -126,13 +126,13 @@ export class Intent<Outcome extends TypeArgument> implements StructClass { __Str
 
  toJSONField() { return {
 
- issuer: this.issuer.toJSONField(),key: this.key,description: this.description,executionTimes: fieldToJSON<Vector<"u64">>(`vector<u64>`, this.executionTimes),expirationTime: this.expirationTime.toString(),role: this.role,actions: this.actions.toJSONField(),outcome: fieldToJSON<Outcome>(this.$typeArgs[0], this.outcome),
+ issuer: this.issuer.toJSONField(),key: this.key,description: this.description,creator: this.creator,executionTimes: fieldToJSON<Vector<"u64">>(`vector<u64>`, this.executionTimes),expirationTime: this.expirationTime.toString(),role: this.role,actions: this.actions.toJSONField(),outcome: fieldToJSON<Outcome>(this.$typeArgs[0], this.outcome),
 
 } }
 
  toJSON() { return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() } }
 
- static fromJSONField<Outcome extends Reified<TypeArgument, any>>( typeArg: Outcome, field: any ): Intent<ToTypeArgument<Outcome>> { return Intent.reified( typeArg, ).new( { issuer: decodeFromJSONField(Issuer.reified(), field.issuer), key: decodeFromJSONField(String.reified(), field.key), description: decodeFromJSONField(String.reified(), field.description), executionTimes: decodeFromJSONField(reified.vector("u64"), field.executionTimes), expirationTime: decodeFromJSONField("u64", field.expirationTime), role: decodeFromJSONField(String.reified(), field.role), actions: decodeFromJSONField(Bag.reified(), field.actions), outcome: decodeFromJSONField(typeArg, field.outcome) } ) }
+ static fromJSONField<Outcome extends Reified<TypeArgument, any>>( typeArg: Outcome, field: any ): Intent<ToTypeArgument<Outcome>> { return Intent.reified( typeArg, ).new( { issuer: decodeFromJSONField(Issuer.reified(), field.issuer), key: decodeFromJSONField(String.reified(), field.key), description: decodeFromJSONField(String.reified(), field.description), creator: decodeFromJSONField("address", field.creator), executionTimes: decodeFromJSONField(reified.vector("u64"), field.executionTimes), expirationTime: decodeFromJSONField("u64", field.expirationTime), role: decodeFromJSONField(String.reified(), field.role), actions: decodeFromJSONField(Bag.reified(), field.actions), outcome: decodeFromJSONField(typeArg, field.outcome) } ) }
 
  static fromJSON<Outcome extends Reified<TypeArgument, any>>( typeArg: Outcome, json: Record<string, any> ): Intent<ToTypeArgument<Outcome>> { if (json.$typeName !== Intent.$typeName) { throw new Error("not a WithTwoGenerics json object") }; assertReifiedTypeArgsMatch( composeSuiType(Intent.$typeName, extractType(typeArg)), json.$typeArgs, [typeArg], )
 

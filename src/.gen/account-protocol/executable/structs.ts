@@ -1,4 +1,3 @@
-import {String} from "../../_dependencies/source/0x1/string/structs";
 import {PhantomReified, Reified, StructClass, ToField, ToTypeStr, decodeFromFields, decodeFromFieldsWithTypes, decodeFromJSONField, phantom} from "../../_framework/reified";
 import {FieldsWithTypes, composeSuiType, compressSuiType} from "../../_framework/util";
 import {PKG_V1} from "../index";
@@ -11,7 +10,7 @@ import {fromB64} from "@mysten/sui/utils";
 
 export function isExecutable(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::executable::Executable`; }
 
-export interface ExecutableFields { issuer: ToField<Issuer>; key: ToField<String>; actionIdx: ToField<"u64"> }
+export interface ExecutableFields { issuer: ToField<Issuer>; actionIdx: ToField<"u64"> }
 
 export type ExecutableReified = Reified< Executable, ExecutableFields >;
 
@@ -21,11 +20,11 @@ export class Executable implements StructClass { __StructClass = true as const;
 
  readonly $typeName = Executable.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::executable::Executable`; readonly $typeArgs: []; readonly $isPhantom = Executable.$isPhantom;
 
- readonly issuer: ToField<Issuer>; readonly key: ToField<String>; readonly actionIdx: ToField<"u64">
+ readonly issuer: ToField<Issuer>; readonly actionIdx: ToField<"u64">
 
  private constructor(typeArgs: [], fields: ExecutableFields, ) { this.$fullTypeName = composeSuiType( Executable.$typeName, ...typeArgs ) as `${typeof PKG_V1}::executable::Executable`; this.$typeArgs = typeArgs;
 
- this.issuer = fields.issuer;; this.key = fields.key;; this.actionIdx = fields.actionIdx; }
+ this.issuer = fields.issuer;; this.actionIdx = fields.actionIdx; }
 
  static reified( ): ExecutableReified { return { typeName: Executable.$typeName, fullTypeName: composeSuiType( Executable.$typeName, ...[] ) as `${typeof PKG_V1}::executable::Executable`, typeArgs: [ ] as [], isPhantom: Executable.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => Executable.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => Executable.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => Executable.fromBcs( data, ), bcs: Executable.bcs, fromJSONField: (field: any) => Executable.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => Executable.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => Executable.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => Executable.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => Executable.fetch( client, id, ), new: ( fields: ExecutableFields, ) => { return new Executable( [], fields ) }, kind: "StructClassReified", } }
 
@@ -35,29 +34,29 @@ export class Executable implements StructClass { __StructClass = true as const;
 
  static get bcs() { return bcs.struct("Executable", {
 
- issuer: Issuer.bcs, key: String.bcs, action_idx: bcs.u64()
+ issuer: Issuer.bcs, action_idx: bcs.u64()
 
 }) };
 
- static fromFields( fields: Record<string, any> ): Executable { return Executable.reified( ).new( { issuer: decodeFromFields(Issuer.reified(), fields.issuer), key: decodeFromFields(String.reified(), fields.key), actionIdx: decodeFromFields("u64", fields.action_idx) } ) }
+ static fromFields( fields: Record<string, any> ): Executable { return Executable.reified( ).new( { issuer: decodeFromFields(Issuer.reified(), fields.issuer), actionIdx: decodeFromFields("u64", fields.action_idx) } ) }
 
  static fromFieldsWithTypes( item: FieldsWithTypes ): Executable { if (!isExecutable(item.type)) { throw new Error("not a Executable type");
 
  }
 
- return Executable.reified( ).new( { issuer: decodeFromFieldsWithTypes(Issuer.reified(), item.fields.issuer), key: decodeFromFieldsWithTypes(String.reified(), item.fields.key), actionIdx: decodeFromFieldsWithTypes("u64", item.fields.action_idx) } ) }
+ return Executable.reified( ).new( { issuer: decodeFromFieldsWithTypes(Issuer.reified(), item.fields.issuer), actionIdx: decodeFromFieldsWithTypes("u64", item.fields.action_idx) } ) }
 
  static fromBcs( data: Uint8Array ): Executable { return Executable.fromFields( Executable.bcs.parse(data) ) }
 
  toJSONField() { return {
 
- issuer: this.issuer.toJSONField(),key: this.key,actionIdx: this.actionIdx.toString(),
+ issuer: this.issuer.toJSONField(),actionIdx: this.actionIdx.toString(),
 
 } }
 
  toJSON() { return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() } }
 
- static fromJSONField( field: any ): Executable { return Executable.reified( ).new( { issuer: decodeFromJSONField(Issuer.reified(), field.issuer), key: decodeFromJSONField(String.reified(), field.key), actionIdx: decodeFromJSONField("u64", field.actionIdx) } ) }
+ static fromJSONField( field: any ): Executable { return Executable.reified( ).new( { issuer: decodeFromJSONField(Issuer.reified(), field.issuer), actionIdx: decodeFromJSONField("u64", field.actionIdx) } ) }
 
  static fromJSON( json: Record<string, any> ): Executable { if (json.$typeName !== Executable.$typeName) { throw new Error("not a WithTwoGenerics json object") };
 

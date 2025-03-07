@@ -219,7 +219,7 @@ export class Vault implements StructClass { __StructClass = true as const;
 
 export function isVaultKey(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::vault::VaultKey`; }
 
-export interface VaultKeyFields { name: ToField<String> }
+export interface VaultKeyFields { pos0: ToField<String> }
 
 export type VaultKeyReified = Reified< VaultKey, VaultKeyFields >;
 
@@ -229,11 +229,11 @@ export class VaultKey implements StructClass { __StructClass = true as const;
 
  readonly $typeName = VaultKey.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::vault::VaultKey`; readonly $typeArgs: []; readonly $isPhantom = VaultKey.$isPhantom;
 
- readonly name: ToField<String>
+ readonly pos0: ToField<String>
 
  private constructor(typeArgs: [], fields: VaultKeyFields, ) { this.$fullTypeName = composeSuiType( VaultKey.$typeName, ...typeArgs ) as `${typeof PKG_V1}::vault::VaultKey`; this.$typeArgs = typeArgs;
 
- this.name = fields.name; }
+ this.pos0 = fields.pos0; }
 
  static reified( ): VaultKeyReified { return { typeName: VaultKey.$typeName, fullTypeName: composeSuiType( VaultKey.$typeName, ...[] ) as `${typeof PKG_V1}::vault::VaultKey`, typeArgs: [ ] as [], isPhantom: VaultKey.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => VaultKey.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => VaultKey.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => VaultKey.fromBcs( data, ), bcs: VaultKey.bcs, fromJSONField: (field: any) => VaultKey.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => VaultKey.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => VaultKey.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => VaultKey.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => VaultKey.fetch( client, id, ), new: ( fields: VaultKeyFields, ) => { return new VaultKey( [], fields ) }, kind: "StructClassReified", } }
 
@@ -243,29 +243,29 @@ export class VaultKey implements StructClass { __StructClass = true as const;
 
  static get bcs() { return bcs.struct("VaultKey", {
 
- name: String.bcs
+ pos0: String.bcs
 
 }) };
 
- static fromFields( fields: Record<string, any> ): VaultKey { return VaultKey.reified( ).new( { name: decodeFromFields(String.reified(), fields.name) } ) }
+ static fromFields( fields: Record<string, any> ): VaultKey { return VaultKey.reified( ).new( { pos0: decodeFromFields(String.reified(), fields.pos0) } ) }
 
  static fromFieldsWithTypes( item: FieldsWithTypes ): VaultKey { if (!isVaultKey(item.type)) { throw new Error("not a VaultKey type");
 
  }
 
- return VaultKey.reified( ).new( { name: decodeFromFieldsWithTypes(String.reified(), item.fields.name) } ) }
+ return VaultKey.reified( ).new( { pos0: decodeFromFieldsWithTypes(String.reified(), item.fields.pos0) } ) }
 
  static fromBcs( data: Uint8Array ): VaultKey { return VaultKey.fromFields( VaultKey.bcs.parse(data) ) }
 
  toJSONField() { return {
 
- name: this.name,
+ pos0: this.pos0,
 
 } }
 
  toJSON() { return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() } }
 
- static fromJSONField( field: any ): VaultKey { return VaultKey.reified( ).new( { name: decodeFromJSONField(String.reified(), field.name) } ) }
+ static fromJSONField( field: any ): VaultKey { return VaultKey.reified( ).new( { pos0: decodeFromJSONField(String.reified(), field.pos0) } ) }
 
  static fromJSON( json: Record<string, any> ): VaultKey { if (json.$typeName !== VaultKey.$typeName) { throw new Error("not a WithTwoGenerics json object") };
 
