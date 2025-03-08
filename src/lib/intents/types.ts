@@ -1,4 +1,4 @@
-import { ACCOUNT_ACTIONS, ACCOUNT_CONFIG, ACCOUNT_PROTOCOL, TransactionPureInput } from "../../types";
+import { ACCOUNT_ACTIONS, ACCOUNT_MULTISIG, ACCOUNT_PROTOCOL, TransactionPureInput } from "../../types";
 import { Threshold, Member, Dep } from "../account";
 
 export type IntentType = typeof IntentTypes[keyof typeof IntentTypes];
@@ -8,7 +8,7 @@ export const IntentTypes = {
     ConfigDeps: `${ACCOUNT_PROTOCOL.V1.slice(2)}::config::ConfigDepsIntent`,
     ToggleUnverifiedAllowed: `${ACCOUNT_PROTOCOL.V1.slice(2)}::config::ToggleUnverifiedAllowedIntent`,
     // Config
-    ConfigMultisig: `${ACCOUNT_CONFIG.V1.slice(2)}::multisig::ConfigMultisigIntent`,
+    ConfigMultisig: `${ACCOUNT_MULTISIG.V1.slice(2)}::multisig::ConfigMultisigIntent`,
     // Actions
     BorrowCap: `${ACCOUNT_ACTIONS.V1.slice(2)}::access_control_intents::BorrowCapIntent`,
 
@@ -33,10 +33,10 @@ export const IntentTypes = {
 } as const;
 
 export enum IntentStatus {
-    Pending, // can be approved
-    Approved, // has been approved by user but cannot be executed because execution time not reached
-    Executable, // can be executed because execution time reached, and threshold reached or reachable by user
-    Expired, // can be deleted because expiration time reached 
+    Pending, // created, pending for resolution
+    Resolved, // resolved, but execution time not reached
+    Executable, // resolved, can be executed because execution time reached
+    Expired, // can be deleted because expiration time reached, (can still be resolved or executed)
 }
 
 export type Issuer = {
@@ -48,6 +48,7 @@ export type IntentFields = {
     issuer: Issuer;
     key: string;
     description: string;
+    creator: string;
     executionTimes: bigint[];
     expirationTime: bigint;
     role: string;

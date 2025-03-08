@@ -1,4 +1,4 @@
-import { ACCOUNT_CONFIG } from "src/types/constants";
+import { ACCOUNT_MULTISIG } from "src/types/constants";
 import { Intent } from "../intents";
 import { Managed, Owned } from "../objects";
 import { Profile } from "../user/types";
@@ -6,8 +6,8 @@ import { Profile } from "../user/types";
 export type AccountType = typeof AccountTypes[keyof typeof AccountTypes];
 
 export const AccountTypes = {
-    Multisig: `${ACCOUNT_CONFIG.V1}::multisig::Multisig`,
-    // Dao: `${ACCOUNT_CONFIG.V1}::dao::Dao`,
+    Multisig: `${ACCOUNT_MULTISIG.V1}::multisig::Multisig`,
+    // Dao: `${ACCOUNT_MULTISIG.V1}::dao::Dao`,
 } as const;
 
 // Account
@@ -38,6 +38,7 @@ export type MultisigData = AccountData & {
     roles: Record<string, Role>;
     members: MemberProfile[];
     intents: Intent[];
+    fees: bigint;
 }
 
 export type Role = {

@@ -1,28 +1,14 @@
 import { SuiClient, getFullnodeUrl } from "@mysten/sui/client";
 import { Transaction, TransactionObjectInput, TransactionResult } from "@mysten/sui/transactions";
 import {
-	User, Extensions,
+	User, Extensions, Intent,
+	OwnedData, ManagedData, AccountPreview,
 	Multisig, Approvals, Member, Threshold, Dep,
 	IntentStatus, ActionsArgs, IntentArgs, intentRegistry, IntentType,
 	ConfigDepsIntent, WithdrawAndBurnIntent, UpdateMetadataIntent, ConfigMultisigIntent,
-	AccountPreview,
-	Intent,
-	ManagedData,
-	OwnedData,
-	ToggleUnverifiedAllowedIntent,
-	BorrowCapIntent,
-	DisableRulesIntent,
-	MintAndTransferIntent,
-	MintAndVestIntent,
-	TakeNftsIntent,
-	ListNftsIntent,
-	WithdrawAndTransferToVaultIntent,
-	WithdrawAndTransferIntent,
-	WithdrawAndVestIntent,
-	UpgradePackageIntent,
-	RestrictPolicyIntent,
-	SpendAndTransferIntent,
-	SpendAndVestIntent,
+	ToggleUnverifiedAllowedIntent, BorrowCapIntent, DisableRulesIntent, MintAndTransferIntent, MintAndVestIntent, 
+	TakeNftsIntent, ListNftsIntent, WithdrawAndTransferToVaultIntent, WithdrawAndTransferIntent, WithdrawAndVestIntent, 
+	UpgradePackageIntent, RestrictPolicyIntent, SpendAndTransferIntent, SpendAndVestIntent,
 } from "./lib";
 import {
 	SUI_FRAMEWORK, MULTISIG_GENERICS, TRANSFER_POLICY_RULES, ACCOUNT_PROTOCOL,
@@ -88,7 +74,8 @@ export class MultisigClient {
 			});
 		}
 		// create the multisig
-		const multisig = this.multisig?.newMultisig(tx);
+		const fee = tx.splitCoins(tx.gas, [this.multisig.fees]);
+		const multisig = this.multisig?.newMultisig(tx, fee);
 		// add AccountProtocol, AccountConfig and AccountActions dependency (AccountProtocol and AccountConfig are already added)
 		this.multisig.atomicConfigDeps(tx, { deps: this.extensions.getLatestDeps().slice(0, 3) }, multisig); // atomic intent
 		// add name

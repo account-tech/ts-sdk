@@ -32,5 +32,6 @@ export enum ACCOUNT_ACTIONS {
 // Shared objects
 export const EXTENSIONS = "0xf4b314447da092b619a8cde4ef13bc40e5ecd0fd30622aab08782301b541e871";
 export const USER_REGISTRY = "0x24697c64cc1cff77177866c5a1c20aacb346b6f83c5ac9b738c2beaf6db534cb";
+export const MULTISIG_FEES = "0x5c3a97139224cb7ea39d1a5c541fab89875c068819d63cb0b6bb8eccf2fa72f1";
 // Types
 export const MULTISIG_GENERICS: [string, string] = [`${ACCOUNT_MULTISIG.V1}::multisig::Multisig`, `${ACCOUNT_MULTISIG.V1}::multisig::Approvals`];

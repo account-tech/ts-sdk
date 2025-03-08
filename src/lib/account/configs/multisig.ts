@@ -1,18 +1,20 @@
 import { Transaction, TransactionArgument, TransactionObjectInput, TransactionResult } from "@mysten/sui/transactions";
 import { SuiClient } from "@mysten/sui/client";
 import { Account as AccountRaw } from "../../../.gen/account-protocol/account/structs";
-import { Multisig as MultisigRaw, Approvals as ApprovalsRaw } from "../../../.gen/account-config/multisig/structs";
-import { newAccount } from "../../../.gen/account-config/multisig/functions";
-import * as configMultisig from "../../../.gen/account-config/multisig/functions";
+import { destroyEmptyIntent } from "../../../.gen/account-protocol/account/functions";
+import { Multisig as MultisigRaw, Approvals as ApprovalsRaw } from "../../../.gen/account-multisig/multisig/structs";
+import { newAccount } from "../../../.gen/account-multisig/multisig/functions";
+import * as configMultisig from "../../../.gen/account-multisig/config/functions";
 import * as config from "../../../.gen/account-protocol/config/functions";
-import { approveIntent, disapproveIntent, executeIntent, authenticate, emptyOutcome, sendInvite, join, leave, destroyEmptyIntent } from "../../../.gen/account-config/multisig/functions";
+import { approveIntent, disapproveIntent, executeIntent, authenticate, emptyOutcome, sendInvite, join, leave } from "../../../.gen/account-multisig/multisig/functions";
 import { destroyEmptyExpired } from "../../../.gen/account-protocol/intents/functions";
 import { DepFields } from "../../../.gen/account-protocol/deps/structs";
-import { MemberFields, RoleFields } from "../../../.gen/account-config/multisig/structs";
+import { MemberFields, RoleFields } from "../../../.gen/account-multisig/multisig/structs";
+import { Fees as FeesRaw } from "../../../.gen/account-multisig/fees/structs";
 import { IntentFields as IntentFieldsRaw } from "../../../.gen/account-protocol/intents/structs";
 
 import { User } from "../../user/user";
-import { ACCOUNT_PROTOCOL, CLOCK, EXTENSIONS, MULTISIG_GENERICS, SUI_FRAMEWORK, TransactionPureInput } from "../../../types";
+import { ACCOUNT_PROTOCOL, CLOCK, EXTENSIONS, MULTISIG_FEES, MULTISIG_GENERICS, SUI_FRAMEWORK, TransactionPureInput } from "../../../types";
 import { Intent, IntentStatus, ConfigDepsArgs, ConfigMultisigArgs, IntentFields } from "../../intents";
 import { Dep, Role, MemberProfile, MultisigData } from "../types";
 import { Account } from "../account";
@@ -23,6 +25,7 @@ export class Multisig extends Account implements MultisigData {
     public global: Role = { threshold: 0, totalWeight: 0 };
     public roles: Record<string, Role> = {};
     public members: MemberProfile[] = [];
+    public fees: bigint = 0n;
 
     static async init(
         client: SuiClient,
@@ -86,7 +89,34 @@ export class Multisig extends Account implements MultisigData {
         });
         // get Proposals with actions
         const intents = await Promise.all(multisigAccount!.intents.inner.map(async (fieldsRaw: IntentFieldsRaw<ApprovalsRaw>) => {
-            const outcome = new Approvals(id, fieldsRaw.key, Number(fieldsRaw.outcome.totalWeight), Number(fieldsRaw.outcome.roleWeight), fieldsRaw.outcome.approved.contents);
+            const now = Date.now();
+            let status: IntentStatus;
+            // Check expiration first
+            if (fieldsRaw.expirationTime < now) {
+                status = IntentStatus.Expired;
+            } else {
+                // Check if intent has reached threshold
+                const hasReachedThreshold =
+                    Number(fieldsRaw.outcome.totalWeight) >= this.global.threshold ||
+                    Number(fieldsRaw.outcome.roleWeight) >= this.roles[fieldsRaw.role].threshold;
+
+                // If threshold is reached, check execution time
+                if (hasReachedThreshold) {
+                    status = fieldsRaw.executionTimes[0] <= now
+                        ? IntentStatus.Executable
+                        : IntentStatus.Resolved;
+                } else {
+                    status = IntentStatus.Pending;
+                }
+            }
+            const outcome = new Approvals(
+                id,
+                fieldsRaw.key,
+                Number(fieldsRaw.outcome.totalWeight),
+                Number(fieldsRaw.outcome.roleWeight),
+                fieldsRaw.outcome.approved.contents,
+                status
+            );
             const fields: IntentFields = {
                 issuer: {
                     accountAddr: fieldsRaw.issuer.accountAddr,
@@ -94,6 +124,7 @@ export class Multisig extends Account implements MultisigData {
                 },
                 key: fieldsRaw.key,
                 description: fieldsRaw.description,
+                creator: fieldsRaw.creator,
                 executionTimes: fieldsRaw.executionTimes,
                 expirationTime: fieldsRaw.expirationTime,
                 role: fieldsRaw.role,
@@ -107,6 +138,9 @@ export class Multisig extends Account implements MultisigData {
         const managedAssets = await Managed.init(this.client, id, ['currencies', 'kiosks', 'vaults', 'upgradePolicies']);
         const ownedObjects = await Owned.init(this.client, id);
 
+        // get fees
+        const fees = await FeesRaw.fetch(this.client, id);
+
         return {
             id: multisigAccount.id,
             metadata,
@@ -117,6 +151,7 @@ export class Multisig extends Account implements MultisigData {
             intents,
             managedAssets,
             ownedObjects,
+            fees: fees.amount,
         }
     }
 
@@ -134,6 +169,7 @@ export class Multisig extends Account implements MultisigData {
         this.intents = multisig.intents;
         this.managedAssets = multisig.managedAssets;
         this.ownedObjects = multisig.ownedObjects;
+        this.fees = multisig.fees;
     }
 
     getData(): MultisigData {
@@ -147,6 +183,7 @@ export class Multisig extends Account implements MultisigData {
             intents: this.intents,
             managedAssets: this.managedAssets,
             ownedObjects: this.ownedObjects,
+            fees: this.fees,
         }
     }
 
@@ -185,7 +222,7 @@ export class Multisig extends Account implements MultisigData {
         if (hasReachedThreshold) {
             return intent.fields.executionTimes[0] <= now
                 ? IntentStatus.Executable
-                : IntentStatus.Approved;
+                : IntentStatus.Resolved;
         }
 
         return IntentStatus.Pending;
@@ -194,10 +231,15 @@ export class Multisig extends Account implements MultisigData {
 
     newMultisig(
         tx: Transaction,
+        coin: TransactionObjectInput,
     ): TransactionResult {
         return newAccount(
             tx,
-            EXTENSIONS
+            {
+                extensions: EXTENSIONS,
+                fees: MULTISIG_FEES,
+                coin,
+            }
         );
     }
 
@@ -355,7 +397,7 @@ export class Multisig extends Account implements MultisigData {
         const executable = this.executeIntent(tx, "config-multisig", account);
         configMultisig.executeConfigMultisig(tx, { executable, account });
 
-        const expired = destroyEmptyIntent(tx, { account, key: "config-multisig" });
+        const expired = destroyEmptyIntent(tx, MULTISIG_GENERICS, { account, key: "config-multisig" });
         configMultisig.deleteConfigMultisig(tx, expired);
         return destroyEmptyExpired(tx, expired);
     }
@@ -385,7 +427,7 @@ export class Multisig extends Account implements MultisigData {
         const executable = this.executeIntent(tx, "toggle-unverified-deps", account);
         config.executeToggleUnverifiedAllowed(tx, MULTISIG_GENERICS, { executable, account });
 
-        const expired = destroyEmptyIntent(tx, { account, key: "toggle-unverified-deps" });
+        const expired = destroyEmptyIntent(tx, MULTISIG_GENERICS, { account, key: "toggle-unverified-deps" });
         config.deleteToggleUnverifiedAllowed(tx, expired);
         return destroyEmptyExpired(tx, expired);
     }
@@ -433,123 +475,9 @@ export class Multisig extends Account implements MultisigData {
         const executable = this.executeIntent(tx, "config-deps", account);
         config.executeConfigDeps(tx, MULTISIG_GENERICS, { executable, account });
 
-        const expired = destroyEmptyIntent(tx, { account, key: "config-deps" });
+        const expired = destroyEmptyIntent(tx, MULTISIG_GENERICS, { account, key: "config-deps" });
         config.deleteConfigDeps(tx, expired);
         return destroyEmptyExpired(tx, expired);
     }
-
-    // mint(
-    //     tx: Transaction,
-    //     intentArgs: IntentArgs,
-    //     actionsArgs: MintArgs,
-    //     multisig: TransactionObjectInput = this.id,
-    // ): TransactionResult {
-    //     this.assertMultisig();
-    //     this.assertKey(intentArgs);
-
-    //     currency.proposeMint(
-    //         tx,
-    //         actionsArgs.coinType,
-    //         {
-    //             multisig: this.id,
-    //             key: intentArgs.key,
-    //             description: intentArgs.description ?? "",
-    //             executionTime: BigInt(intentArgs.executionTime ?? 0),
-    //             expirationEpoch: BigInt(intentArgs.expirationEpoch ?? this.epoch + 7),
-    //             amount: BigInt(actionsArgs.amount),
-    //         }
-    //     );
-
-    //     this.approveIntent(tx, intentArgs.key);
-    //     const executable = this.executeIntent(tx, intentArgs.key);
-
-    //     return currency.executeMint(tx, actionsArgs.coinType, { executable, multisig });
-    // }
-
-    // burn(
-    //     tx: Transaction,
-    //     intentArgs: IntentArgs,
-    //     actionsArgs: BurnArgs,
-    // ): TransactionResult {
-    //     this.assertMultisig();
-    //     this.assertKey(intentArgs);
-
-    //     currency.proposeBurn(
-    //         tx,
-    //         actionsArgs.coinType,
-    //         {
-    //             multisig: this.id,
-    //             key: intentArgs.key,
-    //             description: intentArgs.description ?? "",
-    //             executionTime: BigInt(intentArgs.executionTime ?? 0),
-    //             expirationEpoch: BigInt(intentArgs.expirationEpoch ?? this.epoch + 7),
-    //             coinId: actionsArgs.coinId,
-    //             amount: BigInt(actionsArgs.amount),
-    //         }
-    //     );
-
-    //     this.approveIntent(tx, intentArgs.key);
-    //     const executable = this.executeIntent(tx, intentArgs.key);
-
-    //     return currency.executeBurn(tx, actionsArgs.coinType, { executable, multisig: this.id, receiving: actionsArgs.coinId });
-    // }
-
-    // update(
-    //     tx: Transaction,
-    //     intentArgs: IntentArgs,
-    //     actionsArgs: UpdateArgs,
-    //     metadata: string, // CoinMetadata<CoinType> ID
-    // ): TransactionResult {
-    //     this.assertMultisig();
-    //     this.assertKey(intentArgs);
-
-    //     currency.proposeUpdate(
-    //         tx,
-    //         actionsArgs.coinType,
-    //         {
-    //             multisig: this.id,
-    //             key: intentArgs.key,
-    //             description: intentArgs.description ?? "",
-    //             executionTime: BigInt(intentArgs.executionTime ?? 0),
-    //             expirationEpoch: BigInt(intentArgs.expirationEpoch ?? this.epoch + 7),
-    //             mdName: actionsArgs.name,
-    //             mdSymbol: actionsArgs.symbol,
-    //             mdDescription: actionsArgs.description,
-    //             mdIcon: actionsArgs.icon,
-    //         }
-    //     );
-
-    //     this.approveIntent(tx, intentArgs.key);
-    //     const executable = this.executeIntent(tx, intentArgs.key);
-
-    //     return currency.executeUpdate(tx, actionsArgs.coinType, { executable, multisig: this.id, metadata });
-    // }
-
-    // take(
-    // 	tx: Transaction,
-    // 	args: TakeArgs,
-    // ): TransactionResult {
-    // 	this.assertMultisig();
-    // 	this.assertKey(args);
-
-    // 	kiosk.proposeTake(
-    // 		tx,
-    // 		{
-    // 			multisig: this.id,
-    // 			key: args.key,
-    // 			description: args.description ?? "",
-    // 			executionTime: BigInt(args.executionTime ?? 0),
-    // 			expirationEpoch: BigInt(args.expirationEpoch ?? this.epoch + 7),
-    // 			name: args.name,
-    // 			nftIds: args.nftIds,
-    // 			recipient: args.recipient,
-    // 		}
-    // 	);
-
-    // 	this.approveIntent(tx, args.key);
-    // 	const executable = this.executeIntent(tx, args.key);
-
-    // 	return kiosk.executeTake(tx, { executable, multisig: this.id });
-    // }
 }
 

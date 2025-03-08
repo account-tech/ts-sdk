@@ -1,7 +1,8 @@
 import { Transaction, TransactionResult } from "@mysten/sui/transactions";
-import { approveIntent, disapproveIntent, executeIntent } from "../../../.gen/account-config/multisig/functions";
+import { approveIntent, disapproveIntent, executeIntent } from "../../../.gen/account-multisig/multisig/functions";
 import { CLOCK } from "../../../types/constants";
 import { Outcome } from "../outcome";
+import { IntentStatus } from "src/lib/intents";
 
 export class Approvals implements Outcome {
     constructor(
@@ -11,6 +12,7 @@ export class Approvals implements Outcome {
         public totalWeight: number,
         public roleWeight: number,
         public approved: string[],
+        public status: IntentStatus,
     ) { }
 
     hasApproved(addr: string): boolean {
