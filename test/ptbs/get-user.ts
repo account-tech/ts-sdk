@@ -6,9 +6,9 @@ import { NETWORK, testKeypair } from "./utils";
     const client = new SuiClient({ url: getFullnodeUrl(NETWORK) });
     const user = await User.init(
         client,
-        "0x528b64ec15669c537d501d9260d321c56e948bd260459b6260a89cfd93178e15",
+        "0x3c00d56434d581fdfd6e280626f7c8ee75cc9dac134d84290491e65f9b8b7161",
     )
 
-    const userData = user.getData().invites;
+    const userData = user.getData().accounts;
     console.log(userData);
 })();

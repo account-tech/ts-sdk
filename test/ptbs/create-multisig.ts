@@ -10,8 +10,6 @@ import { executeTx, NETWORK, testKeypair } from "./utils";
 
     const tx = new Transaction();
 
-    console.log(ms.user)
-
     ms.createMultisig(
         tx, 
         "Main", 

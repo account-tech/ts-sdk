@@ -35,6 +35,8 @@ export class Multisig extends Account implements MultisigData {
         if (multisigId) {
             multisig.id = multisigId;
             await multisig.refresh();
+        } else {
+            multisig.fees = await multisig.fetchFees();
         }
         return multisig;
     }
@@ -138,9 +140,6 @@ export class Multisig extends Account implements MultisigData {
         const managedAssets = await Managed.init(this.client, id, ['currencies', 'kiosks', 'vaults', 'upgradePolicies']);
         const ownedObjects = await Owned.init(this.client, id);
 
-        // get fees
-        const fees = await FeesRaw.fetch(this.client, id);
-
         return {
             id: multisigAccount.id,
             metadata,
@@ -151,12 +150,17 @@ export class Multisig extends Account implements MultisigData {
             intents,
             managedAssets,
             ownedObjects,
-            fees: fees.amount,
         }
+    }
+
+    async fetchFees(): Promise<bigint> {
+        const fees = await FeesRaw.fetch(this.client, MULTISIG_FEES);
+        return fees.amount;
     }
 
     async refresh(id: string = this.id) {
         this.setData(await this.fetch(id));
+        this.fees = await this.fetchFees();
     }
 
     setData(multisig: MultisigData) {
@@ -169,7 +173,6 @@ export class Multisig extends Account implements MultisigData {
         this.intents = multisig.intents;
         this.managedAssets = multisig.managedAssets;
         this.ownedObjects = multisig.ownedObjects;
-        this.fees = multisig.fees;
     }
 
     getData(): MultisigData {
@@ -183,7 +186,6 @@ export class Multisig extends Account implements MultisigData {
             intents: this.intents,
             managedAssets: this.managedAssets,
             ownedObjects: this.ownedObjects,
-            fees: this.fees,
         }
     }
 

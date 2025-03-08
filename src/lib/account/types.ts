@@ -38,7 +38,6 @@ export type MultisigData = AccountData & {
     roles: Record<string, Role>;
     members: MemberProfile[];
     intents: Intent[];
-    fees: bigint;
 }
 
 export type Role = {
