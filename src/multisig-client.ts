@@ -179,6 +179,10 @@ export class MultisigClient {
 		return this.user.refuseInvite(tx, invite);
 	}
 
+	reorderMultisigs(tx: Transaction, multisigAddrs: string[]) {
+		return this.user.reorderAccounts(tx, this.user.id, AccountTypes.Multisig, multisigAddrs);
+	}
+
 	// === Getters ===
 
 	/// Returns the latest deps from the extensions

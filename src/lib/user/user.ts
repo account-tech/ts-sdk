@@ -2,7 +2,7 @@ import { Transaction, TransactionObjectInput, TransactionResult } from "@mysten/
 import { SuiClient, SuiMoveObject, SuiObjectResponse } from "@mysten/sui/client";
 import { SuinsClient } from '@mysten/suins-toolkit';
 import { User as UserRaw, Invite as InviteRaw } from "../../.gen/account-protocol/user/structs";
-import { acceptInvite, refuseInvite } from "../../.gen/account-protocol/user/functions";
+import { acceptInvite, refuseInvite, reorderAccounts } from "../../.gen/account-protocol/user/functions";
 import { new_, transfer, destroy } from "../../.gen/account-protocol/user/functions";
 import { USER_REGISTRY, ACCOUNT_PROTOCOL, contractObjects } from "../../types/constants";
 import { UserData, AccountsByType, AccountPreview, Invite, InvitesByType, Profile } from "./types";
@@ -220,6 +220,10 @@ export class User implements UserData {
 
 	refuseInvite(tx: Transaction, invite: TransactionObjectInput): TransactionResult {
 		return refuseInvite(tx, invite);
+	}
+
+	reorderAccounts(tx: Transaction, user: TransactionObjectInput, accountType: string, accountAddrs: string[]) {
+		return reorderAccounts(tx, accountType, { user, addrs: accountAddrs });
 	}
 }
 
