@@ -43,7 +43,7 @@ let rolesToAdd = [
     await ms.refresh();
 
     // execute the proposal 
-    const tx2 = new Transaction();
-    ms.execute(tx2, testKeypair.toSuiAddress(), "add role");
-    await executeTx(tx2);
+    // const tx2 = new Transaction();
+    // ms.execute(tx2, testKeypair.toSuiAddress(), "add role");
+    // await executeTx(tx2);
 })();

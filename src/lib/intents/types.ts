@@ -8,7 +8,7 @@ export const IntentTypes = {
     ConfigDeps: `${ACCOUNT_PROTOCOL.V1.slice(2)}::config::ConfigDepsIntent`,
     ToggleUnverifiedAllowed: `${ACCOUNT_PROTOCOL.V1.slice(2)}::config::ToggleUnverifiedAllowedIntent`,
     // Config
-    ConfigMultisig: `${ACCOUNT_MULTISIG.V1.slice(2)}::multisig::ConfigMultisigIntent`,
+    ConfigMultisig: `${ACCOUNT_MULTISIG.V1.slice(2)}::config::ConfigMultisigIntent`,
     // Actions
     BorrowCap: `${ACCOUNT_ACTIONS.V1.slice(2)}::access_control_intents::BorrowCapIntent`,
 

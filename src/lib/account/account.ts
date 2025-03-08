@@ -3,7 +3,8 @@ import {
 	Intent, IntentFields, IntentTypes,
 	BorrowCapIntent, ConfigDepsIntent, DisableRulesIntent, UpdateMetadataIntent, MintAndTransferIntent, MintAndVestIntent, WithdrawAndBurnIntent,
 	TakeNftsIntent, ListNftsIntent, WithdrawAndTransferToVaultIntent, WithdrawAndTransferIntent, WithdrawAndVestIntent,
-	UpgradePackageIntent, RestrictPolicyIntent, SpendAndTransferIntent, SpendAndVestIntent, ConfigMultisigIntent
+	UpgradePackageIntent, RestrictPolicyIntent, SpendAndTransferIntent, SpendAndVestIntent, ConfigMultisigIntent,
+	ToggleUnverifiedAllowedIntent
 } from "../intents";
 import { Outcome } from "../outcomes";
 import { Managed, Owned } from "../objects";
@@ -35,6 +36,8 @@ export abstract class Account implements AccountData {
 		switch (fields.issuer.intentType) {
 			case IntentTypes.ConfigDeps:
 				return await ConfigDepsIntent.init(client, this.id, outcome, fields);
+			case IntentTypes.ToggleUnverifiedAllowed:
+				return await ToggleUnverifiedAllowedIntent.init(client, this.id, outcome, fields);
 			case IntentTypes.ConfigMultisig:
 				return await ConfigMultisigIntent.init(client, this.id, outcome, fields);
 			case IntentTypes.BorrowCap:

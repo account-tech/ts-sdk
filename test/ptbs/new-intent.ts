@@ -11,13 +11,10 @@ import { NETWORK, MULTISIG, testKeypair, executeTx } from "./utils";
     );
     const tx = new Transaction();
 
-    ms.request(
-        tx, 
-        IntentTypes.BorrowCap,
-        { key: "Lock Coin" }, // proposalArgs 
-        { 
-            capType: "0x2::package::UpgradeCap",
-        } as BorrowCapArgs // actionsArgs
+    ms.requestToggleUnverifiedDepsAllowed(
+        tx,
+        true,
+        "Toggle Unverified Allowed",
     );
     
     executeTx(tx);
