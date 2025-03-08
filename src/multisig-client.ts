@@ -76,8 +76,6 @@ export class MultisigClient {
 		// create the multisig
 		const fee = tx.splitCoins(tx.gas, [this.multisig.fees]);
 		const multisig = this.multisig?.newMultisig(tx, fee);
-		// add AccountProtocol, AccountConfig and AccountActions dependency (AccountProtocol and AccountConfig are already added)
-		this.multisig.atomicConfigDeps(tx, { deps: this.extensions.getLatestDeps().slice(0, 3) }, multisig); // atomic intent
 		// add name
 		const auth = this.multisig.authenticate(tx, multisig);
 		commands.replaceMetadata(tx, MULTISIG_GENERICS, auth, multisig, ["name"], [name]);
