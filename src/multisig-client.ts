@@ -167,10 +167,11 @@ export class MultisigClient {
 	}
 
 	acceptInvite(tx: Transaction, invite: TransactionObjectInput): TransactionResult {
-		if (this.user.id === "") {
-			this.user.createUser(tx);
+		let user: TransactionObjectInput = this.user.id;
+		if (user === "") {
+			user = this.user.createUser(tx);
 		}
-		return this.user.acceptInvite(tx, this.user.id, invite);
+		return this.user.acceptInvite(tx, user, invite);
 	}
 
 	refuseInvite(tx: Transaction, invite: TransactionObjectInput): TransactionResult {
