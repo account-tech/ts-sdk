@@ -259,7 +259,7 @@ export class MultisigClient {
 	}
 
 	getIntentStatus(key: string): IntentStatus {
-		return this.multisig.intentStatus(key);
+		return this.multisig.intent(key)?.outcome.status;
 	}
 
 	canApproveIntent(key: string): boolean {
@@ -268,27 +268,27 @@ export class MultisigClient {
 	}
 
 	/// Returns true if the intent can be executed after potential approval
-	canExecuteIntent(key: string): boolean {
-		const intent = this.multisig.intent(key);
-		const outcome = intent?.outcome as Approvals;
-		const member = this.multisig.member(this.user.address!);
+	// canExecuteIntent(key: string): boolean {
+	// 	const intent = this.multisig.intent(key);
+	// 	const outcome = intent?.outcome as Approvals;
+	// 	const member = this.multisig.member(this.user.address!);
 
-		switch (this.multisig.intentStatus(key)) {
-			case IntentStatus.Executable:
-				return true;
-			case IntentStatus.Pending:
-				const hasRole = member.roles.includes(intent.fields.role);
+	// 	switch (this.multisig.intentStatus(key)) {
+	// 		case IntentStatus.Executable:
+	// 			return true;
+	// 		case IntentStatus.Pending:
+	// 			const hasRole = member.roles.includes(intent.fields.role);
 
-				const thresholdReachedAfterApproval =
-					(outcome.totalWeight + member.weight) >= this.multisig.global.threshold ||
-					(hasRole ? outcome.roleWeight + member.weight : outcome.roleWeight) >= this.multisig.roles[intent.fields.role].threshold;
-				const executionTimeReached = intent!.fields.executionTimes[0] <= Date.now();
+	// 			const thresholdReachedAfterApproval =
+	// 				(outcome.totalWeight + member.weight) >= this.multisig.global.threshold ||
+	// 				(hasRole ? outcome.roleWeight + member.weight : outcome.roleWeight) >= this.multisig.roles[intent.fields.role].threshold;
+	// 			const executionTimeReached = intent!.fields.executionTimes[0] <= Date.now();
 
-				return thresholdReachedAfterApproval && executionTimeReached;
-			default:
-				return false;
-		}
-	}
+	// 			return thresholdReachedAfterApproval && executionTimeReached;
+	// 		default:
+	// 			return false;
+	// 	}
+	// }
 
 	getManagedAssets(): ManagedData {
 		return this.multisig.managedAssets.getData();

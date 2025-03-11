@@ -15,7 +15,7 @@ import { IntentFields as IntentFieldsRaw } from "../../../.gen/account-protocol/
 
 import { User } from "../../user/user";
 import { ACCOUNT_PROTOCOL, CLOCK, EXTENSIONS, MULTISIG_FEES, MULTISIG_GENERICS, SUI_FRAMEWORK, TransactionPureInput } from "../../../types";
-import { Intent, IntentStatus, ConfigDepsArgs, ConfigMultisigArgs, IntentFields } from "../../intents";
+import { Intent, ConfigDepsArgs, ConfigMultisigArgs, IntentFields } from "../../intents";
 import { Dep, Role, MemberProfile, MultisigData } from "../types";
 import { Account } from "../account";
 import { Approvals } from "../../outcomes";
@@ -91,33 +91,16 @@ export class Multisig extends Account implements MultisigData {
         });
         // get Proposals with actions
         const intents = await Promise.all(multisigAccount!.intents.inner.map(async (fieldsRaw: IntentFieldsRaw<ApprovalsRaw>) => {
-            const now = Date.now();
-            let status: IntentStatus;
-            // Check expiration first
-            if (fieldsRaw.expirationTime < now) {
-                status = IntentStatus.Expired;
-            } else {
-                // Check if intent has reached threshold
-                const hasReachedThreshold =
-                    Number(fieldsRaw.outcome.totalWeight) >= this.global.threshold ||
-                    Number(fieldsRaw.outcome.roleWeight) >= this.roles[fieldsRaw.role].threshold;
-
-                // If threshold is reached, check execution time
-                if (hasReachedThreshold) {
-                    status = fieldsRaw.executionTimes[0] <= now
-                        ? IntentStatus.Executable
-                        : IntentStatus.Resolved;
-                } else {
-                    status = IntentStatus.Pending;
-                }
-            }
             const outcome = new Approvals(
                 id,
                 fieldsRaw.key,
                 Number(fieldsRaw.outcome.totalWeight),
                 Number(fieldsRaw.outcome.roleWeight),
                 fieldsRaw.outcome.approved.contents,
-                status
+                fieldsRaw.executionTimes[0],
+                fieldsRaw.expirationTime,
+                Number(fieldsRaw.outcome.totalWeight),
+                Number(fieldsRaw.outcome.roleWeight),
             );
             const fields: IntentFields = {
                 issuer: {
@@ -203,31 +186,6 @@ export class Multisig extends Account implements MultisigData {
             throw new Error(`Intent with key ${key} not found.`);
         }
         return intent;
-    }
-
-    intentStatus(key: string): IntentStatus {
-        const intent = this.intent(key);
-        const now = Date.now();
-
-        // Check expiration first
-        if (intent.fields.expirationTime < now) {
-            return IntentStatus.Expired;
-        }
-
-        // Check if intent has reached threshold
-        const approvals = intent.outcome as Approvals;
-        const hasReachedThreshold =
-            approvals.totalWeight >= this.global.threshold ||
-            approvals.roleWeight >= this.roles[intent.fields.role].threshold;
-
-        // If threshold is reached, check execution time
-        if (hasReachedThreshold) {
-            return intent.fields.executionTimes[0] <= now
-                ? IntentStatus.Executable
-                : IntentStatus.Resolved;
-        }
-
-        return IntentStatus.Pending;
     }
 
 

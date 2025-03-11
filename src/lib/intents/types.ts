@@ -32,11 +32,9 @@ export const IntentTypes = {
     SpendAndVest: `${ACCOUNT_ACTIONS.V1.slice(2)}::vault_intents::SpendAndVestIntent`,
 } as const;
 
-export enum IntentStatus {
-    Pending, // created, pending for resolution
-    Resolved, // resolved, but execution time not reached
-    Executable, // resolved, can be executed because execution time reached
-    Expired, // can be deleted because expiration time reached, (can still be resolved or executed)
+export type IntentStatus = {
+    stage: 'pending' | 'resolved' | 'executable'; // pending approval > waiting for execution_time > executable
+    deletable: boolean; // can be deleted because expiration time reached, (can still be resolved or executed)
 }
 
 export type Issuer = {
