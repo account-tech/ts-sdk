@@ -1,8 +1,8 @@
 export { Intent } from "./intent";
-export { IntentTypes, IntentStatus } from "./types";
 export { intentRegistry } from "./registry";
+export { IntentTypes } from "./types";
 export type {
-    IntentType, Issuer, IntentFields, IntentArgs, ActionsArgs,
+    IntentType, Issuer, IntentFields, IntentArgs, ActionsArgs, IntentStatus,
     ConfigDepsArgs, ToggleUnverifiedAllowedArgs, ConfigMultisigArgs,
     BorrowCapArgs,
     DisableRulesArgs, UpdateMetadataArgs, MintAndTransferArgs, MintAndVestArgs, WithdrawAndBurnArgs,

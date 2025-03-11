@@ -7,5 +7,5 @@ import { MULTISIG, NETWORK, testKeypair } from "./utils";
         testKeypair.toSuiAddress(),
         MULTISIG
     )
-    console.log(ms.getIntents());
+    console.log(ms.getOwnedObjects());
 })();

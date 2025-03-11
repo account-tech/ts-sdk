@@ -49,7 +49,7 @@ export class Owned implements OwnedData {
                 coin.amount += BigInt((obj.data?.content as any).fields.balance);
             }
             // Check if it's a "visual" NFT
-            else if (obj.data.display) {
+            else if (obj.data.display?.data) {
                 const display = obj.data.display;
                 nfts.push({
                     type: obj.data.type,

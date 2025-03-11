@@ -2,9 +2,9 @@
 
 import { KioskClient, Network } from "@mysten/kiosk";
 import { DynamicFieldInfo, SuiClient } from "@mysten/sui/client";
-import { ManagedKeyTypes, ManagedData, Cap, Currency, UpgradePolicy, Kiosk, Vault, Df } from "./types";
+import { ManagedKeyTypes, ManagedData, Cap, Currency, Kiosk, Vault, Df, Package } from "./types";
 import { processCurrencies } from "./dynamic-fields/currency";
-import { processUpgradePolicies } from "./dynamic-fields/upgrade-policies";
+import { processPackages } from "./dynamic-fields/packages";
 import { processVaults } from "./dynamic-fields/vault";
 import { processKiosks } from "./dynamic-fields/kiosk";
 
@@ -14,7 +14,7 @@ export class Managed implements ManagedData {
     currencies: Record<string, Currency> = {}; // coinType -> currency
     kiosks: Record<string, Kiosk> = {}; // name -> Kiosk
     vaults: Record<string, Vault> = {}; // coinType -> Vault
-    upgradePolicies: Record<string, UpgradePolicy> = {}; // name -> packageId
+    packages: Record<string, Package> = {}; // name -> packageId
 
     private constructor(
         public client: SuiClient,
@@ -51,7 +51,7 @@ export class Managed implements ManagedData {
 
         let caps: Cap[] = []; // cap types
         const currencyDfs = new Map<string, Df>(); // name -> df ids
-        const upgradePolicyDfs = new Map<string, Df>(); // name -> df ids
+        const packagesDfs = new Map<string, Df>(); // name -> df ids
         const kioskDfs = new Map<string, string>(); // name -> df id
         const vaultDfs = new Map<string, string>(); // name -> df id
 
@@ -62,7 +62,7 @@ export class Managed implements ManagedData {
                     caps.push({ type: capType! });
                     break;
                 case ManagedKeyTypes.TreasuryCap: {
-                    const name = (df.name.value as any).name;
+                    const name = (df.name.value as any).pos0;
                     if (!currencyDfs.has(name)) {
                         currencyDfs.set(name, { capId: "", rulesId: "" });
                     }
@@ -70,7 +70,7 @@ export class Managed implements ManagedData {
                     break;
                 }
                 case ManagedKeyTypes.CurrencyRules: {
-                    const name = (df.name.value as any).name;
+                    const name = (df.name.value as any).pos0;
                     if (!currencyDfs.has(name)) {
                         currencyDfs.set(name, { capId: "", rulesId: "" });
                     }
@@ -78,29 +78,29 @@ export class Managed implements ManagedData {
                     break;
                 }
                 case ManagedKeyTypes.KioskOwner: {
-                    const name = (df.name.value as any).name;
+                    const name = (df.name.value as any).pos0;
                     kioskDfs.set(name, df.objectId);
                     break;
                 }
                 case ManagedKeyTypes.Vault: {
-                    const name = (df.name.value as any).name;
+                    const name = (df.name.value as any).pos0;
                     vaultDfs.set(name, df.objectId);
                     break;
                 }
                 case ManagedKeyTypes.UpgradeRules: {
-                    const name = (df.name.value as any).name;
-                    if (!upgradePolicyDfs.has(name)) {
-                        upgradePolicyDfs.set(name, { capId: "", rulesId: "" });
+                    const name = (df.name.value as any).pos0;
+                    if (!packagesDfs.has(name)) {
+                        packagesDfs.set(name, { capId: "", rulesId: "" });
                     }
-                    upgradePolicyDfs.get(name)!.rulesId = df.objectId;
+                    packagesDfs.get(name)!.rulesId = df.objectId;
                     break;
                 }
                 case ManagedKeyTypes.UpgradeCap: {
-                    const name = (df.name.value as any).name;
-                    if (!upgradePolicyDfs.has(name)) {
-                        upgradePolicyDfs.set(name, { capId: "", rulesId: "" });
+                    const name = (df.name.value as any).pos0;
+                    if (!packagesDfs.has(name)) {
+                        packagesDfs.set(name, { capId: "", rulesId: "" });
                     }
-                    upgradePolicyDfs.get(name)!.capId = df.objectId;
+                    packagesDfs.get(name)!.capId = df.objectId;
                     break;
                 }
                 case ManagedKeyTypes.UpgradeIndex:
@@ -122,8 +122,8 @@ export class Managed implements ManagedData {
             if (assets.includes('vaults') && vaultDfs.size > 0) {
                 result.vaults = await processVaults(this.client, vaultDfs);
             }
-            if (assets.includes('upgradePolicies') && upgradePolicyDfs.size > 0) {
-                result.upgradePolicies = await processUpgradePolicies(this.client, upgradePolicyDfs);
+            if (assets.includes('packages') && packagesDfs.size > 0) {
+                result.packages = await processPackages(this.client, packagesDfs);
             }
             return result as ManagedData;
         }
@@ -133,7 +133,7 @@ export class Managed implements ManagedData {
             currencies: await processCurrencies(this.client, currencyDfs),
             kiosks: await processKiosks(this.kioskClient, kioskDfs),
             vaults: await processVaults(this.client, vaultDfs),
-            upgradePolicies: await processUpgradePolicies(this.client, upgradePolicyDfs),
+            packages: await processPackages(this.client, packagesDfs),
         };
     }
 
@@ -148,7 +148,7 @@ export class Managed implements ManagedData {
             currencies: this.currencies,
             kiosks: this.kiosks,
             vaults: this.vaults,
-            upgradePolicies: this.upgradePolicies,
+            packages: this.packages,
         }
     }
 
@@ -157,6 +157,6 @@ export class Managed implements ManagedData {
         this.currencies = data.currencies;
         this.kiosks = data.kiosks;
         this.vaults = data.vaults;
-        this.upgradePolicies = data.upgradePolicies;
+        this.packages = data.packages;
     }
 }

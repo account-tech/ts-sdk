@@ -30,7 +30,7 @@ export type ManagedData = {
     currencies: Record<string, Currency>; // coinType -> currency
     kiosks: Record<string, Kiosk>; // name -> Kiosk
     vaults: Record<string, Vault>; // coinType -> Vault
-    upgradePolicies: Record<string, UpgradePolicy>; // name -> upgrade & package info
+    packages: Record<string, Package>; // name -> package info
 }
 
 export type ManagedKeyType = typeof ManagedKeyTypes[keyof typeof ManagedKeyTypes];
@@ -88,7 +88,7 @@ export type Vault = {
     coins: Record<string, bigint>;
 }
 
-export type UpgradePolicy = {
+export type Package = {
     packageId: string;
     capId: string;
     delayMs: bigint;

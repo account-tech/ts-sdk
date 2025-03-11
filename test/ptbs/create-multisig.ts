@@ -14,7 +14,7 @@ import { executeTx, NETWORK, testKeypair } from "./utils";
         tx, 
         "Main", 
         { username: "Thouny", profilePicture: "https://example.com/avatar.png" }, 
-        ["0x528b64ec15669c537d501d9260d321c56e948bd260459b6260a89cfd93178e15"],
+        ["0x3f50ede2b1e41f3515f03be51be68befea18fc20e22166406e584bf73c62c85c"],
         // 2
     );
     

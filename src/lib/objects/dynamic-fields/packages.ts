@@ -1,13 +1,13 @@
 import { SuiClient } from "@mysten/sui/client";
 import { UpgradeCap } from "../../../.gen/_dependencies/source/0x2/package/structs";
 import { UpgradeRules } from "../../../.gen/account-actions/package-upgrade/structs";
-import { Df, UpgradePolicy } from "../types";
+import { Df, Package } from "../types";
 import { SuiMoveObject } from "@mysten/sui/client";
 
-export async function processUpgradePolicies(
+export async function processPackages(
     client: SuiClient,
     upgradePolicyDfs: Map<string, Df>
-): Promise<Record<string, UpgradePolicy>> {
+): Promise<Record<string, Package>> {
     // Extract all IDs we need to fetch
     const allIds = Array.from(upgradePolicyDfs.values()).flatMap(df => [df.rulesId, df.capId]);
 
@@ -32,7 +32,7 @@ export async function processUpgradePolicies(
     });
 
     // Process each upgrade policy
-    const result: Record<string, UpgradePolicy> = {};
+    const result: Record<string, Package> = {};
     for (const [name, { rulesId, capId }] of upgradePolicyDfs.entries()) {
         const rulesObj = rulesById[rulesId];
         const capObj = capsById[capId];

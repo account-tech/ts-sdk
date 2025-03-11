@@ -1,2 +1,2 @@
 export { User } from "./user";
-export type { UserData, AccountPreview, AccountPreviews } from "./types"; 
+export type { UserData, AccountPreview, AccountsByType, Invite, InvitesByType } from "./types"; 
