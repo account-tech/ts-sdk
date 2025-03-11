@@ -18,13 +18,13 @@ export class Approvals implements Outcome {
         executionTime: bigint,
         expirationTime: bigint,
         globalThreshold: number,
-        roleThreshold: number,
+        roleThreshold?: number,
     ) {
         this.status = this.computeStatus(
-            executionTime,
-            expirationTime,
             totalWeight,
             roleWeight,
+            executionTime,
+            expirationTime,
             globalThreshold,
             roleThreshold,
         );
@@ -53,12 +53,12 @@ export class Approvals implements Outcome {
     }
 
     computeStatus(
-        executionTime: bigint,
-        expirationTime: bigint,
         totalWeight: number,
         roleWeight: number,
+        executionTime: bigint,
+        expirationTime: bigint,
         globalThreshold: number,
-        roleThreshold: number,
+        roleThreshold?: number,
     ): IntentStatus {
         const now = Date.now();
 
@@ -72,7 +72,7 @@ export class Approvals implements Outcome {
         // Check if intent has reached threshold
         const hasReachedThreshold =
             totalWeight >= globalThreshold ||
-            roleWeight >= roleThreshold;
+            (roleThreshold && roleWeight >= roleThreshold);
 
         // If threshold is reached, check execution time
         if (hasReachedThreshold) {

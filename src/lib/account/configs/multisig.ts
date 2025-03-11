@@ -99,8 +99,8 @@ export class Multisig extends Account implements MultisigData {
                 fieldsRaw.outcome.approved.contents,
                 fieldsRaw.executionTimes[0],
                 fieldsRaw.expirationTime,
-                Number(fieldsRaw.outcome.totalWeight),
-                Number(fieldsRaw.outcome.roleWeight),
+                Number(global.threshold),
+                Number(roles[fieldsRaw.role]?.threshold),
             );
             const fields: IntentFields = {
                 issuer: {
