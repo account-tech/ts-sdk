@@ -9,10 +9,17 @@ export async function processKiosks(
     const result: Record<string, Kiosk> = {};
 
     // First get all kiosk cap objects to get kiosk IDs
-    const kioskCapObjs = await client.client.multiGetObjects({
-        ids: Array.from(kioskDfs.values()),
-        options: { showContent: true }
-    });
+    // Process in batches of 50 due to API limitations
+    const kioskCapObjs = [];
+    const capIds = Array.from(kioskDfs.values());
+    for (let i = 0; i < capIds.length; i += 50) {
+        const batch = capIds.slice(i, i + 50);
+        const batchResults = await client.client.multiGetObjects({
+            ids: batch,
+            options: { showContent: true }
+        });
+        kioskCapObjs.push(...batchResults);
+    }
 
     // Map cap IDs to kiosk IDs
     const capToKioskId: Record<string, string> = {};

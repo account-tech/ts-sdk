@@ -8,10 +8,16 @@ export async function processVaults(
     const result: Record<string, Vault> = {};
 
     // First get all vault objects to extract bag IDs
-    const vaultStructs = await client.multiGetObjects({
-        ids: Array.from(vaultDfs.values()),
-        options: { showContent: true }
-    });
+    // Process in batches of 50 due to API limitations
+    const vaultStructs = [];
+    for (let i = 0; i < Array.from(vaultDfs.values()).length; i += 50) {
+        const batch = Array.from(vaultDfs.values()).slice(i, i + 50);
+        const batchResults = await client.multiGetObjects({
+            ids: batch,
+            options: { showContent: true }
+        });
+        vaultStructs.push(...batchResults);
+    }
 
     // Map vault IDs to their bag IDs
     const vaultToBagId: Record<string, string> = {};

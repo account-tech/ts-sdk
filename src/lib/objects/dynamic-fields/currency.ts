@@ -13,10 +13,16 @@ export async function processCurrencies(
     const allIds = Array.from(currencyDfs.values()).flatMap(df => [df.rulesId, df.capId]);
 
     // Fetch all objects in one batch
-    const objects = await client.multiGetObjects({
-        ids: allIds,
-        options: { showContent: true }
-    });
+    // Process in batches of 50 due to API limitations
+    const objects = [];
+    for (let i = 0; i < allIds.length; i += 50) {
+        const batch = allIds.slice(i, i + 50);
+        const batchResults = await client.multiGetObjects({
+            ids: batch,
+            options: { showContent: true }
+        });
+        objects.push(...batchResults);
+    }
 
     // Create lookup maps
     const rulesById: Record<string, SuiMoveObject> = {};

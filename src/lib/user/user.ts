@@ -80,10 +80,16 @@ export class User implements UserData {
 		if (!allIds || allIds.length === 0) return accountsByType;
 
 		// Fetch all account objects in one batch
-		const accountsObjs = await this.client.multiGetObjects({
-			ids: allIds,
-			options: { showContent: true }
-		});
+		// Process in batches of 50 due to API limitations
+		const accountsObjs = [];
+		for (let i = 0; i < allIds.length; i += 50) {
+			const batch = allIds.slice(i, i + 50);
+			const batchResults = await this.client.multiGetObjects({
+				ids: batch,
+				options: { showContent: true }
+			});
+			accountsObjs.push(...batchResults);
+		}
 
 		// Process each account object
 		accountsObjs.forEach((acc: SuiObjectResponse) => {
@@ -133,10 +139,16 @@ export class User implements UserData {
 		const accountAddrs = invites.map(invite => invite.accountAddr);
 
 		// Fetch all account objects in one batch
-		const accountObjs = await this.client.multiGetObjects({
-			ids: accountAddrs,
-			options: { showContent: true }
-		});
+		// Process in batches of 50 due to API limitations
+		const accountObjs = [];
+		for (let i = 0; i < accountAddrs.length; i += 50) {
+			const batch = accountAddrs.slice(i, i + 50);
+			const batchResults = await this.client.multiGetObjects({
+				ids: batch,
+				options: { showContent: true }
+			});
+			accountObjs.push(...batchResults);
+		}
 
 		// Create a map of account address to name
 		const accountNames = new Map<string, string>();
