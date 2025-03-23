@@ -3,21 +3,7 @@ import {String} from "../../_dependencies/source/0x1/string/structs";
 import {obj, pure} from "../../_framework/util";
 import {Transaction, TransactionArgument, TransactionObjectInput} from "@mysten/sui/transactions";
 
-export function length( tx: Transaction, deps: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::deps::length`, arguments: [ obj(tx, deps) ], }) }
-
-export interface NewArgs { extensions: TransactionObjectInput; unverifiedAllowed: boolean | TransactionArgument; names: Array<string | TransactionArgument> | TransactionArgument; addresses: Array<string | TransactionArgument> | TransactionArgument; versions: Array<bigint | TransactionArgument> | TransactionArgument }
-
-export function new_( tx: Transaction, args: NewArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::deps::new`, arguments: [ obj(tx, args.extensions), pure(tx, args.unverifiedAllowed, `bool`), pure(tx, args.names, `vector<${String.$typeName}>`), pure(tx, args.addresses, `vector<address>`), pure(tx, args.versions, `vector<u64>`) ], }) }
-
-export function name( tx: Transaction, dep: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::deps::name`, arguments: [ obj(tx, dep) ], }) }
-
-export function version( tx: Transaction, dep: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::deps::version`, arguments: [ obj(tx, dep) ], }) }
-
 export function addr( tx: Transaction, dep: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::deps::addr`, arguments: [ obj(tx, dep) ], }) }
-
-export interface GetByIdxArgs { deps: TransactionObjectInput; idx: bigint | TransactionArgument }
-
-export function getByIdx( tx: Transaction, args: GetByIdxArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::deps::get_by_idx`, arguments: [ obj(tx, args.deps), pure(tx, args.idx, `u64`) ], }) }
 
 export interface CheckArgs { deps: TransactionObjectInput; versionWitness: TransactionObjectInput }
 
@@ -35,10 +21,28 @@ export interface GetByAddrArgs { deps: TransactionObjectInput; addr: string | Tr
 
 export function getByAddr( tx: Transaction, args: GetByAddrArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::deps::get_by_addr`, arguments: [ obj(tx, args.deps), pure(tx, args.addr, `address`) ], }) }
 
+export interface GetByIdxArgs { deps: TransactionObjectInput; idx: bigint | TransactionArgument }
+
+export function getByIdx( tx: Transaction, args: GetByIdxArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::deps::get_by_idx`, arguments: [ obj(tx, args.deps), pure(tx, args.idx, `u64`) ], }) }
+
 export interface GetByNameArgs { deps: TransactionObjectInput; name: string | TransactionArgument }
 
 export function getByName( tx: Transaction, args: GetByNameArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::deps::get_by_name`, arguments: [ obj(tx, args.deps), pure(tx, args.name, `${String.$typeName}`) ], }) }
 
-export function unverifiedAllowed( tx: Transaction, deps: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::deps::unverified_allowed`, arguments: [ obj(tx, deps) ], }) }
+export function length( tx: Transaction, deps: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::deps::length`, arguments: [ obj(tx, deps) ], }) }
+
+export function name( tx: Transaction, dep: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::deps::name`, arguments: [ obj(tx, dep) ], }) }
+
+export interface NewArgs { extensions: TransactionObjectInput; unverifiedAllowed: boolean | TransactionArgument; names: Array<string | TransactionArgument> | TransactionArgument; addresses: Array<string | TransactionArgument> | TransactionArgument; versions: Array<bigint | TransactionArgument> | TransactionArgument }
+
+export function new_( tx: Transaction, args: NewArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::deps::new`, arguments: [ obj(tx, args.extensions), pure(tx, args.unverifiedAllowed, `bool`), pure(tx, args.names, `vector<${String.$typeName}>`), pure(tx, args.addresses, `vector<address>`), pure(tx, args.versions, `vector<u64>`) ], }) }
+
+export interface NewLatestExtensionsArgs { extensions: TransactionObjectInput; names: Array<string | TransactionArgument> | TransactionArgument }
+
+export function newLatestExtensions( tx: Transaction, args: NewLatestExtensionsArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::deps::new_latest_extensions`, arguments: [ obj(tx, args.extensions), pure(tx, args.names, `vector<${String.$typeName}>`) ], }) }
 
 export function toggleUnverifiedAllowed( tx: Transaction, deps: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::deps::toggle_unverified_allowed`, arguments: [ obj(tx, deps) ], }) }
+
+export function unverifiedAllowed( tx: Transaction, deps: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::deps::unverified_allowed`, arguments: [ obj(tx, deps) ], }) }
+
+export function version( tx: Transaction, dep: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::deps::version`, arguments: [ obj(tx, dep) ], }) }

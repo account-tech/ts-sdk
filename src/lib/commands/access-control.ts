@@ -4,7 +4,7 @@ import { Transaction, TransactionObjectInput, TransactionResult } from "@mysten/
 /// Deposits and locks a Cap object in the Account
 export function depositCap(
     tx: Transaction,
-    accountGenerics: [string, string],
+    configType: string,
     capType: string,
     auth: TransactionObjectInput,
     account: TransactionObjectInput,
@@ -12,7 +12,7 @@ export function depositCap(
 ): TransactionResult {
     return lockCap(
         tx,
-        [...accountGenerics, capType],
+        [configType, capType],
         { auth, account, cap: capObject },
     );
 }

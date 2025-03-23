@@ -5,14 +5,14 @@ import { TransactionPureInput } from "src/types/helpers";
 /// Opens a Kiosk managed by the Account
 export function openKiosk(
     tx: Transaction,
-    accountGenerics: [string, string],
+    configType: string,
     auth: TransactionObjectInput,
     account: TransactionObjectInput,
     name: string,
 ): TransactionResult {
     return open(
         tx,
-        accountGenerics,
+        configType,
         { auth, account, name },
     );
 }
@@ -20,7 +20,7 @@ export function openKiosk(
 /// Places an object in the Kiosk, the object must come from another Kiosk
 export function placeInKiosk(
     tx: Transaction,
-    accountGenerics: [string, string],
+    configType: string,
     nftType: string,
     auth: TransactionObjectInput,
     account: TransactionObjectInput,
@@ -33,7 +33,7 @@ export function placeInKiosk(
 ): TransactionResult {
     return place(
         tx,
-        [...accountGenerics, nftType],
+        [configType, nftType],
         { auth, account, accountKiosk, senderKiosk, senderCap, policy: transferPolicy, name: kioskName, nftId },
     );
 }
@@ -41,7 +41,7 @@ export function placeInKiosk(
 /// Delists an object from the Kiosk
 export function delistFromKiosk(
     tx: Transaction,
-    accountGenerics: [string, string],
+    configType: string,
     nftType: string,
     auth: TransactionObjectInput,
     account: TransactionObjectInput,
@@ -51,7 +51,7 @@ export function delistFromKiosk(
 ): TransactionResult {
     return delist(
         tx,
-        [...accountGenerics, nftType],
+        [configType, nftType],
         { auth, account, kiosk, name, nftId },
     );
 }
@@ -59,7 +59,7 @@ export function delistFromKiosk(
 /// Withdraws the profits from the Kiosk to the Account
 export function withdrawProfitsFromKiosk(
     tx: Transaction,
-    accountGenerics: [string, string],
+    configType: string,
     auth: TransactionObjectInput,
     account: TransactionObjectInput,
     kiosk: TransactionObjectInput,
@@ -67,7 +67,7 @@ export function withdrawProfitsFromKiosk(
 ): TransactionResult {
     return withdrawProfits(
         tx,
-        accountGenerics,
+        configType,
         { auth, account, kiosk, name },
     );
 }
@@ -75,7 +75,7 @@ export function withdrawProfitsFromKiosk(
 /// Closes an empty Kiosk managed by the Account
 export function closeKiosk(
     tx: Transaction,
-    accountGenerics: [string, string],
+    configType: string,
     auth: TransactionObjectInput,
     account: TransactionObjectInput,
     kiosk: TransactionObjectInput,
@@ -83,7 +83,7 @@ export function closeKiosk(
 ): TransactionResult {
     return close(
         tx,
-        accountGenerics,
+        configType,
         { auth, account, kiosk, name },
     );
 }

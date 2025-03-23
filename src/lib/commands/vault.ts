@@ -4,14 +4,14 @@ import { Transaction, TransactionObjectInput, TransactionResult } from "@mysten/
 /// Opens a Vault managed by the Account
 export function openVault(
     tx: Transaction,
-    accountGenerics: [string, string],
+    configType: string,
     auth: TransactionObjectInput,
     account: TransactionObjectInput,
     name: string,
 ): TransactionResult {
     return open(
         tx,
-        accountGenerics,
+        configType,
         { auth, account, name },
     );
 }
@@ -19,7 +19,7 @@ export function openVault(
 /// Deposits an object into the Vault from the caller wallet
 export function depositFromWallet(
     tx: Transaction,
-    accountGenerics: [string, string],
+    configType: string,
     coinType: string,
     auth: TransactionObjectInput,
     account: TransactionObjectInput,
@@ -28,7 +28,7 @@ export function depositFromWallet(
 ): TransactionResult {
     return deposit(
         tx,
-        [...accountGenerics, coinType],
+        [configType, coinType],
         { auth, account, name, coin },
     );
 }
@@ -36,14 +36,14 @@ export function depositFromWallet(
 /// Closes the Vault if empty
 export function closeVault(
     tx: Transaction,
-    accountGenerics: [string, string],
+    configType: string,
     auth: TransactionObjectInput,
     account: TransactionObjectInput,
     name: string,
 ): TransactionResult {
     return close(
         tx,
-        accountGenerics,
+        configType,
         { auth, account, name },
     );
 }

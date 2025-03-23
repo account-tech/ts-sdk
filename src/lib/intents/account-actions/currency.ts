@@ -13,7 +13,7 @@ import { WithdrawAction } from "../../../.gen/account-protocol/owned/structs";
 import { TransferAction } from "../../../.gen/account-actions/transfer/structs";
 import { VestAction } from "../../../.gen/account-actions/vesting/structs";
 
-import { UpdateMetadataArgs, WithdrawAndBurnArgs, IntentArgs, IntentFields, DisableRulesArgs, MintAndTransferArgs, MintAndVestArgs } from "../types";
+import { UpdateMetadataArgs, WithdrawAndBurnArgs, IntentFields, DisableRulesArgs, MintAndTransferArgs, MintAndVestArgs } from "../types";
 import { Intent } from "../intent";
 import { Outcome } from "../../outcomes";
 import { CLOCK } from "../../../types";
@@ -36,12 +36,12 @@ export class DisableRulesIntent extends Intent {
 
         intent.args = {
             coinType,
-            disableMint: disableAction.mint,
-            disableBurn: disableAction.burn,
-            disableUpdateSymbol: disableAction.updateSymbol,
-            disableUpdateName: disableAction.updateName,
-            disableUpdateDescription: disableAction.updateDescription,
-            disableUpdateIcon: disableAction.updateIcon,
+            mint: disableAction.mint,
+            burn: disableAction.burn,
+            updateSymbol: disableAction.updateSymbol,
+            updateName: disableAction.updateName,
+            updateDescription: disableAction.updateDescription,
+            updateIcon: disableAction.updateIcon,
         };
         return intent;
     }
@@ -50,9 +50,9 @@ export class DisableRulesIntent extends Intent {
         tx: Transaction,
         accountGenerics: [string, string],
         auth: TransactionObjectInput,
-        outcome: TransactionObjectInput,
         account: string,
-        intentArgs: IntentArgs,
+        params: TransactionObjectInput,
+        outcome: TransactionObjectInput,
         actionArgs: DisableRulesArgs,
     ): TransactionResult {
         return currencyIntent.requestDisableRules(
@@ -61,17 +61,14 @@ export class DisableRulesIntent extends Intent {
             {
                 auth,
                 account,
+                params,
                 outcome,
-                key: intentArgs.key,
-                description: intentArgs.description ?? "",
-                executionTime: intentArgs.executionTimes?.[0] ?? 0n,
-                expirationTime: intentArgs.expirationTime ?? BigInt(Math.floor(Date.now()) + 7 * 24 * 60 * 60 * 1000),
-                disableMint: actionArgs.disableMint,
-                disableBurn: actionArgs.disableBurn,
-                disableUpdateSymbol: actionArgs.disableUpdateSymbol,
-                disableUpdateName: actionArgs.disableUpdateName,
-                disableUpdateDescription: actionArgs.disableUpdateDescription,
-                disableUpdateIcon: actionArgs.disableUpdateIcon,
+                mint: actionArgs.mint,
+                burn: actionArgs.burn,
+                updateSymbol: actionArgs.updateSymbol,
+                updateName: actionArgs.updateName,
+                updateDescription: actionArgs.updateDescription,
+                updateIcon: actionArgs.updateIcon,
             }
         );
     }
@@ -165,10 +162,14 @@ export class UpdateMetadataIntent extends Intent {
             newName: updateAction.name,
             newSymbol: updateAction.symbol,
             newDescription: updateAction.description,
-            newIcon: updateAction.iconUrl,
+            newIconUrl: updateAction.iconUrl,
         };
 
-        intent.metadata = await getCoinMeta(client, intent.args.coinType);
+        const metadata = await getCoinMeta(client, intent.args.coinType);
+        if (!metadata) {
+            throw new Error(`Metadata not found for coin type: ${intent.args.coinType}`);
+        }
+        intent.metadata = metadata;
         return intent;
     }
 
@@ -176,9 +177,9 @@ export class UpdateMetadataIntent extends Intent {
         tx: Transaction,
         accountGenerics: [string, string],
         auth: TransactionObjectInput,
-        outcome: TransactionObjectInput,
         account: string,
-        intentArgs: IntentArgs,
+        params: TransactionObjectInput,
+        outcome: TransactionObjectInput,
         actionArgs: UpdateMetadataArgs,
     ): TransactionResult {
         return currencyIntent.requestUpdateMetadata(
@@ -187,15 +188,12 @@ export class UpdateMetadataIntent extends Intent {
             {
                 auth,
                 account,
+                params,
                 outcome,
-                key: intentArgs.key,
-                description: intentArgs.description ?? "",
-                executionTime: intentArgs.executionTimes?.[0] ?? 0n,
-                expirationTime: intentArgs.expirationTime ?? BigInt(Math.floor(Date.now()) + 7 * 24 * 60 * 60 * 1000),
                 mdName: actionArgs.newName,
                 mdSymbol: actionArgs.newSymbol,
                 mdDescription: actionArgs.newDescription,
-                mdIcon: actionArgs.newIcon,
+                mdIconUrl: actionArgs.newIconUrl,
             }
         );
     }
@@ -300,9 +298,9 @@ export class MintAndTransferIntent extends Intent {
         tx: Transaction,
         accountGenerics: [string, string],
         auth: TransactionObjectInput,
-        outcome: TransactionObjectInput,
         account: string,
-        intentArgs: IntentArgs,
+        params: TransactionObjectInput,
+        outcome: TransactionObjectInput,
         actionArgs: MintAndTransferArgs,
     ): TransactionResult {
         return currencyIntent.requestMintAndTransfer(
@@ -311,11 +309,8 @@ export class MintAndTransferIntent extends Intent {
             {
                 auth,
                 account,
+                params,
                 outcome,
-                key: intentArgs.key,
-                description: intentArgs.description ?? "",
-                executionTimes: intentArgs.executionTimes ?? [0n],
-                expirationTime: intentArgs.expirationTime ?? BigInt(Math.floor(Date.now()) + 7 * 24 * 60 * 60 * 1000),
                 amounts: actionArgs.transfers.map(transfer => BigInt(transfer.amount)),
                 recipients: actionArgs.transfers.map(transfer => transfer.recipient),
             }
@@ -429,9 +424,9 @@ export class MintAndVestIntent extends Intent {
         tx: Transaction,
         accountGenerics: [string, string],
         auth: TransactionObjectInput,
-        outcome: TransactionObjectInput,
         account: string,
-        intentArgs: IntentArgs,
+        params: TransactionObjectInput,
+        outcome: TransactionObjectInput,
         actionArgs: MintAndVestArgs,
     ): TransactionResult {
         return currencyIntent.requestMintAndVest(
@@ -440,11 +435,8 @@ export class MintAndVestIntent extends Intent {
             {
                 auth,
                 account,
+                params,
                 outcome,
-                key: intentArgs.key,
-                description: intentArgs.description ?? "",
-                executionTime: intentArgs.executionTimes?.[0] ?? 0n,
-                expirationTime: intentArgs.expirationTime ?? BigInt(Math.floor(Date.now()) + 7 * 24 * 60 * 60 * 1000),
                 totalAmount: actionArgs.amount,
                 recipient: actionArgs.recipient,
                 startTimestamp: actionArgs.start,
@@ -557,9 +549,9 @@ export class WithdrawAndBurnIntent extends Intent {
         tx: Transaction,
         accountGenerics: [string, string],
         auth: TransactionObjectInput,
-        outcome: TransactionObjectInput,
         account: string,
-        intentArgs: IntentArgs,
+        params: TransactionObjectInput,
+        outcome: TransactionObjectInput,
         actionArgs: WithdrawAndBurnArgs,
     ): TransactionResult {
         return currencyIntent.requestWithdrawAndBurn(
@@ -568,11 +560,8 @@ export class WithdrawAndBurnIntent extends Intent {
             {
                 auth,
                 account,
+                params,
                 outcome,
-                key: intentArgs.key,
-                description: intentArgs.description ?? "",
-                executionTime: intentArgs.executionTimes?.[0] ?? 0n,
-                expirationTime: intentArgs.expirationTime ?? BigInt(Math.floor(Date.now()) + 7 * 24 * 60 * 60 * 1000),
                 coinId: actionArgs.coinId,
                 amount: actionArgs.amount,
             }
@@ -611,7 +600,7 @@ export class WithdrawAndBurnIntent extends Intent {
         );
         owned.deleteWithdraw(
             tx,
-            accountGenerics,
+            accountGenerics[0],
             {
                 expired,
                 account
@@ -645,7 +634,7 @@ export class WithdrawAndBurnIntent extends Intent {
         );
         owned.deleteWithdraw(
             tx,
-            accountGenerics,
+            accountGenerics[0],
             {
                 expired,
                 account

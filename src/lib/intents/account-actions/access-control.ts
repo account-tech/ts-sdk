@@ -5,7 +5,7 @@ import * as intents from "../../../.gen/account-protocol/intents/functions";
 import * as accessControlIntent from "../../../.gen/account-actions/access-control-intents/functions";
 import * as accessControl from "../../../.gen/account-actions/access-control/functions";
 
-import { BorrowCapArgs, IntentArgs, IntentFields } from "../types";
+import { BorrowCapArgs, IntentFields } from "../types";
 import { Intent } from "../intent";
 import { Outcome } from "../../outcomes";
 import { CLOCK } from "../../../types";
@@ -34,9 +34,9 @@ export class BorrowCapIntent extends Intent {
         tx: Transaction,
         accountGenerics: [string, string],
         auth: TransactionObjectInput,
-        outcome: TransactionObjectInput,
         account: string,
-        intentArgs: IntentArgs,
+        params: TransactionObjectInput,
+        outcome: TransactionObjectInput,
         actionArgs: BorrowCapArgs,
     ): TransactionResult {
         return accessControlIntent.requestBorrowCap(
@@ -45,11 +45,8 @@ export class BorrowCapIntent extends Intent {
             {
                 auth,
                 account,
+                params,
                 outcome,
-                key: intentArgs.key,
-                description: intentArgs.description ?? "",
-                executionTimes: intentArgs.executionTimes ?? [0n],
-                expirationTime: intentArgs.expirationTime ?? BigInt(Math.floor(Date.now()) + 7 * 24 * 60 * 60 * 1000),
             }
         );
     }

@@ -81,43 +81,45 @@ export class ACCOUNT implements StructClass { __StructClass = true as const;
 
 export function isAccount(type: string): boolean { type = compressSuiType(type); return type.startsWith(`${PKG_V1}::account::Account` + '<'); }
 
-export interface AccountFields<Config extends TypeArgument, Outcome extends TypeArgument> { id: ToField<UID>; metadata: ToField<Metadata>; deps: ToField<Deps>; intents: ToField<Intents<Outcome>>; config: ToField<Config> }
+export interface AccountFields<Config extends TypeArgument> { id: ToField<UID>; metadata: ToField<Metadata>; deps: ToField<Deps>; intents: ToField<Intents>; config: ToField<Config> }
 
-export type AccountReified<Config extends TypeArgument, Outcome extends TypeArgument> = Reified< Account<Config, Outcome>, AccountFields<Config, Outcome> >;
+export type AccountReified<Config extends TypeArgument> = Reified< Account<Config>, AccountFields<Config> >;
 
-export class Account<Config extends TypeArgument, Outcome extends TypeArgument> implements StructClass { __StructClass = true as const;
+export class Account<Config extends TypeArgument> implements StructClass { __StructClass = true as const;
 
- static readonly $typeName = `${PKG_V1}::account::Account`; static readonly $numTypeParams = 2; static readonly $isPhantom = [false,false,] as const;
+ static readonly $typeName = `${PKG_V1}::account::Account`; static readonly $numTypeParams = 1; static readonly $isPhantom = [false,] as const;
 
- readonly $typeName = Account.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::account::Account<${ToTypeStr<Config>}, ${ToTypeStr<Outcome>}>`; readonly $typeArgs: [ToTypeStr<Config>, ToTypeStr<Outcome>]; readonly $isPhantom = Account.$isPhantom;
+ readonly $typeName = Account.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::account::Account<${ToTypeStr<Config>}>`; readonly $typeArgs: [ToTypeStr<Config>]; readonly $isPhantom = Account.$isPhantom;
 
- readonly id: ToField<UID>; readonly metadata: ToField<Metadata>; readonly deps: ToField<Deps>; readonly intents: ToField<Intents<Outcome>>; readonly config: ToField<Config>
+ readonly id: ToField<UID>; readonly metadata: ToField<Metadata>; readonly deps: ToField<Deps>; readonly intents: ToField<Intents>; readonly config: ToField<Config>
 
- private constructor(typeArgs: [ToTypeStr<Config>, ToTypeStr<Outcome>], fields: AccountFields<Config, Outcome>, ) { this.$fullTypeName = composeSuiType( Account.$typeName, ...typeArgs ) as `${typeof PKG_V1}::account::Account<${ToTypeStr<Config>}, ${ToTypeStr<Outcome>}>`; this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [ToTypeStr<Config>], fields: AccountFields<Config>, ) { this.$fullTypeName = composeSuiType( Account.$typeName, ...typeArgs ) as `${typeof PKG_V1}::account::Account<${ToTypeStr<Config>}>`; this.$typeArgs = typeArgs;
 
  this.id = fields.id;; this.metadata = fields.metadata;; this.deps = fields.deps;; this.intents = fields.intents;; this.config = fields.config; }
 
- static reified<Config extends Reified<TypeArgument, any>, Outcome extends Reified<TypeArgument, any>>( Config: Config, Outcome: Outcome ): AccountReified<ToTypeArgument<Config>, ToTypeArgument<Outcome>> { return { typeName: Account.$typeName, fullTypeName: composeSuiType( Account.$typeName, ...[extractType(Config), extractType(Outcome)] ) as `${typeof PKG_V1}::account::Account<${ToTypeStr<ToTypeArgument<Config>>}, ${ToTypeStr<ToTypeArgument<Outcome>>}>`, typeArgs: [ extractType(Config), extractType(Outcome) ] as [ToTypeStr<ToTypeArgument<Config>>, ToTypeStr<ToTypeArgument<Outcome>>], isPhantom: Account.$isPhantom, reifiedTypeArgs: [Config, Outcome], fromFields: (fields: Record<string, any>) => Account.fromFields( [Config, Outcome], fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => Account.fromFieldsWithTypes( [Config, Outcome], item, ), fromBcs: (data: Uint8Array) => Account.fromBcs( [Config, Outcome], data, ), bcs: Account.bcs(toBcs(Config), toBcs(Outcome)), fromJSONField: (field: any) => Account.fromJSONField( [Config, Outcome], field, ), fromJSON: (json: Record<string, any>) => Account.fromJSON( [Config, Outcome], json, ), fromSuiParsedData: (content: SuiParsedData) => Account.fromSuiParsedData( [Config, Outcome], content, ), fromSuiObjectData: (content: SuiObjectData) => Account.fromSuiObjectData( [Config, Outcome], content, ), fetch: async (client: SuiClient, id: string) => Account.fetch( client, [Config, Outcome], id, ), new: ( fields: AccountFields<ToTypeArgument<Config>, ToTypeArgument<Outcome>>, ) => { return new Account( [extractType(Config), extractType(Outcome)], fields ) }, kind: "StructClassReified", } }
+ static reified<Config extends Reified<TypeArgument, any>>( Config: Config ): AccountReified<ToTypeArgument<Config>> { return { typeName: Account.$typeName, fullTypeName: composeSuiType( Account.$typeName, ...[extractType(Config)] ) as `${typeof PKG_V1}::account::Account<${ToTypeStr<ToTypeArgument<Config>>}>`, typeArgs: [ extractType(Config) ] as [ToTypeStr<ToTypeArgument<Config>>], isPhantom: Account.$isPhantom, reifiedTypeArgs: [Config], fromFields: (fields: Record<string, any>) => Account.fromFields( Config, fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => Account.fromFieldsWithTypes( Config, item, ), fromBcs: (data: Uint8Array) => Account.fromBcs( Config, data, ), bcs: Account.bcs(toBcs(Config)), fromJSONField: (field: any) => Account.fromJSONField( Config, field, ), fromJSON: (json: Record<string, any>) => Account.fromJSON( Config, json, ), fromSuiParsedData: (content: SuiParsedData) => Account.fromSuiParsedData( Config, content, ), fromSuiObjectData: (content: SuiObjectData) => Account.fromSuiObjectData( Config, content, ), fetch: async (client: SuiClient, id: string) => Account.fetch( client, Config, id, ), new: ( fields: AccountFields<ToTypeArgument<Config>>, ) => { return new Account( [extractType(Config)], fields ) }, kind: "StructClassReified", } }
 
  static get r() { return Account.reified }
 
- static phantom<Config extends Reified<TypeArgument, any>, Outcome extends Reified<TypeArgument, any>>( Config: Config, Outcome: Outcome ): PhantomReified<ToTypeStr<Account<ToTypeArgument<Config>, ToTypeArgument<Outcome>>>> { return phantom(Account.reified( Config, Outcome )); } static get p() { return Account.phantom }
+ static phantom<Config extends Reified<TypeArgument, any>>( Config: Config ): PhantomReified<ToTypeStr<Account<ToTypeArgument<Config>>>> { return phantom(Account.reified( Config )); } static get p() { return Account.phantom }
 
- static get bcs() { return <Config extends BcsType<any>, Outcome extends BcsType<any>>(Config: Config, Outcome: Outcome) => bcs.struct(`Account<${Config.name}, ${Outcome.name}>`, {
+ static get bcs() { return <Config extends BcsType<any>>(Config: Config) => bcs.struct(`Account<${Config.name}>`, {
 
- id: UID.bcs, metadata: Metadata.bcs, deps: Deps.bcs, intents: Intents.bcs(Outcome), config: Config
+ id: UID.bcs, metadata: Metadata.bcs, deps: Deps.bcs, intents: Intents.bcs, config: Config
 
 }) };
 
- static fromFields<Config extends Reified<TypeArgument, any>, Outcome extends Reified<TypeArgument, any>>( typeArgs: [Config, Outcome], fields: Record<string, any> ): Account<ToTypeArgument<Config>, ToTypeArgument<Outcome>> { return Account.reified( typeArgs[0], typeArgs[1], ).new( { id: decodeFromFields(UID.reified(), fields.id), metadata: decodeFromFields(Metadata.reified(), fields.metadata), deps: decodeFromFields(Deps.reified(), fields.deps), intents: decodeFromFields(Intents.reified(typeArgs[1]), fields.intents), config: decodeFromFields(typeArgs[0], fields.config) } ) }
+ static fromFields<Config extends Reified<TypeArgument, any>>( typeArg: Config, fields: Record<string, any> ): Account<ToTypeArgument<Config>> { return Account.reified( typeArg, ).new( { id: decodeFromFields(UID.reified(), fields.id), metadata: decodeFromFields(Metadata.reified(), fields.metadata), deps: decodeFromFields(Deps.reified(), fields.deps), intents: decodeFromFields(Intents.reified(), fields.intents), config: decodeFromFields(typeArg, fields.config) } ) }
 
- static fromFieldsWithTypes<Config extends Reified<TypeArgument, any>, Outcome extends Reified<TypeArgument, any>>( typeArgs: [Config, Outcome], item: FieldsWithTypes ): Account<ToTypeArgument<Config>, ToTypeArgument<Outcome>> { if (!isAccount(item.type)) { throw new Error("not a Account type");
+ static fromFieldsWithTypes<Config extends Reified<TypeArgument, any>>( typeArg: Config, item: FieldsWithTypes ): Account<ToTypeArgument<Config>> { if (!isAccount(item.type)) { throw new Error("not a Account type");
 
- } assertFieldsWithTypesArgsMatch(item, typeArgs);
+ } assertFieldsWithTypesArgsMatch(item, [typeArg]);
 
- return Account.reified( typeArgs[0], typeArgs[1], ).new( { id: decodeFromFieldsWithTypes(UID.reified(), item.fields.id), metadata: decodeFromFieldsWithTypes(Metadata.reified(), item.fields.metadata), deps: decodeFromFieldsWithTypes(Deps.reified(), item.fields.deps), intents: decodeFromFieldsWithTypes(Intents.reified(typeArgs[1]), item.fields.intents), config: decodeFromFieldsWithTypes(typeArgs[0], item.fields.config) } ) }
+ return Account.reified( typeArg, ).new( { id: decodeFromFieldsWithTypes(UID.reified(), item.fields.id), metadata: decodeFromFieldsWithTypes(Metadata.reified(), item.fields.metadata), deps: decodeFromFieldsWithTypes(Deps.reified(), item.fields.deps), intents: decodeFromFieldsWithTypes(Intents.reified(), item.fields.intents), config: decodeFromFieldsWithTypes(typeArg, item.fields.config) } ) }
 
- static fromBcs<Config extends Reified<TypeArgument, any>, Outcome extends Reified<TypeArgument, any>>( typeArgs: [Config, Outcome], data: Uint8Array ): Account<ToTypeArgument<Config>, ToTypeArgument<Outcome>> { return Account.fromFields( typeArgs, Account.bcs( toBcs(typeArgs[0]), toBcs(typeArgs[1]) ).parse(data) ) }
+ static fromBcs<Config extends Reified<TypeArgument, any>>( typeArg: Config, data: Uint8Array ): Account<ToTypeArgument<Config>> { const typeArgs = [typeArg];
+
+ return Account.fromFields( typeArg, Account.bcs( toBcs(typeArgs[0]) ).parse(data) ) }
 
  toJSONField() { return {
 
@@ -127,23 +129,23 @@ export class Account<Config extends TypeArgument, Outcome extends TypeArgument> 
 
  toJSON() { return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() } }
 
- static fromJSONField<Config extends Reified<TypeArgument, any>, Outcome extends Reified<TypeArgument, any>>( typeArgs: [Config, Outcome], field: any ): Account<ToTypeArgument<Config>, ToTypeArgument<Outcome>> { return Account.reified( typeArgs[0], typeArgs[1], ).new( { id: decodeFromJSONField(UID.reified(), field.id), metadata: decodeFromJSONField(Metadata.reified(), field.metadata), deps: decodeFromJSONField(Deps.reified(), field.deps), intents: decodeFromJSONField(Intents.reified(typeArgs[1]), field.intents), config: decodeFromJSONField(typeArgs[0], field.config) } ) }
+ static fromJSONField<Config extends Reified<TypeArgument, any>>( typeArg: Config, field: any ): Account<ToTypeArgument<Config>> { return Account.reified( typeArg, ).new( { id: decodeFromJSONField(UID.reified(), field.id), metadata: decodeFromJSONField(Metadata.reified(), field.metadata), deps: decodeFromJSONField(Deps.reified(), field.deps), intents: decodeFromJSONField(Intents.reified(), field.intents), config: decodeFromJSONField(typeArg, field.config) } ) }
 
- static fromJSON<Config extends Reified<TypeArgument, any>, Outcome extends Reified<TypeArgument, any>>( typeArgs: [Config, Outcome], json: Record<string, any> ): Account<ToTypeArgument<Config>, ToTypeArgument<Outcome>> { if (json.$typeName !== Account.$typeName) { throw new Error("not a WithTwoGenerics json object") }; assertReifiedTypeArgsMatch( composeSuiType(Account.$typeName, ...typeArgs.map(extractType)), json.$typeArgs, typeArgs, )
+ static fromJSON<Config extends Reified<TypeArgument, any>>( typeArg: Config, json: Record<string, any> ): Account<ToTypeArgument<Config>> { if (json.$typeName !== Account.$typeName) { throw new Error("not a WithTwoGenerics json object") }; assertReifiedTypeArgsMatch( composeSuiType(Account.$typeName, extractType(typeArg)), json.$typeArgs, [typeArg], )
 
- return Account.fromJSONField( typeArgs, json, ) }
+ return Account.fromJSONField( typeArg, json, ) }
 
- static fromSuiParsedData<Config extends Reified<TypeArgument, any>, Outcome extends Reified<TypeArgument, any>>( typeArgs: [Config, Outcome], content: SuiParsedData ): Account<ToTypeArgument<Config>, ToTypeArgument<Outcome>> { if (content.dataType !== "moveObject") { throw new Error("not an object"); } if (!isAccount(content.type)) { throw new Error(`object at ${(content.fields as any).id} is not a Account object`); } return Account.fromFieldsWithTypes( typeArgs, content ); }
+ static fromSuiParsedData<Config extends Reified<TypeArgument, any>>( typeArg: Config, content: SuiParsedData ): Account<ToTypeArgument<Config>> { if (content.dataType !== "moveObject") { throw new Error("not an object"); } if (!isAccount(content.type)) { throw new Error(`object at ${(content.fields as any).id} is not a Account object`); } return Account.fromFieldsWithTypes( typeArg, content ); }
 
- static fromSuiObjectData<Config extends Reified<TypeArgument, any>, Outcome extends Reified<TypeArgument, any>>( typeArgs: [Config, Outcome], data: SuiObjectData ): Account<ToTypeArgument<Config>, ToTypeArgument<Outcome>> { if (data.bcs) { if (data.bcs.dataType !== "moveObject" || !isAccount(data.bcs.type)) { throw new Error(`object at is not a Account object`); }
+ static fromSuiObjectData<Config extends Reified<TypeArgument, any>>( typeArg: Config, data: SuiObjectData ): Account<ToTypeArgument<Config>> { if (data.bcs) { if (data.bcs.dataType !== "moveObject" || !isAccount(data.bcs.type)) { throw new Error(`object at is not a Account object`); }
 
- const gotTypeArgs = parseTypeName(data.bcs.type).typeArgs; if (gotTypeArgs.length !== 2) { throw new Error(`type argument mismatch: expected 2 type arguments but got ${gotTypeArgs.length}`); }; for (let i = 0; i < 2; i++) { const gotTypeArg = compressSuiType(gotTypeArgs[i]); const expectedTypeArg = compressSuiType(extractType(typeArgs[i])); if (gotTypeArg !== expectedTypeArg) { throw new Error(`type argument mismatch at position ${i}: expected '${expectedTypeArg}' but got '${gotTypeArg}'`); } };
+ const gotTypeArgs = parseTypeName(data.bcs.type).typeArgs; if (gotTypeArgs.length !== 1) { throw new Error(`type argument mismatch: expected 1 type argument but got '${gotTypeArgs.length}'`); }; const gotTypeArg = compressSuiType(gotTypeArgs[0]); const expectedTypeArg = compressSuiType(extractType(typeArg)); if (gotTypeArg !== compressSuiType(extractType(typeArg))) { throw new Error(`type argument mismatch: expected '${expectedTypeArg}' but got '${gotTypeArg}'`); };
 
- return Account.fromBcs( typeArgs, fromB64(data.bcs.bcsBytes) ); } if (data.content) { return Account.fromSuiParsedData( typeArgs, data.content ) } throw new Error( "Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request." ); }
+ return Account.fromBcs( typeArg, fromB64(data.bcs.bcsBytes) ); } if (data.content) { return Account.fromSuiParsedData( typeArg, data.content ) } throw new Error( "Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request." ); }
 
- static async fetch<Config extends Reified<TypeArgument, any>, Outcome extends Reified<TypeArgument, any>>( client: SuiClient, typeArgs: [Config, Outcome], id: string ): Promise<Account<ToTypeArgument<Config>, ToTypeArgument<Outcome>>> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching Account object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isAccount(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a Account object`); }
+ static async fetch<Config extends Reified<TypeArgument, any>>( client: SuiClient, typeArg: Config, id: string ): Promise<Account<ToTypeArgument<Config>>> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching Account object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isAccount(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a Account object`); }
 
- return Account.fromSuiObjectData( typeArgs, res.data ); }
+ return Account.fromSuiObjectData( typeArg, res.data ); }
 
  }
 

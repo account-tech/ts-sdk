@@ -4,7 +4,7 @@ import { Transaction, TransactionObjectInput, TransactionResult } from "@mysten/
 /// Deposits and locks a TreasuryCap in the Account
 export function depositTreasuryCap(
     tx: Transaction,
-    accountGenerics: [string, string],
+    configType: string,
     coinType: string,
     auth: TransactionObjectInput,
     account: TransactionObjectInput,
@@ -13,7 +13,7 @@ export function depositTreasuryCap(
 ): TransactionResult {
     return lockCap(
         tx,
-        [...accountGenerics, coinType],
+        [configType, coinType],
         { auth, account, treasuryCap, maxSupply: maxSupply ? BigInt(maxSupply) : null },
     );
 }
@@ -21,7 +21,7 @@ export function depositTreasuryCap(
 /// Public function to allow anyone to burn coins using a TreasuryCap attached to the Account (if can_burn enabled)
 export function burnCoins(
     tx: Transaction,
-    accountGenerics: [string, string],
+    configType: string,
     coinType: string,
     account: TransactionObjectInput,
     coin: TransactionObjectInput,
@@ -29,7 +29,7 @@ export function burnCoins(
     // caller should check if TreasuryCap exist and can_burn is enabled
     return publicBurn(
         tx,
-        [...accountGenerics, coinType],
+        [configType, coinType],
         { account, coin },
     );
 }

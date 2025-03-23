@@ -4,7 +4,7 @@ import { Transaction, TransactionObjectInput, TransactionResult } from "@mysten/
 /// Deposits and locks a Cap object in the Account
 export function mergeAndSplit(
     tx: Transaction,
-    accountGenerics: [string, string],
+    configType: string,
     coinType: string,
     auth: TransactionObjectInput,
     account: TransactionObjectInput,
@@ -13,7 +13,7 @@ export function mergeAndSplit(
 ): TransactionResult {
     return mergeAndSplitFun(
         tx,
-        [...accountGenerics, coinType],
+        [configType, coinType],
         { auth, account, toMerge, toSplit },
     );
 }

@@ -13,8 +13,7 @@ import { NETWORK, MULTISIG, testKeypair, executeTx } from "./utils";
 
     ms.requestToggleUnverifiedDepsAllowed(
         tx,
-        true,
-        "Toggle Unverified",
+        {key: "Toggle Unverified"},
     );
     
     executeTx(tx);

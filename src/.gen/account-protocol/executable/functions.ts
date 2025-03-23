@@ -1,13 +1,17 @@
 import {PUBLISHED_AT} from "..";
-import {obj} from "../../_framework/util";
+import {GenericArg, generic, obj} from "../../_framework/util";
 import {Transaction, TransactionObjectInput} from "@mysten/sui/transactions";
 
-export function new_( tx: Transaction, issuer: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::executable::new`, arguments: [ obj(tx, issuer) ], }) }
+export function actionIdx( tx: Transaction, typeArg: string, executable: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::executable::action_idx`, typeArguments: [typeArg], arguments: [ obj(tx, executable) ], }) }
 
-export function destroy( tx: Transaction, executable: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::executable::destroy`, arguments: [ obj(tx, executable) ], }) }
+export function containsAction( tx: Transaction, typeArgs: [string, string], executable: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::executable::contains_action`, typeArguments: typeArgs, arguments: [ obj(tx, executable) ], }) }
 
-export function issuer( tx: Transaction, executable: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::executable::issuer`, arguments: [ obj(tx, executable) ], }) }
+export function destroy( tx: Transaction, typeArg: string, executable: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::executable::destroy`, typeArguments: [typeArg], arguments: [ obj(tx, executable) ], }) }
 
-export function actionIdx( tx: Transaction, executable: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::executable::action_idx`, arguments: [ obj(tx, executable) ], }) }
+export function intent( tx: Transaction, typeArg: string, executable: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::executable::intent`, typeArguments: [typeArg], arguments: [ obj(tx, executable) ], }) }
 
-export function nextAction( tx: Transaction, executable: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::executable::next_action`, arguments: [ obj(tx, executable) ], }) }
+export function new_( tx: Transaction, typeArg: string, intent: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::executable::new`, typeArguments: [typeArg], arguments: [ obj(tx, intent) ], }) }
+
+export interface NextActionArgs { executable: TransactionObjectInput; intentWitness: GenericArg }
+
+export function nextAction( tx: Transaction, typeArgs: [string, string, string], args: NextActionArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::executable::next_action`, typeArguments: typeArgs, arguments: [ obj(tx, args.executable), generic(tx, `${typeArgs[2]}`, args.intentWitness) ], }) }

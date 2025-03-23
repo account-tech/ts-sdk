@@ -12,7 +12,8 @@ import {
 } from "./lib";
 import {
 	SUI_FRAMEWORK, MULTISIG_GENERICS, TRANSFER_POLICY_RULES, ACCOUNT_PROTOCOL,
-	TransactionPureInput, DepStatus
+	TransactionPureInput, DepStatus,
+	MULTISIG_CONFIG_TYPE
 } from "./types";
 import * as commands from "./lib/commands";
 import { AccountTypes, MultisigData } from "./lib/account/types";
@@ -78,7 +79,7 @@ export class MultisigClient {
 		const multisig = this.multisig?.newMultisig(tx, fee);
 		// add name
 		const auth = this.multisig.authenticate(tx, multisig);
-		commands.replaceMetadata(tx, MULTISIG_GENERICS, auth, multisig, ["name"], [name]);
+		commands.replaceMetadata(tx, MULTISIG_CONFIG_TYPE, auth, multisig, ["name"], [name]);
 		// update multisig rules if members are provided
 		if (memberAddresses) {
 			const members = memberAddresses.map((address: string) => ({ address, weight: 1, roles: [] }));
@@ -103,18 +104,19 @@ export class MultisigClient {
 	/// Factory function to call the appropriate request function
 	request(
 		tx: Transaction,
-		proposalType: IntentType,
-		proposalArgs: IntentArgs,
+		intentType: IntentType,
+		intentArgs: IntentArgs,
 		actionsArgs: ActionsArgs,
 	): TransactionResult {
 		const auth = this.multisig.authenticate(tx);
+		const params = Intent.createParams(tx, intentArgs);
 		const outcome = this.multisig.emptyApprovalsOutcome(tx);
 
-		const proposalClass = intentRegistry[proposalType];
-		const method = proposalClass.prototype.request;
-		method.call(proposalClass, tx, MULTISIG_GENERICS, auth, outcome, this.multisig.id, proposalArgs, actionsArgs);
+		const intentClass = intentRegistry[intentType];
+		const method = intentClass.prototype.request;
+		method.call(intentClass, tx, MULTISIG_GENERICS, auth, this.multisig.id, params, outcome, actionsArgs);
 		// directly approve after proposing
-		return this.multisig.approveIntent(tx, proposalArgs.key, this.multisig.id);
+		return this.multisig.approveIntent(tx, intentArgs.key, this.multisig.id);
 	}
 
 	/// Approves a intent
@@ -147,6 +149,7 @@ export class MultisigClient {
 
 		let result;
 		result = intent.execute(tx, MULTISIG_GENERICS, executable);
+		intent.completeExecution(tx, MULTISIG_GENERICS, executable);
 		// if no more executions scheduled after this one, destroy intent
 		if (intent.fields.executionTimes.length == 1) {
 			result = intent.clearEmpty(tx, MULTISIG_GENERICS, this.multisig.id, intentKey);
@@ -310,7 +313,7 @@ export class MultisigClient {
 		if (!coin || coin.amount < toSplit.reduce((acc, curr) => acc + curr, 0n)) throw new Error("Not enough coins");
 
 		const auth = this.multisig.authenticate(tx);
-		return commands.mergeAndSplit(tx, MULTISIG_GENERICS, coinType, auth, this.multisig.id, coin.ids.slice(0, 500), toSplit);
+		return commands.mergeAndSplit(tx, MULTISIG_CONFIG_TYPE, coinType, auth, this.multisig.id, coin.ids.slice(0, 500), toSplit);
 	}
 
 	/// Deposits and locks a Cap object in the Account
@@ -320,7 +323,7 @@ export class MultisigClient {
 		capObject: TransactionObjectInput,
 	): TransactionResult {
 		const auth = this.multisig.authenticate(tx);
-		return commands.depositCap(tx, MULTISIG_GENERICS, capType, auth, this.multisig.id, capObject);
+		return commands.depositCap(tx, MULTISIG_CONFIG_TYPE, capType, auth, this.multisig.id, capObject);
 	}
 
 	/// Modifies the name of the Account
@@ -329,7 +332,7 @@ export class MultisigClient {
 		newName: string,
 	): TransactionResult {
 		const auth = this.multisig.authenticate(tx);
-		return commands.replaceMetadata(tx, MULTISIG_GENERICS, auth, this.multisig.id, ["name"], [newName]);
+		return commands.replaceMetadata(tx, MULTISIG_CONFIG_TYPE, auth, this.multisig.id, ["name"], [newName]);
 	}
 
 	/// Updates the verified deps to the latest version
@@ -337,7 +340,7 @@ export class MultisigClient {
 		tx: Transaction,
 	): TransactionResult {
 		const auth = this.multisig.authenticate(tx);
-		return commands.updateVerifiedDepsToLatest(tx, MULTISIG_GENERICS, auth, this.multisig.id);
+		return commands.updateVerifiedDepsToLatest(tx, MULTISIG_CONFIG_TYPE, auth, this.multisig.id);
 	}
 
 	/// Deposits and locks a TreasuryCap object in the Account
@@ -347,7 +350,7 @@ export class MultisigClient {
 		treasuryCap: TransactionObjectInput,
 	): TransactionResult {
 		const auth = this.multisig.authenticate(tx);
-		return commands.depositTreasuryCap(tx, MULTISIG_GENERICS, coinType, auth, this.multisig.id, treasuryCap);
+		return commands.depositTreasuryCap(tx, MULTISIG_CONFIG_TYPE, coinType, auth, this.multisig.id, treasuryCap);
 	}
 
 	/// Opens a Kiosk in the Account
@@ -356,7 +359,7 @@ export class MultisigClient {
 		kioskName: string,
 	): TransactionResult {
 		const auth = this.multisig.authenticate(tx);
-		return commands.openKiosk(tx, MULTISIG_GENERICS, auth, this.multisig.id, kioskName);
+		return commands.openKiosk(tx, MULTISIG_CONFIG_TYPE, auth, this.multisig.id, kioskName);
 	}
 
 	/// Places an NFT in a Kiosk managed by the Account
@@ -387,7 +390,7 @@ export class MultisigClient {
 		// get the account kiosk from its name 
 		const accountKioskId = this.multisig.managedAssets.kiosks[kioskName].id;
 		const auth = this.multisig.authenticate(tx);
-		const request = commands.placeInKiosk(tx, MULTISIG_GENERICS, nftType, auth, this.multisig.id, accountKioskId, senderKiosk, senderCap, policyId, kioskName, nftId);
+		const request = commands.placeInKiosk(tx, MULTISIG_CONFIG_TYPE, nftType, auth, this.multisig.id, accountKioskId, senderKiosk, senderCap, policyId, kioskName, nftId);
 		return tx.moveCall({
 			target: `${SUI_FRAMEWORK}::transfer_policy::confirm_request`,
 			typeArguments: [nftType],
@@ -407,7 +410,7 @@ export class MultisigClient {
 		const nftType = this.multisig.managedAssets.kiosks[kioskName].items.find(item => item.id === nftId)?.type;
 		if (!nftType) throw new Error("NFT not found in kiosk");
 		const auth = this.multisig.authenticate(tx);
-		return commands.delistFromKiosk(tx, MULTISIG_GENERICS, nftType, auth, this.multisig.id, accountKioskId, kioskName, nftId);
+		return commands.delistFromKiosk(tx, MULTISIG_CONFIG_TYPE, nftType, auth, this.multisig.id, accountKioskId, kioskName, nftId);
 	}
 
 	/// Withdraws the profits from a Kiosk managed by the Account
@@ -418,7 +421,7 @@ export class MultisigClient {
 		// get the account kiosk from its name 
 		const accountKioskId = this.multisig.managedAssets.kiosks[kioskName].id;
 		const auth = this.multisig.authenticate(tx);
-		return commands.withdrawProfitsFromKiosk(tx, MULTISIG_GENERICS, auth, this.multisig.id, accountKioskId, kioskName);
+		return commands.withdrawProfitsFromKiosk(tx, MULTISIG_CONFIG_TYPE, auth, this.multisig.id, accountKioskId, kioskName);
 	}
 
 	/// Closes an empty Kiosk managed by the Account
@@ -429,7 +432,7 @@ export class MultisigClient {
 		// get the account kiosk from its name 
 		const accountKioskId = this.multisig.managedAssets.kiosks[kioskName].id;
 		const auth = this.multisig.authenticate(tx);
-		return commands.closeKiosk(tx, MULTISIG_GENERICS, auth, this.multisig.id, accountKioskId, kioskName);
+		return commands.closeKiosk(tx, MULTISIG_CONFIG_TYPE, auth, this.multisig.id, accountKioskId, kioskName);
 	}
 
 	/// Deposits and locks an UpgradeCap object in the Account
@@ -439,7 +442,7 @@ export class MultisigClient {
 		upgradeCap: TransactionObjectInput,
 	): TransactionResult {
 		const auth = this.multisig.authenticate(tx);
-		return commands.depositUpgradeCap(tx, MULTISIG_GENERICS, auth, this.multisig.id, upgradeCap, packageName, 0);
+		return commands.depositUpgradeCap(tx, MULTISIG_CONFIG_TYPE, auth, this.multisig.id, upgradeCap, packageName, 0);
 	}
 
 	/// Opens a Treasury in the Account
@@ -448,7 +451,7 @@ export class MultisigClient {
 		treasuryName: string,
 	): TransactionResult {
 		const auth = this.multisig.authenticate(tx);
-		return commands.openVault(tx, MULTISIG_GENERICS, auth, this.multisig.id, treasuryName);
+		return commands.openVault(tx, MULTISIG_CONFIG_TYPE, auth, this.multisig.id, treasuryName);
 	}
 
 	/// Deposits an object into the Treasury from the caller wallet
@@ -459,7 +462,7 @@ export class MultisigClient {
 		coin: TransactionObjectInput,
 	): TransactionResult {
 		const auth = this.multisig.authenticate(tx);
-		return commands.depositFromWallet(tx, MULTISIG_GENERICS, coinType, auth, this.multisig.id, treasuryName, coin);
+		return commands.depositFromWallet(tx, MULTISIG_CONFIG_TYPE, coinType, auth, this.multisig.id, treasuryName, coin);
 	}
 
 	/// Closes an empty Treasury managed by the Account
@@ -468,230 +471,211 @@ export class MultisigClient {
 		treasuryName: string,
 	): TransactionResult {
 		const auth = this.multisig.authenticate(tx);
-		return commands.closeVault(tx, MULTISIG_GENERICS, auth, this.multisig.id, treasuryName);
+		return commands.closeVault(tx, MULTISIG_CONFIG_TYPE, auth, this.multisig.id, treasuryName);
 	}
 
 	// === Intents ===
 
 	requestConfigMultisig(
 		tx: Transaction,
+		intentArgs: IntentArgs,
 		globalThreshold: number,
 		roleThresholds: Threshold[],
 		members: Member[],
-		key: string,
-		description?: string, // default is empty
-		executionTime?: bigint, // default is now
-		expirationTime?: bigint, // default is 1 week
 	): TransactionResult {
 		const auth = this.multisig.authenticate(tx);
+		const params = Intent.createParams(tx, intentArgs);
 		const outcome = this.multisig.emptyApprovalsOutcome(tx);
 
 		ConfigMultisigIntent.prototype.request(
 			tx,
 			MULTISIG_GENERICS,
 			auth,
-			outcome,
 			this.multisig.id,
-			{ key, description, executionTimes: [executionTime ?? 0n], expirationTime },
+			params,
+			outcome,
 			{ members, thresholds: { global: globalThreshold, roles: roleThresholds } },
 		);
 
-		return this.multisig.approveIntent(tx, key, this.multisig.id);
+		return this.multisig.approveIntent(tx, intentArgs.key, this.multisig.id);
 	}
 
 	requestConfigDeps(
 		tx: Transaction,
+		intentArgs: IntentArgs,
 		deps: Dep[],
-		key: string,
-		description?: string, // default is empty
-		executionTime?: bigint, // default is now
-		expirationTime?: bigint, // default is 1 week
 	): TransactionResult {
 		const auth = this.multisig.authenticate(tx);
+		const params = Intent.createParams(tx, intentArgs);
 		const outcome = this.multisig.emptyApprovalsOutcome(tx);
 
 		ConfigDepsIntent.prototype.request(
 			tx,
 			MULTISIG_GENERICS,
 			auth,
-			outcome,
 			this.multisig.id,
-			{ key, description, executionTimes: [executionTime ?? 0n], expirationTime },
+			params,
+			outcome,
 			{ deps },
 		);
 
-		return this.multisig.approveIntent(tx, key, this.multisig.id);
+		return this.multisig.approveIntent(tx, intentArgs.key, this.multisig.id);
 	}
 
 	requestToggleUnverifiedDepsAllowed(
 		tx: Transaction,
-		newValue: boolean, // true to allow unverified deps, false to disallow
-		key: string,
-		description?: string, // default is empty
-		executionTime?: bigint, // default is now
-		expirationTime?: bigint, // default is 1 week
+		intentArgs: IntentArgs,
 	): TransactionResult {
 		const auth = this.multisig.authenticate(tx);
+		const params = Intent.createParams(tx, intentArgs);
 		const outcome = this.multisig.emptyApprovalsOutcome(tx);
-
+		
 		ToggleUnverifiedAllowedIntent.prototype.request(
 			tx,
 			MULTISIG_GENERICS,
 			auth,
-			outcome,
 			this.multisig.id,
-			{ key, description, executionTimes: [executionTime ?? 0n], expirationTime },
-			{ newValue }, // useless argument, just to respect the interface
+			params,
+			outcome,
+			{}
 		);
 
-		return this.multisig.approveIntent(tx, key, this.multisig.id);
+		return this.multisig.approveIntent(tx, intentArgs.key, this.multisig.id);
 	}
 
 	requestBorrowCap(
 		tx: Transaction,
+		intentArgs: IntentArgs,
 		capType: string,
-		key: string,
-		description?: string, // default is empty
-		executionTime?: bigint, // default is now
-		expirationTime?: bigint, // default is 1 week
 	): TransactionResult {
 		const auth = this.multisig.authenticate(tx);
+		const params = Intent.createParams(tx, intentArgs);
 		const outcome = this.multisig.emptyApprovalsOutcome(tx);
 
 		BorrowCapIntent.prototype.request(
 			tx,
 			MULTISIG_GENERICS,
 			auth,
-			outcome,
 			this.multisig.id,
-			{ key, description, executionTimes: [executionTime ?? 0n], expirationTime },
+			params,
+			outcome,
 			{ capType },
 		);
 
-		return this.multisig.approveIntent(tx, key, this.multisig.id);
+		return this.multisig.approveIntent(tx, intentArgs.key, this.multisig.id);
 	}
 
 	requestDisableRules(
 		tx: Transaction,
+		intentArgs: IntentArgs,
 		coinType: string,
-		disableMint: boolean,
-		disableBurn: boolean,
-		disableUpdateSymbol: boolean,
-		disableUpdateName: boolean,
-		disableUpdateDescription: boolean,
-		disableUpdateIcon: boolean,
-		key: string,
-		description?: string, // default is empty
-		executionTime?: bigint, // default is now
-		expirationTime?: bigint, // default is 1 week
+		mint: boolean,
+		burn: boolean,
+		updateSymbol: boolean,
+		updateName: boolean,
+		updateDescription: boolean,
+		updateIcon: boolean,
 	): TransactionResult {
 		const auth = this.multisig.authenticate(tx);
+		const params = Intent.createParams(tx, intentArgs);
 		const outcome = this.multisig.emptyApprovalsOutcome(tx);
 
 		DisableRulesIntent.prototype.request(
 			tx,
 			MULTISIG_GENERICS,
 			auth,
-			outcome,
 			this.multisig.id,
-			{ key, description, executionTimes: [executionTime ?? 0n], expirationTime },
-			{ coinType, disableMint, disableBurn, disableUpdateSymbol, disableUpdateName, disableUpdateDescription, disableUpdateIcon },
+			params,
+			outcome,
+			{ coinType, mint, burn, updateSymbol, updateName, updateDescription, updateIcon },
 		);
 
-		return this.multisig.approveIntent(tx, key, this.multisig.id);
+		return this.multisig.approveIntent(tx, intentArgs.key, this.multisig.id);
 	}
 
 	requestUpdateMetadata(
 		tx: Transaction,
+		intentArgs: IntentArgs,
 		coinType: string,
 		newName: string | null,
 		newSymbol: string | null,
 		newDescription: string | null,
-		newIcon: string | null,
-		key: string,
-		description?: string, // default is empty
-		executionTime?: bigint, // default is now
-		expirationTime?: bigint, // default is 1 week
+		newIconUrl: string | null,
 	): TransactionResult {
 		const auth = this.multisig.authenticate(tx);
+		const params = Intent.createParams(tx, intentArgs);
 		const outcome = this.multisig.emptyApprovalsOutcome(tx);
 
 		UpdateMetadataIntent.prototype.request(
 			tx,
 			MULTISIG_GENERICS,
 			auth,
-			outcome,
 			this.multisig.id,
-			{ key, description, executionTimes: [executionTime ?? 0n], expirationTime },
-			{ coinType, newName, newSymbol, newDescription, newIcon },
+			params,
+			outcome,
+			{ coinType, newName, newSymbol, newDescription, newIconUrl },
 		);
 
-		return this.multisig.approveIntent(tx, key, this.multisig.id);
+		return this.multisig.approveIntent(tx, intentArgs.key, this.multisig.id);
 	}
 
 	requestMintAndTransfer(
 		tx: Transaction,
+		intentArgs: IntentArgs,
 		coinType: string,
 		transfers: { amount: bigint, recipient: string }[],
-		key: string,
-		description?: string, // default is empty
-		executionTimes?: bigint[], // default is now
-		expirationTime?: bigint, // default is 1 week
 	): TransactionResult {
 		const auth = this.multisig.authenticate(tx);
+		const params = Intent.createParams(tx, intentArgs);
 		const outcome = this.multisig.emptyApprovalsOutcome(tx);
 
 		MintAndTransferIntent.prototype.request(
 			tx,
 			MULTISIG_GENERICS,
 			auth,
-			outcome,
 			this.multisig.id,
-			{ key, description, executionTimes: executionTimes ?? [0n], expirationTime },
+			params,
+			outcome,
 			{ coinType, transfers },
 		);
 
-		return this.multisig.approveIntent(tx, key, this.multisig.id);
+		return this.multisig.approveIntent(tx, intentArgs.key, this.multisig.id);
 	}
 
 	requestMintAndVest(
 		tx: Transaction,
+		intentArgs: IntentArgs,
 		coinType: string,
 		amount: bigint,
 		start: bigint,
 		end: bigint,
 		recipient: string,
-		key: string,
-		description?: string, // default is empty
-		executionTime?: bigint, // default is now
-		expirationTime?: bigint, // default is 1 week
 	): TransactionResult {
 		const auth = this.multisig.authenticate(tx);
+		const params = Intent.createParams(tx, intentArgs);
 		const outcome = this.multisig.emptyApprovalsOutcome(tx);
 
 		MintAndVestIntent.prototype.request(
 			tx,
 			MULTISIG_GENERICS,
 			auth,
-			outcome,
 			this.multisig.id,
-			{ key, description, executionTimes: [executionTime ?? 0n], expirationTime },
+			params,
+			outcome,
 			{ coinType, amount, start, end, recipient },
 		);
 
-		return this.multisig.approveIntent(tx, key, this.multisig.id);
+		return this.multisig.approveIntent(tx, intentArgs.key, this.multisig.id);
 	}
 
 	requestWithdrawAndBurn(
 		tx: Transaction,
+		intentArgs: IntentArgs,
 		coinType: string,
 		amount: bigint,
-		key: string,
-		description?: string, // default is empty
-		executionTime?: bigint, // default is now
-		expirationTime?: bigint, // default is 1 week
 	): TransactionResult {
 		const auth = this.multisig.authenticate(tx);
+		const params = Intent.createParams(tx, intentArgs);
 		const outcome = this.multisig.emptyApprovalsOutcome(tx);
 
 		const coinId = this.mergeAndSplit(tx, coinType, [amount]);
@@ -700,77 +684,71 @@ export class MultisigClient {
 			tx,
 			MULTISIG_GENERICS,
 			auth,
-			outcome,
 			this.multisig.id,
-			{ key, description, executionTimes: [executionTime ?? 0n], expirationTime },
+			params,
+			outcome,
 			{ coinType, coinId, amount },
 		);
 
-		return this.multisig.approveIntent(tx, key, this.multisig.id);
+		return this.multisig.approveIntent(tx, intentArgs.key, this.multisig.id);
 	}
 
 	requestTakeNfts(
 		tx: Transaction,
+		intentArgs: IntentArgs,
 		kioskName: string,
 		nftIds: string[],
 		recipient: string,
-		key: string,
-		description?: string, // default is empty
-		executionTime?: bigint, // default is now
-		expirationTime?: bigint, // default is 1 week
 	): TransactionResult {
 		const auth = this.multisig.authenticate(tx);
+		const params = Intent.createParams(tx, intentArgs);
 		const outcome = this.multisig.emptyApprovalsOutcome(tx);
 
 		TakeNftsIntent.prototype.request(
 			tx,
 			MULTISIG_GENERICS,
 			auth,
-			outcome,
 			this.multisig.id,
-			{ key, description, executionTimes: [executionTime ?? 0n], expirationTime },
+			params,
+			outcome,
 			{ kioskName, nftIds, recipient },
 		);
 
-		return this.multisig.approveIntent(tx, key, this.multisig.id);
+		return this.multisig.approveIntent(tx, intentArgs.key, this.multisig.id);
 	}
 
 	requestListNfts(
 		tx: Transaction,
+		intentArgs: IntentArgs,
 		kioskName: string,
 		listings: { nftId: string, price: bigint }[],
-		key: string,
-		description?: string, // default is empty
-		executionTime?: bigint, // default is now
-		expirationTime?: bigint, // default is 1 week
 	): TransactionResult {
 		const auth = this.multisig.authenticate(tx);
+		const params = Intent.createParams(tx, intentArgs);
 		const outcome = this.multisig.emptyApprovalsOutcome(tx);
 
 		ListNftsIntent.prototype.request(
 			tx,
 			MULTISIG_GENERICS,
 			auth,
-			outcome,
 			this.multisig.id,
-			{ key, description, executionTimes: [executionTime ?? 0n], expirationTime },
+			params,
+			outcome,
 			{ kioskName, listings },
 		);
 
-		return this.multisig.approveIntent(tx, key, this.multisig.id);
+		return this.multisig.approveIntent(tx, intentArgs.key, this.multisig.id);
 	}
 
 	requestWithdrawAndTransferToVault(
 		tx: Transaction,
+		intentArgs: IntentArgs,
 		coinType: string,
 		coinAmount: bigint,
 		vaultName: string,
-		key: string,
-		description?: string, // default is empty
-		executionTime?: bigint, // default is now
-		expirationTime?: bigint, // default is 1 week
 	): TransactionResult {
 		const auth = this.multisig.authenticate(tx);
+		const params = Intent.createParams(tx, intentArgs);
 		const outcome = this.multisig.emptyApprovalsOutcome(tx);
 
 		const coinId = this.mergeAndSplit(tx, coinType, [coinAmount]);
@@ -779,25 +757,23 @@ export class MultisigClient {
 			tx,
 			MULTISIG_GENERICS,
 			auth,
-			outcome,
 			this.multisig.id,
-			{ key, description, executionTimes: [executionTime ?? 0n], expirationTime },
+			params,
+			outcome,
 			{ coinType, coinId, coinAmount, vaultName },
 		);
 
-		return this.multisig.approveIntent(tx, key, this.multisig.id);
+		return this.multisig.approveIntent(tx, intentArgs.key, this.multisig.id);
 	}
 
 	requestWithdrawAndTransfer(
 		tx: Transaction,
+		intentArgs: IntentArgs,
 		coinTransfers: { coinType: string, coinAmount: bigint, recipient: string }[], 
 		objTransfers: { objectId: string, recipient: string }[], 
-		key: string,
-		description?: string, // default is empty
-		executionTime?: bigint, // default is now
-		expirationTime?: bigint, // default is 1 week
 	): TransactionResult {
 		const auth = this.multisig.authenticate(tx);
+		const params = Intent.createParams(tx, intentArgs);
 		const outcome = this.multisig.emptyApprovalsOutcome(tx);
 
 		let transfers: { objectId: TransactionPureInput, recipient: string }[] = objTransfers;
@@ -811,28 +787,26 @@ export class MultisigClient {
 			tx,
 			MULTISIG_GENERICS,
 			auth,
-			outcome,
 			this.multisig.id,
-			{ key, description, executionTimes: [executionTime ?? 0n], expirationTime },
+			params,
+			outcome,
 			{ transfers },
 		);
 
-		return this.multisig.approveIntent(tx, key, this.multisig.id);
+		return this.multisig.approveIntent(tx, intentArgs.key, this.multisig.id);
 	}
 
 	requestWithdrawAndVest(
 		tx: Transaction,
+		intentArgs: IntentArgs,
 		coinType: string,
 		coinAmount: bigint,
 		start: bigint,
 		end: bigint,
 		recipient: string,
-		key: string,
-		description?: string, // default is empty
-		executionTime?: bigint, // default is now
-		expirationTime?: bigint, // default is 1 week
 	): TransactionResult {
 		const auth = this.multisig.authenticate(tx);
+		const params = Intent.createParams(tx, intentArgs);
 		const outcome = this.multisig.emptyApprovalsOutcome(tx);
 
 		const coinId = this.mergeAndSplit(tx, coinType, [coinAmount]);
@@ -841,118 +815,110 @@ export class MultisigClient {
 			tx,
 			MULTISIG_GENERICS,
 			auth,
-			outcome,
 			this.multisig.id,
-			{ key, description, executionTimes: [executionTime ?? 0n], expirationTime },
+			params,
+			outcome,
 			{ coinId, start, end, recipient },
 		);
 
-		return this.multisig.approveIntent(tx, key, this.multisig.id);
+		return this.multisig.approveIntent(tx, intentArgs.key, this.multisig.id);
 	}
 
 	requestUpgradePackage(
 		tx: Transaction,
+		intentArgs: IntentArgs,
 		packageName: string,
 		digest: number[],
-		key: string,
-		description?: string, // default is empty
-		executionTime?: bigint, // default is now
-		expirationTime?: bigint, // default is 1 week
 	): TransactionResult {
 		const auth = this.multisig.authenticate(tx);
+		const params = Intent.createParams(tx, intentArgs);
 		const outcome = this.multisig.emptyApprovalsOutcome(tx);
 
 		UpgradePackageIntent.prototype.request(
 			tx,
 			MULTISIG_GENERICS,
 			auth,
-			outcome,
 			this.multisig.id,
-			{ key, description, executionTimes: [executionTime ?? 0n], expirationTime },
+			params,
+			outcome,
 			{ packageName, digest },
 		);
 
-		return this.multisig.approveIntent(tx, key, this.multisig.id);
+		return this.multisig.approveIntent(tx, intentArgs.key, this.multisig.id);
 	}
 
 	requestRestrictPolicy(
 		tx: Transaction,
+		intentArgs: IntentArgs,
 		packageName: string,
 		policy: number,
-		key: string,
-		description?: string, // default is empty
-		executionTime?: bigint, // default is now
-		expirationTime?: bigint, // default is 1 week
 	): TransactionResult {
 		const auth = this.multisig.authenticate(tx);
+		const params = Intent.createParams(tx, intentArgs);
 		const outcome = this.multisig.emptyApprovalsOutcome(tx);
 
 		RestrictPolicyIntent.prototype.request(
 			tx,
 			MULTISIG_GENERICS,
 			auth,
-			outcome,
 			this.multisig.id,
-			{ key, description, executionTimes: [executionTime ?? 0n], expirationTime },
+			params,
+			outcome,
 			{ packageName, policy },
 		);
 
-		return this.multisig.approveIntent(tx, key, this.multisig.id);
+		return this.multisig.approveIntent(tx, intentArgs.key, this.multisig.id);
 	}
 
 	requestSpendAndTransfer(
 		tx: Transaction,
+		intentArgs: IntentArgs,
 		treasuryName: string,
 		coinType: string,
 		transfers: { amount: bigint, recipient: string }[],
-		key: string,
-		description?: string, // default is empty
-		executionTimes?: bigint[], // default is now
-		expirationTime?: bigint, // default is 1 week
 	): TransactionResult {
 		const auth = this.multisig.authenticate(tx);
+		const params = Intent.createParams(tx, intentArgs);
 		const outcome = this.multisig.emptyApprovalsOutcome(tx);
 
 		SpendAndTransferIntent.prototype.request(
 			tx,
 			MULTISIG_GENERICS,
 			auth,
-			outcome,
 			this.multisig.id,
-			{ key, description, executionTimes: executionTimes ?? [0n], expirationTime },
+			params,
+			outcome,
 			{ treasuryName, coinType, transfers },
 		);
 
-		return this.multisig.approveIntent(tx, key, this.multisig.id);
+		return this.multisig.approveIntent(tx, intentArgs.key, this.multisig.id);
 	}
 
 	requestSpendAndVest(
 		tx: Transaction,
+		intentArgs: IntentArgs,
 		treasuryName: string,
 		coinType: string,
 		amount: bigint,
 		start: bigint,
 		end: bigint,
 		recipient: string,
-		key: string,
-		description?: string, // default is empty
-		executionTime?: bigint, // default is now
-		expirationTime?: bigint, // default is 1 week
 	): TransactionResult {
 		const auth = this.multisig.authenticate(tx);
+		const params = Intent.createParams(tx, intentArgs);
 		const outcome = this.multisig.emptyApprovalsOutcome(tx);
 
 		SpendAndVestIntent.prototype.request(
 			tx,
 			MULTISIG_GENERICS,
 			auth,
-			outcome,
 			this.multisig.id,
-			{ key, description, executionTimes: [executionTime ?? 0n], expirationTime },
+			params,
+			outcome,
 			{ treasuryName, coinType, amount, start, end, recipient },
 		);
 
-		return this.multisig.approveIntent(tx, key, this.multisig.id);
+		return this.multisig.approveIntent(tx, intentArgs.key, this.multisig.id);
 	}
 }
 

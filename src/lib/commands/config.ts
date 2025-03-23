@@ -5,7 +5,7 @@ import { EXTENSIONS } from "src/types/constants";
 /// Replaces the metadata of an account, first element must be "name"
 export function replaceMetadata(
     tx: Transaction,
-    accountGenerics: [string, string],
+    configType: string,
     auth: TransactionObjectInput,
     account: TransactionObjectInput,
     keys: string[],
@@ -15,7 +15,7 @@ export function replaceMetadata(
 
     return editMetadata(
         tx,
-        accountGenerics,
+        configType,
         { auth, account, keys, values },
     );
 }
@@ -23,13 +23,13 @@ export function replaceMetadata(
 /// Updates the verified dependencies (deps allowed in Extensions) to the latest version
 export function updateVerifiedDepsToLatest(
     tx: Transaction,
-    accountGenerics: [string, string],
+    configType: string,
     auth: TransactionObjectInput,
     account: TransactionObjectInput,
 ) {
     return updateExtensionsToLatest(
         tx,
-        accountGenerics,
+        configType,
         { auth, account, extensions: EXTENSIONS },
     );
 }

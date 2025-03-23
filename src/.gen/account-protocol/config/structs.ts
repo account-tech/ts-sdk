@@ -146,7 +146,7 @@ export class ConfigDepsIntent implements StructClass { __StructClass = true as c
 
 export function isToggleUnverifiedAllowedAction(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::config::ToggleUnverifiedAllowedAction`; }
 
-export interface ToggleUnverifiedAllowedActionFields { newValue: ToField<"bool"> }
+export interface ToggleUnverifiedAllowedActionFields { dummyField: ToField<"bool"> }
 
 export type ToggleUnverifiedAllowedActionReified = Reified< ToggleUnverifiedAllowedAction, ToggleUnverifiedAllowedActionFields >;
 
@@ -156,11 +156,11 @@ export class ToggleUnverifiedAllowedAction implements StructClass { __StructClas
 
  readonly $typeName = ToggleUnverifiedAllowedAction.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::config::ToggleUnverifiedAllowedAction`; readonly $typeArgs: []; readonly $isPhantom = ToggleUnverifiedAllowedAction.$isPhantom;
 
- readonly newValue: ToField<"bool">
+ readonly dummyField: ToField<"bool">
 
  private constructor(typeArgs: [], fields: ToggleUnverifiedAllowedActionFields, ) { this.$fullTypeName = composeSuiType( ToggleUnverifiedAllowedAction.$typeName, ...typeArgs ) as `${typeof PKG_V1}::config::ToggleUnverifiedAllowedAction`; this.$typeArgs = typeArgs;
 
- this.newValue = fields.newValue; }
+ this.dummyField = fields.dummyField; }
 
  static reified( ): ToggleUnverifiedAllowedActionReified { return { typeName: ToggleUnverifiedAllowedAction.$typeName, fullTypeName: composeSuiType( ToggleUnverifiedAllowedAction.$typeName, ...[] ) as `${typeof PKG_V1}::config::ToggleUnverifiedAllowedAction`, typeArgs: [ ] as [], isPhantom: ToggleUnverifiedAllowedAction.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => ToggleUnverifiedAllowedAction.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => ToggleUnverifiedAllowedAction.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => ToggleUnverifiedAllowedAction.fromBcs( data, ), bcs: ToggleUnverifiedAllowedAction.bcs, fromJSONField: (field: any) => ToggleUnverifiedAllowedAction.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => ToggleUnverifiedAllowedAction.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => ToggleUnverifiedAllowedAction.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => ToggleUnverifiedAllowedAction.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => ToggleUnverifiedAllowedAction.fetch( client, id, ), new: ( fields: ToggleUnverifiedAllowedActionFields, ) => { return new ToggleUnverifiedAllowedAction( [], fields ) }, kind: "StructClassReified", } }
 
@@ -170,29 +170,29 @@ export class ToggleUnverifiedAllowedAction implements StructClass { __StructClas
 
  static get bcs() { return bcs.struct("ToggleUnverifiedAllowedAction", {
 
- new_value: bcs.bool()
+ dummy_field: bcs.bool()
 
 }) };
 
- static fromFields( fields: Record<string, any> ): ToggleUnverifiedAllowedAction { return ToggleUnverifiedAllowedAction.reified( ).new( { newValue: decodeFromFields("bool", fields.new_value) } ) }
+ static fromFields( fields: Record<string, any> ): ToggleUnverifiedAllowedAction { return ToggleUnverifiedAllowedAction.reified( ).new( { dummyField: decodeFromFields("bool", fields.dummy_field) } ) }
 
  static fromFieldsWithTypes( item: FieldsWithTypes ): ToggleUnverifiedAllowedAction { if (!isToggleUnverifiedAllowedAction(item.type)) { throw new Error("not a ToggleUnverifiedAllowedAction type");
 
  }
 
- return ToggleUnverifiedAllowedAction.reified( ).new( { newValue: decodeFromFieldsWithTypes("bool", item.fields.new_value) } ) }
+ return ToggleUnverifiedAllowedAction.reified( ).new( { dummyField: decodeFromFieldsWithTypes("bool", item.fields.dummy_field) } ) }
 
  static fromBcs( data: Uint8Array ): ToggleUnverifiedAllowedAction { return ToggleUnverifiedAllowedAction.fromFields( ToggleUnverifiedAllowedAction.bcs.parse(data) ) }
 
  toJSONField() { return {
 
- newValue: this.newValue,
+ dummyField: this.dummyField,
 
 } }
 
  toJSON() { return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() } }
 
- static fromJSONField( field: any ): ToggleUnverifiedAllowedAction { return ToggleUnverifiedAllowedAction.reified( ).new( { newValue: decodeFromJSONField("bool", field.newValue) } ) }
+ static fromJSONField( field: any ): ToggleUnverifiedAllowedAction { return ToggleUnverifiedAllowedAction.reified( ).new( { dummyField: decodeFromJSONField("bool", field.dummyField) } ) }
 
  static fromJSON( json: Record<string, any> ): ToggleUnverifiedAllowedAction { if (json.$typeName !== ToggleUnverifiedAllowedAction.$typeName) { throw new Error("not a WithTwoGenerics json object") };
 

@@ -18,20 +18,21 @@ export const TRANSFER_POLICY_RULES = [
 ];
 // Account.tech Published Packages
 export enum ACCOUNT_EXTENSIONS {
-    V1 = "0x94308db2bb8510fe049a2753e1f05ab46c94c8f1e5bd5f163d5173318a3a3d30",
+    V1 = "0x6e4d4fd65ffc3e7b09969bcfc34d4ec0b5bd640279f0027849884af404e9bc09",
 }
 export enum ACCOUNT_PROTOCOL {
-    V1 = "0x378bf5c9174a33e4669c95d8e22231c7739b333d97b2a876e6734f755e72ee56",
+    V1 = "0x77a39df37fab5b6d47c9976f114ef1ac21313edee5a446135c08fdbaf615b623",
 }
 export enum ACCOUNT_MULTISIG {
-    V1 = "0xceacdcf1d8aeb17acb0ad695d2229b818cef98b4fbed673db84ee64ec4b24e86",
+    V1 = "0x5b249579964953a3f49ed605ff0329302c0c218e1603fbb9921e19bfacb901a8",
 }
 export enum ACCOUNT_ACTIONS {
-    V1 = "0x730a9f336be5b66cc221eb8d5030ee2c65838aad95c7c5a1082733bea9dc2f3d",
+    V1 = "0x47f40cba7b543409155238c9ddd0914f2d9f1bd69ebd2116a32dd667da0f4aab",
 }
 // Shared objects
-export const EXTENSIONS = "0xf4b314447da092b619a8cde4ef13bc40e5ecd0fd30622aab08782301b541e871";
-export const USER_REGISTRY = "0x24697c64cc1cff77177866c5a1c20aacb346b6f83c5ac9b738c2beaf6db534cb";
-export const MULTISIG_FEES = "0x5c3a97139224cb7ea39d1a5c541fab89875c068819d63cb0b6bb8eccf2fa72f1";
+export const EXTENSIONS = "0x519268651fbc7b3714db3ea0ec6c06ec707e6bb0788559852e1d61bd60c192d1";
+export const USER_REGISTRY = "0xf0535de74eb05b832755ff9bc58f6eaf52c48fa72442727dc41f81953b5a4be5";
+export const MULTISIG_FEES = "0x7f2fbf8b52a1324fbf36aceea947cd3c0a65d5ff56d409daa75a2339adf5a880";
 // Types
+export const MULTISIG_CONFIG_TYPE = `${ACCOUNT_MULTISIG.V1}::multisig::Multisig`;
 export const MULTISIG_GENERICS: [string, string] = [`${ACCOUNT_MULTISIG.V1}::multisig::Multisig`, `${ACCOUNT_MULTISIG.V1}::multisig::Approvals`];

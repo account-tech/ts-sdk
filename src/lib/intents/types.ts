@@ -37,16 +37,13 @@ export type IntentStatus = {
     deletable: boolean; // can be deleted because expiration time reached, (can still be resolved or executed)
 }
 
-export type Issuer = {
-    accountAddr: string;
-    intentType: string;
-}
-
 export type IntentFields = {
-    issuer: Issuer;
+    type: string;
     key: string;
     description: string;
+    account: string;
     creator: string;
+    creationTime: bigint;
     executionTimes: bigint[];
     expirationTime: bigint;
     role: string;
@@ -73,9 +70,7 @@ export type ConfigDepsArgs = {
     deps: Dep[];
 }
 
-export type ToggleUnverifiedAllowedArgs = {
-    newValue?: boolean;
-}
+export type ToggleUnverifiedAllowedArgs = {}
 
 export type ConfigMultisigArgs = {
     members?: Member[];
@@ -88,12 +83,12 @@ export type BorrowCapArgs = {
 
 export type DisableRulesArgs = {
     coinType: string;
-    disableMint: boolean;
-    disableBurn: boolean;
-    disableUpdateSymbol: boolean;
-    disableUpdateName: boolean;
-    disableUpdateDescription: boolean;
-    disableUpdateIcon: boolean;
+    mint: boolean;
+    burn: boolean;
+    updateSymbol: boolean;
+    updateName: boolean;
+    updateDescription: boolean;
+    updateIcon: boolean;
 }
 
 export type UpdateMetadataArgs = {
@@ -101,7 +96,7 @@ export type UpdateMetadataArgs = {
     newName: string | null;
     newSymbol: string | null;
     newDescription: string | null;
-    newIcon: string | null;
+    newIconUrl: string | null;
 }
 
 export type MintAndTransferArgs = {

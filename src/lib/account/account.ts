@@ -33,7 +33,7 @@ export abstract class Account implements AccountData {
 		outcome: Outcome,
 		fields: IntentFields
 	): Promise<Intent> {
-		switch (fields.issuer.intentType) {
+		switch (fields.type) {
 			case IntentTypes.ConfigDeps:
 				return await ConfigDepsIntent.init(client, this.id, outcome, fields);
 			case IntentTypes.ToggleUnverifiedAllowed:
@@ -71,7 +71,7 @@ export abstract class Account implements AccountData {
 			case IntentTypes.SpendAndVest:
 				return await SpendAndVestIntent.init(client, this.id, outcome, fields);
 			default:
-				throw new Error(`Intent type ${fields.issuer.intentType} not supported.`);
+				throw new Error(`Intent type ${fields.type} not supported.`);
 		}
 	}
 }

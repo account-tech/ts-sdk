@@ -1,7 +1,7 @@
 import { Transaction, TransactionArgument, TransactionObjectInput, TransactionResult } from "@mysten/sui/transactions";
-import { SuiClient } from "@mysten/sui/client";
+import { DynamicFieldInfo, SuiClient } from "@mysten/sui/client";
 import { Account as AccountRaw } from "../../../.gen/account-protocol/account/structs";
-import { destroyEmptyIntent } from "../../../.gen/account-protocol/account/functions";
+import { destroyEmptyIntent, confirmExecution } from "../../../.gen/account-protocol/account/functions";
 import { Multisig as MultisigRaw, Approvals as ApprovalsRaw } from "../../../.gen/account-multisig/multisig/structs";
 import { newAccount } from "../../../.gen/account-multisig/multisig/functions";
 import * as configMultisig from "../../../.gen/account-multisig/config/functions";
@@ -11,7 +11,7 @@ import { destroyEmptyExpired } from "../../../.gen/account-protocol/intents/func
 import { DepFields } from "../../../.gen/account-protocol/deps/structs";
 import { MemberFields, RoleFields } from "../../../.gen/account-multisig/multisig/structs";
 import { Fees as FeesRaw } from "../../../.gen/account-multisig/fees/structs";
-import { IntentFields as IntentFieldsRaw } from "../../../.gen/account-protocol/intents/structs";
+import { Intent as IntentRaw } from "../../../.gen/account-protocol/intents/structs";
 
 import { User } from "../../user/user";
 import { ACCOUNT_PROTOCOL, CLOCK, EXTENSIONS, MULTISIG_FEES, MULTISIG_GENERICS, SUI_FRAMEWORK, TransactionPureInput } from "../../../types";
@@ -46,7 +46,7 @@ export class Multisig extends Account implements MultisigData {
             throw new Error("No address provided to refresh multisig");
         }
 
-        const accountReified = AccountRaw.r(MultisigRaw.r, ApprovalsRaw.r);
+        const accountReified = AccountRaw.r(MultisigRaw.r);
         const multisigAccount = await accountReified.fetch(this.client, id);
 
         // get metadata
@@ -89,33 +89,56 @@ export class Multisig extends Account implements MultisigData {
         multisigAccount.config.roles.forEach((role: RoleFields) => {
             roles[role.name] = { threshold: Number(role.threshold), totalWeight: roleWeights[role.name] || 0 };
         });
-        // get Proposals with actions
-        const intents = await Promise.all(multisigAccount!.intents.inner.map(async (fieldsRaw: IntentFieldsRaw<ApprovalsRaw>) => {
+        // get Intents with actions
+        let dfs: DynamicFieldInfo[] = [];
+        let data: DynamicFieldInfo[];
+        let nextCursor: string | null = null;
+        let hasNextPage = true;
+        while (hasNextPage) {
+            ({ data, nextCursor, hasNextPage } = await this.client.getDynamicFields({
+                parentId: multisigAccount.intents.inner.id,
+                cursor: nextCursor
+            }));
+            dfs.push(...data);
+            nextCursor = nextCursor;
+        }
+        const dfIds = dfs.map((df) => df.objectId);
+        // Process in batches of 50 due to API limitations
+        const intentsDfs = [];
+        for (let i = 0; i < dfIds.length; i += 50) {
+            const batch = dfIds.slice(i, i + 50);
+            const batchResults = await this.client.multiGetObjects({
+                ids: batch,
+                options: { showContent: true }
+            });
+            intentsDfs.push(...batchResults);
+        }
+        const intents = await Promise.all(intentsDfs.map(async (df: any) => {
+            const intent = IntentRaw.fromFieldsWithTypes(ApprovalsRaw.r, (df.data?.content as any).fields.value);
             const outcome = new Approvals(
                 id,
-                fieldsRaw.key,
-                Number(fieldsRaw.outcome.totalWeight),
-                Number(fieldsRaw.outcome.roleWeight),
-                fieldsRaw.outcome.approved.contents,
-                fieldsRaw.executionTimes[0],
-                fieldsRaw.expirationTime,
+                intent.key,
+                Number(intent.outcome.totalWeight),
+                Number(intent.outcome.roleWeight),
+                intent.outcome.approved.contents,
+                intent.executionTimes[0],
+                intent.expirationTime,
                 Number(global.threshold),
-                Number(roles[fieldsRaw.role]?.threshold),
+                Number(roles[intent.role]?.threshold),
             );
             const fields: IntentFields = {
-                issuer: {
-                    accountAddr: fieldsRaw.issuer.accountAddr,
-                    intentType: fieldsRaw.issuer.intentType.name,
-                },
-                key: fieldsRaw.key,
-                description: fieldsRaw.description,
-                creator: fieldsRaw.creator,
-                executionTimes: fieldsRaw.executionTimes,
-                expirationTime: fieldsRaw.expirationTime,
-                role: fieldsRaw.role,
-                actionsId: fieldsRaw.actions.id,
+                type: intent.type.name,
+                key: intent.key,
+                description: intent.description,
+                account: intent.account,
+                creator: intent.creator,
+                creationTime: intent.creationTime,
+                executionTimes: intent.executionTimes,
+                expirationTime: intent.expirationTime,
+                role: intent.role,
+                actionsId: intent.actions.id,
             }
-
+            
             return await this.fetchIntentWithActions(this.client, outcome, fields);
         }));
 
@@ -211,7 +234,7 @@ export class Multisig extends Account implements MultisigData {
             package: SUI_FRAMEWORK,
             module: "transfer",
             function: "public_share_object",
-            typeArguments: [`${ACCOUNT_PROTOCOL.V1}::account::Account<${MULTISIG_GENERICS}>`],
+            typeArguments: [`${ACCOUNT_PROTOCOL.V1}::account::Account<${MULTISIG_GENERICS[0]}>`],
             arguments: [account],
         });
     }
@@ -332,6 +355,7 @@ export class Multisig extends Account implements MultisigData {
         }
 
         const auth = this.authenticate(tx, account);
+        const params = Intent.createParams(tx, { key: "config-multisig" });
         const outcome = this.emptyApprovalsOutcome(tx);
 
         configMultisig.requestConfigMultisig(
@@ -339,11 +363,8 @@ export class Multisig extends Account implements MultisigData {
             {
                 auth,
                 account,
+                params,
                 outcome,
-                key: "config-multisig",
-                description: "",
-                executionTime: 0n,
-                expirationTime: 0n,
                 addresses,
                 weights,
                 roles,
@@ -356,6 +377,7 @@ export class Multisig extends Account implements MultisigData {
         this.approveIntent(tx, "config-multisig", account);
         const executable = this.executeIntent(tx, "config-multisig", account);
         configMultisig.executeConfigMultisig(tx, { executable, account });
+        confirmExecution(tx, MULTISIG_GENERICS, { account, executable });
 
         const expired = destroyEmptyIntent(tx, MULTISIG_GENERICS, { account, key: "config-multisig" });
         configMultisig.deleteConfigMultisig(tx, expired);
@@ -367,6 +389,7 @@ export class Multisig extends Account implements MultisigData {
         account: TransactionObjectInput,
     ): TransactionResult {
         const auth = this.authenticate(tx, account);
+        const params = Intent.createParams(tx, { key: "toggle-unverified-deps" });
         const outcome = this.emptyApprovalsOutcome(tx);
 
         config.requestToggleUnverifiedAllowed(
@@ -375,17 +398,15 @@ export class Multisig extends Account implements MultisigData {
             {
                 auth,
                 account,
+                params,
                 outcome,
-                key: "toggle-unverified-deps",
-                description: "",
-                executionTime: 0n,
-                expirationTime: 0n,
             }
         );
 
         this.approveIntent(tx, "toggle-unverified-deps", account);
         const executable = this.executeIntent(tx, "toggle-unverified-deps", account);
         config.executeToggleUnverifiedAllowed(tx, MULTISIG_GENERICS, { executable, account });
+        confirmExecution(tx, MULTISIG_GENERICS, { account, executable });
 
         const expired = destroyEmptyIntent(tx, MULTISIG_GENERICS, { account, key: "toggle-unverified-deps" });
         config.deleteToggleUnverifiedAllowed(tx, expired);
@@ -411,6 +432,7 @@ export class Multisig extends Account implements MultisigData {
         });
 
         const auth = this.authenticate(tx, account);
+        const params = Intent.createParams(tx, { key: "config-deps" });
         const outcome = this.emptyApprovalsOutcome(tx);
 
         config.requestConfigDeps(
@@ -419,11 +441,8 @@ export class Multisig extends Account implements MultisigData {
             {
                 auth,
                 account,
+                params,
                 outcome,
-                key: "config-deps",
-                description: "",
-                executionTime: 0n,
-                expirationTime: 0n,
                 extensions: EXTENSIONS,
                 names,
                 addresses,
@@ -434,6 +453,7 @@ export class Multisig extends Account implements MultisigData {
         this.approveIntent(tx, "config-deps", account);
         const executable = this.executeIntent(tx, "config-deps", account);
         config.executeConfigDeps(tx, MULTISIG_GENERICS, { executable, account });
+        confirmExecution(tx, MULTISIG_GENERICS, { account, executable });
 
         const expired = destroyEmptyIntent(tx, MULTISIG_GENERICS, { account, key: "config-deps" });
         config.deleteConfigDeps(tx, expired);

@@ -6,7 +6,7 @@ import * as kioskIntent from "../../../.gen/account-actions/kiosk-intents/functi
 import * as accountProtocol from "../../../.gen/account-protocol/account/functions";
 import * as intents from "../../../.gen/account-protocol/intents/functions";
 
-import { ListNftsArgs, TakeNftsArgs, IntentArgs, IntentFields } from "../types";
+import { ListNftsArgs, TakeNftsArgs, IntentFields } from "../types";
 import { Intent } from "../intent";
 import { Outcome } from "../../outcomes";
 import { CLOCK } from "../../../types";
@@ -37,9 +37,9 @@ export class TakeNftsIntent extends Intent {
         tx: Transaction,
         accountGenerics: [string, string],
         auth: TransactionObjectInput,
-        outcome: TransactionObjectInput,
         account: string,
-        intentArgs: IntentArgs,
+        params: TransactionObjectInput,
+        outcome: TransactionObjectInput,
         actionArgs: TakeNftsArgs,
     ): TransactionResult {
         return kioskIntent.requestTakeNfts(
@@ -48,11 +48,8 @@ export class TakeNftsIntent extends Intent {
             {
                 auth,
                 account,
+                params,
                 outcome,
-                key: intentArgs.key,
-                description: intentArgs.description ?? "",
-                executionTime: intentArgs.executionTimes?.[0] ?? 0n,
-                expirationTime: intentArgs.expirationTime ?? BigInt(Math.floor(Date.now()) + 7 * 24 * 60 * 60 * 1000),
                 kioskName: actionArgs.kioskName,
                 nftIds: actionArgs.nftIds,
                 recipient: actionArgs.recipient,
@@ -166,9 +163,9 @@ export class ListNftsIntent extends Intent {
         tx: Transaction,
         accountGenerics: [string, string],
         auth: TransactionObjectInput,
-        outcome: TransactionObjectInput,
         account: string,
-        intentArgs: IntentArgs,
+        params: TransactionObjectInput,
+        outcome: TransactionObjectInput,
         actionArgs: ListNftsArgs,
     ): TransactionResult {
         return kioskIntent.requestListNfts(
@@ -177,11 +174,8 @@ export class ListNftsIntent extends Intent {
             {
                 auth,
                 account,
+                params,
                 outcome,
-                key: intentArgs.key,
-                description: intentArgs.description ?? "",
-                executionTime: intentArgs.executionTimes?.[0] ?? 0n,
-                expirationTime: intentArgs.expirationTime ?? BigInt(Math.floor(Date.now()) + 7 * 24 * 60 * 60 * 1000),
                 kioskName: actionArgs.kioskName,
                 nftIds: actionArgs.listings.map(listing => listing.nftId),
                 prices: actionArgs.listings.map(listing => BigInt(listing.price)),

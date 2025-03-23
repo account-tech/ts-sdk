@@ -3,21 +3,7 @@ import {String} from "../../_dependencies/source/0x1/string/structs";
 import {obj, pure} from "../../_framework/util";
 import {Transaction, TransactionArgument, TransactionObjectInput} from "@mysten/sui/transactions";
 
-export interface JoinArgs { user: TransactionObjectInput; account: TransactionObjectInput }
-
-export function join( tx: Transaction, args: JoinArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::multisig::join`, arguments: [ obj(tx, args.user), obj(tx, args.account) ], }) }
-
 export function addresses( tx: Transaction, multisig: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::multisig::addresses`, arguments: [ obj(tx, multisig) ], }) }
-
-export function configMut( tx: Transaction, account: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::multisig::config_mut`, arguments: [ obj(tx, account) ], }) }
-
-export interface ExecuteIntentArgs { account: TransactionObjectInput; key: string | TransactionArgument; clock: TransactionObjectInput }
-
-export function executeIntent( tx: Transaction, args: ExecuteIntentArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::multisig::execute_intent`, arguments: [ obj(tx, args.account), pure(tx, args.key, `${String.$typeName}`), obj(tx, args.clock) ], }) }
-
-export interface SendInviteArgs { account: TransactionObjectInput; recipient: string | TransactionArgument }
-
-export function sendInvite( tx: Transaction, args: SendInviteArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::multisig::send_invite`, arguments: [ obj(tx, args.account), pure(tx, args.recipient, `address`) ], }) }
 
 export interface ApproveIntentArgs { account: TransactionObjectInput; key: string | TransactionArgument }
 
@@ -29,11 +15,17 @@ export function assertIsMember( tx: Transaction, multisig: TransactionObjectInpu
 
 export function authenticate( tx: Transaction, account: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::multisig::authenticate`, arguments: [ obj(tx, account) ], }) }
 
+export function configMut( tx: Transaction, account: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::multisig::config_mut`, arguments: [ obj(tx, account) ], }) }
+
 export interface DisapproveIntentArgs { account: TransactionObjectInput; key: string | TransactionArgument }
 
 export function disapproveIntent( tx: Transaction, args: DisapproveIntentArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::multisig::disapprove_intent`, arguments: [ obj(tx, args.account), pure(tx, args.key, `${String.$typeName}`) ], }) }
 
 export function emptyOutcome( tx: Transaction, ) { return tx.moveCall({ target: `${PUBLISHED_AT}::multisig::empty_outcome`, arguments: [ ], }) }
+
+export interface ExecuteIntentArgs { account: TransactionObjectInput; key: string | TransactionArgument; clock: TransactionObjectInput }
+
+export function executeIntent( tx: Transaction, args: ExecuteIntentArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::multisig::execute_intent`, arguments: [ obj(tx, args.account), pure(tx, args.key, `${String.$typeName}`), obj(tx, args.clock) ], }) }
 
 export function getGlobalThreshold( tx: Transaction, multisig: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::multisig::get_global_threshold`, arguments: [ obj(tx, multisig) ], }) }
 
@@ -53,17 +45,21 @@ export interface HasRoleArgs { member: TransactionObjectInput; role: string | Tr
 
 export function hasRole( tx: Transaction, args: HasRoleArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::multisig::has_role`, arguments: [ obj(tx, args.member), pure(tx, args.role, `${String.$typeName}`) ], }) }
 
-export interface MemberArgs { multisig: TransactionObjectInput; addr: string | TransactionArgument }
-
-export function member( tx: Transaction, args: MemberArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::multisig::member`, arguments: [ obj(tx, args.multisig), pure(tx, args.addr, `address`) ], }) }
-
 export interface IsMemberArgs { multisig: TransactionObjectInput; addr: string | TransactionArgument }
 
 export function isMember( tx: Transaction, args: IsMemberArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::multisig::is_member`, arguments: [ obj(tx, args.multisig), pure(tx, args.addr, `address`) ], }) }
 
+export interface JoinArgs { user: TransactionObjectInput; account: TransactionObjectInput }
+
+export function join( tx: Transaction, args: JoinArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::multisig::join`, arguments: [ obj(tx, args.user), obj(tx, args.account) ], }) }
+
 export interface LeaveArgs { user: TransactionObjectInput; account: TransactionObjectInput }
 
 export function leave( tx: Transaction, args: LeaveArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::multisig::leave`, arguments: [ obj(tx, args.user), obj(tx, args.account) ], }) }
+
+export interface MemberArgs { multisig: TransactionObjectInput; addr: string | TransactionArgument }
+
+export function member( tx: Transaction, args: MemberArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::multisig::member`, arguments: [ obj(tx, args.multisig), pure(tx, args.addr, `address`) ], }) }
 
 export interface NewAccountArgs { extensions: TransactionObjectInput; fees: TransactionObjectInput; coin: TransactionObjectInput }
 
@@ -81,11 +77,15 @@ export function roleWeight( tx: Transaction, outcome: TransactionObjectInput ) {
 
 export function roles( tx: Transaction, member: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::multisig::roles`, arguments: [ obj(tx, member) ], }) }
 
+export interface SendInviteArgs { account: TransactionObjectInput; recipient: string | TransactionArgument }
+
+export function sendInvite( tx: Transaction, args: SendInviteArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::multisig::send_invite`, arguments: [ obj(tx, args.account), pure(tx, args.recipient, `address`) ], }) }
+
 export function totalWeight( tx: Transaction, outcome: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::multisig::total_weight`, arguments: [ obj(tx, outcome) ], }) }
 
-export interface ValidateArgs { outcome: TransactionObjectInput; multisig: TransactionObjectInput; role: string | TransactionArgument }
+export interface ValidateOutcomeArgs { outcome: TransactionObjectInput; multisig: TransactionObjectInput; role: string | TransactionArgument }
 
-export function validate( tx: Transaction, args: ValidateArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::multisig::validate`, arguments: [ obj(tx, args.outcome), obj(tx, args.multisig), pure(tx, args.role, `${String.$typeName}`) ], }) }
+export function validateOutcome( tx: Transaction, args: ValidateOutcomeArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::multisig::validate_outcome`, arguments: [ obj(tx, args.outcome), obj(tx, args.multisig), pure(tx, args.role, `${String.$typeName}`) ], }) }
 
 export interface VerifyNewRulesArgs { addresses: Array<string | TransactionArgument> | TransactionArgument; weights: Array<bigint | TransactionArgument> | TransactionArgument; roles: Array<Array<string | TransactionArgument> | TransactionArgument> | TransactionArgument; global: bigint | TransactionArgument; roleNames: Array<string | TransactionArgument> | TransactionArgument; roleThresholds: Array<bigint | TransactionArgument> | TransactionArgument }
 

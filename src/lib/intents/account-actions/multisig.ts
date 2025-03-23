@@ -5,7 +5,7 @@ import * as accountProtocol from "../../../.gen/account-protocol/account/functio
 import * as intents from "../../../.gen/account-protocol/intents/functions";
 import { ConfigMultisigAction } from "../../../.gen/account-multisig/config/structs";
 
-import { ConfigMultisigArgs, IntentArgs, IntentFields } from "../types";
+import { ConfigMultisigArgs, IntentFields } from "../types";
 import { Intent } from "../intent";
 import { Outcome } from "../../outcomes";
 import { CLOCK } from "../../../types";
@@ -46,9 +46,9 @@ export class ConfigMultisigIntent extends Intent {
         tx: Transaction,
         _accountGenerics: [string, string], // can be anything, this is just to respect the interface
         auth: TransactionObjectInput,
-        outcome: TransactionObjectInput,
         account: string,
-        intentArgs: IntentArgs,
+        params: TransactionObjectInput,
+        outcome: TransactionObjectInput,
         actionArgs: ConfigMultisigArgs,
     ): TransactionResult {
         let addresses: string[] = [];
@@ -78,11 +78,8 @@ export class ConfigMultisigIntent extends Intent {
             {
                 auth,
                 account,
+                params,
                 outcome,
-                key: intentArgs.key,
-                description: intentArgs.description ?? "",
-                executionTime: intentArgs.executionTimes?.[0] ?? 0n,
-                expirationTime: intentArgs.expirationTime ?? BigInt(Math.floor(Date.now()) + 7 * 24 * 60 * 60 * 1000),
                 addresses,
                 weights,
                 roles,

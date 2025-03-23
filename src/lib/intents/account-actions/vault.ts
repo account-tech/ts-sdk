@@ -10,7 +10,7 @@ import { SpendAction } from "../../../.gen/account-actions/vault/structs";
 import { TransferAction } from "../../../.gen/account-actions/transfer/structs";
 import { VestAction } from "../../../.gen/account-actions/vesting/structs";
 
-import { IntentArgs, IntentFields, SpendAndTransferArgs, SpendAndVestArgs } from "../types";
+import { IntentFields, SpendAndTransferArgs, SpendAndVestArgs } from "../types";
 import { Intent } from "../intent";
 import { Outcome } from "../../outcomes";
 import { CLOCK } from "../../../types";
@@ -44,9 +44,9 @@ export class SpendAndTransferIntent extends Intent {
         tx: Transaction,
         accountGenerics: [string, string],
         auth: TransactionObjectInput,
-        outcome: TransactionObjectInput,
         account: string,
-        intentArgs: IntentArgs,
+        params: TransactionObjectInput,
+        outcome: TransactionObjectInput,
         actionArgs: SpendAndTransferArgs,
     ): TransactionResult {
         return vaultIntents.requestSpendAndTransfer(
@@ -55,11 +55,8 @@ export class SpendAndTransferIntent extends Intent {
             {
                 auth,
                 account,
+                params,
                 outcome,
-                key: intentArgs.key,
-                description: intentArgs.description ?? "",
-                executionTimes: intentArgs.executionTimes ?? [0n],
-                expirationTime: intentArgs.expirationTime ?? BigInt(Math.floor(Date.now()) + 7 * 24 * 60 * 60 * 1000),
                 vaultName: actionArgs.treasuryName,
                 amounts: actionArgs.transfers.map(transfer => BigInt(transfer.amount)),
                 recipients: actionArgs.transfers.map(transfer => transfer.recipient),
@@ -182,9 +179,9 @@ export class SpendAndVestIntent extends Intent {
         tx: Transaction,
         accountGenerics: [string, string],
         auth: TransactionObjectInput,
-        outcome: TransactionObjectInput,
         account: string,
-        intentArgs: IntentArgs,
+        params: TransactionObjectInput,
+        outcome: TransactionObjectInput,
         actionArgs: SpendAndVestArgs,
     ): TransactionResult {
         return vaultIntents.requestSpendAndVest(
@@ -193,11 +190,8 @@ export class SpendAndVestIntent extends Intent {
             {
                 auth,
                 account,
+                params,
                 outcome,
-                key: intentArgs.key,
-                description: intentArgs.description ?? "",
-                executionTime: intentArgs.executionTimes?.[0] ?? 0n,
-                expirationTime: intentArgs.expirationTime ?? BigInt(Math.floor(Date.now()) + 7 * 24 * 60 * 60 * 1000),
                 vaultName: actionArgs.treasuryName,
                 coinAmount: BigInt(actionArgs.amount),
                 startTimestamp: BigInt(actionArgs.start),

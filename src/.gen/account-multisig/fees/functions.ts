@@ -4,13 +4,13 @@ import {Transaction, TransactionArgument, TransactionObjectInput} from "@mysten/
 
 export function amount( tx: Transaction, fees: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::fees::amount`, arguments: [ obj(tx, fees) ], }) }
 
-export function recipient( tx: Transaction, fees: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::fees::recipient`, arguments: [ obj(tx, fees) ], }) }
-
 export function init( tx: Transaction, ) { return tx.moveCall({ target: `${PUBLISHED_AT}::fees::init`, arguments: [ ], }) }
 
 export interface ProcessArgs { fees: TransactionObjectInput; coin: TransactionObjectInput }
 
 export function process( tx: Transaction, args: ProcessArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::fees::process`, arguments: [ obj(tx, args.fees), obj(tx, args.coin) ], }) }
+
+export function recipient( tx: Transaction, fees: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::fees::recipient`, arguments: [ obj(tx, fees) ], }) }
 
 export interface SetAmountArgs { adminCap: TransactionObjectInput; fees: TransactionObjectInput; amount: bigint | TransactionArgument }
 

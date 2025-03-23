@@ -7,7 +7,7 @@ import { ConfigDepsAction, ToggleUnverifiedAllowedAction } from "../../../.gen/a
 
 import { CLOCK, EXTENSIONS } from "../../../types";
 import { Outcome } from "../../outcomes";
-import { ConfigDepsArgs, IntentArgs, IntentFields, ToggleUnverifiedAllowedArgs } from "../types";
+import { ConfigDepsArgs, IntentFields, ToggleUnverifiedAllowedArgs } from "../types";
 import { Intent } from "../intent";
 
 export class ConfigDepsIntent extends Intent {
@@ -38,9 +38,9 @@ export class ConfigDepsIntent extends Intent {
         tx: Transaction,
         accountGenerics: [string, string],
         auth: TransactionObjectInput,
-        outcome: TransactionObjectInput,
         account: string,
-        intentArgs: IntentArgs,
+        params: TransactionObjectInput,
+        outcome: TransactionObjectInput,
         actionArgs: ConfigDepsArgs,
     ): TransactionResult {
         const names: string[] = [];
@@ -58,11 +58,8 @@ export class ConfigDepsIntent extends Intent {
             {
                 auth,
                 account,
+                params,
                 outcome,
-                key: intentArgs.key,
-                description: intentArgs.description ?? "",
-                executionTime: intentArgs.executionTimes?.[0] ?? 0n,
-                expirationTime: intentArgs.expirationTime ?? BigInt(Math.floor(Date.now()) + 7 * 24 * 60 * 60 * 1000),
                 extensions: EXTENSIONS,
                 names,
                 addresses,
@@ -148,11 +145,9 @@ export class ToggleUnverifiedAllowedIntent extends Intent {
         const intent = new ToggleUnverifiedAllowedIntent(client, account, outcome, fields);
         // resolve actions
         const actions = await intent.fetchActions(fields.actionsId);
-        const toggleUnverifiedAllowedAction = ToggleUnverifiedAllowedAction.fromFieldsWithTypes(actions[0]);
+        ToggleUnverifiedAllowedAction.fromFieldsWithTypes(actions[0]);
 
-        intent.args = {
-            newValue: toggleUnverifiedAllowedAction.newValue,
-        };
+        intent.args = {};
         return intent;
     }
 
@@ -160,9 +155,9 @@ export class ToggleUnverifiedAllowedIntent extends Intent {
         tx: Transaction,
         accountGenerics: [string, string],
         auth: TransactionObjectInput,
-        outcome: TransactionObjectInput,
         account: string,
-        intentArgs: IntentArgs,
+        params: TransactionObjectInput,
+        outcome: TransactionObjectInput,
         _actionArgs: ToggleUnverifiedAllowedArgs,
     ): TransactionResult {
         return config.requestToggleUnverifiedAllowed(
@@ -171,11 +166,8 @@ export class ToggleUnverifiedAllowedIntent extends Intent {
             {
                 auth,
                 account,
+                params,
                 outcome,
-                key: intentArgs.key,
-                description: intentArgs.description ?? "",
-                executionTime: intentArgs.executionTimes?.[0] ?? 0n,
-                expirationTime: intentArgs.expirationTime ?? BigInt(Math.floor(Date.now()) + 7 * 24 * 60 * 60 * 1000),
             }
         );
     }

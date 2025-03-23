@@ -77,6 +77,74 @@ export class Approvals implements StructClass { __StructClass = true as const;
 
  }
 
+/* ============================== ConfigWitness =============================== */
+
+export function isConfigWitness(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::multisig::ConfigWitness`; }
+
+export interface ConfigWitnessFields { dummyField: ToField<"bool"> }
+
+export type ConfigWitnessReified = Reified< ConfigWitness, ConfigWitnessFields >;
+
+export class ConfigWitness implements StructClass { __StructClass = true as const;
+
+ static readonly $typeName = `${PKG_V1}::multisig::ConfigWitness`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
+
+ readonly $typeName = ConfigWitness.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::multisig::ConfigWitness`; readonly $typeArgs: []; readonly $isPhantom = ConfigWitness.$isPhantom;
+
+ readonly dummyField: ToField<"bool">
+
+ private constructor(typeArgs: [], fields: ConfigWitnessFields, ) { this.$fullTypeName = composeSuiType( ConfigWitness.$typeName, ...typeArgs ) as `${typeof PKG_V1}::multisig::ConfigWitness`; this.$typeArgs = typeArgs;
+
+ this.dummyField = fields.dummyField; }
+
+ static reified( ): ConfigWitnessReified { return { typeName: ConfigWitness.$typeName, fullTypeName: composeSuiType( ConfigWitness.$typeName, ...[] ) as `${typeof PKG_V1}::multisig::ConfigWitness`, typeArgs: [ ] as [], isPhantom: ConfigWitness.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => ConfigWitness.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => ConfigWitness.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => ConfigWitness.fromBcs( data, ), bcs: ConfigWitness.bcs, fromJSONField: (field: any) => ConfigWitness.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => ConfigWitness.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => ConfigWitness.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => ConfigWitness.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => ConfigWitness.fetch( client, id, ), new: ( fields: ConfigWitnessFields, ) => { return new ConfigWitness( [], fields ) }, kind: "StructClassReified", } }
+
+ static get r() { return ConfigWitness.reified() }
+
+ static phantom( ): PhantomReified<ToTypeStr<ConfigWitness>> { return phantom(ConfigWitness.reified( )); } static get p() { return ConfigWitness.phantom() }
+
+ static get bcs() { return bcs.struct("ConfigWitness", {
+
+ dummy_field: bcs.bool()
+
+}) };
+
+ static fromFields( fields: Record<string, any> ): ConfigWitness { return ConfigWitness.reified( ).new( { dummyField: decodeFromFields("bool", fields.dummy_field) } ) }
+
+ static fromFieldsWithTypes( item: FieldsWithTypes ): ConfigWitness { if (!isConfigWitness(item.type)) { throw new Error("not a ConfigWitness type");
+
+ }
+
+ return ConfigWitness.reified( ).new( { dummyField: decodeFromFieldsWithTypes("bool", item.fields.dummy_field) } ) }
+
+ static fromBcs( data: Uint8Array ): ConfigWitness { return ConfigWitness.fromFields( ConfigWitness.bcs.parse(data) ) }
+
+ toJSONField() { return {
+
+ dummyField: this.dummyField,
+
+} }
+
+ toJSON() { return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() } }
+
+ static fromJSONField( field: any ): ConfigWitness { return ConfigWitness.reified( ).new( { dummyField: decodeFromJSONField("bool", field.dummyField) } ) }
+
+ static fromJSON( json: Record<string, any> ): ConfigWitness { if (json.$typeName !== ConfigWitness.$typeName) { throw new Error("not a WithTwoGenerics json object") };
+
+ return ConfigWitness.fromJSONField( json, ) }
+
+ static fromSuiParsedData( content: SuiParsedData ): ConfigWitness { if (content.dataType !== "moveObject") { throw new Error("not an object"); } if (!isConfigWitness(content.type)) { throw new Error(`object at ${(content.fields as any).id} is not a ConfigWitness object`); } return ConfigWitness.fromFieldsWithTypes( content ); }
+
+ static fromSuiObjectData( data: SuiObjectData ): ConfigWitness { if (data.bcs) { if (data.bcs.dataType !== "moveObject" || !isConfigWitness(data.bcs.type)) { throw new Error(`object at is not a ConfigWitness object`); }
+
+ return ConfigWitness.fromBcs( fromB64(data.bcs.bcsBytes) ); } if (data.content) { return ConfigWitness.fromSuiParsedData( data.content ) } throw new Error( "Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request." ); }
+
+ static async fetch( client: SuiClient, id: string ): Promise<ConfigWitness> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching ConfigWitness object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isConfigWitness(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a ConfigWitness object`); }
+
+ return ConfigWitness.fromSuiObjectData( res.data ); }
+
+ }
+
 /* ============================== Member =============================== */
 
 export function isMember(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::multisig::Member`; }
@@ -278,73 +346,5 @@ export class Role implements StructClass { __StructClass = true as const;
  static async fetch( client: SuiClient, id: string ): Promise<Role> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching Role object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isRole(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a Role object`); }
 
  return Role.fromSuiObjectData( res.data ); }
-
- }
-
-/* ============================== Witness =============================== */
-
-export function isWitness(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::multisig::Witness`; }
-
-export interface WitnessFields { dummyField: ToField<"bool"> }
-
-export type WitnessReified = Reified< Witness, WitnessFields >;
-
-export class Witness implements StructClass { __StructClass = true as const;
-
- static readonly $typeName = `${PKG_V1}::multisig::Witness`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
-
- readonly $typeName = Witness.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::multisig::Witness`; readonly $typeArgs: []; readonly $isPhantom = Witness.$isPhantom;
-
- readonly dummyField: ToField<"bool">
-
- private constructor(typeArgs: [], fields: WitnessFields, ) { this.$fullTypeName = composeSuiType( Witness.$typeName, ...typeArgs ) as `${typeof PKG_V1}::multisig::Witness`; this.$typeArgs = typeArgs;
-
- this.dummyField = fields.dummyField; }
-
- static reified( ): WitnessReified { return { typeName: Witness.$typeName, fullTypeName: composeSuiType( Witness.$typeName, ...[] ) as `${typeof PKG_V1}::multisig::Witness`, typeArgs: [ ] as [], isPhantom: Witness.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => Witness.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => Witness.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => Witness.fromBcs( data, ), bcs: Witness.bcs, fromJSONField: (field: any) => Witness.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => Witness.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => Witness.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => Witness.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => Witness.fetch( client, id, ), new: ( fields: WitnessFields, ) => { return new Witness( [], fields ) }, kind: "StructClassReified", } }
-
- static get r() { return Witness.reified() }
-
- static phantom( ): PhantomReified<ToTypeStr<Witness>> { return phantom(Witness.reified( )); } static get p() { return Witness.phantom() }
-
- static get bcs() { return bcs.struct("Witness", {
-
- dummy_field: bcs.bool()
-
-}) };
-
- static fromFields( fields: Record<string, any> ): Witness { return Witness.reified( ).new( { dummyField: decodeFromFields("bool", fields.dummy_field) } ) }
-
- static fromFieldsWithTypes( item: FieldsWithTypes ): Witness { if (!isWitness(item.type)) { throw new Error("not a Witness type");
-
- }
-
- return Witness.reified( ).new( { dummyField: decodeFromFieldsWithTypes("bool", item.fields.dummy_field) } ) }
-
- static fromBcs( data: Uint8Array ): Witness { return Witness.fromFields( Witness.bcs.parse(data) ) }
-
- toJSONField() { return {
-
- dummyField: this.dummyField,
-
-} }
-
- toJSON() { return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() } }
-
- static fromJSONField( field: any ): Witness { return Witness.reified( ).new( { dummyField: decodeFromJSONField("bool", field.dummyField) } ) }
-
- static fromJSON( json: Record<string, any> ): Witness { if (json.$typeName !== Witness.$typeName) { throw new Error("not a WithTwoGenerics json object") };
-
- return Witness.fromJSONField( json, ) }
-
- static fromSuiParsedData( content: SuiParsedData ): Witness { if (content.dataType !== "moveObject") { throw new Error("not an object"); } if (!isWitness(content.type)) { throw new Error(`object at ${(content.fields as any).id} is not a Witness object`); } return Witness.fromFieldsWithTypes( content ); }
-
- static fromSuiObjectData( data: SuiObjectData ): Witness { if (data.bcs) { if (data.bcs.dataType !== "moveObject" || !isWitness(data.bcs.type)) { throw new Error(`object at is not a Witness object`); }
-
- return Witness.fromBcs( fromB64(data.bcs.bcsBytes) ); } if (data.content) { return Witness.fromSuiParsedData( data.content ) } throw new Error( "Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request." ); }
-
- static async fetch( client: SuiClient, id: string ): Promise<Witness> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching Witness object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isWitness(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a Witness object`); }
-
- return Witness.fromSuiObjectData( res.data ); }
 
  }

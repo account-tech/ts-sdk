@@ -9,6 +9,74 @@ import {bcs} from "@mysten/sui/bcs";
 import {SuiClient, SuiObjectData, SuiParsedData} from "@mysten/sui/client";
 import {fromB64, fromHEX, toHEX} from "@mysten/sui/utils";
 
+/* ============================== CommitAction =============================== */
+
+export function isCommitAction(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::package_upgrade::CommitAction`; }
+
+export interface CommitActionFields { name: ToField<String> }
+
+export type CommitActionReified = Reified< CommitAction, CommitActionFields >;
+
+export class CommitAction implements StructClass { __StructClass = true as const;
+
+ static readonly $typeName = `${PKG_V1}::package_upgrade::CommitAction`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
+
+ readonly $typeName = CommitAction.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::package_upgrade::CommitAction`; readonly $typeArgs: []; readonly $isPhantom = CommitAction.$isPhantom;
+
+ readonly name: ToField<String>
+
+ private constructor(typeArgs: [], fields: CommitActionFields, ) { this.$fullTypeName = composeSuiType( CommitAction.$typeName, ...typeArgs ) as `${typeof PKG_V1}::package_upgrade::CommitAction`; this.$typeArgs = typeArgs;
+
+ this.name = fields.name; }
+
+ static reified( ): CommitActionReified { return { typeName: CommitAction.$typeName, fullTypeName: composeSuiType( CommitAction.$typeName, ...[] ) as `${typeof PKG_V1}::package_upgrade::CommitAction`, typeArgs: [ ] as [], isPhantom: CommitAction.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => CommitAction.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => CommitAction.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => CommitAction.fromBcs( data, ), bcs: CommitAction.bcs, fromJSONField: (field: any) => CommitAction.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => CommitAction.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => CommitAction.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => CommitAction.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => CommitAction.fetch( client, id, ), new: ( fields: CommitActionFields, ) => { return new CommitAction( [], fields ) }, kind: "StructClassReified", } }
+
+ static get r() { return CommitAction.reified() }
+
+ static phantom( ): PhantomReified<ToTypeStr<CommitAction>> { return phantom(CommitAction.reified( )); } static get p() { return CommitAction.phantom() }
+
+ static get bcs() { return bcs.struct("CommitAction", {
+
+ name: String.bcs
+
+}) };
+
+ static fromFields( fields: Record<string, any> ): CommitAction { return CommitAction.reified( ).new( { name: decodeFromFields(String.reified(), fields.name) } ) }
+
+ static fromFieldsWithTypes( item: FieldsWithTypes ): CommitAction { if (!isCommitAction(item.type)) { throw new Error("not a CommitAction type");
+
+ }
+
+ return CommitAction.reified( ).new( { name: decodeFromFieldsWithTypes(String.reified(), item.fields.name) } ) }
+
+ static fromBcs( data: Uint8Array ): CommitAction { return CommitAction.fromFields( CommitAction.bcs.parse(data) ) }
+
+ toJSONField() { return {
+
+ name: this.name,
+
+} }
+
+ toJSON() { return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() } }
+
+ static fromJSONField( field: any ): CommitAction { return CommitAction.reified( ).new( { name: decodeFromJSONField(String.reified(), field.name) } ) }
+
+ static fromJSON( json: Record<string, any> ): CommitAction { if (json.$typeName !== CommitAction.$typeName) { throw new Error("not a WithTwoGenerics json object") };
+
+ return CommitAction.fromJSONField( json, ) }
+
+ static fromSuiParsedData( content: SuiParsedData ): CommitAction { if (content.dataType !== "moveObject") { throw new Error("not an object"); } if (!isCommitAction(content.type)) { throw new Error(`object at ${(content.fields as any).id} is not a CommitAction object`); } return CommitAction.fromFieldsWithTypes( content ); }
+
+ static fromSuiObjectData( data: SuiObjectData ): CommitAction { if (data.bcs) { if (data.bcs.dataType !== "moveObject" || !isCommitAction(data.bcs.type)) { throw new Error(`object at is not a CommitAction object`); }
+
+ return CommitAction.fromBcs( fromB64(data.bcs.bcsBytes) ); } if (data.content) { return CommitAction.fromSuiParsedData( data.content ) } throw new Error( "Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request." ); }
+
+ static async fetch( client: SuiClient, id: string ): Promise<CommitAction> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching CommitAction object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isCommitAction(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a CommitAction object`); }
+
+ return CommitAction.fromSuiObjectData( res.data ); }
+
+ }
+
 /* ============================== RestrictAction =============================== */
 
 export function isRestrictAction(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::package_upgrade::RestrictAction`; }
@@ -81,7 +149,7 @@ export class RestrictAction implements StructClass { __StructClass = true as con
 
 export function isUpgradeAction(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::package_upgrade::UpgradeAction`; }
 
-export interface UpgradeActionFields { name: ToField<String>; digest: ToField<Vector<"u8">>; upgradeTime: ToField<"u64"> }
+export interface UpgradeActionFields { name: ToField<String>; digest: ToField<Vector<"u8">> }
 
 export type UpgradeActionReified = Reified< UpgradeAction, UpgradeActionFields >;
 
@@ -91,11 +159,11 @@ export class UpgradeAction implements StructClass { __StructClass = true as cons
 
  readonly $typeName = UpgradeAction.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::package_upgrade::UpgradeAction`; readonly $typeArgs: []; readonly $isPhantom = UpgradeAction.$isPhantom;
 
- readonly name: ToField<String>; readonly digest: ToField<Vector<"u8">>; readonly upgradeTime: ToField<"u64">
+ readonly name: ToField<String>; readonly digest: ToField<Vector<"u8">>
 
  private constructor(typeArgs: [], fields: UpgradeActionFields, ) { this.$fullTypeName = composeSuiType( UpgradeAction.$typeName, ...typeArgs ) as `${typeof PKG_V1}::package_upgrade::UpgradeAction`; this.$typeArgs = typeArgs;
 
- this.name = fields.name;; this.digest = fields.digest;; this.upgradeTime = fields.upgradeTime; }
+ this.name = fields.name;; this.digest = fields.digest; }
 
  static reified( ): UpgradeActionReified { return { typeName: UpgradeAction.$typeName, fullTypeName: composeSuiType( UpgradeAction.$typeName, ...[] ) as `${typeof PKG_V1}::package_upgrade::UpgradeAction`, typeArgs: [ ] as [], isPhantom: UpgradeAction.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => UpgradeAction.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => UpgradeAction.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => UpgradeAction.fromBcs( data, ), bcs: UpgradeAction.bcs, fromJSONField: (field: any) => UpgradeAction.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => UpgradeAction.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => UpgradeAction.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => UpgradeAction.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => UpgradeAction.fetch( client, id, ), new: ( fields: UpgradeActionFields, ) => { return new UpgradeAction( [], fields ) }, kind: "StructClassReified", } }
 
@@ -105,29 +173,29 @@ export class UpgradeAction implements StructClass { __StructClass = true as cons
 
  static get bcs() { return bcs.struct("UpgradeAction", {
 
- name: String.bcs, digest: bcs.vector(bcs.u8()), upgrade_time: bcs.u64()
+ name: String.bcs, digest: bcs.vector(bcs.u8())
 
 }) };
 
- static fromFields( fields: Record<string, any> ): UpgradeAction { return UpgradeAction.reified( ).new( { name: decodeFromFields(String.reified(), fields.name), digest: decodeFromFields(reified.vector("u8"), fields.digest), upgradeTime: decodeFromFields("u64", fields.upgrade_time) } ) }
+ static fromFields( fields: Record<string, any> ): UpgradeAction { return UpgradeAction.reified( ).new( { name: decodeFromFields(String.reified(), fields.name), digest: decodeFromFields(reified.vector("u8"), fields.digest) } ) }
 
  static fromFieldsWithTypes( item: FieldsWithTypes ): UpgradeAction { if (!isUpgradeAction(item.type)) { throw new Error("not a UpgradeAction type");
 
  }
 
- return UpgradeAction.reified( ).new( { name: decodeFromFieldsWithTypes(String.reified(), item.fields.name), digest: decodeFromFieldsWithTypes(reified.vector("u8"), item.fields.digest), upgradeTime: decodeFromFieldsWithTypes("u64", item.fields.upgrade_time) } ) }
+ return UpgradeAction.reified( ).new( { name: decodeFromFieldsWithTypes(String.reified(), item.fields.name), digest: decodeFromFieldsWithTypes(reified.vector("u8"), item.fields.digest) } ) }
 
  static fromBcs( data: Uint8Array ): UpgradeAction { return UpgradeAction.fromFields( UpgradeAction.bcs.parse(data) ) }
 
  toJSONField() { return {
 
- name: this.name,digest: fieldToJSON<Vector<"u8">>(`vector<u8>`, this.digest),upgradeTime: this.upgradeTime.toString(),
+ name: this.name,digest: fieldToJSON<Vector<"u8">>(`vector<u8>`, this.digest),
 
 } }
 
  toJSON() { return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() } }
 
- static fromJSONField( field: any ): UpgradeAction { return UpgradeAction.reified( ).new( { name: decodeFromJSONField(String.reified(), field.name), digest: decodeFromJSONField(reified.vector("u8"), field.digest), upgradeTime: decodeFromJSONField("u64", field.upgradeTime) } ) }
+ static fromJSONField( field: any ): UpgradeAction { return UpgradeAction.reified( ).new( { name: decodeFromJSONField(String.reified(), field.name), digest: decodeFromJSONField(reified.vector("u8"), field.digest) } ) }
 
  static fromJSON( json: Record<string, any> ): UpgradeAction { if (json.$typeName !== UpgradeAction.$typeName) { throw new Error("not a WithTwoGenerics json object") };
 

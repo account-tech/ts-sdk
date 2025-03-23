@@ -6,7 +6,7 @@ import * as upgradePolicies from "../../../.gen/account-actions/package-upgrade/
 import * as upgradePoliciesIntents from "../../../.gen/account-actions/package-upgrade-intents/functions";
 import { RestrictAction, UpgradeAction } from "../../../.gen/account-actions/package-upgrade/structs";
 
-import { IntentArgs, IntentFields, RestrictPolicyArgs, UpgradePackageArgs } from "../types";
+import { IntentFields, RestrictPolicyArgs, UpgradePackageArgs } from "../types";
 import { Intent } from "../intent";
 import { Outcome } from "../../outcomes";
 import { CLOCK } from "../../../types";
@@ -36,9 +36,9 @@ export class UpgradePackageIntent extends Intent {
         tx: Transaction,
         accountGenerics: [string, string],
         auth: TransactionObjectInput,
-        outcome: TransactionObjectInput,
         account: string,
-        intentArgs: IntentArgs,
+        params: TransactionObjectInput,
+        outcome: TransactionObjectInput,
         actionArgs: UpgradePackageArgs,
     ): TransactionResult {
         return upgradePoliciesIntents.requestUpgradePackage(
@@ -47,14 +47,10 @@ export class UpgradePackageIntent extends Intent {
             {
                 auth,
                 account,
+                params,
                 outcome,
-                key: intentArgs.key,
-                description: intentArgs.description ?? "",
-                executionTime: intentArgs.executionTimes?.[0] ?? 0n,
-                expirationTime: intentArgs.expirationTime ?? BigInt(Math.floor(Date.now()) + 7 * 24 * 60 * 60 * 1000),
                 packageName: actionArgs.packageName,
                 digest: actionArgs.digest,
-                clock: CLOCK
             }
         );
     }
@@ -150,9 +146,9 @@ export class RestrictPolicyIntent extends Intent {
         tx: Transaction,
         accountGenerics: [string, string],
         auth: TransactionObjectInput,
-        outcome: TransactionObjectInput,
         account: string,
-        intentArgs: IntentArgs,
+        params: TransactionObjectInput,
+        outcome: TransactionObjectInput,
         actionArgs: RestrictPolicyArgs,
     ): TransactionResult {
         return upgradePoliciesIntents.requestRestrictPolicy(
@@ -161,11 +157,8 @@ export class RestrictPolicyIntent extends Intent {
             {
                 auth,
                 account,
+                params,
                 outcome,
-                key: intentArgs.key,
-                description: intentArgs.description ?? "",
-                executionTime: intentArgs.executionTimes?.[0] ?? 0n,
-                expirationTime: intentArgs.expirationTime ?? BigInt(Math.floor(Date.now()) + 7 * 24 * 60 * 60 * 1000),
                 packageName: actionArgs.packageName,
                 policy: actionArgs.policy,
             }

@@ -7,23 +7,7 @@ export interface AddArgs { extensions: TransactionObjectInput; adminCap: Transac
 
 export function add( tx: Transaction, args: AddArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::extensions::add`, arguments: [ obj(tx, args.extensions), obj(tx, args.adminCap), pure(tx, args.name, `${String.$typeName}`), pure(tx, args.addr, `address`), pure(tx, args.version, `u64`) ], }) }
 
-export function length( tx: Transaction, extensions: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::extensions::length`, arguments: [ obj(tx, extensions) ], }) }
-
-export interface RemoveArgs { extensions: TransactionObjectInput; adminCap: TransactionObjectInput; name: string | TransactionArgument }
-
-export function remove( tx: Transaction, args: RemoveArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::extensions::remove`, arguments: [ obj(tx, args.extensions), obj(tx, args.adminCap), pure(tx, args.name, `${String.$typeName}`) ], }) }
-
-export function name( tx: Transaction, extension: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::extensions::name`, arguments: [ obj(tx, extension) ], }) }
-
-export function version( tx: Transaction, history: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::extensions::version`, arguments: [ obj(tx, history) ], }) }
-
-export interface UpdateArgs { extensions: TransactionObjectInput; adminCap: TransactionObjectInput; name: string | TransactionArgument; addr: string | TransactionArgument; version: bigint | TransactionArgument }
-
-export function update( tx: Transaction, args: UpdateArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::extensions::update`, arguments: [ obj(tx, args.extensions), obj(tx, args.adminCap), pure(tx, args.name, `${String.$typeName}`), pure(tx, args.addr, `address`), pure(tx, args.version, `u64`) ], }) }
-
 export function addr( tx: Transaction, history: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::extensions::addr`, arguments: [ obj(tx, history) ], }) }
-
-export function history( tx: Transaction, extension: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::extensions::history`, arguments: [ obj(tx, extension) ], }) }
 
 export interface GetByIdxArgs { extensions: TransactionObjectInput; idx: bigint | TransactionArgument }
 
@@ -37,8 +21,24 @@ export interface GetLatestForNameArgs { extensions: TransactionObjectInput; name
 
 export function getLatestForName( tx: Transaction, args: GetLatestForNameArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::extensions::get_latest_for_name`, arguments: [ obj(tx, args.extensions), pure(tx, args.name, `${String.$typeName}`) ], }) }
 
+export function history( tx: Transaction, extension: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::extensions::history`, arguments: [ obj(tx, extension) ], }) }
+
 export function init( tx: Transaction, ) { return tx.moveCall({ target: `${PUBLISHED_AT}::extensions::init`, arguments: [ ], }) }
 
 export interface IsExtensionArgs { extensions: TransactionObjectInput; name: string | TransactionArgument; addr: string | TransactionArgument; version: bigint | TransactionArgument }
 
 export function isExtension( tx: Transaction, args: IsExtensionArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::extensions::is_extension`, arguments: [ obj(tx, args.extensions), pure(tx, args.name, `${String.$typeName}`), pure(tx, args.addr, `address`), pure(tx, args.version, `u64`) ], }) }
+
+export function length( tx: Transaction, extensions: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::extensions::length`, arguments: [ obj(tx, extensions) ], }) }
+
+export function name( tx: Transaction, extension: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::extensions::name`, arguments: [ obj(tx, extension) ], }) }
+
+export interface RemoveArgs { extensions: TransactionObjectInput; adminCap: TransactionObjectInput; name: string | TransactionArgument }
+
+export function remove( tx: Transaction, args: RemoveArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::extensions::remove`, arguments: [ obj(tx, args.extensions), obj(tx, args.adminCap), pure(tx, args.name, `${String.$typeName}`) ], }) }
+
+export interface UpdateArgs { extensions: TransactionObjectInput; adminCap: TransactionObjectInput; name: string | TransactionArgument; addr: string | TransactionArgument; version: bigint | TransactionArgument }
+
+export function update( tx: Transaction, args: UpdateArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::extensions::update`, arguments: [ obj(tx, args.extensions), obj(tx, args.adminCap), pure(tx, args.name, `${String.$typeName}`), pure(tx, args.addr, `address`), pure(tx, args.version, `u64`) ], }) }
+
+export function version( tx: Transaction, history: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::extensions::version`, arguments: [ obj(tx, history) ], }) }

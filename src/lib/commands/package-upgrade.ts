@@ -4,7 +4,7 @@ import { Transaction, TransactionObjectInput, TransactionResult } from "@mysten/
 /// Deposits and locks an UpgradeCap in the Account
 export function depositUpgradeCap(
     tx: Transaction,
-    accountGenerics: [string, string],
+    configType: string,
     auth: TransactionObjectInput,
     account: TransactionObjectInput,
     upgradeCap: TransactionObjectInput,
@@ -13,7 +13,7 @@ export function depositUpgradeCap(
 ): TransactionResult {
     return lockCap(
         tx,
-        accountGenerics,
+        configType,
         { auth, account, cap: upgradeCap, name: packageName, delayMs: BigInt(delayMs) },
     );
 }

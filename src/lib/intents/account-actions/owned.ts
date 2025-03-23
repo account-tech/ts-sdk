@@ -12,7 +12,7 @@ import { TransferAction } from "../../../.gen/account-actions/transfer/structs";
 import { VestAction } from "../../../.gen/account-actions/vesting/structs";
 import { DepositAction } from "../../../.gen/account-actions/vault/structs";
 
-import { IntentArgs, IntentFields, WithdrawAndTransferArgs, WithdrawAndTransferToVaultArgs, WithdrawAndVestArgs } from "../types";
+import { IntentFields, WithdrawAndTransferArgs, WithdrawAndTransferToVaultArgs, WithdrawAndVestArgs } from "../types";
 import { Intent } from "../intent";
 import { Outcome } from "../../outcomes";
 import { CLOCK } from "../../../types";
@@ -45,9 +45,9 @@ export class WithdrawAndTransferToVaultIntent extends Intent {
         tx: Transaction,
         accountGenerics: [string, string],
         auth: TransactionObjectInput,
-        outcome: TransactionObjectInput,
         account: string,
-        intentArgs: IntentArgs,
+        params: TransactionObjectInput,
+        outcome: TransactionObjectInput,
         actionArgs: WithdrawAndTransferToVaultArgs,
     ): TransactionResult {
         return ownedIntents.requestWithdrawAndTransferToVault(
@@ -56,11 +56,8 @@ export class WithdrawAndTransferToVaultIntent extends Intent {
             {
                 auth,
                 account,
+                params,
                 outcome,
-                key: intentArgs.key,
-                description: intentArgs.description ?? "",
-                executionTime: intentArgs.executionTimes?.[0] ?? 0n,
-                expirationTime: intentArgs.expirationTime ?? 0n,
                 coinId: actionArgs.coinId,
                 coinAmount: actionArgs.coinAmount,
                 vaultName: actionArgs.vaultName,
@@ -100,7 +97,7 @@ export class WithdrawAndTransferToVaultIntent extends Intent {
         );
         owned.deleteWithdraw(
             tx,
-            accountGenerics,
+            accountGenerics[0],
             {
                 expired,
                 account
@@ -134,7 +131,7 @@ export class WithdrawAndTransferToVaultIntent extends Intent {
         );
         owned.deleteWithdraw(
             tx,
-            accountGenerics,
+            accountGenerics[0],
             {
                 expired,
                 account
@@ -154,7 +151,6 @@ export class WithdrawAndTransferToVaultIntent extends Intent {
 
 export class WithdrawAndTransferIntent extends Intent {
     declare args: WithdrawAndTransferArgs;
-    // TODO: get object info from ./objects/owned.ts
 
     static async init(
         client: SuiClient,
@@ -179,9 +175,9 @@ export class WithdrawAndTransferIntent extends Intent {
         tx: Transaction,
         accountGenerics: [string, string],
         auth: TransactionObjectInput,
-        outcome: TransactionObjectInput,
         account: string,
-        intentArgs: IntentArgs,
+        params: TransactionObjectInput,
+        outcome: TransactionObjectInput,
         actionArgs: WithdrawAndTransferArgs,
     ): TransactionResult {
         return ownedIntents.requestWithdrawAndTransfer(
@@ -190,11 +186,8 @@ export class WithdrawAndTransferIntent extends Intent {
             {
                 auth,
                 account,
+                params,
                 outcome,
-                key: intentArgs.key,
-                description: intentArgs.description ?? "",
-                executionTime: intentArgs.executionTimes?.[0] ?? 0n,
-                expirationTime: intentArgs.expirationTime ?? 0n,
                 objectIds: actionArgs.transfers.map(transfer => transfer.objectId),
                 recipients: actionArgs.transfers.map(transfer => transfer.recipient),
             }
@@ -238,7 +231,7 @@ export class WithdrawAndTransferIntent extends Intent {
         for (let i = 0; i < this.args!.transfers.length; i++) {
             owned.deleteWithdraw(
                 tx,
-                accountGenerics,
+                accountGenerics[0],
                 {
                     expired,
                     account
@@ -273,7 +266,7 @@ export class WithdrawAndTransferIntent extends Intent {
         for (let i = 0; i < this.args!.transfers.length; i++) {
             owned.deleteWithdraw(
                 tx,
-                accountGenerics,
+                accountGenerics[0],
                 {
                     expired,
                     account
@@ -317,9 +310,9 @@ export class WithdrawAndVestIntent extends Intent {
         tx: Transaction,
         accountGenerics: [string, string],
         auth: TransactionObjectInput,
-        outcome: TransactionObjectInput,
         account: string,
-        intentArgs: IntentArgs,
+        params: TransactionObjectInput,
+        outcome: TransactionObjectInput,
         actionArgs: WithdrawAndVestArgs,
     ): TransactionResult {
         return ownedIntents.requestWithdrawAndVest(
@@ -328,11 +321,8 @@ export class WithdrawAndVestIntent extends Intent {
             {
                 auth,
                 account,
+                params,
                 outcome,
-                key: intentArgs.key,
-                description: intentArgs.description ?? "",
-                executionTime: intentArgs.executionTimes?.[0] ?? 0n,
-                expirationTime: intentArgs.expirationTime ?? 0n,
                 coinId: actionArgs.coinId,
                 startTimestamp: actionArgs.start,
                 endTimestamp: actionArgs.end,
@@ -373,7 +363,7 @@ export class WithdrawAndVestIntent extends Intent {
         );
         owned.deleteWithdraw(
             tx,
-            accountGenerics,
+            accountGenerics[0],
             {
                 expired,
                 account
@@ -406,7 +396,7 @@ export class WithdrawAndVestIntent extends Intent {
         );
         owned.deleteWithdraw(
             tx,
-            accountGenerics,
+            accountGenerics[0],
             {
                 expired,
                 account
