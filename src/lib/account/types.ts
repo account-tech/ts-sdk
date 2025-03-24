@@ -1,6 +1,4 @@
 import { ACCOUNT_MULTISIG } from "src/types/constants";
-import { Intent } from "../intents";
-import { Managed, Owned } from "../objects";
 import { Profile } from "../user/types";
 
 export type AccountType = typeof AccountTypes[keyof typeof AccountTypes];
@@ -16,8 +14,7 @@ export type AccountData = {
     id: string;
     metadata: Metadata[];
     deps: Dep[];
-    managedAssets: Managed;
-    ownedObjects: Owned;
+    intentsBagId: string;
 }
 
 export type Metadata = {
@@ -37,7 +34,6 @@ export type MultisigData = AccountData & {
     global: Role;
     roles: Record<string, Role>;
     members: MemberProfile[];
-    intents: Intent[];
 }
 
 export type Role = {

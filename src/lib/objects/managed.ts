@@ -3,10 +3,10 @@
 import { KioskClient, Network } from "@mysten/kiosk";
 import { DynamicFieldInfo, SuiClient } from "@mysten/sui/client";
 import { ManagedKeyTypes, ManagedData, Cap, Currency, Kiosk, Vault, Df, Package } from "./types";
-import { processCurrencies } from "./dynamic-fields/currency";
+import { processCurrencies } from "./dynamic-fields/currencies";
 import { processPackages } from "./dynamic-fields/packages";
-import { processVaults } from "./dynamic-fields/vault";
-import { processKiosks } from "./dynamic-fields/kiosk";
+import { processVaults } from "./dynamic-fields/vaults";
+import { processKiosks } from "./dynamic-fields/kiosks";
 
 export class Managed implements ManagedData {
     kioskClient: KioskClient;

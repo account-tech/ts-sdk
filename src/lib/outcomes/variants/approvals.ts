@@ -3,31 +3,32 @@ import { approveIntent, disapproveIntent, executeIntent } from "../../../.gen/ac
 import { CLOCK } from "../../../types/constants";
 import { Outcome } from "../outcome";
 import { IntentStatus } from "src/lib/intents";
+import { Approvals as ApprovalsRaw } from "src/.gen/account-multisig/multisig/structs";
 
 export class Approvals implements Outcome {
-    public status: IntentStatus;
+    status!: IntentStatus;
+    multisig: string;
+    key: string;
+    // Approvals Data
+    totalWeight: number;
+    roleWeight: number;
+    approved: string[];
 
-    constructor(
-        public multisig: string,
-        public key: string,
-        // Approvals Data
-        public totalWeight: number,
-        public roleWeight: number,
-        public approved: string[],
-        // Multisig Data
-        executionTime: bigint,
-        expirationTime: bigint,
-        globalThreshold: number,
-        roleThreshold?: number,
-    ) {
-        this.status = this.computeStatus(
-            totalWeight,
-            roleWeight,
-            executionTime,
-            expirationTime,
-            globalThreshold,
-            roleThreshold,
-        );
+    constructor(multisigId: string, key: string, fields: any) {
+        let approvals = ApprovalsRaw.fromFields(fields);
+        this.multisig = multisigId;
+        this.key = key;
+        this.totalWeight = Number(approvals.totalWeight);
+        this.roleWeight = Number(approvals.roleWeight);
+        this.approved = approvals.approved.contents;
+        // this.status = this.computeStatus(
+        //     totalWeight,
+        //     roleWeight,
+        //     executionTime,
+        //     expirationTime,
+        //     globalThreshold,
+        //     roleThreshold,
+        // );
     }
 
     hasApproved(addr: string): boolean {
@@ -48,7 +49,7 @@ export class Approvals implements Outcome {
         return disapproveIntent(tx, { account: this.multisig, key: this.key });
     }
 
-    constructExecutable(tx: Transaction): TransactionResult {
+    execute(tx: Transaction): TransactionResult {
         return executeIntent(tx, { account: this.multisig, key: this.key, clock: CLOCK });
     }
 
