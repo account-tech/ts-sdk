@@ -4,7 +4,7 @@ import { SDKConfig } from "./types";
 
 export class AccountSDK {
     private config: SDKConfig;
-    
+
     private constructor(
         public client: SuiClient,
         public extensions: Extensions,
@@ -14,10 +14,10 @@ export class AccountSDK {
         public managedAssets: Managed | undefined,
         public ownedObjects: Owned | undefined,
         config: SDKConfig,
-    ) { 
+    ) {
         this.config = config;
     }
-    
+
     static async init(
         network: "mainnet" | "testnet" | "devnet" | "localnet" | string,
         userAddr: string,

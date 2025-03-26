@@ -13,7 +13,7 @@ import { executeTx, MULTISIG, NETWORK, testKeypair } from "./utils";
 
     // ms.reorderMultisigs(tx, ["0x8e7c0b44b9552e2a25c53254c797f69e8cceed71745bca8e39daaad7796fa8f2", "0xd4ab6ea7a1ee3f277b1056d35595a4f2f1ef0fe1a98ed53f176cc545978e9ddb", "0x14c5ea70611c54558ce1b807064a27881cd85241e3b454cb75aef6fa611a96a7"]);
     
-    // ms.depositCap(tx, "0x4571c24c8e47ab2ce9c170d99aa76a619eb1ed989ec38fb94340834da2fc909d::cooler_factory::FactoryOwnerCap", "0x1efa833caaa530a7d8a8669b804224c8963783a29b7385c02f818a099cb609d7");
+    ms.depositCap(tx, "0x2::package::Publisher", "0x290574ad812957bd511a5e2ac642ccbf999ebc25a7d38314723de7b1f5617814");
     // ms.modifyName(tx, "New Name");
     // ms.depositTreasuryCap(tx, "0x1f445b827f5fcc3a2e43d03960afe057bfeb471a49162039b37d9f677c1fbb02::coin::COIN", "0xf58025c2eb61bba18f85ba0047b9f46bf568d0e17c8fb4bc6d7d21a55acbc04a");
     // ms.openKiosk(tx, "Degen");
