@@ -65,7 +65,7 @@ export class Intent {
         return confirmExecution(tx, accountGenerics, { account: this.account!, executable });
     }
 
-    async fetchActions(parentId: string) {
+    async fetchActions(parentId: string): Promise<any[]> {
         // get the actions in each proposal bag
         const { data } = await this.client.getDynamicFields({ parentId });
         // sort actions by ascending order 
@@ -127,7 +127,7 @@ export class Intents {
         intentsBagId: string,
         intentRegistry: Record<string, typeof Intent>,
         outcomeRegistry: Record<string, typeof Outcome>,
-    ) {
+    ): Promise<Intents> {
         const intents = new Intents(client, accountId, intentsBagId, intentRegistry, outcomeRegistry);
         await intents.refresh();
         return intents;
@@ -191,8 +191,8 @@ export class Intents {
         return intents;
     }
 
-    async refresh() {
-        const intents = await this.fetchIntents(this.intentsBagId);
+    async refresh(intentsBagId: string = this.intentsBagId) {
+        const intents = await this.fetchIntents(intentsBagId);
         this.intents = intents.reduce((acc, intent) => {
             acc[intent.fields.key] = intent;
             return acc;
