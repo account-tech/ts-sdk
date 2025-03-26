@@ -1,3 +1,4 @@
+export * from "./account-actions";
 export { Intent, Intents } from "./intent";
 export type {
     IntentFields, IntentArgs, ActionsArgs, IntentStatus,
@@ -9,11 +10,3 @@ export type {
     SpendAndTransferArgs, SpendAndVestArgs,
     UpgradePackageArgs, RestrictPolicyArgs
 } from "./types";
-export { BorrowCapIntent } from "./account-actions/access-control";
-export { ConfigDepsIntent, ToggleUnverifiedAllowedIntent } from "./account-actions/config";
-export { DisableRulesIntent, UpdateMetadataIntent, MintAndTransferIntent, MintAndVestIntent, WithdrawAndBurnIntent } from "./account-actions/currency";
-export { TakeNftsIntent, ListNftsIntent } from "./account-actions/kiosk";
-export { ConfigMultisigIntent } from "./account-actions/multisig";
-export { WithdrawAndTransferToVaultIntent, WithdrawAndVestIntent, WithdrawAndTransferIntent } from "./account-actions/owned";
-export { UpgradePackageIntent, RestrictPolicyIntent } from "./account-actions/package-upgrade";
-export { SpendAndTransferIntent, SpendAndVestIntent } from "./account-actions/vault";

@@ -1,14 +1,11 @@
 import { Transaction, TransactionObjectInput, TransactionResult } from "@mysten/sui/transactions";
 import {
-	Intent,
+	Intent, User, Intents, Owned, Managed, Extensions,
 	OwnedData, ManagedData, AccountPreview,
 	Multisig, Approvals, Member, Threshold, Dep,
 	IntentStatus, ActionsArgs, IntentArgs,
-	ConfigDepsIntent, WithdrawAndBurnIntent, UpdateMetadataIntent, ConfigMultisigIntent,
-	ToggleUnverifiedAllowedIntent, BorrowCapIntent, DisableRulesIntent, MintAndTransferIntent, MintAndVestIntent, 
-	TakeNftsIntent, ListNftsIntent, WithdrawAndTransferToVaultIntent, WithdrawAndTransferIntent, WithdrawAndVestIntent, 
-	UpgradePackageIntent, RestrictPolicyIntent, SpendAndTransferIntent, SpendAndVestIntent,
 } from "./lib";
+import * as AccountActions from "./lib/intents/account-actions";
 import {
 	SUI_FRAMEWORK, MULTISIG_GENERICS, TRANSFER_POLICY_RULES, ACCOUNT_PROTOCOL,
 	TransactionPureInput, DepStatus,
@@ -26,6 +23,25 @@ export class MultisigClient {
 	private constructor(
 		public accountSDK: AccountSDK,
 	) { }
+
+	private get multisig(): Multisig {
+		return this.accountSDK.account as Multisig;
+	}
+	private get extensions(): Extensions {
+		return this.accountSDK.extensions as Extensions;
+	}
+	private get user(): User {
+		return this.accountSDK.user as User;
+	}
+	private get intents(): Intents {
+		return this.accountSDK.intents as Intents;
+	}
+	private get managedAssets(): Managed {
+		return this.accountSDK.managedAssets as Managed;
+	}
+	private get ownedObjects(): Owned {
+		return this.accountSDK.ownedObjects as Owned;
+	}
 
 	static async init(
 		network: "mainnet" | "testnet" | "devnet" | "localnet" | string,
@@ -53,7 +69,7 @@ export class MultisigClient {
 	}
 
 	async switchMultisig(multisigId: string) {
-		await this.accountSDK.account.refresh(multisigId);
+		await this.multisig.refresh(multisigId);
 	}
 
 	/// Creates a multisig with default weights of 1 (1 member = 1 voice)
@@ -65,11 +81,11 @@ export class MultisigClient {
 		globalThreshold?: number,
 	): TransactionResult {
 		// create the user if the user doesn't have one
-		let userId: TransactionPureInput = this.accountSDK.user.id;
+		let userId: TransactionPureInput = this.user.id;
 		let createdUser: TransactionPureInput | null = null;
 		if (userId === "") {
 			if (!newUser) throw new Error("User must create an user before creating a multisig");
-			createdUser = this.accountSDK.user.createUser(tx); // TODO: add optional params for username and avatar 
+			createdUser = this.user.createUser(tx); // TODO: add optional params for username and avatar 
 			userId = tx.moveCall({
 				target: `${SUI_FRAMEWORK}::object::id`,
 				typeArguments: [`${ACCOUNT_PROTOCOL.V1}::user::User`],
@@ -77,30 +93,30 @@ export class MultisigClient {
 			});
 		}
 		// create the multisig
-		const fee = tx.splitCoins(tx.gas, [(this.accountSDK.account as Multisig).fees]);
-		const multisig = (this.accountSDK.account as Multisig)?.newMultisig(tx, fee);
+		const fee = tx.splitCoins(tx.gas, [this.multisig.fees]);
+		const multisig = this.multisig?.newMultisig(tx, fee);
 		// add name
-		const auth = (this.accountSDK.account as Multisig).authenticate(tx, multisig);
+		const auth = this.multisig.authenticate(tx, multisig);
 		commands.replaceMetadata(tx, MULTISIG_CONFIG_TYPE, auth, multisig, ["name"], [name]);
 		// update multisig rules if members are provided
 		if (memberAddresses) {
 			const members = memberAddresses.map((address: string) => ({ address, weight: 1, roles: [] }));
-			members.push({ address: this.accountSDK.user.address!, weight: 1, roles: [] }); // add creator to the members
+			members.push({ address: this.user.address!, weight: 1, roles: [] }); // add creator to the members
 
-			(this.accountSDK.account as Multisig).atomicConfigMultisig(
+			this.multisig.atomicConfigMultisig(
 				tx,
 				{ members, thresholds: { global: globalThreshold ?? 1, roles: [] } },
 				multisig
 			); // atomic intent
 		}
 		// creator register the multisig in his user
-		(this.accountSDK.account as Multisig).joinMultisig(tx, createdUser ? createdUser : userId, multisig);
+		this.multisig.joinMultisig(tx, createdUser ? createdUser : userId, multisig);
 		// send invites to added members
-		memberAddresses?.forEach(address => { (this.accountSDK.account as Multisig).sendInvite(tx, address, multisig) });
+		memberAddresses?.forEach(address => { this.multisig.sendInvite(tx, address, multisig) });
 		// transfer the user if just created
-		if (createdUser) this.accountSDK.user.transferUser(tx, createdUser, this.accountSDK.user.address!);
+		if (createdUser) this.user.transferUser(tx, createdUser, this.user.address!);
 		// share the multisig
-		return (this.accountSDK.account as Multisig)?.shareMultisig(tx, multisig);
+		return this.multisig?.shareMultisig(tx, multisig);
 	}
 
 	/// Factory function to call the appropriate request function
@@ -110,15 +126,15 @@ export class MultisigClient {
 		intentArgs: IntentArgs,
 		actionsArgs: ActionsArgs,
 	): TransactionResult {
-		const auth = (this.accountSDK.account as Multisig).authenticate(tx);
+		const auth = this.multisig.authenticate(tx);
 		const params = Intent.createParams(tx, intentArgs);
-		const outcome = (this.accountSDK.account as Multisig).emptyApprovalsOutcome(tx);
+		const outcome = this.multisig.emptyApprovalsOutcome(tx);
 
 		const intentClass = AccountMultisigIntentRegistry[intentType];
 		const method = intentClass.prototype.request;
-		method.call(intentClass, tx, MULTISIG_GENERICS, auth, (this.accountSDK.account as Multisig).id, params, outcome, actionsArgs);
+		method.call(intentClass, tx, MULTISIG_GENERICS, auth, this.multisig.id, params, outcome, actionsArgs);
 		// directly approve after proposing
-		return (this.accountSDK.account as Multisig).approveIntent(tx, intentArgs.key, (this.accountSDK.account as Multisig).id);
+		return this.multisig.approveIntent(tx, intentArgs.key, this.multisig.id);
 	}
 
 	/// Approves a intent
@@ -126,7 +142,7 @@ export class MultisigClient {
 		tx: Transaction,
 		intentKey: string
 	): TransactionResult {
-		return (this.accountSDK.account as Multisig).approveIntent(tx, intentKey, (this.accountSDK.account as Multisig).id);
+		return this.multisig.approveIntent(tx, intentKey, this.multisig.id);
 	}
 
 	/// Removes approval from a intent
@@ -134,7 +150,7 @@ export class MultisigClient {
 		tx: Transaction,
 		intentKey: string
 	): TransactionResult {
-		return (this.accountSDK.account as Multisig).disapproveIntent(tx, intentKey, (this.accountSDK.account as Multisig).id);
+		return this.multisig.disapproveIntent(tx, intentKey, this.multisig.id);
 	}
 
 	/// Calls the execute function for the intent, approve if not already done
@@ -143,18 +159,18 @@ export class MultisigClient {
 		caller: string,
 		intentKey: string
 	): TransactionResult {
-		const intent = this.accountSDK.intents?.intents?.[intentKey];
+		const intent = this.intents?.intents?.[intentKey];
 		if (!intent) throw new Error("Intent not found");
 
 		(intent.outcome as Approvals).maybeApprove(tx, caller);
-		const executable = (this.accountSDK.account as Multisig).executeIntent(tx, intentKey);
+		const executable = this.multisig.executeIntent(tx, intentKey);
 
 		let result;
 		result = intent.execute(tx, MULTISIG_GENERICS, executable);
 		intent.completeExecution(tx, MULTISIG_GENERICS, executable);
 		// if no more executions scheduled after this one, destroy intent
 		if (intent.fields.executionTimes.length == 1) {
-			result = intent.clearEmpty(tx, MULTISIG_GENERICS, (this.accountSDK.account as Multisig).id, intentKey);
+			result = intent.clearEmpty(tx, MULTISIG_GENERICS, this.multisig.id, intentKey);
 		}
 		return result;
 	}
@@ -164,54 +180,54 @@ export class MultisigClient {
 		tx: Transaction,
 		intentKey: string,
 	) {
-		const intent = this.accountSDK.intents?.intents?.[intentKey];
+		const intent = this.intents?.intents?.[intentKey];
 		if (!intent) throw new Error("Intent not found");
 		if (!intent.hasExpired()) throw new Error("Intent has not expired");
 
-		intent.deleteExpired(tx, MULTISIG_GENERICS, (this.accountSDK.account as Multisig).id, intentKey);
+		intent.deleteExpired(tx, MULTISIG_GENERICS, this.multisig.id, intentKey);
 	}
 
 	acceptInvite(tx: Transaction, invite: TransactionObjectInput): TransactionResult {
-		let user: TransactionObjectInput = this.accountSDK.user.id;
+		let user: TransactionObjectInput = this.user.id;
 		if (user === "") {
-			user = this.accountSDK.user.createUser(tx);
+			user = this.user.createUser(tx);
 		}
-		return this.accountSDK.user.acceptInvite(tx, user, invite);
+		return this.user.acceptInvite(tx, user, invite);
 	}
 
 	refuseInvite(tx: Transaction, invite: TransactionObjectInput): TransactionResult {
-		return this.accountSDK.user.refuseInvite(tx, invite);
+		return this.user.refuseInvite(tx, invite);
 	}
 
 	reorderMultisigs(tx: Transaction, multisigAddrs: string[]) {
-		return this.accountSDK.user.reorderAccounts(tx, this.accountSDK.user.id, AccountTypes.Multisig, multisigAddrs);
+		return this.user.reorderAccounts(tx, this.user.id, AccountTypes.Multisig, multisigAddrs);
 	}
 
 	// === Getters ===
 
 	/// Returns the latest deps from the extensions
 	getLatestExtensions(): Dep[] {
-		return this.accountSDK.extensions.getLatestDeps();
+		return this.extensions.getLatestDeps();
 	}
 
 	getUserProfile(): Profile {
-		return this.accountSDK.user.profile;
+		return this.user.profile;
 	}
 
 	getUserMultisigs(): AccountPreview[] {
-		return this.accountSDK.user.getAccounts(AccountTypes.Multisig);
+		return this.user.getAccounts(AccountTypes.Multisig);
 	}
 
 	getUserInvites(): Invite[] {
-		return this.accountSDK.user.getInvites(AccountTypes.Multisig);
+		return this.user.getInvites(AccountTypes.Multisig);
 	}
 
 	getMultisigName(): string {
-		return (this.accountSDK.account as Multisig).getName();
+		return this.multisig.getName();
 	}
 
 	getMultisigDeps(): Dep[] {
-		return (this.accountSDK.account as Multisig).deps;
+		return this.multisig.deps;
 	}
 
 	/// Returns deps that are in Multisig and in Extensions
@@ -249,18 +265,18 @@ export class MultisigClient {
 
 	getMultisigConfig(): Pick<MultisigData, "global" | "roles" | "members"> {
 		return {
-			global: (this.accountSDK.account as Multisig).global,
-			roles: (this.accountSDK.account as Multisig).roles,
-			members: (this.accountSDK.account as Multisig).members,
+			global: this.multisig.global,
+			roles: this.multisig.roles,
+			members: this.multisig.members,
 		};
 	}
 
 	getIntents(): Record<string, Intent> {
-		return this.accountSDK.intents?.intents ?? {};
+		return this.intents?.intents ?? {};
 	}
 
 	getIntent(key: string): Intent {
-		const intent = this.accountSDK.intents?.intents?.[key];
+		const intent = this.intents?.intents?.[key];
 		if (!intent) throw new Error("Intent not found");
 		return intent;
 	}
@@ -271,24 +287,24 @@ export class MultisigClient {
 
 	canApproveIntent(key: string): boolean {
 		const outcome = this.getIntent(key).outcome as Approvals;
-		return outcome.approved.includes(this.accountSDK.user.address!);
+		return outcome.approved.includes(this.user.address!);
 	}
 
 	/// Returns true if the intent can be executed after potential approval
 	// canExecuteIntent(key: string): boolean {
-	// 	const intent = (this.accountSDK.account as Multisig).intent(key);
+	// 	const intent = this.multisig.intent(key);
 	// 	const outcome = intent?.outcome as Approvals;
-	// 	const member = (this.accountSDK.account as Multisig).member(this.accountSDK.user.address!);
+	// 	const member = this.multisig.member(this.user.address!);
 
-	// 	switch ((this.accountSDK.account as Multisig).intentStatus(key)) {
+	// 	switch (this.multisig.intentStatus(key)) {
 	// 		case IntentStatus.Executable:
 	// 			return true;
 	// 		case IntentStatus.Pending:
 	// 			const hasRole = member.roles.includes(intent.fields.role);
 
 	// 			const thresholdReachedAfterApproval =
-	// 				(outcome.totalWeight + member.weight) >= (this.accountSDK.account as Multisig).global.threshold ||
-	// 				(hasRole ? outcome.roleWeight + member.weight : outcome.roleWeight) >= (this.accountSDK.account as Multisig).roles[intent.fields.role].threshold;
+	// 				(outcome.totalWeight + member.weight) >= this.multisig.global.threshold ||
+	// 				(hasRole ? outcome.roleWeight + member.weight : outcome.roleWeight) >= this.multisig.roles[intent.fields.role].threshold;
 	// 			const executionTimeReached = intent!.fields.executionTimes[0] <= Date.now();
 
 	// 			return thresholdReachedAfterApproval && executionTimeReached;
@@ -298,11 +314,11 @@ export class MultisigClient {
 	// }
 
 	getManagedAssets(): ManagedData {
-		return this.accountSDK.managedAssets?.getData() ?? {} as ManagedData;
+		return this.managedAssets?.getData() ?? {} as ManagedData;
 	}
 
 	getOwnedObjects(): OwnedData {
-		return this.accountSDK.ownedObjects?.getData() ?? {} as OwnedData;
+		return this.ownedObjects?.getData() ?? {} as OwnedData;
 	}
 
 	// === Commands ===
@@ -313,11 +329,11 @@ export class MultisigClient {
 		coinType: string,
 		toSplit: bigint[], // amounts
 	): TransactionResult {
-		const coin = this.accountSDK.ownedObjects?.getCoin(coinType);
+		const coin = this.ownedObjects?.getCoin(coinType);
 		if (!coin || coin.amount < toSplit.reduce((acc, curr) => acc + curr, 0n)) throw new Error("Not enough coins");
 
-		const auth = (this.accountSDK.account as Multisig).authenticate(tx);
-		return commands.mergeAndSplit(tx, MULTISIG_CONFIG_TYPE, coinType, auth, (this.accountSDK.account as Multisig).id, coin.ids.slice(0, 500), toSplit);
+		const auth = this.multisig.authenticate(tx);
+		return commands.mergeAndSplit(tx, MULTISIG_CONFIG_TYPE, coinType, auth, this.multisig.id, coin.ids.slice(0, 500), toSplit);
 	}
 
 	/// Deposits and locks a Cap object in the Account
@@ -326,8 +342,8 @@ export class MultisigClient {
 		capType: string,
 		capObject: TransactionObjectInput,
 	): TransactionResult {
-		const auth = (this.accountSDK.account as Multisig).authenticate(tx);
-		return commands.depositCap(tx, MULTISIG_CONFIG_TYPE, capType, auth, (this.accountSDK.account as Multisig).id, capObject);
+		const auth = this.multisig.authenticate(tx);
+		return commands.depositCap(tx, MULTISIG_CONFIG_TYPE, capType, auth, this.multisig.id, capObject);
 	}
 
 	/// Modifies the name of the Account
@@ -335,16 +351,16 @@ export class MultisigClient {
 		tx: Transaction,
 		newName: string,
 	): TransactionResult {
-		const auth = (this.accountSDK.account as Multisig).authenticate(tx);
-		return commands.replaceMetadata(tx, MULTISIG_CONFIG_TYPE, auth, (this.accountSDK.account as Multisig).id, ["name"], [newName]);
+		const auth = this.multisig.authenticate(tx);
+		return commands.replaceMetadata(tx, MULTISIG_CONFIG_TYPE, auth, this.multisig.id, ["name"], [newName]);
 	}
 
 	/// Updates the verified deps to the latest version
 	updateVerifiedDeps(
 		tx: Transaction,
 	): TransactionResult {
-		const auth = (this.accountSDK.account as Multisig).authenticate(tx);
-		return commands.updateVerifiedDepsToLatest(tx, MULTISIG_CONFIG_TYPE, auth, (this.accountSDK.account as Multisig).id);
+		const auth = this.multisig.authenticate(tx);
+		return commands.updateVerifiedDepsToLatest(tx, MULTISIG_CONFIG_TYPE, auth, this.multisig.id);
 	}
 
 	/// Deposits and locks a TreasuryCap object in the Account
@@ -353,8 +369,8 @@ export class MultisigClient {
 		coinType: string,
 		treasuryCap: TransactionObjectInput,
 	): TransactionResult {
-		const auth = (this.accountSDK.account as Multisig).authenticate(tx);
-		return commands.depositTreasuryCap(tx, MULTISIG_CONFIG_TYPE, coinType, auth, (this.accountSDK.account as Multisig).id, treasuryCap);
+		const auth = this.multisig.authenticate(tx);
+		return commands.depositTreasuryCap(tx, MULTISIG_CONFIG_TYPE, coinType, auth, this.multisig.id, treasuryCap);
 	}
 
 	/// Opens a Kiosk in the Account
@@ -362,8 +378,8 @@ export class MultisigClient {
 		tx: Transaction,
 		kioskName: string,
 	): TransactionResult {
-		const auth = (this.accountSDK.account as Multisig).authenticate(tx);
-		return commands.openKiosk(tx, MULTISIG_CONFIG_TYPE, auth, (this.accountSDK.account as Multisig).id, kioskName);
+		const auth = this.multisig.authenticate(tx);
+		return commands.openKiosk(tx, MULTISIG_CONFIG_TYPE, auth, this.multisig.id, kioskName);
 	}
 
 	/// Places an NFT in a Kiosk managed by the Account
@@ -375,7 +391,7 @@ export class MultisigClient {
 		kioskName: string,
 		nftId: string,
 	): Promise<TransactionResult> {
-		const policies = await this.accountSDK.managedAssets?.kioskClient.getTransferPolicies({ type: nftType });
+		const policies = await this.managedAssets?.kioskClient.getTransferPolicies({ type: nftType });
 		// find a correct policy
 		let policyId = "";
 		if (policies?.length == 0) {
@@ -392,10 +408,10 @@ export class MultisigClient {
 		}
 
 		// get the account kiosk from its name 
-		const accountKioskId = this.accountSDK.managedAssets?.kiosks[kioskName].id;
+		const accountKioskId = this.managedAssets?.kiosks[kioskName].id;
 		if (!accountKioskId) throw new Error("Kiosk not found");
-		const auth = (this.accountSDK.account as Multisig).authenticate(tx);
-		const request = commands.placeInKiosk(tx, MULTISIG_CONFIG_TYPE, nftType, auth, (this.accountSDK.account as Multisig).id, accountKioskId, senderKiosk, senderCap, policyId, kioskName, nftId);
+		const auth = this.multisig.authenticate(tx);
+		const request = commands.placeInKiosk(tx, MULTISIG_CONFIG_TYPE, nftType, auth, this.multisig.id, accountKioskId, senderKiosk, senderCap, policyId, kioskName, nftId);
 		return tx.moveCall({
 			target: `${SUI_FRAMEWORK}::transfer_policy::confirm_request`,
 			typeArguments: [nftType],
@@ -410,13 +426,13 @@ export class MultisigClient {
 		nftId: string,
 	): TransactionResult {
 		// get the account kiosk from its name 
-		const accountKioskId = this.accountSDK.managedAssets?.kiosks[kioskName].id;
+		const accountKioskId = this.managedAssets?.kiosks[kioskName].id;
 		if (!accountKioskId) throw new Error("Kiosk not found");
 		// get the nft type from the nft id
-		const nftType = this.accountSDK.managedAssets?.kiosks[kioskName].items.find(item => item.id === nftId)?.type;
+		const nftType = this.managedAssets?.kiosks[kioskName].items.find(item => item.id === nftId)?.type;
 		if (!nftType) throw new Error("NFT not found in kiosk");
-		const auth = (this.accountSDK.account as Multisig).authenticate(tx);
-		return commands.delistFromKiosk(tx, MULTISIG_CONFIG_TYPE, nftType, auth, (this.accountSDK.account as Multisig).id, accountKioskId, kioskName, nftId);
+		const auth = this.multisig.authenticate(tx);
+		return commands.delistFromKiosk(tx, MULTISIG_CONFIG_TYPE, nftType, auth, this.multisig.id, accountKioskId, kioskName, nftId);
 	}
 
 	/// Withdraws the profits from a Kiosk managed by the Account
@@ -425,10 +441,10 @@ export class MultisigClient {
 		kioskName: string,
 	): TransactionResult {
 		// get the account kiosk from its name 
-		const accountKioskId = this.accountSDK.managedAssets?.kiosks[kioskName].id;
+		const accountKioskId = this.managedAssets?.kiosks[kioskName].id;
 		if (!accountKioskId) throw new Error("Kiosk not found");
-		const auth = (this.accountSDK.account as Multisig).authenticate(tx);
-		return commands.withdrawProfitsFromKiosk(tx, MULTISIG_CONFIG_TYPE, auth, (this.accountSDK.account as Multisig).id, accountKioskId, kioskName);
+		const auth = this.multisig.authenticate(tx);
+		return commands.withdrawProfitsFromKiosk(tx, MULTISIG_CONFIG_TYPE, auth, this.multisig.id, accountKioskId, kioskName);
 	}
 
 	/// Closes an empty Kiosk managed by the Account
@@ -437,10 +453,10 @@ export class MultisigClient {
 		kioskName: string,
 	): TransactionResult {
 		// get the account kiosk from its name 
-		const accountKioskId = this.accountSDK.managedAssets?.kiosks[kioskName].id;
+		const accountKioskId = this.managedAssets?.kiosks[kioskName].id;
 		if (!accountKioskId) throw new Error("Kiosk not found");
-		const auth = (this.accountSDK.account as Multisig).authenticate(tx);
-		return commands.closeKiosk(tx, MULTISIG_CONFIG_TYPE, auth, (this.accountSDK.account as Multisig).id, accountKioskId, kioskName);
+		const auth = this.multisig.authenticate(tx);
+		return commands.closeKiosk(tx, MULTISIG_CONFIG_TYPE, auth, this.multisig.id, accountKioskId, kioskName);
 	}
 
 	/// Deposits and locks an UpgradeCap object in the Account
@@ -449,8 +465,8 @@ export class MultisigClient {
 		packageName: string,
 		upgradeCap: TransactionObjectInput,
 	): TransactionResult {
-		const auth = (this.accountSDK.account as Multisig).authenticate(tx);
-		return commands.depositUpgradeCap(tx, MULTISIG_CONFIG_TYPE, auth, (this.accountSDK.account as Multisig).id, upgradeCap, packageName, 0);
+		const auth = this.multisig.authenticate(tx);
+		return commands.depositUpgradeCap(tx, MULTISIG_CONFIG_TYPE, auth, this.multisig.id, upgradeCap, packageName, 0);
 	}
 
 	/// Opens a Treasury in the Account
@@ -458,8 +474,8 @@ export class MultisigClient {
 		tx: Transaction,
 		treasuryName: string,
 	): TransactionResult {
-		const auth = (this.accountSDK.account as Multisig).authenticate(tx);
-		return commands.openVault(tx, MULTISIG_CONFIG_TYPE, auth, (this.accountSDK.account as Multisig).id, treasuryName);
+		const auth = this.multisig.authenticate(tx);
+		return commands.openVault(tx, MULTISIG_CONFIG_TYPE, auth, this.multisig.id, treasuryName);
 	}
 
 	/// Deposits an object into the Treasury from the caller wallet
@@ -469,8 +485,8 @@ export class MultisigClient {
 		treasuryName: string,
 		coin: TransactionObjectInput,
 	): TransactionResult {
-		const auth = (this.accountSDK.account as Multisig).authenticate(tx);
-		return commands.depositFromWallet(tx, MULTISIG_CONFIG_TYPE, coinType, auth, (this.accountSDK.account as Multisig).id, treasuryName, coin);
+		const auth = this.multisig.authenticate(tx);
+		return commands.depositFromWallet(tx, MULTISIG_CONFIG_TYPE, coinType, auth, this.multisig.id, treasuryName, coin);
 	}
 
 	/// Closes an empty Treasury managed by the Account
@@ -478,8 +494,8 @@ export class MultisigClient {
 		tx: Transaction,
 		treasuryName: string,
 	): TransactionResult {
-		const auth = (this.accountSDK.account as Multisig).authenticate(tx);
-		return commands.closeVault(tx, MULTISIG_CONFIG_TYPE, auth, (this.accountSDK.account as Multisig).id, treasuryName);
+		const auth = this.multisig.authenticate(tx);
+		return commands.closeVault(tx, MULTISIG_CONFIG_TYPE, auth, this.multisig.id, treasuryName);
 	}
 
 	// === Intents ===
@@ -491,21 +507,21 @@ export class MultisigClient {
 		roleThresholds: Threshold[],
 		members: Member[],
 	): TransactionResult {
-		const auth = (this.accountSDK.account as Multisig).authenticate(tx);
+		const auth = this.multisig.authenticate(tx);
 		const params = Intent.createParams(tx, intentArgs);
-		const outcome = (this.accountSDK.account as Multisig).emptyApprovalsOutcome(tx);
+		const outcome = this.multisig.emptyApprovalsOutcome(tx);
 
-		ConfigMultisigIntent.prototype.request(
+		AccountActions.ConfigMultisigIntent.prototype.request(
 			tx,
 			MULTISIG_GENERICS,
 			auth,
-			(this.accountSDK.account as Multisig).id,
+			this.multisig.id,
 			params,
 			outcome,
 			{ members, thresholds: { global: globalThreshold, roles: roleThresholds } },
 		);
 
-		return (this.accountSDK.account as Multisig).approveIntent(tx, intentArgs.key, (this.accountSDK.account as Multisig).id);
+		return this.multisig.approveIntent(tx, intentArgs.key, this.multisig.id);
 	}
 
 	requestConfigDeps(
@@ -513,42 +529,42 @@ export class MultisigClient {
 		intentArgs: IntentArgs,
 		deps: Dep[],
 	): TransactionResult {
-		const auth = (this.accountSDK.account as Multisig).authenticate(tx);
+		const auth = this.multisig.authenticate(tx);
 		const params = Intent.createParams(tx, intentArgs);
-		const outcome = (this.accountSDK.account as Multisig).emptyApprovalsOutcome(tx);
+		const outcome = this.multisig.emptyApprovalsOutcome(tx);
 
-		ConfigDepsIntent.prototype.request(
+		AccountActions.ConfigDepsIntent.prototype.request(
 			tx,
 			MULTISIG_GENERICS,
 			auth,
-			(this.accountSDK.account as Multisig).id,
+			this.multisig.id,
 			params,
 			outcome,
 			{ deps },
 		);
 
-		return (this.accountSDK.account as Multisig).approveIntent(tx, intentArgs.key, (this.accountSDK.account as Multisig).id);
+		return this.multisig.approveIntent(tx, intentArgs.key, this.multisig.id);
 	}
 
 	requestToggleUnverifiedDepsAllowed(
 		tx: Transaction,
 		intentArgs: IntentArgs,
 	): TransactionResult {
-		const auth = (this.accountSDK.account as Multisig).authenticate(tx);
+		const auth = this.multisig.authenticate(tx);
 		const params = Intent.createParams(tx, intentArgs);
-		const outcome = (this.accountSDK.account as Multisig).emptyApprovalsOutcome(tx);
+		const outcome = this.multisig.emptyApprovalsOutcome(tx);
 		
-		ToggleUnverifiedAllowedIntent.prototype.request(
+		AccountActions.ToggleUnverifiedAllowedIntent.prototype.request(
 			tx,
 			MULTISIG_GENERICS,
 			auth,
-			(this.accountSDK.account as Multisig).id,
+			this.multisig.id,
 			params,
 			outcome,
 			{}
 		);
 
-		return (this.accountSDK.account as Multisig).approveIntent(tx, intentArgs.key, (this.accountSDK.account as Multisig).id);
+		return this.multisig.approveIntent(tx, intentArgs.key, this.multisig.id);
 	}
 
 	requestBorrowCap(
@@ -556,21 +572,21 @@ export class MultisigClient {
 		intentArgs: IntentArgs,
 		capType: string,
 	): TransactionResult {
-		const auth = (this.accountSDK.account as Multisig).authenticate(tx);
+		const auth = this.multisig.authenticate(tx);
 		const params = Intent.createParams(tx, intentArgs);
-		const outcome = (this.accountSDK.account as Multisig).emptyApprovalsOutcome(tx);
+		const outcome = this.multisig.emptyApprovalsOutcome(tx);
 
-		BorrowCapIntent.prototype.request(
+		AccountActions.BorrowCapIntent.prototype.request(
 			tx,
 			MULTISIG_GENERICS,
 			auth,
-			(this.accountSDK.account as Multisig).id,
+			this.multisig.id,
 			params,
 			outcome,
 			{ capType },
 		);
 
-		return (this.accountSDK.account as Multisig).approveIntent(tx, intentArgs.key, (this.accountSDK.account as Multisig).id);
+		return this.multisig.approveIntent(tx, intentArgs.key, this.multisig.id);
 	}
 
 	requestDisableRules(
@@ -584,21 +600,21 @@ export class MultisigClient {
 		updateDescription: boolean,
 		updateIcon: boolean,
 	): TransactionResult {
-		const auth = (this.accountSDK.account as Multisig).authenticate(tx);
+		const auth = this.multisig.authenticate(tx);
 		const params = Intent.createParams(tx, intentArgs);
-		const outcome = (this.accountSDK.account as Multisig).emptyApprovalsOutcome(tx);
+		const outcome = this.multisig.emptyApprovalsOutcome(tx);
 
-		DisableRulesIntent.prototype.request(
+		AccountActions.DisableRulesIntent.prototype.request(
 			tx,
 			MULTISIG_GENERICS,
 			auth,
-			(this.accountSDK.account as Multisig).id,
+			this.multisig.id,
 			params,
 			outcome,
 			{ coinType, mint, burn, updateSymbol, updateName, updateDescription, updateIcon },
 		);
 
-		return (this.accountSDK.account as Multisig).approveIntent(tx, intentArgs.key, (this.accountSDK.account as Multisig).id);
+		return this.multisig.approveIntent(tx, intentArgs.key, this.multisig.id);
 	}
 
 	requestUpdateMetadata(
@@ -610,21 +626,21 @@ export class MultisigClient {
 		newDescription: string | null,
 		newIconUrl: string | null,
 	): TransactionResult {
-		const auth = (this.accountSDK.account as Multisig).authenticate(tx);
+		const auth = this.multisig.authenticate(tx);
 		const params = Intent.createParams(tx, intentArgs);
-		const outcome = (this.accountSDK.account as Multisig).emptyApprovalsOutcome(tx);
+		const outcome = this.multisig.emptyApprovalsOutcome(tx);
 
-		UpdateMetadataIntent.prototype.request(
+		AccountActions.UpdateMetadataIntent.prototype.request(
 			tx,
 			MULTISIG_GENERICS,
 			auth,
-			(this.accountSDK.account as Multisig).id,
+			this.multisig.id,
 			params,
 			outcome,
 			{ coinType, newName, newSymbol, newDescription, newIconUrl },
 		);
 
-		return (this.accountSDK.account as Multisig).approveIntent(tx, intentArgs.key, (this.accountSDK.account as Multisig).id);
+		return this.multisig.approveIntent(tx, intentArgs.key, this.multisig.id);
 	}
 
 	requestMintAndTransfer(
@@ -633,21 +649,21 @@ export class MultisigClient {
 		coinType: string,
 		transfers: { amount: bigint, recipient: string }[],
 	): TransactionResult {
-		const auth = (this.accountSDK.account as Multisig).authenticate(tx);
+		const auth = this.multisig.authenticate(tx);
 		const params = Intent.createParams(tx, intentArgs);
-		const outcome = (this.accountSDK.account as Multisig).emptyApprovalsOutcome(tx);
+		const outcome = this.multisig.emptyApprovalsOutcome(tx);
 
-		MintAndTransferIntent.prototype.request(
+		AccountActions.MintAndTransferIntent.prototype.request(
 			tx,
 			MULTISIG_GENERICS,
 			auth,
-			(this.accountSDK.account as Multisig).id,
+			this.multisig.id,
 			params,
 			outcome,
 			{ coinType, transfers },
 		);
 
-		return (this.accountSDK.account as Multisig).approveIntent(tx, intentArgs.key, (this.accountSDK.account as Multisig).id);
+		return this.multisig.approveIntent(tx, intentArgs.key, this.multisig.id);
 	}
 
 	requestMintAndVest(
@@ -659,21 +675,21 @@ export class MultisigClient {
 		end: bigint,
 		recipient: string,
 	): TransactionResult {
-		const auth = (this.accountSDK.account as Multisig).authenticate(tx);
+		const auth = this.multisig.authenticate(tx);
 		const params = Intent.createParams(tx, intentArgs);
-		const outcome = (this.accountSDK.account as Multisig).emptyApprovalsOutcome(tx);
+		const outcome = this.multisig.emptyApprovalsOutcome(tx);
 
-		MintAndVestIntent.prototype.request(
+		AccountActions.MintAndVestIntent.prototype.request(
 			tx,
 			MULTISIG_GENERICS,
 			auth,
-			(this.accountSDK.account as Multisig).id,
+			this.multisig.id,
 			params,
 			outcome,
 			{ coinType, amount, start, end, recipient },
 		);
 
-		return (this.accountSDK.account as Multisig).approveIntent(tx, intentArgs.key, (this.accountSDK.account as Multisig).id);
+		return this.multisig.approveIntent(tx, intentArgs.key, this.multisig.id);
 	}
 
 	requestWithdrawAndBurn(
@@ -682,23 +698,23 @@ export class MultisigClient {
 		coinType: string,
 		amount: bigint,
 	): TransactionResult {
-		const auth = (this.accountSDK.account as Multisig).authenticate(tx);
+		const auth = this.multisig.authenticate(tx);
 		const params = Intent.createParams(tx, intentArgs);
-		const outcome = (this.accountSDK.account as Multisig).emptyApprovalsOutcome(tx);
+		const outcome = this.multisig.emptyApprovalsOutcome(tx);
 
 		const coinId = this.mergeAndSplit(tx, coinType, [amount]);
 
-		WithdrawAndBurnIntent.prototype.request(
+		AccountActions.WithdrawAndBurnIntent.prototype.request(
 			tx,
 			MULTISIG_GENERICS,
 			auth,
-			(this.accountSDK.account as Multisig).id,
+			this.multisig.id,
 			params,
 			outcome,
 			{ coinType, coinId, amount },
 		);
 
-		return (this.accountSDK.account as Multisig).approveIntent(tx, intentArgs.key, (this.accountSDK.account as Multisig).id);
+		return this.multisig.approveIntent(tx, intentArgs.key, this.multisig.id);
 	}
 
 	requestTakeNfts(
@@ -708,21 +724,21 @@ export class MultisigClient {
 		nftIds: string[],
 		recipient: string,
 	): TransactionResult {
-		const auth = (this.accountSDK.account as Multisig).authenticate(tx);
+		const auth = this.multisig.authenticate(tx);
 		const params = Intent.createParams(tx, intentArgs);
-		const outcome = (this.accountSDK.account as Multisig).emptyApprovalsOutcome(tx);
+		const outcome = this.multisig.emptyApprovalsOutcome(tx);
 
-		TakeNftsIntent.prototype.request(
+		AccountActions.TakeNftsIntent.prototype.request(
 			tx,
 			MULTISIG_GENERICS,
 			auth,
-			(this.accountSDK.account as Multisig).id,
+			this.multisig.id,
 			params,
 			outcome,
 			{ kioskName, nftIds, recipient },
 		);
 
-		return (this.accountSDK.account as Multisig).approveIntent(tx, intentArgs.key, (this.accountSDK.account as Multisig).id);
+		return this.multisig.approveIntent(tx, intentArgs.key, this.multisig.id);
 	}
 
 	requestListNfts(
@@ -731,21 +747,21 @@ export class MultisigClient {
 		kioskName: string,
 		listings: { nftId: string, price: bigint }[],
 	): TransactionResult {
-		const auth = (this.accountSDK.account as Multisig).authenticate(tx);
+		const auth = this.multisig.authenticate(tx);
 		const params = Intent.createParams(tx, intentArgs);
-		const outcome = (this.accountSDK.account as Multisig).emptyApprovalsOutcome(tx);
+		const outcome = this.multisig.emptyApprovalsOutcome(tx);
 
-		ListNftsIntent.prototype.request(
+		AccountActions.ListNftsIntent.prototype.request(
 			tx,
 			MULTISIG_GENERICS,
 			auth,
-			(this.accountSDK.account as Multisig).id,
+			this.multisig.id,
 			params,
 			outcome,
 			{ kioskName, listings },
 		);
 
-		return (this.accountSDK.account as Multisig).approveIntent(tx, intentArgs.key, (this.accountSDK.account as Multisig).id);
+		return this.multisig.approveIntent(tx, intentArgs.key, this.multisig.id);
 	}
 
 	requestWithdrawAndTransferToVault(
@@ -755,23 +771,23 @@ export class MultisigClient {
 		coinAmount: bigint,
 		vaultName: string,
 	): TransactionResult {
-		const auth = (this.accountSDK.account as Multisig).authenticate(tx);
+		const auth = this.multisig.authenticate(tx);
 		const params = Intent.createParams(tx, intentArgs);
-		const outcome = (this.accountSDK.account as Multisig).emptyApprovalsOutcome(tx);
+		const outcome = this.multisig.emptyApprovalsOutcome(tx);
 
 		const coinId = this.mergeAndSplit(tx, coinType, [coinAmount]);
 
-		WithdrawAndTransferToVaultIntent.prototype.request(
+		AccountActions.WithdrawAndTransferToVaultIntent.prototype.request(
 			tx,
 			MULTISIG_GENERICS,
 			auth,
-			(this.accountSDK.account as Multisig).id,
+			this.multisig.id,
 			params,
 			outcome,
 			{ coinType, coinId, coinAmount, vaultName },
 		);
 
-		return (this.accountSDK.account as Multisig).approveIntent(tx, intentArgs.key, (this.accountSDK.account as Multisig).id);
+		return this.multisig.approveIntent(tx, intentArgs.key, this.multisig.id);
 	}
 
 	requestWithdrawAndTransfer(
@@ -780,9 +796,9 @@ export class MultisigClient {
 		coinTransfers: { coinType: string, coinAmount: bigint, recipient: string }[], 
 		objTransfers: { objectId: string, recipient: string }[], 
 	): TransactionResult {
-		const auth = (this.accountSDK.account as Multisig).authenticate(tx);
+		const auth = this.multisig.authenticate(tx);
 		const params = Intent.createParams(tx, intentArgs);
-		const outcome = (this.accountSDK.account as Multisig).emptyApprovalsOutcome(tx);
+		const outcome = this.multisig.emptyApprovalsOutcome(tx);
 
 		let transfers: { objectId: TransactionPureInput, recipient: string }[] = objTransfers;
 
@@ -791,17 +807,17 @@ export class MultisigClient {
 			transfers.push({ objectId, recipient: transfer.recipient });
 		});
 
-		WithdrawAndTransferIntent.prototype.request(
+		AccountActions.WithdrawAndTransferIntent.prototype.request(
 			tx,
 			MULTISIG_GENERICS,
 			auth,
-			(this.accountSDK.account as Multisig).id,
+			this.multisig.id,
 			params,
 			outcome,
 			{ transfers },
 		);
 
-		return (this.accountSDK.account as Multisig).approveIntent(tx, intentArgs.key, (this.accountSDK.account as Multisig).id);
+		return this.multisig.approveIntent(tx, intentArgs.key, this.multisig.id);
 	}
 
 	requestWithdrawAndVest(
@@ -813,23 +829,23 @@ export class MultisigClient {
 		end: bigint,
 		recipient: string,
 	): TransactionResult {
-		const auth = (this.accountSDK.account as Multisig).authenticate(tx);
+		const auth = this.multisig.authenticate(tx);
 		const params = Intent.createParams(tx, intentArgs);
-		const outcome = (this.accountSDK.account as Multisig).emptyApprovalsOutcome(tx);
+		const outcome = this.multisig.emptyApprovalsOutcome(tx);
 
 		const coinId = this.mergeAndSplit(tx, coinType, [coinAmount]);
 
-		WithdrawAndVestIntent.prototype.request(
+		AccountActions.WithdrawAndVestIntent.prototype.request(
 			tx,
 			MULTISIG_GENERICS,
 			auth,
-			(this.accountSDK.account as Multisig).id,
+			this.multisig.id,
 			params,
 			outcome,
 			{ coinId, start, end, recipient },
 		);
 
-		return (this.accountSDK.account as Multisig).approveIntent(tx, intentArgs.key, (this.accountSDK.account as Multisig).id);
+		return this.multisig.approveIntent(tx, intentArgs.key, this.multisig.id);
 	}
 
 	requestUpgradePackage(
@@ -838,21 +854,21 @@ export class MultisigClient {
 		packageName: string,
 		digest: number[],
 	): TransactionResult {
-		const auth = (this.accountSDK.account as Multisig).authenticate(tx);
+		const auth = this.multisig.authenticate(tx);
 		const params = Intent.createParams(tx, intentArgs);
-		const outcome = (this.accountSDK.account as Multisig).emptyApprovalsOutcome(tx);
+		const outcome = this.multisig.emptyApprovalsOutcome(tx);
 
-		UpgradePackageIntent.prototype.request(
+		AccountActions.UpgradePackageIntent.prototype.request(
 			tx,
 			MULTISIG_GENERICS,
 			auth,
-			(this.accountSDK.account as Multisig).id,
+			this.multisig.id,
 			params,
 			outcome,
 			{ packageName, digest },
 		);
 
-		return (this.accountSDK.account as Multisig).approveIntent(tx, intentArgs.key, (this.accountSDK.account as Multisig).id);
+		return this.multisig.approveIntent(tx, intentArgs.key, this.multisig.id);
 	}
 
 	requestRestrictPolicy(
@@ -861,21 +877,21 @@ export class MultisigClient {
 		packageName: string,
 		policy: number,
 	): TransactionResult {
-		const auth = (this.accountSDK.account as Multisig).authenticate(tx);
+		const auth = this.multisig.authenticate(tx);
 		const params = Intent.createParams(tx, intentArgs);
-		const outcome = (this.accountSDK.account as Multisig).emptyApprovalsOutcome(tx);
+		const outcome = this.multisig.emptyApprovalsOutcome(tx);
 
-		RestrictPolicyIntent.prototype.request(
+		AccountActions.RestrictPolicyIntent.prototype.request(
 			tx,
 			MULTISIG_GENERICS,
 			auth,
-			(this.accountSDK.account as Multisig).id,
+			this.multisig.id,
 			params,
 			outcome,
 			{ packageName, policy },
 		);
 
-		return (this.accountSDK.account as Multisig).approveIntent(tx, intentArgs.key, (this.accountSDK.account as Multisig).id);
+		return this.multisig.approveIntent(tx, intentArgs.key, this.multisig.id);
 	}
 
 	requestSpendAndTransfer(
@@ -885,21 +901,21 @@ export class MultisigClient {
 		coinType: string,
 		transfers: { amount: bigint, recipient: string }[],
 	): TransactionResult {
-		const auth = (this.accountSDK.account as Multisig).authenticate(tx);
+		const auth = this.multisig.authenticate(tx);
 		const params = Intent.createParams(tx, intentArgs);
-		const outcome = (this.accountSDK.account as Multisig).emptyApprovalsOutcome(tx);
+		const outcome = this.multisig.emptyApprovalsOutcome(tx);
 
-		SpendAndTransferIntent.prototype.request(
+		AccountActions.SpendAndTransferIntent.prototype.request(
 			tx,
 			MULTISIG_GENERICS,
 			auth,
-			(this.accountSDK.account as Multisig).id,
+			this.multisig.id,
 			params,
 			outcome,
 			{ treasuryName, coinType, transfers },
 		);
 
-		return (this.accountSDK.account as Multisig).approveIntent(tx, intentArgs.key, (this.accountSDK.account as Multisig).id);
+		return this.multisig.approveIntent(tx, intentArgs.key, this.multisig.id);
 	}
 
 	requestSpendAndVest(
@@ -912,21 +928,21 @@ export class MultisigClient {
 		end: bigint,
 		recipient: string,
 	): TransactionResult {
-		const auth = (this.accountSDK.account as Multisig).authenticate(tx);
+		const auth = this.multisig.authenticate(tx);
 		const params = Intent.createParams(tx, intentArgs);
-		const outcome = (this.accountSDK.account as Multisig).emptyApprovalsOutcome(tx);
+		const outcome = this.multisig.emptyApprovalsOutcome(tx);
 
-		SpendAndVestIntent.prototype.request(
+		AccountActions.SpendAndVestIntent.prototype.request(
 			tx,
 			MULTISIG_GENERICS,
 			auth,
-			(this.accountSDK.account as Multisig).id,
+			this.multisig.id,
 			params,
 			outcome,
 			{ treasuryName, coinType, amount, start, end, recipient },
 		);
 
-		return (this.accountSDK.account as Multisig).approveIntent(tx, intentArgs.key, (this.accountSDK.account as Multisig).id);
+		return this.multisig.approveIntent(tx, intentArgs.key, this.multisig.id);
 	}
 }
 

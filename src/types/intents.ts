@@ -1,13 +1,6 @@
 import { ACCOUNT_PROTOCOL, ACCOUNT_MULTISIG, ACCOUNT_ACTIONS } from "./constants";
 import { Intent } from "../lib";
-import { BorrowCapIntent } from "../lib/intents/account-actions/access-control";
-import { ConfigDepsIntent, ToggleUnverifiedAllowedIntent } from "../lib/intents/account-actions/config";
-import { DisableRulesIntent, UpdateMetadataIntent, MintAndTransferIntent, MintAndVestIntent, WithdrawAndBurnIntent } from "../lib/intents/account-actions/currency";
-import { TakeNftsIntent, ListNftsIntent } from "../lib/intents/account-actions/kiosk";
-import { ConfigMultisigIntent } from "../lib/intents/account-actions/multisig";
-import { WithdrawAndTransferToVaultIntent, WithdrawAndVestIntent, WithdrawAndTransferIntent } from "../lib/intents/account-actions/owned";
-import { UpgradePackageIntent, RestrictPolicyIntent } from "../lib/intents/account-actions/package-upgrade";
-import { SpendAndTransferIntent, SpendAndVestIntent } from "../lib/intents/account-actions/vault";
+import * as AccountActions from "../lib/intents/account-actions";
 
 // Composable types
 
@@ -58,28 +51,28 @@ export const AccountMultisigIntentTypes = {
 } as const;
 
 export const AccountMultisigIntentRegistry: Record<AccountMultisigIntentType, typeof Intent> = {
-    [AccountMultisigIntentTypes.ConfigDeps]: ConfigDepsIntent,
-    [AccountMultisigIntentTypes.ToggleUnverifiedAllowed]: ToggleUnverifiedAllowedIntent,
-    [AccountMultisigIntentTypes.ConfigMultisig]: ConfigMultisigIntent,
+    [AccountMultisigIntentTypes.ConfigDeps]: AccountActions.ConfigDepsIntent,
+    [AccountMultisigIntentTypes.ToggleUnverifiedAllowed]: AccountActions.ToggleUnverifiedAllowedIntent,
+    [AccountMultisigIntentTypes.ConfigMultisig]: AccountActions.ConfigMultisigIntent,
 
-    [AccountMultisigIntentTypes.BorrowCap]: BorrowCapIntent,
+    [AccountMultisigIntentTypes.BorrowCap]: AccountActions.BorrowCapIntent,
 
-    [AccountMultisigIntentTypes.DisableRules]: DisableRulesIntent,
-    [AccountMultisigIntentTypes.UpdateMetadata]: UpdateMetadataIntent,
-    [AccountMultisigIntentTypes.MintAndTransfer]: MintAndTransferIntent,
-    [AccountMultisigIntentTypes.MintAndVest]: MintAndVestIntent,
-    [AccountMultisigIntentTypes.WithdrawAndBurn]: WithdrawAndBurnIntent,
+    [AccountMultisigIntentTypes.DisableRules]: AccountActions.DisableRulesIntent,
+    [AccountMultisigIntentTypes.UpdateMetadata]: AccountActions.UpdateMetadataIntent,
+    [AccountMultisigIntentTypes.MintAndTransfer]: AccountActions.MintAndTransferIntent,
+    [AccountMultisigIntentTypes.MintAndVest]: AccountActions.MintAndVestIntent,
+    [AccountMultisigIntentTypes.WithdrawAndBurn]: AccountActions.WithdrawAndBurnIntent,
 
-    [AccountMultisigIntentTypes.TakeNfts]: TakeNftsIntent,
-    [AccountMultisigIntentTypes.ListNfts]: ListNftsIntent,
+    [AccountMultisigIntentTypes.TakeNfts]: AccountActions.TakeNftsIntent,
+    [AccountMultisigIntentTypes.ListNfts]: AccountActions.ListNftsIntent,
 
-    [AccountMultisigIntentTypes.WithdrawAndTransferToVault]: WithdrawAndTransferToVaultIntent,
-    [AccountMultisigIntentTypes.WithdrawAndTransfer]: WithdrawAndTransferIntent,
-    [AccountMultisigIntentTypes.WithdrawAndVest]: WithdrawAndVestIntent,
+    [AccountMultisigIntentTypes.WithdrawAndTransferToVault]: AccountActions.WithdrawAndTransferToVaultIntent,
+    [AccountMultisigIntentTypes.WithdrawAndTransfer]: AccountActions.WithdrawAndTransferIntent,
+    [AccountMultisigIntentTypes.WithdrawAndVest]: AccountActions.WithdrawAndVestIntent,
 
-    [AccountMultisigIntentTypes.UpgradePackage]: UpgradePackageIntent,
-    [AccountMultisigIntentTypes.RestrictPolicy]: RestrictPolicyIntent,
+    [AccountMultisigIntentTypes.UpgradePackage]: AccountActions.UpgradePackageIntent,
+    [AccountMultisigIntentTypes.RestrictPolicy]: AccountActions.RestrictPolicyIntent,
 
-    [AccountMultisigIntentTypes.SpendAndTransfer]: SpendAndTransferIntent,
-    [AccountMultisigIntentTypes.SpendAndVest]: SpendAndVestIntent,
+    [AccountMultisigIntentTypes.SpendAndTransfer]: AccountActions.SpendAndTransferIntent,
+    [AccountMultisigIntentTypes.SpendAndVest]: AccountActions.SpendAndVestIntent,
 } as const;
