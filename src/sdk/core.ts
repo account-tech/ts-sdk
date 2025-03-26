@@ -30,7 +30,7 @@ export class AccountSDK {
         const extensions = await Extensions.init(client);
         const user = await User.init(client, userAddr);
 
-        const account = new Account(client);
+        const account = new config.accountType(client);
         await account.init(accountId);
 
         let intents: Intents | undefined;

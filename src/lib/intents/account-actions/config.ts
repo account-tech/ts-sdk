@@ -136,19 +136,13 @@ export class ConfigDepsIntent extends Intent {
 export class ToggleUnverifiedAllowedIntent extends Intent {
     declare args: ToggleUnverifiedAllowedArgs;
 
-    static async init(
-        client: SuiClient,
-        account: string,
-        outcome: Outcome,
-        fields: IntentFields,
-    ): Promise<ToggleUnverifiedAllowedIntent> {
-        const intent = new ToggleUnverifiedAllowedIntent(client, account, outcome, fields);
+    async init() {
+        const intent = new ToggleUnverifiedAllowedIntent(this.client, this.account, this.outcome, this.fields);
         // resolve actions
-        const actions = await intent.fetchActions(fields.actionsId);
+        const actions = await intent.fetchActions(this.fields.actionsId);
         ToggleUnverifiedAllowedAction.fromFieldsWithTypes(actions[0]);
 
         intent.args = {};
-        return intent;
     }
 
     request(

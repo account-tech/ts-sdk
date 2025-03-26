@@ -159,30 +159,29 @@ export class Intents {
             intentsDfs.push(...batchResults);
         }
         const intents = await Promise.all(intentsDfs.map(async (df: any) => {
-            const intentRaw = (df.data?.content as any).fields.value;
-            
-            const outcomeType = this.outcomeRegistry[intentRaw.outcome.type.name];
+            const intentRaw = (df.data?.content as any).fields.value.fields;
+            const outcomeType = this.outcomeRegistry[intentRaw.outcome.type];
             if (!outcomeType) {
-                throw new Error(`Outcome type ${intentRaw.outcome.type.name} not found`);
+                throw new Error(`Outcome type ${intentRaw.outcome.type} not found`);
             }
             const outcome = new outcomeType(this.accountId, intentRaw.key, intentRaw.outcome);
             
             const fields: IntentFields = {
-                type: intentRaw.type.name,
+                type_: intentRaw.type_.fields.name,
                 key: intentRaw.key,
                 description: intentRaw.description,
                 account: intentRaw.account,
                 creator: intentRaw.creator,
-                creationTime: intentRaw.creationTime,
-                executionTimes: intentRaw.executionTimes,
-                expirationTime: intentRaw.expirationTime,
+                creationTime: BigInt(intentRaw.creation_time),
+                executionTimes: intentRaw.execution_times.map((time: any) => BigInt(time)),
+                expirationTime: BigInt(intentRaw.expiration_time),
                 role: intentRaw.role,
-                actionsId: intentRaw.actions.id,
+                actionsId: intentRaw.actions.fields.id.id,
             }
-
-            let intentType = this.intentRegistry[fields.type];
+            
+            let intentType = this.intentRegistry[fields.type_];
             if (!intentType) {
-                throw new Error(`Intent type ${fields.type} not found`);
+                throw new Error(`Intent type ${fields.type_} not registered`);
             }
             let intent = new intentType(this.client, this.accountId, outcome, fields);
             await intent.init();

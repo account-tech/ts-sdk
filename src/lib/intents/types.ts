@@ -7,7 +7,7 @@ export type IntentStatus = {
 }
 
 export type IntentFields = {
-    type: string;
+    type_: string;
     key: string;
     description: string;
     account: string;

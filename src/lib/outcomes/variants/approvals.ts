@@ -6,7 +6,7 @@ import { IntentStatus } from "src/lib/intents";
 import { Approvals as ApprovalsRaw } from "src/.gen/account-multisig/multisig/structs";
 
 export class Approvals implements Outcome {
-    status!: IntentStatus;
+    status!: IntentStatus; // TODO: add status
     multisig: string;
     key: string;
     // Approvals Data
@@ -15,7 +15,7 @@ export class Approvals implements Outcome {
     approved: string[];
 
     constructor(multisigId: string, key: string, fields: any) {
-        let approvals = ApprovalsRaw.fromFields(fields);
+        let approvals = ApprovalsRaw.fromFieldsWithTypes(fields);
         this.multisig = multisigId;
         this.key = key;
         this.totalWeight = Number(approvals.totalWeight);
