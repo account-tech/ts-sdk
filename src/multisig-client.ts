@@ -1,7 +1,7 @@
 import { Transaction, TransactionObjectInput, TransactionResult } from "@mysten/sui/transactions";
 import {
 	Intent, User, Intents, Owned, Managed, Extensions,
-	OwnedData, AccountPreview, Currencies, Kiosks, Vaults, Packages,
+	OwnedData, AccountPreview, Currencies, Kiosks, Vaults, Packages, Caps,
 	Multisig, Approvals, Member, Threshold, Dep,
 	IntentStatus, ActionsArgs, IntentArgs,
 } from "./lib";
@@ -42,6 +42,9 @@ export class MultisigClient {
 	get ownedObjects(): Owned {
 		return this.accountSDK.ownedObjects as Owned;
 	}
+	get caps(): Caps {
+		return this.managedAssets.assets["caps"] as Caps;
+	}
 	get currencies(): Currencies {
 		return this.managedAssets.assets["currencies"] as Currencies;
 	}
@@ -67,7 +70,7 @@ export class MultisigClient {
 			{
 				accountType: Multisig,
 				ownedObjects: true,
-				assetRegistry: [Currencies, Kiosks, Packages, Vaults],
+				assetRegistry: [Caps, Currencies, Kiosks, Packages, Vaults],
 				intentRegistry: AccountMultisigIntentRegistry,
 				outcomeRegistry: MultisigOutcomeRegistry,
 			}
