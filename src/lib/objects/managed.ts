@@ -12,11 +12,6 @@ export class Asset {
     keys: string[] = [];
     dfs: DynamicFieldInfo[] = [];
     assets: Record<string, any> = {}; // name -> asset struct
-    // caps: Cap[] = []; // cap types
-    // currencies: Record<string, Currency> = {}; // coinType -> currency
-    // kiosks: Record<string, Kiosk> = {}; // name -> Kiosk
-    // vaults: Record<string, Vault> = {}; // coinType -> Vault
-    // packages: Record<string, Package> = {}; // name -> packageId
 
     constructor(client: SuiClient, dfs: DynamicFieldInfo[]) {
         this.client = client;

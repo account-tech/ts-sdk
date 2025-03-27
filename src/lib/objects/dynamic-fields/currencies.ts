@@ -14,20 +14,20 @@ export class Currencies extends Asset {
         const dfIds = this.dfs.map(df => df.objectId);
         // Fetch all objects in one batch
         // Process in batches of 50 due to API limitations
-        const objects = [];
+        const dfContents = [];
         for (let i = 0; i < dfIds.length; i += 50) {
             const batch = dfIds.slice(i, i + 50);
             const batchResults = await this.client.multiGetObjects({
                 ids: batch,
                 options: { showContent: true }
             });
-            objects.push(...batchResults);
+            dfContents.push(...batchResults);
         }
     
         // Create lookup maps
         const coinTypeToCapRules: Record<string, { cap: SuiMoveObject | null, rules: SuiMoveObject | null }> = {};
     
-        objects.forEach(obj => {
+        dfContents.forEach(obj => {
             if (!obj.data?.content) return;
             const moveObj = obj.data.content as SuiMoveObject;
             if (moveObj.type?.includes('CurrencyRules')) {

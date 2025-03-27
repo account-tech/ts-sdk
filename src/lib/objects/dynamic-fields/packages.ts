@@ -14,20 +14,20 @@ export class Packages extends Asset {
         const allIds = this.dfs.map(df => df.objectId);
     
         // Process in batches of 50 due to API limitations
-        const objects = [];
+        const dfContents = [];
         for (let i = 0; i < allIds.length; i += 50) {
             const batch = allIds.slice(i, i + 50);
             const batchResults = await this.client.multiGetObjects({
                 ids: batch,
                 options: { showContent: true }
             });
-            objects.push(...batchResults);
+            dfContents.push(...batchResults);
         }
     
         // Create lookup maps
         const nameToCapRules: Record<string, { cap: SuiMoveObject | null, rules: SuiMoveObject | null }> = {};
     
-        objects.forEach(obj => {
+        dfContents.forEach(obj => {
             if (!obj.data?.content) return;
             const moveObj = obj.data.content as SuiMoveObject;
             if (moveObj.type?.includes('UpgradeRules')) {

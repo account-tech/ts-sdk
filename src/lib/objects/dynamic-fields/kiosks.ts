@@ -14,19 +14,19 @@ export class Kiosks extends Asset {
     
         // First get all kiosk cap objects to get kiosk IDs
         // Process in batches of 50 due to API limitations
-        const kioskCapObjs = [];
+        const dfContents = [];
         for (let i = 0; i < dfIds.length; i += 50) {
             const batch = dfIds.slice(i, i + 50);
             const batchResults = await this.client.multiGetObjects({
                 ids: batch,
                 options: { showContent: true }
             });
-            kioskCapObjs.push(...batchResults);
+            dfContents.push(...batchResults);
         }
     
         // Map cap IDs to kiosk IDs
         const capToKioskId: Record<string, string> = {};
-        kioskCapObjs.forEach(obj => {
+        dfContents.forEach(obj => {
             if (!obj.data?.content) return;
             const moveObj = obj.data.content as SuiMoveObject;
             const capId = (moveObj.fields as any).id.id;
