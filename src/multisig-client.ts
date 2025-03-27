@@ -1,6 +1,6 @@
 import { Transaction, TransactionObjectInput, TransactionResult } from "@mysten/sui/transactions";
 import {
-	Intent, User, Intents, Owned, Managed, Extensions,
+	Intent, User, Owned, Extensions, Asset,
 	OwnedData, AccountPreview, Currencies, Kiosks, Vaults, Packages, Caps,
 	Multisig, Approvals, Member, Threshold, Dep,
 	IntentStatus, ActionsArgs, IntentArgs,
@@ -16,7 +16,7 @@ import * as commands from "./lib/commands";
 import { AccountTypes, MultisigData } from "./lib/account/types";
 import { Invite, Profile } from "./lib/user/types";
 import { AccountSDK } from "./sdk";
-import { AccountMultisigIntentRegistry, MultisigOutcomeRegistry } from "./types";
+import { AccountMultisigIntentRegistry } from "./types";
 
 export class MultisigClient {
 
@@ -33,29 +33,29 @@ export class MultisigClient {
 	get user(): User {
 		return this.accountSDK.user as User;
 	}
-	get intents(): Intents {
-		return this.accountSDK.intents as Intents;
-	}
-	get managedAssets(): Managed {
-		return this.accountSDK.managedAssets as Managed;
+	get intents(): Record<string, Intent> {
+		return this.accountSDK.intents?.intents ?? {} as Record<string, Intent>;
 	}
 	get ownedObjects(): Owned {
 		return this.accountSDK.ownedObjects as Owned;
 	}
+	get managedAssets(): Record<string, Asset> {
+		return this.accountSDK.managedAssets?.assets ?? {} as Record<string, Asset>;
+	}
 	get caps(): Caps {
-		return this.managedAssets.assets["caps"] as Caps;
+		return this.managedAssets["caps"] as Caps;
 	}
 	get currencies(): Currencies {
-		return this.managedAssets.assets["currencies"] as Currencies;
+		return this.managedAssets["currencies"] as Currencies;
 	}
 	get kiosks(): Kiosks {
-		return this.managedAssets.assets["kiosks"] as Kiosks;
+		return this.managedAssets["kiosks"] as Kiosks;
 	}
 	get packages(): Packages {
-		return this.managedAssets.assets["packages"] as Packages;
+		return this.managedAssets["packages"] as Packages;
 	}
 	get vaults(): Vaults {
-		return this.managedAssets.assets["vaults"] as Vaults;
+		return this.managedAssets["vaults"] as Vaults;
 	}
 
 	static async init(
@@ -72,7 +72,7 @@ export class MultisigClient {
 				ownedObjects: true,
 				assetRegistry: [Caps, Currencies, Kiosks, Packages, Vaults],
 				intentRegistry: AccountMultisigIntentRegistry,
-				outcomeRegistry: MultisigOutcomeRegistry,
+				outcomeRegistry: [Approvals],
 			}
 		);
 		const msClient = new MultisigClient(accountSDK);
@@ -174,7 +174,7 @@ export class MultisigClient {
 		caller: string,
 		intentKey: string
 	): TransactionResult {
-		const intent = this.intents?.intents?.[intentKey];
+		const intent = this.intents[intentKey];
 		if (!intent) throw new Error("Intent not found");
 
 		(intent.outcome as Approvals).maybeApprove(tx, caller);
@@ -195,7 +195,7 @@ export class MultisigClient {
 		tx: Transaction,
 		intentKey: string,
 	) {
-		const intent = this.intents?.intents?.[intentKey];
+		const intent = this.intents[intentKey];
 		if (!intent) throw new Error("Intent not found");
 		if (!intent.hasExpired()) throw new Error("Intent has not expired");
 
@@ -286,12 +286,8 @@ export class MultisigClient {
 		};
 	}
 
-	getIntents(): Record<string, Intent> {
-		return this.intents?.intents ?? {};
-	}
-
 	getIntent(key: string): Intent {
-		const intent = this.intents?.intents?.[key];
+		const intent = this.intents[key];
 		if (!intent) throw new Error("Intent not found");
 		return intent;
 	}

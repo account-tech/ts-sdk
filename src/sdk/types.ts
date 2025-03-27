@@ -6,5 +6,5 @@ export interface SDKConfig {
     ownedObjects: boolean; // e.g. true, false
     assetRegistry: Array<typeof Asset>; // Asset classes
     intentRegistry: Record<string, typeof Intent>; // TypeName -> IntentClass
-    outcomeRegistry: Record<string, typeof Outcome>; // TypeName -> OutcomeClass
+    outcomeRegistry: Array<typeof Outcome>; // Outcome classes
 }

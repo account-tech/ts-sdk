@@ -107,7 +107,7 @@ export class Intent {
 
 export class Intents {
     private intentRegistry: Record<string, typeof Intent>;
-    private outcomeRegistry: Record<string, typeof Outcome>;
+    private outcomeRegistry: Array<typeof Outcome>;
     intents: Record<string, Intent> = {};
 
     private constructor(
@@ -115,7 +115,7 @@ export class Intents {
         public accountId: string,
         public intentsBagId: string,
         intentRegistry: Record<string, typeof Intent>,
-        outcomeRegistry: Record<string, typeof Outcome>,
+        outcomeRegistry: Array<typeof Outcome>,
     ) { 
         this.intentRegistry = intentRegistry;
         this.outcomeRegistry = outcomeRegistry;
@@ -126,7 +126,7 @@ export class Intents {
         accountId: string,
         intentsBagId: string,
         intentRegistry: Record<string, typeof Intent>,
-        outcomeRegistry: Record<string, typeof Outcome>,
+        outcomeRegistry: Array<typeof Outcome>,
     ): Promise<Intents> {
         const intents = new Intents(client, accountId, intentsBagId, intentRegistry, outcomeRegistry);
         await intents.refresh();
@@ -160,7 +160,7 @@ export class Intents {
         }
         const intents = await Promise.all(intentsDfs.map(async (df: any) => {
             const intentRaw = (df.data?.content as any).fields.value.fields;
-            const outcomeType = this.outcomeRegistry[intentRaw.outcome.type];
+            const outcomeType = this.outcomeRegistry.find(outcome => outcome.type === intentRaw.outcome.type);
             if (!outcomeType) {
                 throw new Error(`Outcome type ${intentRaw.outcome.type} not found`);
             }

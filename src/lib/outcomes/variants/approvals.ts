@@ -1,11 +1,13 @@
 import { Transaction, TransactionResult } from "@mysten/sui/transactions";
 import { approveIntent, disapproveIntent, executeIntent } from "../../../.gen/account-multisig/multisig/functions";
-import { CLOCK } from "../../../types/constants";
+import { ACCOUNT_MULTISIG, CLOCK } from "../../../types/constants";
 import { Outcome } from "../outcome";
 import { IntentStatus } from "src/lib/intents";
 import { Approvals as ApprovalsRaw } from "src/.gen/account-multisig/multisig/structs";
 
 export class Approvals implements Outcome {
+    static type = `${ACCOUNT_MULTISIG.V1}::multisig::Approvals`;
+    
     status!: IntentStatus; // TODO: add status
     multisig: string;
     key: string;
