@@ -1,6 +1,5 @@
 /// Managed assets are objects added as dynamic fields with the different interfaces
 
-import { KioskClient, Network } from "@mysten/kiosk";
 import { DynamicFieldInfo, SuiClient } from "@mysten/sui/client";
 
 export interface Asset {
@@ -11,7 +10,7 @@ export class Asset {
     client: SuiClient;
     type: string = "";
     keys: string[] = [];
-    dfIds: string[] = [];
+    dfs: DynamicFieldInfo[] = [];
     assets: Record<string, any> = {}; // name -> asset struct
     // caps: Cap[] = []; // cap types
     // currencies: Record<string, Currency> = {}; // coinType -> currency
@@ -21,13 +20,13 @@ export class Asset {
 
     constructor(client: SuiClient, dfs: DynamicFieldInfo[]) {
         this.client = client;
-        this.dfIds = dfs.filter(df => this.keys.some(key => df.name.type.includes(key))).map(df => df.objectId);
+        this.dfs = dfs.filter(df => this.keys.some(key => df.name.type.includes(key)));
     }
 }
 
 export class Managed {
     private assetRegistry: Array<typeof Asset>;
-    kioskClient: KioskClient;
+    client: SuiClient;
     accountId: string;
     assets: Record<string, Asset> = {};
 
@@ -36,7 +35,7 @@ export class Managed {
         accountId: string,
         assetRegistry: Array<typeof Asset>,
     ) {
-        this.kioskClient = new KioskClient({ client, network: Network.TESTNET });
+        this.client = client;
         this.assetRegistry = assetRegistry;
         this.accountId = accountId;
     }
@@ -61,7 +60,7 @@ export class Managed {
         let nextCursor: string | null = null;
         let hasNextPage = true;
         while (hasNextPage) {
-            ({ data, nextCursor, hasNextPage } = await this.kioskClient.client.getDynamicFields({
+            ({ data, nextCursor, hasNextPage } = await this.client.getDynamicFields({
                 parentId: accountId,
                 cursor: nextCursor
             }));
@@ -70,7 +69,7 @@ export class Managed {
         }
         
         const assets = this.assetRegistry.map(assetClass => {
-            let asset = new assetClass(this.kioskClient.client, dfs);
+            let asset = new assetClass(this.client, dfs);
             asset.init();
             return asset;
         });

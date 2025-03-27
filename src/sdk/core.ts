@@ -38,7 +38,7 @@ export class AccountSDK {
         let ownedObjects: Owned | undefined;
         if (accountId) {
             intents = await Intents.init(client, accountId, account.intentsBagId, config.intentRegistry, config.outcomeRegistry);
-            managedAssets = await Managed.init(client, accountId);
+            managedAssets = await Managed.init(client, accountId, config.assetRegistry);
             if (config.ownedObjects) {
                 ownedObjects = await Owned.init(client, accountId);
             }
@@ -53,7 +53,7 @@ export class AccountSDK {
         await this.account.refresh();
         if (this.account.id) {
             this.intents = await Intents.init(this.client, this.account.id, this.account.intentsBagId, this.config.intentRegistry, this.config.outcomeRegistry);
-            this.managedAssets = await Managed.init(this.client, this.account.id);
+            this.managedAssets = await Managed.init(this.client, this.account.id, this.config.assetRegistry);
             if (this.config.ownedObjects) {
                 this.ownedObjects = await Owned.init(this.client, this.account.id);
             }

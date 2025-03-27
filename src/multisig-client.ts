@@ -1,7 +1,7 @@
 import { Transaction, TransactionObjectInput, TransactionResult } from "@mysten/sui/transactions";
 import {
 	Intent, User, Intents, Owned, Managed, Extensions,
-	OwnedData, ManagedData, AccountPreview,
+	OwnedData, AccountPreview, Currencies, Kiosks, 
 	Multisig, Approvals, Member, Threshold, Dep,
 	IntentStatus, ActionsArgs, IntentArgs,
 } from "./lib";
@@ -42,6 +42,16 @@ export class MultisigClient {
 	private get ownedObjects(): Owned {
 		return this.accountSDK.ownedObjects as Owned;
 	}
+	private get currencies(): Currencies {
+		return this.managedAssets.assets["currencies"] as Currencies;
+	}
+	private get kiosks(): Kiosks {
+		return this.managedAssets.assets["kiosks"] as Kiosks;
+	}
+	private get vaults(): Vaults {
+		return this.managedAssets.assets["vaults"] as Vaults;
+	}
+	
 
 	static async init(
 		network: "mainnet" | "testnet" | "devnet" | "localnet" | string,
@@ -54,8 +64,8 @@ export class MultisigClient {
 			multisigId,
 			{
 				accountType: Multisig,
-				managedAssetTypes: ["currencies", "kiosks", "vaults", "packages"],
 				ownedObjects: true,
+				assetRegistry: [Currencies],
 				intentRegistry: AccountMultisigIntentRegistry,
 				outcomeRegistry: MultisigOutcomeRegistry,
 			}
@@ -313,8 +323,8 @@ export class MultisigClient {
 	// 	}
 	// }
 
-	getManagedAssets(): ManagedData {
-		return this.managedAssets?.getData() ?? {} as ManagedData;
+	getManagedAssets(): Record<string, any> {
+		return this.managedAssets.assets ?? {};
 	}
 
 	getOwnedObjects(): OwnedData {
@@ -391,7 +401,7 @@ export class MultisigClient {
 		kioskName: string,
 		nftId: string,
 	): Promise<TransactionResult> {
-		const policies = await this.managedAssets?.kioskClient.getTransferPolicies({ type: nftType });
+		const policies = await this.kiosks.kioskClient.getTransferPolicies({ type: nftType });
 		// find a correct policy
 		let policyId = "";
 		if (policies?.length == 0) {
@@ -408,7 +418,7 @@ export class MultisigClient {
 		}
 
 		// get the account kiosk from its name 
-		const accountKioskId = this.managedAssets?.kiosks[kioskName].id;
+		const accountKioskId = this.kiosks.assets[kioskName].id;
 		if (!accountKioskId) throw new Error("Kiosk not found");
 		const auth = this.multisig.authenticate(tx);
 		const request = commands.placeInKiosk(tx, MULTISIG_CONFIG_TYPE, nftType, auth, this.multisig.id, accountKioskId, senderKiosk, senderCap, policyId, kioskName, nftId);
@@ -426,10 +436,10 @@ export class MultisigClient {
 		nftId: string,
 	): TransactionResult {
 		// get the account kiosk from its name 
-		const accountKioskId = this.managedAssets?.kiosks[kioskName].id;
+		const accountKioskId = this.kiosks.assets[kioskName].id;
 		if (!accountKioskId) throw new Error("Kiosk not found");
 		// get the nft type from the nft id
-		const nftType = this.managedAssets?.kiosks[kioskName].items.find(item => item.id === nftId)?.type;
+		const nftType = this.kiosks.assets[kioskName].items.find(item => item.id === nftId)?.type;
 		if (!nftType) throw new Error("NFT not found in kiosk");
 		const auth = this.multisig.authenticate(tx);
 		return commands.delistFromKiosk(tx, MULTISIG_CONFIG_TYPE, nftType, auth, this.multisig.id, accountKioskId, kioskName, nftId);
@@ -441,7 +451,7 @@ export class MultisigClient {
 		kioskName: string,
 	): TransactionResult {
 		// get the account kiosk from its name 
-		const accountKioskId = this.managedAssets?.kiosks[kioskName].id;
+		const accountKioskId = this.kiosks.assets[kioskName].id;
 		if (!accountKioskId) throw new Error("Kiosk not found");
 		const auth = this.multisig.authenticate(tx);
 		return commands.withdrawProfitsFromKiosk(tx, MULTISIG_CONFIG_TYPE, auth, this.multisig.id, accountKioskId, kioskName);
@@ -453,7 +463,7 @@ export class MultisigClient {
 		kioskName: string,
 	): TransactionResult {
 		// get the account kiosk from its name 
-		const accountKioskId = this.managedAssets?.kiosks[kioskName].id;
+		const accountKioskId = this.kiosks.assets[kioskName].id;
 		if (!accountKioskId) throw new Error("Kiosk not found");
 		const auth = this.multisig.authenticate(tx);
 		return commands.closeKiosk(tx, MULTISIG_CONFIG_TYPE, auth, this.multisig.id, accountKioskId, kioskName);

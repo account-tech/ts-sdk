@@ -1,20 +1,22 @@
 import { phantom } from "../../../.gen/_framework/reified";
 import { TreasuryCap } from "../../../.gen/_dependencies/source/0x2/coin/structs";
 import { CurrencyRules } from "../../../.gen/account-actions/currency/structs";
-import { Currency } from "../types";
+import { Currency, ManagedKeyTypes } from "../types";
 import { SuiMoveObject } from "@mysten/sui/client";
 import { Asset } from "../managed";
 
 export class Currencies extends Asset {
     override type = "currencies";
-    override keys = ["CurrencyRules", "TreasuryCap"];
+    override keys = [ManagedKeyTypes.CurrencyRules, ManagedKeyTypes.TreasuryCap];
+    override assets: Record<string, Currency> = {}; // name -> currency struct
 
     async init() {
+        const dfIds = this.dfs.map(df => df.objectId);
         // Fetch all objects in one batch
         // Process in batches of 50 due to API limitations
         const objects = [];
-        for (let i = 0; i < this.dfIds.length; i += 50) {
-            const batch = this.dfIds.slice(i, i + 50);
+        for (let i = 0; i < dfIds.length; i += 50) {
+            const batch = dfIds.slice(i, i + 50);
             const batchResults = await this.client.multiGetObjects({
                 ids: batch,
                 options: { showContent: true }
@@ -44,14 +46,13 @@ export class Currencies extends Asset {
         });
     
         // Process each currency
-        const result: Record<string, Currency> = {};
         for (const [coinType, { cap, rules }] of Object.entries(coinTypeToCapRules)) {
             if (!rules || !cap) continue;
     
             const currencyRules = CurrencyRules.fromFieldsWithTypes(phantom(coinType), (rules.fields as any).value);
             const treasuryCap = TreasuryCap.fromSuiParsedData(phantom(coinType), cap);
     
-            result[coinType] = {
+            this.assets[coinType] = {
                 currentSupply: treasuryCap.totalSupply.value,
                 maxSupply: currencyRules.maxSupply ?? null,
                 totalMinted: currencyRules.totalMinted,
@@ -62,7 +63,7 @@ export class Currencies extends Asset {
                 canUpdateName: currencyRules.canUpdateName,
                 canUpdateDescription: currencyRules.canUpdateDescription,
                 canUpdateIcon: currencyRules.canUpdateIcon,
-            };
+            } as Currency;
         }
     }
 }
