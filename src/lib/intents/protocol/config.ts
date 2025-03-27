@@ -7,10 +7,11 @@ import { ConfigDepsAction, ToggleUnverifiedAllowedAction } from "../../../.gen/a
 
 import { CLOCK, EXTENSIONS } from "../../../types";
 import { Outcome } from "../../outcomes";
-import { ConfigDepsArgs, IntentFields, ToggleUnverifiedAllowedArgs } from "../types";
+import { ConfigDepsArgs, IntentFields, ProtocolIntentTypes, ToggleUnverifiedAllowedArgs } from "../types";
 import { Intent } from "../intent";
 
 export class ConfigDepsIntent extends Intent {
+    static type = ProtocolIntentTypes.ConfigDeps;
     declare args: ConfigDepsArgs;
 
     static async init(
@@ -134,21 +135,16 @@ export class ConfigDepsIntent extends Intent {
 }
 
 export class ToggleUnverifiedAllowedIntent extends Intent {
+    static type = ProtocolIntentTypes.ToggleUnverifiedAllowed;
     declare args: ToggleUnverifiedAllowedArgs;
 
-    static async init(
-        client: SuiClient,
-        account: string,
-        outcome: Outcome,
-        fields: IntentFields,
-    ): Promise<ToggleUnverifiedAllowedIntent> {
-        const intent = new ToggleUnverifiedAllowedIntent(client, account, outcome, fields);
+    async init() {
+        const intent = new ToggleUnverifiedAllowedIntent(this.client, this.account, this.outcome, this.fields);
         // resolve actions
-        const actions = await intent.fetchActions(fields.actionsId);
+        const actions = await intent.fetchActions(this.fields.actionsId);
         ToggleUnverifiedAllowedAction.fromFieldsWithTypes(actions[0]);
 
         intent.args = {};
-        return intent;
     }
 
     request(

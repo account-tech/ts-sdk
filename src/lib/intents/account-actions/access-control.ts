@@ -5,12 +5,13 @@ import * as intents from "../../../.gen/account-protocol/intents/functions";
 import * as accessControlIntent from "../../../.gen/account-actions/access-control-intents/functions";
 import * as accessControl from "../../../.gen/account-actions/access-control/functions";
 
-import { BorrowCapArgs, IntentFields } from "../types";
+import { BorrowCapArgs, IntentFields, ActionsIntentTypes } from "../types";
 import { Intent } from "../intent";
 import { Outcome } from "../../outcomes";
 import { CLOCK } from "../../../types";
 
 export class BorrowCapIntent extends Intent {
+    static type = ActionsIntentTypes.BorrowCap;
     declare args: BorrowCapArgs;
 
     static async init(

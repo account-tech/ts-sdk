@@ -12,12 +12,13 @@ import { TransferAction } from "../../../.gen/account-actions/transfer/structs";
 import { VestAction } from "../../../.gen/account-actions/vesting/structs";
 import { DepositAction } from "../../../.gen/account-actions/vault/structs";
 
-import { IntentFields, WithdrawAndTransferArgs, WithdrawAndTransferToVaultArgs, WithdrawAndVestArgs } from "../types";
+import { ActionsIntentTypes, IntentFields, WithdrawAndTransferArgs, WithdrawAndTransferToVaultArgs, WithdrawAndVestArgs } from "../types";
 import { Intent } from "../intent";
 import { Outcome } from "../../outcomes";
 import { CLOCK } from "../../../types";
 
 export class WithdrawAndTransferToVaultIntent extends Intent {
+    static type = ActionsIntentTypes.WithdrawAndTransferToVault;
     declare args: WithdrawAndTransferToVaultArgs;
     // TODO: get object info from ./objects/owned.ts
 
@@ -150,6 +151,7 @@ export class WithdrawAndTransferToVaultIntent extends Intent {
 }
 
 export class WithdrawAndTransferIntent extends Intent {
+    static type = ActionsIntentTypes.WithdrawAndTransfer;
     declare args: WithdrawAndTransferArgs;
 
     static async init(
@@ -285,6 +287,7 @@ export class WithdrawAndTransferIntent extends Intent {
 }
 
 export class WithdrawAndVestIntent extends Intent {
+    static type = ActionsIntentTypes.WithdrawAndVest;
     declare args: WithdrawAndVestArgs;
 
     static async init(

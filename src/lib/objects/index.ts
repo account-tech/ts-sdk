@@ -1,3 +1,4 @@
-export { Managed } from "./managed";
+export { Managed, Asset } from "./managed";
 export { Owned } from "./owned";
-export type { OwnedData, Coin, Nft, OtherObj, ManagedKeyType, ManagedKeyTypes, ManagedData, Cap, Currency, Kiosk, Vault, UpgradePolicy } from "./types";
+export type { OwnedData, Coin, Nft, OtherObj, ManagedKeyType, ManagedKeyTypes, Cap, Currency, Kiosk, Vault } from "./types";
+export * from "./dynamic-fields";

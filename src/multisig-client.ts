@@ -1,53 +1,102 @@
-import { SuiClient, getFullnodeUrl } from "@mysten/sui/client";
 import { Transaction, TransactionObjectInput, TransactionResult } from "@mysten/sui/transactions";
 import {
-	User, Extensions, Intent,
-	OwnedData, ManagedData, AccountPreview,
+	Intent, User, Owned, Extensions, Asset,
+	OwnedData, AccountPreview, Currencies, Kiosks, Vaults, Packages, Caps,
 	Multisig, Approvals, Member, Threshold, Dep,
-	IntentStatus, ActionsArgs, IntentArgs, intentRegistry, IntentType,
-	ConfigDepsIntent, WithdrawAndBurnIntent, UpdateMetadataIntent, ConfigMultisigIntent,
-	ToggleUnverifiedAllowedIntent, BorrowCapIntent, DisableRulesIntent, MintAndTransferIntent, MintAndVestIntent, 
-	TakeNftsIntent, ListNftsIntent, WithdrawAndTransferToVaultIntent, WithdrawAndTransferIntent, WithdrawAndVestIntent, 
-	UpgradePackageIntent, RestrictPolicyIntent, SpendAndTransferIntent, SpendAndVestIntent,
-} from "./lib";
+	IntentStatus, ActionsArgs, IntentArgs,
+} from "./lib"; 
+import {
+	BorrowCapIntent,
+	UpdateMetadataIntent, DisableRulesIntent, MintAndTransferIntent, MintAndVestIntent, WithdrawAndBurnIntent,
+	TakeNftsIntent, ListNftsIntent,
+	UpgradePackageIntent, RestrictPolicyIntent,
+	WithdrawAndTransferToVaultIntent, WithdrawAndTransferIntent, WithdrawAndVestIntent,
+	SpendAndTransferIntent, SpendAndVestIntent,
+	ConfigDepsIntent, ToggleUnverifiedAllowedIntent,
+	ConfigMultisigIntent,
+} from "./lib/intents";
 import {
 	SUI_FRAMEWORK, MULTISIG_GENERICS, TRANSFER_POLICY_RULES, ACCOUNT_PROTOCOL,
 	TransactionPureInput, DepStatus,
-	MULTISIG_CONFIG_TYPE
+	MULTISIG_CONFIG_TYPE,
 } from "./types";
 import * as commands from "./lib/commands";
 import { AccountTypes, MultisigData } from "./lib/account/types";
 import { Invite, Profile } from "./lib/user/types";
+import { AccountSDK } from "./sdk";
 
 export class MultisigClient {
 
 	private constructor(
-		public client: SuiClient,
-		public user: User,
-		public multisig: Multisig,
-		public extensions: Extensions,
+		public accountSDK: AccountSDK,
 	) { }
+
+	get multisig(): Multisig {
+		return this.accountSDK.account as Multisig;
+	}
+	get extensions(): Extensions {
+		return this.accountSDK.extensions as Extensions;
+	}
+	get user(): User {
+		return this.accountSDK.user as User;
+	}
+	get intents(): Record<string, Intent> {
+		return this.accountSDK.intents?.intents ?? {} as Record<string, Intent>;
+	}
+	get ownedObjects(): Owned {
+		return this.accountSDK.ownedObjects as Owned;
+	}
+	get managedAssets(): Record<string, Asset> {
+		return this.accountSDK.managedAssets?.assets ?? {} as Record<string, Asset>;
+	}
+	get caps(): Caps {
+		return this.managedAssets["caps"] as Caps;
+	}
+	get currencies(): Currencies {
+		return this.managedAssets["currencies"] as Currencies;
+	}
+	get kiosks(): Kiosks {
+		return this.managedAssets["kiosks"] as Kiosks;
+	}
+	get packages(): Packages {
+		return this.managedAssets["packages"] as Packages;
+	}
+	get vaults(): Vaults {
+		return this.managedAssets["vaults"] as Vaults;
+	}
 
 	static async init(
 		network: "mainnet" | "testnet" | "devnet" | "localnet" | string,
 		userAddr: string,
 		multisigId?: string,
 	): Promise<MultisigClient> {
-		const url = (network == "mainnet" || network == "testnet" || network == "devnet" || network == "localnet") ? getFullnodeUrl(network) : network;
-		const client = new SuiClient({ url });
-
-		const user = await User.init(client, userAddr);
-		const multisig = await Multisig.init(client, multisigId);
-		const extensions = await Extensions.init(client);
-
-		const msClient = new MultisigClient(client, user, multisig, extensions);
+		const accountSDK = await AccountSDK.init(
+			network, 
+			userAddr, 
+			multisigId,
+			{
+				accountType: Multisig,
+				ownedObjects: true,
+				assetFactory: [Caps, Currencies, Kiosks, Packages, Vaults],
+				intentFactory: [
+					BorrowCapIntent,
+					UpdateMetadataIntent, DisableRulesIntent, MintAndTransferIntent, MintAndVestIntent, WithdrawAndBurnIntent,
+					TakeNftsIntent, ListNftsIntent,
+					UpgradePackageIntent, RestrictPolicyIntent,
+					WithdrawAndTransferToVaultIntent, WithdrawAndTransferIntent, WithdrawAndVestIntent,
+					SpendAndTransferIntent, SpendAndVestIntent,
+					ConfigDepsIntent, ToggleUnverifiedAllowedIntent,
+					ConfigMultisigIntent,
+				],
+				outcomeFactory: [Approvals],
+			}
+		);
+		const msClient = new MultisigClient(accountSDK);
 		return msClient;
 	}
 
 	async refresh() {
-		await this.user.refresh();
-		await this.multisig.refresh();
-		await this.extensions.refresh();
+		await this.accountSDK.refresh();
 	}
 
 	async switchMultisig(multisigId: string) {
@@ -104,7 +153,7 @@ export class MultisigClient {
 	/// Factory function to call the appropriate request function
 	request(
 		tx: Transaction,
-		intentType: IntentType,
+		intentType: string, // TypeName of the intent
 		intentArgs: IntentArgs,
 		actionsArgs: ActionsArgs,
 	): TransactionResult {
@@ -112,7 +161,8 @@ export class MultisigClient {
 		const params = Intent.createParams(tx, intentArgs);
 		const outcome = this.multisig.emptyApprovalsOutcome(tx);
 
-		const intentClass = intentRegistry[intentType];
+		const intentClass = this.accountSDK.config.intentFactory.find(intent => intent.type === intentType);
+		if (!intentClass) throw new Error("Intent not found");
 		const method = intentClass.prototype.request;
 		method.call(intentClass, tx, MULTISIG_GENERICS, auth, this.multisig.id, params, outcome, actionsArgs);
 		// directly approve after proposing
@@ -141,11 +191,11 @@ export class MultisigClient {
 		caller: string,
 		intentKey: string
 	): TransactionResult {
-		const intent = this.multisig.intent(intentKey);
-		if (!intent) throw new Error("Proposal not found");
+		const intent = this.intents[intentKey];
+		if (!intent) throw new Error("Intent not found");
 
 		(intent.outcome as Approvals).maybeApprove(tx, caller);
-		const executable = (intent.outcome as Approvals).constructExecutable(tx);
+		const executable = this.multisig.executeIntent(tx, intentKey);
 
 		let result;
 		result = intent.execute(tx, MULTISIG_GENERICS, executable);
@@ -162,9 +212,9 @@ export class MultisigClient {
 		tx: Transaction,
 		intentKey: string,
 	) {
-		const intent = this.multisig.intent(intentKey);
-		if (!intent) throw new Error("Proposal not found");
-		if (!intent.hasExpired()) throw new Error("Proposal has not expired");
+		const intent = this.intents[intentKey];
+		if (!intent) throw new Error("Intent not found");
+		if (!intent.hasExpired()) throw new Error("Intent has not expired");
 
 		intent.deleteExpired(tx, MULTISIG_GENERICS, this.multisig.id, intentKey);
 	}
@@ -253,20 +303,18 @@ export class MultisigClient {
 		};
 	}
 
-	getIntents(): Intent[] {
-		return this.multisig.intents;
-	}
-
 	getIntent(key: string): Intent {
-		return this.multisig.intent(key);
+		const intent = this.intents[key];
+		if (!intent) throw new Error("Intent not found");
+		return intent;
 	}
 
 	getIntentStatus(key: string): IntentStatus {
-		return this.multisig.intent(key)?.outcome.status;
+		return this.getIntent(key).outcome.status;
 	}
 
 	canApproveIntent(key: string): boolean {
-		const outcome = this.multisig.intent(key)?.outcome as Approvals;
+		const outcome = this.getIntent(key).outcome as Approvals;
 		return outcome.approved.includes(this.user.address!);
 	}
 
@@ -293,12 +341,12 @@ export class MultisigClient {
 	// 	}
 	// }
 
-	getManagedAssets(): ManagedData {
-		return this.multisig.managedAssets.getData();
+	getManagedAssets(): Record<string, any> {
+		return this.managedAssets.assets ?? {};
 	}
 
 	getOwnedObjects(): OwnedData {
-		return this.multisig.ownedObjects.getData();
+		return this.ownedObjects?.getData() ?? {} as OwnedData;
 	}
 
 	// === Commands ===
@@ -309,7 +357,7 @@ export class MultisigClient {
 		coinType: string,
 		toSplit: bigint[], // amounts
 	): TransactionResult {
-		const coin = this.multisig.ownedObjects.getCoin(coinType);
+		const coin = this.ownedObjects?.getCoin(coinType);
 		if (!coin || coin.amount < toSplit.reduce((acc, curr) => acc + curr, 0n)) throw new Error("Not enough coins");
 
 		const auth = this.multisig.authenticate(tx);
@@ -371,16 +419,16 @@ export class MultisigClient {
 		kioskName: string,
 		nftId: string,
 	): Promise<TransactionResult> {
-		const policies = await this.multisig.managedAssets.kioskClient.getTransferPolicies({ type: nftType });
+		const policies = await this.kiosks.kioskClient.getTransferPolicies({ type: nftType });
 		// find a correct policy
 		let policyId = "";
-		if (policies.length == 0) {
+		if (policies?.length == 0) {
 			throw new Error("No transfer policy found for the given NFT type");
-		} else if (policies.length == 1) {
+		} else if (policies?.length == 1) {
 			policyId = policies[0].id;
 		} else {
 			// Find first policy that only contains known rules
-			const validPolicy = policies.find(policy =>
+			const validPolicy = policies!.find(policy =>
 				policy.rules.every(rule => TRANSFER_POLICY_RULES.includes(rule))
 			);
 			if (!validPolicy) throw new Error("No transfer policy found with only known rules");
@@ -388,7 +436,8 @@ export class MultisigClient {
 		}
 
 		// get the account kiosk from its name 
-		const accountKioskId = this.multisig.managedAssets.kiosks[kioskName].id;
+		const accountKioskId = this.kiosks.assets[kioskName].id;
+		if (!accountKioskId) throw new Error("Kiosk not found");
 		const auth = this.multisig.authenticate(tx);
 		const request = commands.placeInKiosk(tx, MULTISIG_CONFIG_TYPE, nftType, auth, this.multisig.id, accountKioskId, senderKiosk, senderCap, policyId, kioskName, nftId);
 		return tx.moveCall({
@@ -405,9 +454,10 @@ export class MultisigClient {
 		nftId: string,
 	): TransactionResult {
 		// get the account kiosk from its name 
-		const accountKioskId = this.multisig.managedAssets.kiosks[kioskName].id;
+		const accountKioskId = this.kiosks.assets[kioskName].id;
+		if (!accountKioskId) throw new Error("Kiosk not found");
 		// get the nft type from the nft id
-		const nftType = this.multisig.managedAssets.kiosks[kioskName].items.find(item => item.id === nftId)?.type;
+		const nftType = this.kiosks.assets[kioskName].items.find(item => item.id === nftId)?.type;
 		if (!nftType) throw new Error("NFT not found in kiosk");
 		const auth = this.multisig.authenticate(tx);
 		return commands.delistFromKiosk(tx, MULTISIG_CONFIG_TYPE, nftType, auth, this.multisig.id, accountKioskId, kioskName, nftId);
@@ -419,7 +469,8 @@ export class MultisigClient {
 		kioskName: string,
 	): TransactionResult {
 		// get the account kiosk from its name 
-		const accountKioskId = this.multisig.managedAssets.kiosks[kioskName].id;
+		const accountKioskId = this.kiosks.assets[kioskName].id;
+		if (!accountKioskId) throw new Error("Kiosk not found");
 		const auth = this.multisig.authenticate(tx);
 		return commands.withdrawProfitsFromKiosk(tx, MULTISIG_CONFIG_TYPE, auth, this.multisig.id, accountKioskId, kioskName);
 	}
@@ -430,7 +481,8 @@ export class MultisigClient {
 		kioskName: string,
 	): TransactionResult {
 		// get the account kiosk from its name 
-		const accountKioskId = this.multisig.managedAssets.kiosks[kioskName].id;
+		const accountKioskId = this.kiosks.assets[kioskName].id;
+		if (!accountKioskId) throw new Error("Kiosk not found");
 		const auth = this.multisig.authenticate(tx);
 		return commands.closeKiosk(tx, MULTISIG_CONFIG_TYPE, auth, this.multisig.id, accountKioskId, kioskName);
 	}

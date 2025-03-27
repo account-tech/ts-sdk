@@ -1,8 +1,16 @@
-export { Intent } from "./intent";
-export { intentRegistry } from "./registry";
-export { IntentTypes } from "./types";
+export { 
+    BorrowCapIntent, 
+    UpdateMetadataIntent, DisableRulesIntent, MintAndTransferIntent, MintAndVestIntent, WithdrawAndBurnIntent,
+    TakeNftsIntent, ListNftsIntent,
+    UpgradePackageIntent, RestrictPolicyIntent,
+    WithdrawAndTransferToVaultIntent, WithdrawAndTransferIntent, WithdrawAndVestIntent,
+    SpendAndTransferIntent, SpendAndVestIntent,
+} from "./account-actions";
+export { ConfigDepsIntent, ToggleUnverifiedAllowedIntent } from "./protocol/config";
+export { ConfigMultisigIntent } from "./multisig/multisig";
+export { Intent, Intents } from "./intent";
 export type {
-    IntentType, Issuer, IntentFields, IntentArgs, ActionsArgs, IntentStatus,
+    IntentFields, IntentArgs, ActionsArgs, IntentStatus,
     ConfigDepsArgs, ToggleUnverifiedAllowedArgs, ConfigMultisigArgs,
     BorrowCapArgs,
     DisableRulesArgs, UpdateMetadataArgs, MintAndTransferArgs, MintAndVestArgs, WithdrawAndBurnArgs,
@@ -11,11 +19,3 @@ export type {
     SpendAndTransferArgs, SpendAndVestArgs,
     UpgradePackageArgs, RestrictPolicyArgs
 } from "./types";
-export { BorrowCapIntent } from "./account-actions/access-control";
-export { ConfigDepsIntent, ToggleUnverifiedAllowedIntent } from "./account-actions/config";
-export { DisableRulesIntent, UpdateMetadataIntent, MintAndTransferIntent, MintAndVestIntent, WithdrawAndBurnIntent } from "./account-actions/currency";
-export { TakeNftsIntent, ListNftsIntent } from "./account-actions/kiosk";
-export { ConfigMultisigIntent } from "./account-actions/multisig";
-export { WithdrawAndTransferToVaultIntent, WithdrawAndVestIntent, WithdrawAndTransferIntent } from "./account-actions/owned";
-export { UpgradePackageIntent, RestrictPolicyIntent } from "./account-actions/package-upgrade";
-export { SpendAndTransferIntent, SpendAndVestIntent } from "./account-actions/vault";

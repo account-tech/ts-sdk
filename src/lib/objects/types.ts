@@ -25,14 +25,6 @@ export type OtherObj = {
     fields: any;
 }
 
-export type ManagedData = {
-    caps: Cap[]; // cap types
-    currencies: Record<string, Currency>; // coinType -> currency
-    kiosks: Record<string, Kiosk>; // name -> Kiosk
-    vaults: Record<string, Vault>; // coinType -> Vault
-    packages: Record<string, Package>; // name -> package info
-}
-
 export type ManagedKeyType = typeof ManagedKeyTypes[keyof typeof ManagedKeyTypes];
 
 export const ManagedKeyTypes = {
@@ -45,11 +37,6 @@ export const ManagedKeyTypes = {
     UpgradeRules: `${ACCOUNT_ACTIONS.V1}::package_upgrade::UpgradeRulesKey`,
     UpgradeIndex: `${ACCOUNT_ACTIONS.V1}::package_upgrade::UpgradeIndexKey`,
 } as const;
-
-export type Df = {
-    capId: string;
-    rulesId: string;
-}
 
 export type Cap = {
     type: string;
@@ -84,12 +71,12 @@ export type Kiosk = {
     listed: string[];
 }
 
-export type Vault = {
-    coins: Record<string, bigint>;
-}
-
 export type Package = {
     packageId: string;
     capId: string;
     delayMs: bigint;
+}
+
+export type Vault = {
+    coins: Record<string, bigint>;
 }

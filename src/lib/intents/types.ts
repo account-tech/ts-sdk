@@ -1,15 +1,16 @@
 import { ACCOUNT_ACTIONS, ACCOUNT_MULTISIG, ACCOUNT_PROTOCOL, TransactionPureInput } from "../../types";
 import { Threshold, Member, Dep } from "../account";
 
-export type IntentType = typeof IntentTypes[keyof typeof IntentTypes];
-
-export const IntentTypes = {
-    // Protocol
+export const ProtocolIntentTypes = {
     ConfigDeps: `${ACCOUNT_PROTOCOL.V1.slice(2)}::config::ConfigDepsIntent`,
     ToggleUnverifiedAllowed: `${ACCOUNT_PROTOCOL.V1.slice(2)}::config::ToggleUnverifiedAllowedIntent`,
-    // Config
+} as const;
+
+export const MultisigIntentTypes = {
     ConfigMultisig: `${ACCOUNT_MULTISIG.V1.slice(2)}::config::ConfigMultisigIntent`,
-    // Actions
+} as const;
+
+export const ActionsIntentTypes = {
     BorrowCap: `${ACCOUNT_ACTIONS.V1.slice(2)}::access_control_intents::BorrowCapIntent`,
 
     DisableRules: `${ACCOUNT_ACTIONS.V1.slice(2)}::currency_intents::DisableRulesIntent`,
@@ -38,7 +39,7 @@ export type IntentStatus = {
 }
 
 export type IntentFields = {
-    type: string;
+    type_: string;
     key: string;
     description: string;
     account: string;

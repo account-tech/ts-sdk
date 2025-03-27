@@ -1,8 +1,7 @@
 import { Transaction, TransactionArgument, TransactionObjectInput, TransactionResult } from "@mysten/sui/transactions";
-import { DynamicFieldInfo, SuiClient } from "@mysten/sui/client";
 import { Account as AccountRaw } from "../../../.gen/account-protocol/account/structs";
 import { destroyEmptyIntent, confirmExecution } from "../../../.gen/account-protocol/account/functions";
-import { Multisig as MultisigRaw, Approvals as ApprovalsRaw } from "../../../.gen/account-multisig/multisig/structs";
+import { Multisig as MultisigRaw } from "../../../.gen/account-multisig/multisig/structs";
 import { newAccount } from "../../../.gen/account-multisig/multisig/functions";
 import * as configMultisig from "../../../.gen/account-multisig/config/functions";
 import * as config from "../../../.gen/account-protocol/config/functions";
@@ -11,34 +10,26 @@ import { destroyEmptyExpired } from "../../../.gen/account-protocol/intents/func
 import { DepFields } from "../../../.gen/account-protocol/deps/structs";
 import { MemberFields, RoleFields } from "../../../.gen/account-multisig/multisig/structs";
 import { Fees as FeesRaw } from "../../../.gen/account-multisig/fees/structs";
-import { Intent as IntentRaw } from "../../../.gen/account-protocol/intents/structs";
 
 import { User } from "../../user/user";
 import { ACCOUNT_PROTOCOL, CLOCK, EXTENSIONS, MULTISIG_FEES, MULTISIG_GENERICS, SUI_FRAMEWORK, TransactionPureInput } from "../../../types";
-import { Intent, ConfigDepsArgs, ConfigMultisigArgs, IntentFields } from "../../intents";
+import { Intent, ConfigDepsArgs, ConfigMultisigArgs } from "../../intents";
 import { Dep, Role, MemberProfile, MultisigData } from "../types";
 import { Account } from "../account";
-import { Approvals } from "../../outcomes";
-import { Managed, Owned } from "../../objects";
 
 export class Multisig extends Account implements MultisigData {
-    public global: Role = { threshold: 0, totalWeight: 0 };
-    public roles: Record<string, Role> = {};
-    public members: MemberProfile[] = [];
-    public fees: bigint = 0n;
+    global: Role = { threshold: 0, totalWeight: 0 };
+    roles: Record<string, Role> = {};
+    members: MemberProfile[] = [];
+    fees: bigint = 0n;
 
-    static async init(
-        client: SuiClient,
-        multisigId?: string,
-    ): Promise<Multisig> {
-        const multisig = new Multisig(client);
-        if (multisigId) {
-            multisig.id = multisigId;
-            await multisig.refresh();
+    async init(id?: string): Promise<void> {
+        if (id) {
+            this.id = id;
+            await this.refresh();
         } else {
-            multisig.fees = await multisig.fetchFees();
+            this.fees = await this.fetchFees();
         }
-        return multisig;
     }
 
     async fetch(id: string = this.id): Promise<MultisigData> {
@@ -67,7 +58,7 @@ export class Multisig extends Account implements MultisigData {
             return {
                 address,
                 username,
-                avatar,
+                avatar, 
                 weight: Number(weight)!,
                 roles: roles!
             }
@@ -89,73 +80,15 @@ export class Multisig extends Account implements MultisigData {
         multisigAccount.config.roles.forEach((role: RoleFields) => {
             roles[role.name] = { threshold: Number(role.threshold), totalWeight: roleWeights[role.name] || 0 };
         });
-        // get Intents with actions
-        let dfs: DynamicFieldInfo[] = [];
-        let data: DynamicFieldInfo[];
-        let nextCursor: string | null = null;
-        let hasNextPage = true;
-        while (hasNextPage) {
-            ({ data, nextCursor, hasNextPage } = await this.client.getDynamicFields({
-                parentId: multisigAccount.intents.inner.id,
-                cursor: nextCursor
-            }));
-            dfs.push(...data);
-            nextCursor = nextCursor;
-        }
-        const dfIds = dfs.map((df) => df.objectId);
-        // Process in batches of 50 due to API limitations
-        const intentsDfs = [];
-        for (let i = 0; i < dfIds.length; i += 50) {
-            const batch = dfIds.slice(i, i + 50);
-            const batchResults = await this.client.multiGetObjects({
-                ids: batch,
-                options: { showContent: true }
-            });
-            intentsDfs.push(...batchResults);
-        }
-        const intents = await Promise.all(intentsDfs.map(async (df: any) => {
-            const intent = IntentRaw.fromFieldsWithTypes(ApprovalsRaw.r, (df.data?.content as any).fields.value);
-            const outcome = new Approvals(
-                id,
-                intent.key,
-                Number(intent.outcome.totalWeight),
-                Number(intent.outcome.roleWeight),
-                intent.outcome.approved.contents,
-                intent.executionTimes[0],
-                intent.expirationTime,
-                Number(global.threshold),
-                Number(roles[intent.role]?.threshold),
-            );
-            const fields: IntentFields = {
-                type: intent.type.name,
-                key: intent.key,
-                description: intent.description,
-                account: intent.account,
-                creator: intent.creator,
-                creationTime: intent.creationTime,
-                executionTimes: intent.executionTimes,
-                expirationTime: intent.expirationTime,
-                role: intent.role,
-                actionsId: intent.actions.id,
-            }
-            
-            return await this.fetchIntentWithActions(this.client, outcome, fields);
-        }));
-
-        // get managed assets
-        const managedAssets = await Managed.init(this.client, id, ['currencies', 'kiosks', 'vaults', 'packages']);
-        const ownedObjects = await Owned.init(this.client, id);
 
         return {
             id: multisigAccount.id,
             metadata,
             deps,
+            intentsBagId: multisigAccount.intents.inner.id,
             global,
             roles,
             members,
-            intents,
-            managedAssets,
-            ownedObjects,
         }
     }
 
@@ -173,12 +106,10 @@ export class Multisig extends Account implements MultisigData {
         this.id = multisig.id;
         this.metadata = multisig.metadata;
         this.deps = multisig.deps;
+        this.intentsBagId = multisig.intentsBagId;
         this.global = multisig.global;
         this.roles = multisig.roles;
         this.members = multisig.members;
-        this.intents = multisig.intents;
-        this.managedAssets = multisig.managedAssets;
-        this.ownedObjects = multisig.ownedObjects;
     }
 
     getData(): MultisigData {
@@ -186,12 +117,10 @@ export class Multisig extends Account implements MultisigData {
             id: this.id,
             metadata: this.metadata,
             deps: this.deps,
+            intentsBagId: this.intentsBagId,
             global: this.global,
             roles: this.roles,
             members: this.members,
-            intents: this.intents,
-            managedAssets: this.managedAssets,
-            ownedObjects: this.ownedObjects,
         }
     }
 
@@ -201,14 +130,6 @@ export class Multisig extends Account implements MultisigData {
             throw new Error(`Member with address ${addr} not found.`);
         }
         return member;
-    }
-
-    intent(key: string): Intent {
-        const intent = this.intents?.find(p => p.fields.key == key);
-        if (!intent) {
-            throw new Error(`Intent with key ${key} not found.`);
-        }
-        return intent;
     }
 
 

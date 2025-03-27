@@ -10,12 +10,13 @@ import { SpendAction } from "../../../.gen/account-actions/vault/structs";
 import { TransferAction } from "../../../.gen/account-actions/transfer/structs";
 import { VestAction } from "../../../.gen/account-actions/vesting/structs";
 
-import { IntentFields, SpendAndTransferArgs, SpendAndVestArgs } from "../types";
+import { ActionsIntentTypes, IntentFields, SpendAndTransferArgs, SpendAndVestArgs } from "../types";
 import { Intent } from "../intent";
 import { Outcome } from "../../outcomes";
 import { CLOCK } from "../../../types";
 
 export class SpendAndTransferIntent extends Intent {
+    static type = ActionsIntentTypes.SpendAndTransfer;  
     declare args: SpendAndTransferArgs;
 
     static async init(
@@ -148,6 +149,7 @@ export class SpendAndTransferIntent extends Intent {
 }
 
 export class SpendAndVestIntent extends Intent {
+    static type = ActionsIntentTypes.SpendAndVest;
     declare args: SpendAndVestArgs;
 
     static async init(
