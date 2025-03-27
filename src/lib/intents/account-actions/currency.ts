@@ -13,12 +13,13 @@ import { WithdrawAction } from "../../../.gen/account-protocol/owned/structs";
 import { TransferAction } from "../../../.gen/account-actions/transfer/structs";
 import { VestAction } from "../../../.gen/account-actions/vesting/structs";
 
-import { UpdateMetadataArgs, WithdrawAndBurnArgs, IntentFields, DisableRulesArgs, MintAndTransferArgs, MintAndVestArgs } from "../types";
+import { UpdateMetadataArgs, WithdrawAndBurnArgs, IntentFields, DisableRulesArgs, MintAndTransferArgs, MintAndVestArgs, ActionsIntentTypes } from "../types";
 import { Intent } from "../intent";
 import { Outcome } from "../../outcomes";
 import { CLOCK } from "../../../types";
 
 export class DisableRulesIntent extends Intent {
+    static type = ActionsIntentTypes.DisableRules;
     declare args: DisableRulesArgs;
 
     static async init(
@@ -141,6 +142,7 @@ export class DisableRulesIntent extends Intent {
 }
 
 export class UpdateMetadataIntent extends Intent {
+    static type = ActionsIntentTypes.UpdateMetadata;
     declare args: UpdateMetadataArgs;
     metadata?: CoinMetadata;
 
@@ -271,6 +273,7 @@ export class UpdateMetadataIntent extends Intent {
 }
 
 export class MintAndTransferIntent extends Intent {
+    static type = ActionsIntentTypes.MintAndTransfer;
     declare args: MintAndTransferArgs;
 
     static async init(
@@ -397,6 +400,7 @@ export class MintAndTransferIntent extends Intent {
 }
 
 export class MintAndVestIntent extends Intent {
+    static type = ActionsIntentTypes.MintAndVest;
     declare args: MintAndVestArgs;
 
     static async init(
@@ -521,6 +525,7 @@ export class MintAndVestIntent extends Intent {
 }
 
 export class WithdrawAndBurnIntent extends Intent {
+    static type = ActionsIntentTypes.WithdrawAndBurn;
     declare args: WithdrawAndBurnArgs;
 
     static async init(

@@ -6,12 +6,13 @@ import * as kioskIntent from "../../../.gen/account-actions/kiosk-intents/functi
 import * as accountProtocol from "../../../.gen/account-protocol/account/functions";
 import * as intents from "../../../.gen/account-protocol/intents/functions";
 
-import { ListNftsArgs, TakeNftsArgs, IntentFields } from "../types";
+import { ListNftsArgs, TakeNftsArgs, IntentFields, ActionsIntentTypes } from "../types";
 import { Intent } from "../intent";
 import { Outcome } from "../../outcomes";
 import { CLOCK } from "../../../types";
 
 export class TakeNftsIntent extends Intent {
+    static type = ActionsIntentTypes.TakeNfts;
     declare args: TakeNftsArgs;
 
     static async init(
@@ -139,6 +140,7 @@ export class TakeNftsIntent extends Intent {
 }
 
 export class ListNftsIntent extends Intent {
+    static type = ActionsIntentTypes.ListNfts;
     declare args: ListNftsArgs;
 
     static async init(

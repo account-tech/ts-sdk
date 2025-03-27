@@ -3,8 +3,6 @@ import { Account, Intents, Owned, Managed, Extensions, User } from "../lib";
 import { SDKConfig } from "./types";
 
 export class AccountSDK {
-    private config: SDKConfig;
-
     private constructor(
         public client: SuiClient,
         public extensions: Extensions,
@@ -13,10 +11,8 @@ export class AccountSDK {
         public intents: Intents | undefined,
         public managedAssets: Managed | undefined,
         public ownedObjects: Owned | undefined,
-        config: SDKConfig,
-    ) {
-        this.config = config;
-    }
+        public config: SDKConfig,
+    ) { }
 
     static async init(
         network: "mainnet" | "testnet" | "devnet" | "localnet" | string,
@@ -37,8 +33,8 @@ export class AccountSDK {
         let managedAssets: Managed | undefined;
         let ownedObjects: Owned | undefined;
         if (accountId) {
-            intents = await Intents.init(client, accountId, account.intentsBagId, config.intentRegistry, config.outcomeRegistry);
-            managedAssets = await Managed.init(client, accountId, config.assetRegistry);
+            intents = await Intents.init(client, accountId, account.intentsBagId, config.intentFactory, config.outcomeFactory);
+            managedAssets = await Managed.init(client, accountId, config.assetFactory);
             if (config.ownedObjects) {
                 ownedObjects = await Owned.init(client, accountId);
             }
@@ -52,8 +48,8 @@ export class AccountSDK {
         await this.user.refresh();
         await this.account.refresh();
         if (this.account.id) {
-            this.intents = await Intents.init(this.client, this.account.id, this.account.intentsBagId, this.config.intentRegistry, this.config.outcomeRegistry);
-            this.managedAssets = await Managed.init(this.client, this.account.id, this.config.assetRegistry);
+            this.intents = await Intents.init(this.client, this.account.id, this.account.intentsBagId, this.config.intentFactory, this.config.outcomeFactory);
+            this.managedAssets = await Managed.init(this.client, this.account.id, this.config.assetFactory);
             if (this.config.ownedObjects) {
                 this.ownedObjects = await Owned.init(this.client, this.account.id);
             }

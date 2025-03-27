@@ -4,19 +4,26 @@ import {
 	OwnedData, AccountPreview, Currencies, Kiosks, Vaults, Packages, Caps,
 	Multisig, Approvals, Member, Threshold, Dep,
 	IntentStatus, ActionsArgs, IntentArgs,
-} from "./lib";
-import * as AccountActions from "./lib/intents/account-actions";
+} from "./lib"; 
+import {
+	BorrowCapIntent,
+	UpdateMetadataIntent, DisableRulesIntent, MintAndTransferIntent, MintAndVestIntent, WithdrawAndBurnIntent,
+	TakeNftsIntent, ListNftsIntent,
+	UpgradePackageIntent, RestrictPolicyIntent,
+	WithdrawAndTransferToVaultIntent, WithdrawAndTransferIntent, WithdrawAndVestIntent,
+	SpendAndTransferIntent, SpendAndVestIntent,
+	ConfigDepsIntent, ToggleUnverifiedAllowedIntent,
+	ConfigMultisigIntent,
+} from "./lib/intents";
 import {
 	SUI_FRAMEWORK, MULTISIG_GENERICS, TRANSFER_POLICY_RULES, ACCOUNT_PROTOCOL,
 	TransactionPureInput, DepStatus,
 	MULTISIG_CONFIG_TYPE,
-	AccountMultisigIntentType
 } from "./types";
 import * as commands from "./lib/commands";
 import { AccountTypes, MultisigData } from "./lib/account/types";
 import { Invite, Profile } from "./lib/user/types";
 import { AccountSDK } from "./sdk";
-import { AccountMultisigIntentRegistry } from "./types";
 
 export class MultisigClient {
 
@@ -70,9 +77,18 @@ export class MultisigClient {
 			{
 				accountType: Multisig,
 				ownedObjects: true,
-				assetRegistry: [Caps, Currencies, Kiosks, Packages, Vaults],
-				intentRegistry: AccountMultisigIntentRegistry,
-				outcomeRegistry: [Approvals],
+				assetFactory: [Caps, Currencies, Kiosks, Packages, Vaults],
+				intentFactory: [
+					BorrowCapIntent,
+					UpdateMetadataIntent, DisableRulesIntent, MintAndTransferIntent, MintAndVestIntent, WithdrawAndBurnIntent,
+					TakeNftsIntent, ListNftsIntent,
+					UpgradePackageIntent, RestrictPolicyIntent,
+					WithdrawAndTransferToVaultIntent, WithdrawAndTransferIntent, WithdrawAndVestIntent,
+					SpendAndTransferIntent, SpendAndVestIntent,
+					ConfigDepsIntent, ToggleUnverifiedAllowedIntent,
+					ConfigMultisigIntent,
+				],
+				outcomeFactory: [Approvals],
 			}
 		);
 		const msClient = new MultisigClient(accountSDK);
@@ -137,7 +153,7 @@ export class MultisigClient {
 	/// Factory function to call the appropriate request function
 	request(
 		tx: Transaction,
-		intentType: AccountMultisigIntentType,
+		intentType: string, // TypeName of the intent
 		intentArgs: IntentArgs,
 		actionsArgs: ActionsArgs,
 	): TransactionResult {
@@ -145,7 +161,8 @@ export class MultisigClient {
 		const params = Intent.createParams(tx, intentArgs);
 		const outcome = this.multisig.emptyApprovalsOutcome(tx);
 
-		const intentClass = AccountMultisigIntentRegistry[intentType];
+		const intentClass = this.accountSDK.config.intentFactory.find(intent => intent.type === intentType);
+		if (!intentClass) throw new Error("Intent not found");
 		const method = intentClass.prototype.request;
 		method.call(intentClass, tx, MULTISIG_GENERICS, auth, this.multisig.id, params, outcome, actionsArgs);
 		// directly approve after proposing
@@ -522,7 +539,7 @@ export class MultisigClient {
 		const params = Intent.createParams(tx, intentArgs);
 		const outcome = this.multisig.emptyApprovalsOutcome(tx);
 
-		AccountActions.ConfigMultisigIntent.prototype.request(
+		ConfigMultisigIntent.prototype.request(
 			tx,
 			MULTISIG_GENERICS,
 			auth,
@@ -544,7 +561,7 @@ export class MultisigClient {
 		const params = Intent.createParams(tx, intentArgs);
 		const outcome = this.multisig.emptyApprovalsOutcome(tx);
 
-		AccountActions.ConfigDepsIntent.prototype.request(
+		ConfigDepsIntent.prototype.request(
 			tx,
 			MULTISIG_GENERICS,
 			auth,
@@ -565,7 +582,7 @@ export class MultisigClient {
 		const params = Intent.createParams(tx, intentArgs);
 		const outcome = this.multisig.emptyApprovalsOutcome(tx);
 		
-		AccountActions.ToggleUnverifiedAllowedIntent.prototype.request(
+		ToggleUnverifiedAllowedIntent.prototype.request(
 			tx,
 			MULTISIG_GENERICS,
 			auth,
@@ -587,7 +604,7 @@ export class MultisigClient {
 		const params = Intent.createParams(tx, intentArgs);
 		const outcome = this.multisig.emptyApprovalsOutcome(tx);
 
-		AccountActions.BorrowCapIntent.prototype.request(
+		BorrowCapIntent.prototype.request(
 			tx,
 			MULTISIG_GENERICS,
 			auth,
@@ -615,7 +632,7 @@ export class MultisigClient {
 		const params = Intent.createParams(tx, intentArgs);
 		const outcome = this.multisig.emptyApprovalsOutcome(tx);
 
-		AccountActions.DisableRulesIntent.prototype.request(
+		DisableRulesIntent.prototype.request(
 			tx,
 			MULTISIG_GENERICS,
 			auth,
@@ -641,7 +658,7 @@ export class MultisigClient {
 		const params = Intent.createParams(tx, intentArgs);
 		const outcome = this.multisig.emptyApprovalsOutcome(tx);
 
-		AccountActions.UpdateMetadataIntent.prototype.request(
+		UpdateMetadataIntent.prototype.request(
 			tx,
 			MULTISIG_GENERICS,
 			auth,
@@ -664,7 +681,7 @@ export class MultisigClient {
 		const params = Intent.createParams(tx, intentArgs);
 		const outcome = this.multisig.emptyApprovalsOutcome(tx);
 
-		AccountActions.MintAndTransferIntent.prototype.request(
+		MintAndTransferIntent.prototype.request(
 			tx,
 			MULTISIG_GENERICS,
 			auth,
@@ -690,7 +707,7 @@ export class MultisigClient {
 		const params = Intent.createParams(tx, intentArgs);
 		const outcome = this.multisig.emptyApprovalsOutcome(tx);
 
-		AccountActions.MintAndVestIntent.prototype.request(
+		MintAndVestIntent.prototype.request(
 			tx,
 			MULTISIG_GENERICS,
 			auth,
@@ -715,7 +732,7 @@ export class MultisigClient {
 
 		const coinId = this.mergeAndSplit(tx, coinType, [amount]);
 
-		AccountActions.WithdrawAndBurnIntent.prototype.request(
+		WithdrawAndBurnIntent.prototype.request(
 			tx,
 			MULTISIG_GENERICS,
 			auth,
@@ -739,7 +756,7 @@ export class MultisigClient {
 		const params = Intent.createParams(tx, intentArgs);
 		const outcome = this.multisig.emptyApprovalsOutcome(tx);
 
-		AccountActions.TakeNftsIntent.prototype.request(
+		TakeNftsIntent.prototype.request(
 			tx,
 			MULTISIG_GENERICS,
 			auth,
@@ -762,7 +779,7 @@ export class MultisigClient {
 		const params = Intent.createParams(tx, intentArgs);
 		const outcome = this.multisig.emptyApprovalsOutcome(tx);
 
-		AccountActions.ListNftsIntent.prototype.request(
+		ListNftsIntent.prototype.request(
 			tx,
 			MULTISIG_GENERICS,
 			auth,
@@ -788,7 +805,7 @@ export class MultisigClient {
 
 		const coinId = this.mergeAndSplit(tx, coinType, [coinAmount]);
 
-		AccountActions.WithdrawAndTransferToVaultIntent.prototype.request(
+		WithdrawAndTransferToVaultIntent.prototype.request(
 			tx,
 			MULTISIG_GENERICS,
 			auth,
@@ -818,7 +835,7 @@ export class MultisigClient {
 			transfers.push({ objectId, recipient: transfer.recipient });
 		});
 
-		AccountActions.WithdrawAndTransferIntent.prototype.request(
+		WithdrawAndTransferIntent.prototype.request(
 			tx,
 			MULTISIG_GENERICS,
 			auth,
@@ -846,7 +863,7 @@ export class MultisigClient {
 
 		const coinId = this.mergeAndSplit(tx, coinType, [coinAmount]);
 
-		AccountActions.WithdrawAndVestIntent.prototype.request(
+		WithdrawAndVestIntent.prototype.request(
 			tx,
 			MULTISIG_GENERICS,
 			auth,
@@ -869,7 +886,7 @@ export class MultisigClient {
 		const params = Intent.createParams(tx, intentArgs);
 		const outcome = this.multisig.emptyApprovalsOutcome(tx);
 
-		AccountActions.UpgradePackageIntent.prototype.request(
+		UpgradePackageIntent.prototype.request(
 			tx,
 			MULTISIG_GENERICS,
 			auth,
@@ -892,7 +909,7 @@ export class MultisigClient {
 		const params = Intent.createParams(tx, intentArgs);
 		const outcome = this.multisig.emptyApprovalsOutcome(tx);
 
-		AccountActions.RestrictPolicyIntent.prototype.request(
+		RestrictPolicyIntent.prototype.request(
 			tx,
 			MULTISIG_GENERICS,
 			auth,
@@ -916,7 +933,7 @@ export class MultisigClient {
 		const params = Intent.createParams(tx, intentArgs);
 		const outcome = this.multisig.emptyApprovalsOutcome(tx);
 
-		AccountActions.SpendAndTransferIntent.prototype.request(
+		SpendAndTransferIntent.prototype.request(
 			tx,
 			MULTISIG_GENERICS,
 			auth,
@@ -943,7 +960,7 @@ export class MultisigClient {
 		const params = Intent.createParams(tx, intentArgs);
 		const outcome = this.multisig.emptyApprovalsOutcome(tx);
 
-		AccountActions.SpendAndVestIntent.prototype.request(
+		SpendAndVestIntent.prototype.request(
 			tx,
 			MULTISIG_GENERICS,
 			auth,

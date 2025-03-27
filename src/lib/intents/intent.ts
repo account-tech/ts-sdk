@@ -42,6 +42,7 @@ export interface Intent {
 }
 
 export class Intent {
+    static type: string;
     args!: ActionsArgs;
 
     constructor(
@@ -106,29 +107,29 @@ export class Intent {
 }
 
 export class Intents {
-    private intentRegistry: Record<string, typeof Intent>;
-    private outcomeRegistry: Array<typeof Outcome>;
+    private intentFactory: Array<typeof Intent>;
+    private outcomeFactory: Array<typeof Outcome>;
     intents: Record<string, Intent> = {};
 
     private constructor(
         public client: SuiClient,
         public accountId: string,
         public intentsBagId: string,
-        intentRegistry: Record<string, typeof Intent>,
-        outcomeRegistry: Array<typeof Outcome>,
+        intentFactory: Array<typeof Intent>,
+        outcomeFactory: Array<typeof Outcome>,
     ) { 
-        this.intentRegistry = intentRegistry;
-        this.outcomeRegistry = outcomeRegistry;
+        this.intentFactory = intentFactory;
+        this.outcomeFactory = outcomeFactory;
     }
 
     static async init(
         client: SuiClient,
         accountId: string,
         intentsBagId: string,
-        intentRegistry: Record<string, typeof Intent>,
-        outcomeRegistry: Array<typeof Outcome>,
+        intentFactory: Array<typeof Intent>,
+        outcomeFactory: Array<typeof Outcome>,
     ): Promise<Intents> {
-        const intents = new Intents(client, accountId, intentsBagId, intentRegistry, outcomeRegistry);
+        const intents = new Intents(client, accountId, intentsBagId, intentFactory, outcomeFactory);
         await intents.refresh();
         return intents;
     }
@@ -160,7 +161,7 @@ export class Intents {
         }
         const intents = await Promise.all(intentsDfs.map(async (df: any) => {
             const intentRaw = (df.data?.content as any).fields.value.fields;
-            const outcomeType = this.outcomeRegistry.find(outcome => outcome.type === intentRaw.outcome.type);
+            const outcomeType = this.outcomeFactory.find(outcome => outcome.type === intentRaw.outcome.type);
             if (!outcomeType) {
                 throw new Error(`Outcome type ${intentRaw.outcome.type} not found`);
             }
@@ -179,7 +180,7 @@ export class Intents {
                 actionsId: intentRaw.actions.fields.id.id,
             }
             
-            let intentType = this.intentRegistry[fields.type_];
+            let intentType = this.intentFactory.find(intent => intent.type === fields.type_);
             if (!intentType) {
                 throw new Error(`Intent type ${fields.type_} not registered`);
             }

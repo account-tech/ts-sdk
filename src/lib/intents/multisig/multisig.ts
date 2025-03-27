@@ -5,12 +5,13 @@ import * as accountProtocol from "../../../.gen/account-protocol/account/functio
 import * as intents from "../../../.gen/account-protocol/intents/functions";
 import { ConfigMultisigAction } from "../../../.gen/account-multisig/config/structs";
 
-import { ConfigMultisigArgs, IntentFields } from "../types";
+import { ConfigMultisigArgs, IntentFields, MultisigIntentTypes } from "../types";
 import { Intent } from "../intent";
 import { Outcome } from "../../outcomes";
 import { CLOCK } from "../../../types";
 
 export class ConfigMultisigIntent extends Intent {
+    static type = MultisigIntentTypes.ConfigMultisig;
     declare args: ConfigMultisigArgs;
 
     static async init(

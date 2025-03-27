@@ -4,7 +4,7 @@ export interface SDKConfig {
     // Account configuration
     accountType: typeof Account; // AccountClass
     ownedObjects: boolean; // e.g. true, false
-    assetRegistry: Array<typeof Asset>; // Asset classes
-    intentRegistry: Record<string, typeof Intent>; // TypeName -> IntentClass
-    outcomeRegistry: Array<typeof Outcome>; // Outcome classes
+    assetFactory: Array<typeof Asset>; // Asset classes
+    intentFactory: Array<typeof Intent>; // Intent classes
+    outcomeFactory: Array<typeof Outcome>; // Outcome classes
 }

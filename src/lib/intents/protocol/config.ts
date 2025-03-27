@@ -7,10 +7,11 @@ import { ConfigDepsAction, ToggleUnverifiedAllowedAction } from "../../../.gen/a
 
 import { CLOCK, EXTENSIONS } from "../../../types";
 import { Outcome } from "../../outcomes";
-import { ConfigDepsArgs, IntentFields, ToggleUnverifiedAllowedArgs } from "../types";
+import { ConfigDepsArgs, IntentFields, ProtocolIntentTypes, ToggleUnverifiedAllowedArgs } from "../types";
 import { Intent } from "../intent";
 
 export class ConfigDepsIntent extends Intent {
+    static type = ProtocolIntentTypes.ConfigDeps;
     declare args: ConfigDepsArgs;
 
     static async init(
@@ -134,6 +135,7 @@ export class ConfigDepsIntent extends Intent {
 }
 
 export class ToggleUnverifiedAllowedIntent extends Intent {
+    static type = ProtocolIntentTypes.ToggleUnverifiedAllowed;
     declare args: ToggleUnverifiedAllowedArgs;
 
     async init() {
