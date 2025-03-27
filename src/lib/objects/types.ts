@@ -71,12 +71,12 @@ export type Kiosk = {
     listed: string[];
 }
 
-export type Vault = {
-    coins: Record<string, bigint>;
-}
-
 export type Package = {
     packageId: string;
     capId: string;
     delayMs: bigint;
+}
+
+export type Vault = {
+    coins: Record<string, bigint>;
 }

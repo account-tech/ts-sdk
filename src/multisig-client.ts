@@ -1,7 +1,7 @@
 import { Transaction, TransactionObjectInput, TransactionResult } from "@mysten/sui/transactions";
 import {
 	Intent, User, Intents, Owned, Managed, Extensions,
-	OwnedData, AccountPreview, Currencies, Kiosks, 
+	OwnedData, AccountPreview, Currencies, Kiosks, Vaults, Packages,
 	Multisig, Approvals, Member, Threshold, Dep,
 	IntentStatus, ActionsArgs, IntentArgs,
 } from "./lib";
@@ -24,34 +24,36 @@ export class MultisigClient {
 		public accountSDK: AccountSDK,
 	) { }
 
-	private get multisig(): Multisig {
+	get multisig(): Multisig {
 		return this.accountSDK.account as Multisig;
 	}
-	private get extensions(): Extensions {
+	get extensions(): Extensions {
 		return this.accountSDK.extensions as Extensions;
 	}
-	private get user(): User {
+	get user(): User {
 		return this.accountSDK.user as User;
 	}
-	private get intents(): Intents {
+	get intents(): Intents {
 		return this.accountSDK.intents as Intents;
 	}
-	private get managedAssets(): Managed {
+	get managedAssets(): Managed {
 		return this.accountSDK.managedAssets as Managed;
 	}
-	private get ownedObjects(): Owned {
+	get ownedObjects(): Owned {
 		return this.accountSDK.ownedObjects as Owned;
 	}
-	private get currencies(): Currencies {
+	get currencies(): Currencies {
 		return this.managedAssets.assets["currencies"] as Currencies;
 	}
-	private get kiosks(): Kiosks {
+	get kiosks(): Kiosks {
 		return this.managedAssets.assets["kiosks"] as Kiosks;
 	}
-	private get vaults(): Vaults {
+	get packages(): Packages {
+		return this.managedAssets.assets["packages"] as Packages;
+	}
+	get vaults(): Vaults {
 		return this.managedAssets.assets["vaults"] as Vaults;
 	}
-	
 
 	static async init(
 		network: "mainnet" | "testnet" | "devnet" | "localnet" | string,
@@ -65,7 +67,7 @@ export class MultisigClient {
 			{
 				accountType: Multisig,
 				ownedObjects: true,
-				assetRegistry: [Currencies],
+				assetRegistry: [Currencies, Kiosks, Packages, Vaults],
 				intentRegistry: AccountMultisigIntentRegistry,
 				outcomeRegistry: MultisigOutcomeRegistry,
 			}
