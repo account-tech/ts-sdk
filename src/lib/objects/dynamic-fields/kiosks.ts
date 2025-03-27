@@ -6,12 +6,12 @@ import { Asset } from "../managed";
 export class Kiosks extends Asset {
     kioskClient = new KioskClient({ client: this.client, network: Network.TESTNET });
     override type = "kiosks";
-    override keys = [ManagedKeyTypes.KioskOwner];
+    static keys = [ManagedKeyTypes.KioskOwner];
     override assets: Record<string, Kiosk> = {}; // name -> kiosk struct
 
     async init() {
+        this.dfs = this.dfs.filter(df => Kiosks.keys.some(key => df.name.type.includes(key)));
         const dfIds = this.dfs.map(df => df.objectId);
-    
         // First get all kiosk cap objects to get kiosk IDs
         // Process in batches of 50 due to API limitations
         const dfContents = [];

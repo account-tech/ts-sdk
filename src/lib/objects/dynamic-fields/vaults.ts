@@ -4,10 +4,11 @@ import { Asset } from "../managed";
 
 export class Vaults extends Asset {
     override type = "vaults";
-    override keys = [ManagedKeyTypes.Vault];
+    static keys = [ManagedKeyTypes.Vault];
     override assets: Record<string, Vault> = {};
     
     async init() {
+        this.dfs = this.dfs.filter(df => Vaults.keys.some(key => df.name.type.includes(key)));
         const dfIds = this.dfs.map(df => df.objectId);
         // First get all vault objects to extract bag IDs
         // Process in batches of 50 due to API limitations
@@ -20,7 +21,7 @@ export class Vaults extends Asset {
             });
             dfContents.push(...batchResults);
         }
-    
+        
         // Map vault IDs to their bag IDs
         const vaultToBagId: Record<string, string> = {};
         dfContents.forEach(df => {
@@ -28,12 +29,12 @@ export class Vaults extends Asset {
             const moveObj = df.data.content as SuiMoveObject;
             vaultToBagId[df.data.objectId] = (moveObj.fields as any).value.fields.bag.fields.id.id;
         });
-    
+        
         // Process each vault in parallel
         await Promise.all(this.dfs.map(async df => {
             const bagId = vaultToBagId[df.objectId];
             if (!bagId) return;
-    
+            
             // Get all dynamic fields (coins) in the bag
             let dfs: DynamicFieldInfo[] = [];
             let data: DynamicFieldInfo[];
@@ -47,7 +48,7 @@ export class Vaults extends Asset {
                 dfs.push(...data);
                 nextCursor = nextCursor;
             }
-    
+            
             // Map field IDs to their coin types
             const fieldIdsToCoinType: Record<string, string> = {};
             dfs.forEach(df => {
@@ -59,7 +60,7 @@ export class Vaults extends Asset {
                 ids: Object.keys(fieldIdsToCoinType),
                 options: { showContent: true }
             });
-    
+            
             // Extract balances from coin objects and combine with types
             const coins: Record<string, bigint> = {};
             coinObjs.forEach(coin => {
@@ -68,7 +69,7 @@ export class Vaults extends Asset {
                 const coinType = fieldIdsToCoinType[coin.data.objectId];
                 coins[coinType] = BigInt((moveObj.fields as any).value);
             });
-
+            
             this.assets[(df.name.value as any).pos0] = { coins };
         }));
     }

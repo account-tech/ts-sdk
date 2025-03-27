@@ -6,17 +6,17 @@ import { Asset } from "../managed";
 
 export class Packages extends Asset {
     override type = "packages";
-    override keys = [ManagedKeyTypes.UpgradeCap, ManagedKeyTypes.UpgradeRules];
+    static keys = [ManagedKeyTypes.UpgradeCap, ManagedKeyTypes.UpgradeRules];
     override assets: Record<string, Package> = {};
     
     async init() {
-        // Extract all IDs we need to fetch
-        const allIds = this.dfs.map(df => df.objectId);
+        this.dfs = this.dfs.filter(df => Packages.keys.some(key => df.name.type.includes(key)));
+        const dfIds = this.dfs.map(df => df.objectId);
     
         // Process in batches of 50 due to API limitations
         const dfContents = [];
-        for (let i = 0; i < allIds.length; i += 50) {
-            const batch = allIds.slice(i, i + 50);
+        for (let i = 0; i < dfIds.length; i += 50) {
+            const batch = dfIds.slice(i, i + 50);
             const batchResults = await this.client.multiGetObjects({
                 ids: batch,
                 options: { showContent: true }

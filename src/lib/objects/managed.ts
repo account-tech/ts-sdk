@@ -9,13 +9,13 @@ export interface Asset {
 export class Asset {
     client: SuiClient;
     type: string = "";
-    keys: string[] = [];
+    static keys: string[] = [];
     dfs: DynamicFieldInfo[] = [];
     assets: Record<string, any> = {}; // name -> asset struct
 
     constructor(client: SuiClient, dfs: DynamicFieldInfo[]) {
         this.client = client;
-        this.dfs = dfs.filter(df => this.keys.some(key => df.name.type.includes(key)));
+        this.dfs = dfs;
     }
 }
 
@@ -63,18 +63,18 @@ export class Managed {
             nextCursor = nextCursor;
         }
         
-        const assets = this.assetRegistry.map(assetClass => {
+        const assets = await Promise.all(this.assetRegistry.map(async assetClass => {
             let asset = new assetClass(this.client, dfs);
-            asset.init();
+            await asset.init();
             return asset;
-        });
+        }));
 
         return assets;
     }
 
     async refresh(accountId: string = this.accountId) {
-        const managed = await this.fetch(accountId);
-        this.assets = managed.reduce((acc, asset) => {
+        const assets = await this.fetch(accountId);
+        this.assets = assets.reduce((acc, asset) => {
             acc[asset.type] = asset;
             return acc;
         }, {} as Record<string, Asset>);
