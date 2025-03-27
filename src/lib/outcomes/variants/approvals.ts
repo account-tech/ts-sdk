@@ -2,13 +2,11 @@ import { Transaction, TransactionResult } from "@mysten/sui/transactions";
 import { approveIntent, disapproveIntent, executeIntent } from "../../../.gen/account-multisig/multisig/functions";
 import { ACCOUNT_MULTISIG, CLOCK } from "../../../types/constants";
 import { Outcome } from "../outcome";
-import { IntentStatus } from "src/lib/intents";
 import { Approvals as ApprovalsRaw } from "src/.gen/account-multisig/multisig/structs";
 
 export class Approvals implements Outcome {
     static type = `${ACCOUNT_MULTISIG.V1}::multisig::Approvals`;
-    
-    status!: IntentStatus; // TODO: add status
+
     multisig: string;
     key: string;
     // Approvals Data
@@ -23,14 +21,6 @@ export class Approvals implements Outcome {
         this.totalWeight = Number(approvals.totalWeight);
         this.roleWeight = Number(approvals.roleWeight);
         this.approved = approvals.approved.contents;
-        // this.status = this.computeStatus(
-        //     totalWeight,
-        //     roleWeight,
-        //     executionTime,
-        //     expirationTime,
-        //     globalThreshold,
-        //     roleThreshold,
-        // );
     }
 
     hasApproved(addr: string): boolean {
@@ -53,38 +43,5 @@ export class Approvals implements Outcome {
 
     execute(tx: Transaction): TransactionResult {
         return executeIntent(tx, { account: this.multisig, key: this.key, clock: CLOCK });
-    }
-
-    computeStatus(
-        totalWeight: number,
-        roleWeight: number,
-        executionTime: bigint,
-        expirationTime: bigint,
-        globalThreshold: number,
-        roleThreshold?: number,
-    ): IntentStatus {
-        const now = Date.now();
-
-        let [stage, deletable] = ['pending', false];
-
-        // Check expiration first
-        if (now >= expirationTime) {
-            deletable = true;
-        }
-
-        // Check if intent has reached threshold
-        const hasReachedThreshold =
-            totalWeight >= globalThreshold ||
-            (roleThreshold && roleWeight >= roleThreshold);
-
-        // If threshold is reached, check execution time
-        if (hasReachedThreshold) {
-            stage = now >= executionTime ? 'executable' : 'resolved';
-        }
-
-        return {
-            stage: stage as 'pending' | 'executable' | 'resolved',
-            deletable,
-        };
     }
 }

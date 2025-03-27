@@ -310,7 +310,30 @@ export class MultisigClient {
 	}
 
 	getIntentStatus(key: string): IntentStatus {
-		return this.getIntent(key).outcome.status;
+		const now = Date.now();
+		const intent = this.getIntent(key);
+
+		let [stage, deletable] = ['pending', false];
+
+		// Check expiration first
+		if (now >= intent.fields.expirationTime) {
+			deletable = true;
+		}
+
+		// Check if intent has reached threshold
+		const hasReachedThreshold =
+			(intent.outcome as Approvals).totalWeight >= this.multisig.global.threshold ||
+			(intent.fields.role in this.multisig.roles && (intent.outcome as Approvals).totalWeight >= this.multisig.roles[intent.fields.role].threshold);
+
+		// If threshold is reached, check execution time
+		if (hasReachedThreshold) {
+			stage = now >= intent.fields.executionTimes[0] ? 'executable' : 'resolved';
+		}
+
+		return {
+			stage: stage as 'pending' | 'executable' | 'resolved',
+			deletable,
+		};
 	}
 
 	canApproveIntent(key: string): boolean {
