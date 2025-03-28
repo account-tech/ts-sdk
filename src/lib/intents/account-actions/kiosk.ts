@@ -1,29 +1,22 @@
 import { Transaction, TransactionObjectInput, TransactionResult } from "@mysten/sui/transactions";
-import { SuiClient } from "@mysten/sui/client";
 import { ListAction, TakeAction } from "../../../.gen/account-actions/kiosk/structs";
 import * as kiosk from "../../../.gen/account-actions/kiosk/functions";
 import * as kioskIntent from "../../../.gen/account-actions/kiosk-intents/functions";
 import * as accountProtocol from "../../../.gen/account-protocol/account/functions";
 import * as intents from "../../../.gen/account-protocol/intents/functions";
 
-import { ListNftsArgs, TakeNftsArgs, IntentFields, ActionsIntentTypes } from "../types";
+import { ListNftsArgs, TakeNftsArgs, ActionsIntentTypes } from "../types";
 import { Intent } from "../intent";
-import { Outcome } from "../../outcomes";
 import { CLOCK } from "../../../types";
 
 export class TakeNftsIntent extends Intent {
     static type = ActionsIntentTypes.TakeNfts;
     declare args: TakeNftsArgs;
 
-    static async init(
-        client: SuiClient,
-        account: string,
-        outcome: Outcome,
-        fields: IntentFields,
-    ): Promise<TakeNftsIntent> {
-        const intent = new TakeNftsIntent(client, account, outcome, fields);
+    async init() {
+        const intent = new TakeNftsIntent(this.client, this.account, this.outcome, this.fields);
         // resolve actions
-        const actions = await intent.fetchActions(fields.actionsId);
+        const actions = await intent.fetchActions(this.fields.actionsId);
         const takeActions = actions.map(action => TakeAction.fromFieldsWithTypes(action));
 
         intent.args = {
@@ -31,7 +24,6 @@ export class TakeNftsIntent extends Intent {
             nftIds: takeActions.map(action => action.nftId),
             recipient: takeActions[0].recipient,
         };
-        return intent;
     }
 
     request(
@@ -143,22 +135,16 @@ export class ListNftsIntent extends Intent {
     static type = ActionsIntentTypes.ListNfts;
     declare args: ListNftsArgs;
 
-    static async init(
-        client: SuiClient,
-        account: string,
-        outcome: Outcome,
-        fields: IntentFields,
-    ): Promise<ListNftsIntent> {
-        const intent = new ListNftsIntent(client, account, outcome, fields);
+    async init() {
+        const intent = new ListNftsIntent(this.client, this.account, this.outcome, this.fields);
         // resolve actions
-        const actions = await intent.fetchActions(fields.actionsId);
+        const actions = await intent.fetchActions(this.fields.actionsId);
         const listActions = actions.map(action => ListAction.fromFieldsWithTypes(action));
 
         intent.args = {
             kioskName: listActions[0].name,
             listings: listActions.map(action => ({ nftId: action.nftId, price: action.price })),
         };
-        return intent;
     }
 
     request(

@@ -10,9 +10,14 @@ import { NETWORK, MULTISIG, testKeypair, executeTx } from "./utils";
     );
     const tx = new Transaction();
 
-    ms.requestToggleUnverifiedDepsAllowed(
+    ms.requestConfigMultisig(
         tx,
-        {key: "Toggle Unverified"},
+        {key: "Config members"},
+        1,
+        [],
+        [
+            {address: testKeypair.toSuiAddress(), weight: 1, roles: []},
+        ]
     );
     
     executeTx(tx);

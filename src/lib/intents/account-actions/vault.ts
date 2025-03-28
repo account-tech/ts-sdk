@@ -1,5 +1,4 @@
 import { Transaction, TransactionObjectInput, TransactionResult } from "@mysten/sui/transactions";
-import { SuiClient } from "@mysten/sui/client";
 import * as accountProtocol from "../../../.gen/account-protocol/account/functions";
 import * as intents from "../../../.gen/account-protocol/intents/functions";
 import * as vault from "../../../.gen/account-actions/vault/functions";
@@ -10,24 +9,18 @@ import { SpendAction } from "../../../.gen/account-actions/vault/structs";
 import { TransferAction } from "../../../.gen/account-actions/transfer/structs";
 import { VestAction } from "../../../.gen/account-actions/vesting/structs";
 
-import { ActionsIntentTypes, IntentFields, SpendAndTransferArgs, SpendAndVestArgs } from "../types";
+import { ActionsIntentTypes, SpendAndTransferArgs, SpendAndVestArgs } from "../types";
 import { Intent } from "../intent";
-import { Outcome } from "../../outcomes";
 import { CLOCK } from "../../../types";
 
 export class SpendAndTransferIntent extends Intent {
     static type = ActionsIntentTypes.SpendAndTransfer;  
     declare args: SpendAndTransferArgs;
 
-    static async init(
-        client: SuiClient,
-        account: string,
-        outcome: Outcome,
-        fields: IntentFields,
-    ): Promise<SpendAndTransferIntent> {
-        const intent = new SpendAndTransferIntent(client, account, outcome, fields);
+    async init() {
+        const intent = new SpendAndTransferIntent(this.client, this.account, this.outcome, this.fields);
         // resolve actions
-        const actions = await intent.fetchActions(fields.actionsId);
+        const actions = await intent.fetchActions(this.fields.actionsId);
         const coinType = actions[0].type.match(/<([^>]*)>/)[1];
 
         intent.args = {
@@ -38,7 +31,6 @@ export class SpendAndTransferIntent extends Intent {
                 recipient: TransferAction.fromFieldsWithTypes(actions[i * 2 + 1]).recipient,
             })),
         };
-        return intent;
     }
 
     request(
@@ -152,15 +144,10 @@ export class SpendAndVestIntent extends Intent {
     static type = ActionsIntentTypes.SpendAndVest;
     declare args: SpendAndVestArgs;
 
-    static async init(
-        client: SuiClient,
-        account: string,
-        outcome: Outcome,
-        fields: IntentFields,
-    ): Promise<SpendAndVestIntent> {
-        const intent = new SpendAndVestIntent(client, account, outcome, fields);
+    async init() {
+        const intent = new SpendAndVestIntent(this.client, this.account, this.outcome, this.fields);
         // resolve actions
-        const actions = await intent.fetchActions(fields.actionsId);
+        const actions = await intent.fetchActions(this.fields.actionsId);
         const coinType = actions[0].type.match(/<([^>]*)>/)[1];
 
         const spendAction = SpendAction.fromFieldsWithTypes(coinType, actions[0]);
@@ -174,7 +161,6 @@ export class SpendAndVestIntent extends Intent {
             end: vestAction.endTimestamp,
             recipient: vestAction.recipient,
         };
-        return intent;
     }
 
     request(

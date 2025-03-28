@@ -1,36 +1,28 @@
 import { Transaction, TransactionObjectInput, TransactionResult } from "@mysten/sui/transactions";
-import { SuiClient } from "@mysten/sui/client";
 import * as accountProtocol from "../../../.gen/account-protocol/account/functions";
 import * as intents from "../../../.gen/account-protocol/intents/functions";
 import * as upgradePolicies from "../../../.gen/account-actions/package-upgrade/functions";
 import * as upgradePoliciesIntents from "../../../.gen/account-actions/package-upgrade-intents/functions";
 import { RestrictAction, UpgradeAction } from "../../../.gen/account-actions/package-upgrade/structs";
 
-import { ActionsIntentTypes, IntentFields, RestrictPolicyArgs, UpgradePackageArgs } from "../types";
+import { ActionsIntentTypes, RestrictPolicyArgs, UpgradePackageArgs } from "../types";
 import { Intent } from "../intent";
-import { Outcome } from "../../outcomes";
 import { CLOCK } from "../../../types";
 
 export class UpgradePackageIntent extends Intent {
     static type = ActionsIntentTypes.UpgradePackage;
     declare args: UpgradePackageArgs;
 
-    static async init(
-        client: SuiClient,
-        account: string,
-        outcome: Outcome,
-        fields: IntentFields,
-    ): Promise<UpgradePackageIntent> {
-        const intent = new UpgradePackageIntent(client, account, outcome, fields);
+    async init() {
+        const intent = new UpgradePackageIntent(this.client, this.account, this.outcome, this.fields);
         // resolve actions
-        const actions = await intent.fetchActions(fields.actionsId);
+        const actions = await intent.fetchActions(this.fields.actionsId);
         const upgradeAction = UpgradeAction.fromFieldsWithTypes(actions[0]);
 
         intent.args = {
             packageName: upgradeAction.name,
             digest: upgradeAction.digest,
         };
-        return intent;
     }
 
     request(
@@ -126,22 +118,16 @@ export class RestrictPolicyIntent extends Intent {
     static type = ActionsIntentTypes.RestrictPolicy;
     declare args: RestrictPolicyArgs;
 
-    static async init(
-        client: SuiClient,
-        account: string,
-        outcome: Outcome,
-        fields: IntentFields,
-    ): Promise<RestrictPolicyIntent> {
-        const intent = new RestrictPolicyIntent(client, account, outcome, fields);
+    async init() {
+        const intent = new RestrictPolicyIntent(this.client, this.account, this.outcome, this.fields);
         // resolve actions
-        const actions = await intent.fetchActions(fields.actionsId);
+        const actions = await intent.fetchActions(this.fields.actionsId);
         const restrictAction = RestrictAction.fromFieldsWithTypes(actions[0]);
 
         intent.args = {
             packageName: restrictAction.name,
             policy: restrictAction.policy,
         };
-        return intent;
     }
 
     request(

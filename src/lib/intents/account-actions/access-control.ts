@@ -1,34 +1,26 @@
 import { Transaction, TransactionObjectInput, TransactionResult } from "@mysten/sui/transactions";
-import { SuiClient } from "@mysten/sui/client";
 import * as accountProtocol from "../../../.gen/account-protocol/account/functions";
 import * as intents from "../../../.gen/account-protocol/intents/functions";
 import * as accessControlIntent from "../../../.gen/account-actions/access-control-intents/functions";
 import * as accessControl from "../../../.gen/account-actions/access-control/functions";
 
-import { BorrowCapArgs, IntentFields, ActionsIntentTypes } from "../types";
+import { BorrowCapArgs, ActionsIntentTypes } from "../types";
 import { Intent } from "../intent";
-import { Outcome } from "../../outcomes";
 import { CLOCK } from "../../../types";
 
 export class BorrowCapIntent extends Intent {
     static type = ActionsIntentTypes.BorrowCap;
     declare args: BorrowCapArgs;
 
-    static async init(
-        client: SuiClient,
-        account: string,
-        outcome: Outcome,
-        fields: IntentFields,
-    ): Promise<BorrowCapIntent> {
-        const intent = new BorrowCapIntent(client, account, outcome, fields);
+    async init() {
+        const intent = new BorrowCapIntent(this.client, this.account, this.outcome, this.fields);
         // resolve actions
-        const actions = await intent.fetchActions(fields.actionsId);
+        const actions = await intent.fetchActions(this.fields.actionsId);
         const capType = actions[0].type;
 
         intent.args = {
             capType,
         };
-        return intent;
     }
 
     request(

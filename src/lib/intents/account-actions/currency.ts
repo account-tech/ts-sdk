@@ -1,5 +1,5 @@
 import { Transaction, TransactionObjectInput, TransactionResult } from "@mysten/sui/transactions";
-import { CoinMetadata, SuiClient } from "@mysten/sui/client";
+import { CoinMetadata } from "@mysten/sui/client";
 import { getCoinMeta } from "@polymedia/coinmeta";
 import * as currency from "../../../.gen/account-actions/currency/functions";
 import * as currencyIntent from "../../../.gen/account-actions/currency-intents/functions";
@@ -13,24 +13,18 @@ import { WithdrawAction } from "../../../.gen/account-protocol/owned/structs";
 import { TransferAction } from "../../../.gen/account-actions/transfer/structs";
 import { VestAction } from "../../../.gen/account-actions/vesting/structs";
 
-import { UpdateMetadataArgs, WithdrawAndBurnArgs, IntentFields, DisableRulesArgs, MintAndTransferArgs, MintAndVestArgs, ActionsIntentTypes } from "../types";
+import { UpdateMetadataArgs, WithdrawAndBurnArgs, DisableRulesArgs, MintAndTransferArgs, MintAndVestArgs, ActionsIntentTypes } from "../types";
 import { Intent } from "../intent";
-import { Outcome } from "../../outcomes";
 import { CLOCK } from "../../../types";
 
 export class DisableRulesIntent extends Intent {
     static type = ActionsIntentTypes.DisableRules;
     declare args: DisableRulesArgs;
 
-    static async init(
-        client: SuiClient,
-        account: string,
-        outcome: Outcome,
-        fields: IntentFields,
-    ): Promise<DisableRulesIntent> {
-        const intent = new DisableRulesIntent(client, account, outcome, fields);
+    async init() {
+        const intent = new DisableRulesIntent(this.client, this.account, this.outcome, this.fields);
         // resolve actions
-        const actions = await intent.fetchActions(fields.actionsId);
+        const actions = await intent.fetchActions(this.fields.actionsId);
 
         const coinType = actions[0].type.match(/<([^>]*)>/)[1];
         const disableAction = DisableAction.fromFieldsWithTypes(coinType, actions[0]); // CoinType, DisableAction
@@ -44,7 +38,6 @@ export class DisableRulesIntent extends Intent {
             updateDescription: disableAction.updateDescription,
             updateIcon: disableAction.updateIcon,
         };
-        return intent;
     }
 
     request(
@@ -146,15 +139,10 @@ export class UpdateMetadataIntent extends Intent {
     declare args: UpdateMetadataArgs;
     metadata?: CoinMetadata;
 
-    static async init(
-        client: SuiClient,
-        account: string,
-        outcome: Outcome,
-        fields: IntentFields,
-    ): Promise<UpdateMetadataIntent> {
-        const intent = new UpdateMetadataIntent(client, account, outcome, fields);
+    async init() {
+        const intent = new UpdateMetadataIntent(this.client, this.account, this.outcome, this.fields);
         // resolve actions
-        const actions = await intent.fetchActions(fields.actionsId);
+        const actions = await intent.fetchActions(this.fields.actionsId);
 
         const coinType = actions[0].type.match(/<([^>]*)>/)[1];
         const updateAction = UpdateAction.fromFieldsWithTypes(coinType, actions[0]); // CoinType, UpdateAction
@@ -167,12 +155,11 @@ export class UpdateMetadataIntent extends Intent {
             newIconUrl: updateAction.iconUrl,
         };
 
-        const metadata = await getCoinMeta(client, intent.args.coinType);
+        const metadata = await getCoinMeta(this.client, intent.args.coinType);
         if (!metadata) {
             throw new Error(`Metadata not found for coin type: ${intent.args.coinType}`);
         }
         intent.metadata = metadata;
-        return intent;
     }
 
     request(
@@ -276,15 +263,10 @@ export class MintAndTransferIntent extends Intent {
     static type = ActionsIntentTypes.MintAndTransfer;
     declare args: MintAndTransferArgs;
 
-    static async init(
-        client: SuiClient,
-        account: string,
-        outcome: Outcome,
-        fields: IntentFields,
-    ): Promise<MintAndTransferIntent> {
-        const intent = new MintAndTransferIntent(client, account, outcome, fields);
+    async init() {
+        const intent = new MintAndTransferIntent(this.client, this.account, this.outcome, this.fields);
         // resolve actions
-        const actions = await intent.fetchActions(fields.actionsId);
+        const actions = await intent.fetchActions(this.fields.actionsId);
         const coinType = actions[0].type.match(/<([^>]*)>/)[1];
 
         intent.args = {
@@ -294,7 +276,6 @@ export class MintAndTransferIntent extends Intent {
                 recipient: TransferAction.fromFieldsWithTypes(actions[i * 2 + 1]).recipient,
             })),
         };
-        return intent;
     }
 
     request(
@@ -403,15 +384,10 @@ export class MintAndVestIntent extends Intent {
     static type = ActionsIntentTypes.MintAndVest;
     declare args: MintAndVestArgs;
 
-    static async init(
-        client: SuiClient,
-        account: string,
-        outcome: Outcome,
-        fields: IntentFields,
-    ): Promise<MintAndVestIntent> {
-        const intent = new MintAndVestIntent(client, account, outcome, fields);
+    async init() {
+        const intent = new MintAndVestIntent(this.client, this.account, this.outcome, this.fields);
         // resolve actions
-        const actions = await intent.fetchActions(fields.actionsId);
+        const actions = await intent.fetchActions(this.fields.actionsId);
         const coinType = actions[0].type.match(/<([^>]*)>/)[1];
 
         intent.args = {
@@ -421,7 +397,6 @@ export class MintAndVestIntent extends Intent {
             start: VestAction.fromFieldsWithTypes(actions[1]).startTimestamp,
             end: VestAction.fromFieldsWithTypes(actions[1]).endTimestamp,
         };
-        return intent;
     }
 
     request(
@@ -528,15 +503,10 @@ export class WithdrawAndBurnIntent extends Intent {
     static type = ActionsIntentTypes.WithdrawAndBurn;
     declare args: WithdrawAndBurnArgs;
 
-    static async init(
-        client: SuiClient,
-        account: string,
-        outcome: Outcome,
-        fields: IntentFields,
-    ): Promise<WithdrawAndBurnIntent> {
-        const intent = new WithdrawAndBurnIntent(client, account, outcome, fields);
+    async init() {
+        const intent = new WithdrawAndBurnIntent(this.client, this.account, this.outcome, this.fields);
         // resolve actions
-        const actions = await intent.fetchActions(fields.actionsId);
+        const actions = await intent.fetchActions(this.fields.actionsId);
 
         const withdrawAction = WithdrawAction.fromFieldsWithTypes(actions[0]); // CoinType, WithdrawAction
         const coinType = actions[1].type.match(/<([^>]*)>/)[1];
@@ -547,7 +517,6 @@ export class WithdrawAndBurnIntent extends Intent {
             coinId: withdrawAction.objectId,
             amount: burnAction.amount,
         };
-        return intent;
     }
 
     request(

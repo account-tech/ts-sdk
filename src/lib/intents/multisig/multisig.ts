@@ -1,28 +1,21 @@
 import { Transaction, TransactionObjectInput, TransactionResult } from "@mysten/sui/transactions";
-import { SuiClient } from "@mysten/sui/client";
 import * as multisig from "../../../.gen/account-multisig/config/functions";
 import * as accountProtocol from "../../../.gen/account-protocol/account/functions";
 import * as intents from "../../../.gen/account-protocol/intents/functions";
 import { ConfigMultisigAction } from "../../../.gen/account-multisig/config/structs";
 
-import { ConfigMultisigArgs, IntentFields, MultisigIntentTypes } from "../types";
+import { ConfigMultisigArgs, MultisigIntentTypes } from "../types";
 import { Intent } from "../intent";
-import { Outcome } from "../../outcomes";
 import { CLOCK } from "../../../types";
 
 export class ConfigMultisigIntent extends Intent {
     static type = MultisigIntentTypes.ConfigMultisig;
     declare args: ConfigMultisigArgs;
 
-    static async init(
-        client: SuiClient,
-        multisig: string,
-        outcome: Outcome,
-        fields: IntentFields,
-    ): Promise<ConfigMultisigIntent> {
-        const intent = new ConfigMultisigIntent(client, multisig, outcome, fields);
+    async init() {
+        const intent = new ConfigMultisigIntent(this.client, this.account, this.outcome, this.fields);
         // resolve actions
-        const actions = await intent.fetchActions(fields.actionsId);
+        const actions = await intent.fetchActions(this.fields.actionsId);
         const configMultisigAction = ConfigMultisigAction.fromFieldsWithTypes(actions[0]);
 
         intent.args = {
@@ -39,8 +32,6 @@ export class ConfigMultisigIntent extends Intent {
                 })),
             },
         };
-
-        return intent;
     }
 
     request(

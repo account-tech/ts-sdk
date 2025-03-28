@@ -1,5 +1,4 @@
 import { Transaction, TransactionObjectInput, TransactionResult } from "@mysten/sui/transactions";
-import { SuiClient } from "@mysten/sui/client";
 import * as accountProtocol from "../../../.gen/account-protocol/account/functions";
 import * as intents from "../../../.gen/account-protocol/intents/functions";
 import * as owned from "../../../.gen/account-protocol/owned/functions";
@@ -12,9 +11,8 @@ import { TransferAction } from "../../../.gen/account-actions/transfer/structs";
 import { VestAction } from "../../../.gen/account-actions/vesting/structs";
 import { DepositAction } from "../../../.gen/account-actions/vault/structs";
 
-import { ActionsIntentTypes, IntentFields, WithdrawAndTransferArgs, WithdrawAndTransferToVaultArgs, WithdrawAndVestArgs } from "../types";
+import { ActionsIntentTypes, WithdrawAndTransferArgs, WithdrawAndTransferToVaultArgs, WithdrawAndVestArgs } from "../types";
 import { Intent } from "../intent";
-import { Outcome } from "../../outcomes";
 import { CLOCK } from "../../../types";
 
 export class WithdrawAndTransferToVaultIntent extends Intent {
@@ -22,15 +20,10 @@ export class WithdrawAndTransferToVaultIntent extends Intent {
     declare args: WithdrawAndTransferToVaultArgs;
     // TODO: get object info from ./objects/owned.ts
 
-    static async init(
-        client: SuiClient,
-        account: string,
-        outcome: Outcome,
-        fields: IntentFields,
-    ): Promise<WithdrawAndTransferToVaultIntent> {
-        const intent = new WithdrawAndTransferToVaultIntent(client, account, outcome, fields);
+    async init() {
+        const intent = new WithdrawAndTransferToVaultIntent(this.client, this.account, this.outcome, this.fields);
         // resolve actions
-        const actions = await intent.fetchActions(fields.actionsId);
+        const actions = await intent.fetchActions(this.fields.actionsId);
         const coinType = actions[1].type.match(/<([^>]*)>/)[1];
 
         intent.args = {
@@ -39,7 +32,6 @@ export class WithdrawAndTransferToVaultIntent extends Intent {
             coinAmount: DepositAction.fromFieldsWithTypes(coinType, actions[1]).amount,
             vaultName: DepositAction.fromFieldsWithTypes(coinType, actions[1]).name,
         };
-        return intent;
     }
 
     request(
@@ -154,15 +146,10 @@ export class WithdrawAndTransferIntent extends Intent {
     static type = ActionsIntentTypes.WithdrawAndTransfer;
     declare args: WithdrawAndTransferArgs;
 
-    static async init(
-        client: SuiClient,
-        account: string,
-        outcome: Outcome,
-        fields: IntentFields,
-    ): Promise<WithdrawAndTransferIntent> {
-        const intent = new WithdrawAndTransferIntent(client, account, outcome, fields);
+    async init() {
+        const intent = new WithdrawAndTransferIntent(this.client, this.account, this.outcome, this.fields);
         // resolve actions
-        const actions = await intent.fetchActions(fields.actionsId);
+        const actions = await intent.fetchActions(this.fields.actionsId);
 
         intent.args = {
             transfers: Array.from({ length: actions.length / 2 }, (_, i) => ({
@@ -170,7 +157,6 @@ export class WithdrawAndTransferIntent extends Intent {
                 recipient: TransferAction.fromFieldsWithTypes(actions[i * 2 + 1]).recipient,
             })),
         };
-        return intent;
     }
 
     request(
@@ -290,15 +276,10 @@ export class WithdrawAndVestIntent extends Intent {
     static type = ActionsIntentTypes.WithdrawAndVest;
     declare args: WithdrawAndVestArgs;
 
-    static async init(
-        client: SuiClient,
-        account: string,
-        outcome: Outcome,
-        fields: IntentFields,
-    ): Promise<WithdrawAndVestIntent> {
-        const intent = new WithdrawAndVestIntent(client, account, outcome, fields);
+    async init() {
+        const intent = new WithdrawAndVestIntent(this.client, this.account, this.outcome, this.fields);
         // resolve actions
-        const actions = await intent.fetchActions(fields.actionsId);
+        const actions = await intent.fetchActions(this.fields.actionsId);
 
         intent.args = {
             coinId: WithdrawAction.fromFieldsWithTypes(actions[0]).objectId,
@@ -306,7 +287,6 @@ export class WithdrawAndVestIntent extends Intent {
             end: VestAction.fromFieldsWithTypes(actions[1]).endTimestamp,
             recipient: VestAction.fromFieldsWithTypes(actions[1]).recipient,
         };
-        return intent;
     }
 
     request(

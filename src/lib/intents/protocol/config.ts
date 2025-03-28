@@ -1,28 +1,21 @@
 import { Transaction, TransactionObjectInput, TransactionResult } from "@mysten/sui/transactions";
-import { SuiClient } from "@mysten/sui/client";
 import * as config from "../../../.gen/account-protocol/config/functions";
 import * as accountProtocol from "../../../.gen/account-protocol/account/functions";
 import * as intents from "../../../.gen/account-protocol/intents/functions";
 import { ConfigDepsAction, ToggleUnverifiedAllowedAction } from "../../../.gen/account-protocol/config/structs";
 
 import { CLOCK, EXTENSIONS } from "../../../types";
-import { Outcome } from "../../outcomes";
-import { ConfigDepsArgs, IntentFields, ProtocolIntentTypes, ToggleUnverifiedAllowedArgs } from "../types";
+import { ConfigDepsArgs, ProtocolIntentTypes, ToggleUnverifiedAllowedArgs } from "../types";
 import { Intent } from "../intent";
 
 export class ConfigDepsIntent extends Intent {
     static type = ProtocolIntentTypes.ConfigDeps;
     declare args: ConfigDepsArgs;
 
-    static async init(
-        client: SuiClient,
-        account: string,
-        outcome: Outcome,
-        fields: IntentFields,
-    ): Promise<ConfigDepsIntent> {
-        const intent = new ConfigDepsIntent(client, account, outcome, fields);
+    async init() {
+        const intent = new ConfigDepsIntent(this.client, this.account, this.outcome, this.fields);
         // resolve actions
-        const actions = await intent.fetchActions(fields.actionsId);
+        const actions = await intent.fetchActions(this.fields.actionsId);
         const configDepsAction = ConfigDepsAction.fromFieldsWithTypes(actions[0]);
 
         intent.args = {
@@ -32,7 +25,6 @@ export class ConfigDepsIntent extends Intent {
                 version: Number(dep.version),
             })),
         };
-        return intent;
     }
 
     request(
