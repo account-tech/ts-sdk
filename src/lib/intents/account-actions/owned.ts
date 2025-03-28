@@ -247,7 +247,7 @@ export class WithdrawAndTransferIntent extends Intent {
                 clock: CLOCK,
             }
         );
-        for (let i = 0; i < this.args!.transfers.length; i++) {
+        this.args.transfers.forEach(_ => {
             owned.deleteWithdraw(
                 tx,
                 accountGenerics[0],
@@ -260,7 +260,7 @@ export class WithdrawAndTransferIntent extends Intent {
                 tx,
                 expired
             );
-        }
+        });
         return intents.destroyEmptyExpired(
             tx,
             expired,

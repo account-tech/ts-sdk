@@ -330,15 +330,17 @@ export class MintAndTransferIntent extends Intent {
                 key,
             }
         );
-        currency.deleteMint(
-            tx,
-            this.args!.coinType,
-            expired
-        );
-        transfer.deleteTransfer(
-            tx,
-            expired
-        );
+        this.args.transfers.forEach(_ => {
+            currency.deleteMint(
+                tx,
+                this.args!.coinType,
+                expired
+            );
+            transfer.deleteTransfer(
+                tx,
+                expired
+            );
+        });
         return intents.destroyEmptyExpired(
             tx,
             expired,
@@ -360,15 +362,17 @@ export class MintAndTransferIntent extends Intent {
                 clock: CLOCK,
             }
         );
-        currency.deleteMint(
-            tx,
-            this.args!.coinType,
-            expired
-        );
-        transfer.deleteTransfer(
-            tx,
-            expired
-        );
+        this.args.transfers.forEach(_ => {
+            currency.deleteMint(
+                tx,
+                this.args!.coinType,
+                expired
+            );
+            transfer.deleteTransfer(
+                tx,
+                expired
+            );
+        });
         return intents.destroyEmptyExpired(
             tx,
             expired,

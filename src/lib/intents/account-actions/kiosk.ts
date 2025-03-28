@@ -89,12 +89,12 @@ export class TakeNftsIntent extends Intent {
                 key,
             }
         );
-        for (let i = 0; i < this.args!.nftIds.length; i++) {
+        this.args.nftIds.forEach(_ => {
             kiosk.deleteTake(
                 tx,
                 expired
             );
-        }
+        });
         return intents.destroyEmptyExpired(
             tx,
             expired,
@@ -116,12 +116,12 @@ export class TakeNftsIntent extends Intent {
                 clock: CLOCK,
             }
         );
-        for (let i = 0; i < this.args!.nftIds.length; i++) {
+        this.args.nftIds.forEach(_ => {
             kiosk.deleteTake(
                 tx,
                 expired,
             );
-        }
+        });
         return intents.destroyEmptyExpired(
             tx,
             expired,
@@ -203,12 +203,12 @@ export class ListNftsIntent extends Intent {
                 key,
             }
         );
-        for (let i = 0; i < this.args!.listings.length; i++) {
+        this.args.listings.forEach(_ => {
             kiosk.deleteList(
                 tx,
                 expired
             );
-        }
+        });
         return intents.destroyEmptyExpired(
             tx,
             expired,
@@ -230,12 +230,12 @@ export class ListNftsIntent extends Intent {
                 clock: CLOCK,
             }
         );
-        for (let i = 0; i < this.args!.listings.length; i++) {
+        this.args.listings.forEach(_ => {
             kiosk.deleteList(
                 tx,
                 expired,
             );
-        }
+        });
         return intents.destroyEmptyExpired(
             tx,
             expired,

@@ -120,7 +120,7 @@ export class SpendAndTransferIntent extends Intent {
                 clock: CLOCK,
             }
         );
-        for (let i = 0; i < this.args!.transfers.length; i++) {
+        this.args.transfers.forEach(_ => {
             vault.deleteSpend(
                 tx,
                 this.args!.coinType,
@@ -130,7 +130,7 @@ export class SpendAndTransferIntent extends Intent {
                 tx,
                 expired
             );
-        }
+        });
         return intents.destroyEmptyExpired(
             tx,
             expired,
