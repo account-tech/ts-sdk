@@ -14,7 +14,6 @@ export class Caps extends Asset {
                 type: df.name.type,
             };
         });
-        console.log(this.assets);
     }
 }
 

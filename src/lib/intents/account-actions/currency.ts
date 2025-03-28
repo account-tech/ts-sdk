@@ -16,6 +16,7 @@ import { VestAction } from "../../../.gen/account-actions/vesting/structs";
 import { UpdateMetadataArgs, WithdrawAndBurnArgs, DisableRulesArgs, MintAndTransferArgs, MintAndVestArgs, ActionsIntentTypes } from "../types";
 import { Intent } from "../intent";
 import { CLOCK } from "../../../types";
+import { phantom } from "src/.gen/_framework/reified";
 
 export class DisableRulesIntent extends Intent {
     static type = ActionsIntentTypes.DisableRules;
@@ -25,7 +26,7 @@ export class DisableRulesIntent extends Intent {
         const actions = await this.fetchActions(this.fields.actionsId);
 
         const coinType = actions[0].type.match(/<([^>]*)>/)[1];
-        const disableAction = DisableAction.fromFieldsWithTypes(coinType, actions[0]); // CoinType, DisableAction
+        const disableAction = DisableAction.fromFieldsWithTypes(phantom(coinType), actions[0]); // CoinType, DisableAction
 
         this.args = {
             coinType,
@@ -141,7 +142,7 @@ export class UpdateMetadataIntent extends Intent {
         const actions = await this.fetchActions(this.fields.actionsId);
 
         const coinType = actions[0].type.match(/<([^>]*)>/)[1];
-        const updateAction = UpdateAction.fromFieldsWithTypes(coinType, actions[0]); // CoinType, UpdateAction
+        const updateAction = UpdateAction.fromFieldsWithTypes(phantom(coinType), actions[0]); // CoinType, UpdateAction
 
         this.args = {
             coinType,
@@ -262,11 +263,12 @@ export class MintAndTransferIntent extends Intent {
     async init() {
         const actions = await this.fetchActions(this.fields.actionsId);
         const coinType = actions[0].type.match(/<([^>]*)>/)[1];
+        
 
         this.args = {
             coinType,
             transfers: Array.from({ length: actions.length / 2 }, (_, i) => ({
-                amount: MintAction.fromFieldsWithTypes(coinType, actions[i * 2]).amount,
+                amount: MintAction.fromFieldsWithTypes(phantom(coinType), actions[i * 2]).amount,
                 recipient: TransferAction.fromFieldsWithTypes(actions[i * 2 + 1]).recipient,
             })),
         };
@@ -384,7 +386,7 @@ export class MintAndVestIntent extends Intent {
 
         this.args = {
             coinType,
-            amount: MintAction.fromFieldsWithTypes(coinType, actions[0]).amount,
+            amount: MintAction.fromFieldsWithTypes(phantom(coinType), actions[0]).amount,
             recipient: VestAction.fromFieldsWithTypes(actions[1]).recipient,
             start: VestAction.fromFieldsWithTypes(actions[1]).startTimestamp,
             end: VestAction.fromFieldsWithTypes(actions[1]).endTimestamp,
@@ -500,7 +502,7 @@ export class WithdrawAndBurnIntent extends Intent {
 
         const withdrawAction = WithdrawAction.fromFieldsWithTypes(actions[0]); // CoinType, WithdrawAction
         const coinType = actions[1].type.match(/<([^>]*)>/)[1];
-        const burnAction = BurnAction.fromFieldsWithTypes(coinType, actions[1]); // CoinType, BurnAction
+        const burnAction = BurnAction.fromFieldsWithTypes(phantom(coinType), actions[1]); // CoinType, BurnAction
 
         this.args = {
             coinType,
