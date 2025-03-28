@@ -21,12 +21,10 @@ export class WithdrawAndTransferToVaultIntent extends Intent {
     // TODO: get object info from ./objects/owned.ts
 
     async init() {
-        const intent = new WithdrawAndTransferToVaultIntent(this.client, this.account, this.outcome, this.fields);
-        // resolve actions
-        const actions = await intent.fetchActions(this.fields.actionsId);
+        const actions = await this.fetchActions(this.fields.actionsId);
         const coinType = actions[1].type.match(/<([^>]*)>/)[1];
 
-        intent.args = {
+        this.args = {
             coinType,
             coinId: WithdrawAction.fromFieldsWithTypes(actions[0]).objectId,
             coinAmount: DepositAction.fromFieldsWithTypes(coinType, actions[1]).amount,
@@ -147,11 +145,9 @@ export class WithdrawAndTransferIntent extends Intent {
     declare args: WithdrawAndTransferArgs;
 
     async init() {
-        const intent = new WithdrawAndTransferIntent(this.client, this.account, this.outcome, this.fields);
-        // resolve actions
-        const actions = await intent.fetchActions(this.fields.actionsId);
+        const actions = await this.fetchActions(this.fields.actionsId);
 
-        intent.args = {
+        this.args = {
             transfers: Array.from({ length: actions.length / 2 }, (_, i) => ({
                 objectId: WithdrawAction.fromFieldsWithTypes(actions[i * 2]).objectId,
                 recipient: TransferAction.fromFieldsWithTypes(actions[i * 2 + 1]).recipient,
@@ -277,11 +273,9 @@ export class WithdrawAndVestIntent extends Intent {
     declare args: WithdrawAndVestArgs;
 
     async init() {
-        const intent = new WithdrawAndVestIntent(this.client, this.account, this.outcome, this.fields);
-        // resolve actions
-        const actions = await intent.fetchActions(this.fields.actionsId);
+        const actions = await this.fetchActions(this.fields.actionsId);
 
-        intent.args = {
+        this.args = {
             coinId: WithdrawAction.fromFieldsWithTypes(actions[0]).objectId,
             start: VestAction.fromFieldsWithTypes(actions[1]).startTimestamp,
             end: VestAction.fromFieldsWithTypes(actions[1]).endTimestamp,

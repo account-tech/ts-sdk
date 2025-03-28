@@ -14,12 +14,10 @@ export class UpgradePackageIntent extends Intent {
     declare args: UpgradePackageArgs;
 
     async init() {
-        const intent = new UpgradePackageIntent(this.client, this.account, this.outcome, this.fields);
-        // resolve actions
-        const actions = await intent.fetchActions(this.fields.actionsId);
+        const actions = await this.fetchActions(this.fields.actionsId);
         const upgradeAction = UpgradeAction.fromFieldsWithTypes(actions[0]);
 
-        intent.args = {
+        this.args = {
             packageName: upgradeAction.name,
             digest: upgradeAction.digest,
         };
@@ -119,12 +117,10 @@ export class RestrictPolicyIntent extends Intent {
     declare args: RestrictPolicyArgs;
 
     async init() {
-        const intent = new RestrictPolicyIntent(this.client, this.account, this.outcome, this.fields);
-        // resolve actions
-        const actions = await intent.fetchActions(this.fields.actionsId);
+        const actions = await this.fetchActions(this.fields.actionsId);
         const restrictAction = RestrictAction.fromFieldsWithTypes(actions[0]);
 
-        intent.args = {
+        this.args = {
             packageName: restrictAction.name,
             policy: restrictAction.policy,
         };

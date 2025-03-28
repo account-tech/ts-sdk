@@ -18,12 +18,10 @@ export class SpendAndTransferIntent extends Intent {
     declare args: SpendAndTransferArgs;
 
     async init() {
-        const intent = new SpendAndTransferIntent(this.client, this.account, this.outcome, this.fields);
-        // resolve actions
-        const actions = await intent.fetchActions(this.fields.actionsId);
+        const actions = await this.fetchActions(this.fields.actionsId);
         const coinType = actions[0].type.match(/<([^>]*)>/)[1];
 
-        intent.args = {
+        this.args = {
             coinType,
             treasuryName: SpendAction.fromFieldsWithTypes(coinType, actions[0]).name,
             transfers: Array.from({ length: actions.length / 2 }, (_, i) => ({
@@ -145,15 +143,13 @@ export class SpendAndVestIntent extends Intent {
     declare args: SpendAndVestArgs;
 
     async init() {
-        const intent = new SpendAndVestIntent(this.client, this.account, this.outcome, this.fields);
-        // resolve actions
-        const actions = await intent.fetchActions(this.fields.actionsId);
+        const actions = await this.fetchActions(this.fields.actionsId);
         const coinType = actions[0].type.match(/<([^>]*)>/)[1];
 
         const spendAction = SpendAction.fromFieldsWithTypes(coinType, actions[0]);
         const vestAction = VestAction.fromFieldsWithTypes(actions[1]);
 
-        intent.args = {
+        this.args = {
             treasuryName: spendAction.name,
             coinType,
             amount: spendAction.amount,

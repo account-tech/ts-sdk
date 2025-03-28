@@ -14,12 +14,10 @@ export class TakeNftsIntent extends Intent {
     declare args: TakeNftsArgs;
 
     async init() {
-        const intent = new TakeNftsIntent(this.client, this.account, this.outcome, this.fields);
-        // resolve actions
-        const actions = await intent.fetchActions(this.fields.actionsId);
+        const actions = await this.fetchActions(this.fields.actionsId);
         const takeActions = actions.map(action => TakeAction.fromFieldsWithTypes(action));
 
-        intent.args = {
+        this.args = {
             kioskName: takeActions[0].name,
             nftIds: takeActions.map(action => action.nftId),
             recipient: takeActions[0].recipient,
@@ -136,12 +134,10 @@ export class ListNftsIntent extends Intent {
     declare args: ListNftsArgs;
 
     async init() {
-        const intent = new ListNftsIntent(this.client, this.account, this.outcome, this.fields);
-        // resolve actions
-        const actions = await intent.fetchActions(this.fields.actionsId);
+        const actions = await this.fetchActions(this.fields.actionsId);
         const listActions = actions.map(action => ListAction.fromFieldsWithTypes(action));
 
-        intent.args = {
+        this.args = {
             kioskName: listActions[0].name,
             listings: listActions.map(action => ({ nftId: action.nftId, price: action.price })),
         };

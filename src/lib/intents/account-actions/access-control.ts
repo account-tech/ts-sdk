@@ -13,12 +13,10 @@ export class BorrowCapIntent extends Intent {
     declare args: BorrowCapArgs;
 
     async init() {
-        const intent = new BorrowCapIntent(this.client, this.account, this.outcome, this.fields);
-        // resolve actions
-        const actions = await intent.fetchActions(this.fields.actionsId);
+        const actions = await this.fetchActions(this.fields.actionsId);
         const capType = actions[0].type;
 
-        intent.args = {
+        this.args = {
             capType,
         };
     }

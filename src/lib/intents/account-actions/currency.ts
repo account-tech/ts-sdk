@@ -22,14 +22,12 @@ export class DisableRulesIntent extends Intent {
     declare args: DisableRulesArgs;
 
     async init() {
-        const intent = new DisableRulesIntent(this.client, this.account, this.outcome, this.fields);
-        // resolve actions
-        const actions = await intent.fetchActions(this.fields.actionsId);
+        const actions = await this.fetchActions(this.fields.actionsId);
 
         const coinType = actions[0].type.match(/<([^>]*)>/)[1];
         const disableAction = DisableAction.fromFieldsWithTypes(coinType, actions[0]); // CoinType, DisableAction
 
-        intent.args = {
+        this.args = {
             coinType,
             mint: disableAction.mint,
             burn: disableAction.burn,
@@ -140,14 +138,12 @@ export class UpdateMetadataIntent extends Intent {
     metadata?: CoinMetadata;
 
     async init() {
-        const intent = new UpdateMetadataIntent(this.client, this.account, this.outcome, this.fields);
-        // resolve actions
-        const actions = await intent.fetchActions(this.fields.actionsId);
+        const actions = await this.fetchActions(this.fields.actionsId);
 
         const coinType = actions[0].type.match(/<([^>]*)>/)[1];
         const updateAction = UpdateAction.fromFieldsWithTypes(coinType, actions[0]); // CoinType, UpdateAction
 
-        intent.args = {
+        this.args = {
             coinType,
             newName: updateAction.name,
             newSymbol: updateAction.symbol,
@@ -155,11 +151,11 @@ export class UpdateMetadataIntent extends Intent {
             newIconUrl: updateAction.iconUrl,
         };
 
-        const metadata = await getCoinMeta(this.client, intent.args.coinType);
+        const metadata = await getCoinMeta(this.client, this.args.coinType);
         if (!metadata) {
-            throw new Error(`Metadata not found for coin type: ${intent.args.coinType}`);
+            throw new Error(`Metadata not found for coin type: ${this.args.coinType}`);
         }
-        intent.metadata = metadata;
+        this.metadata = metadata;
     }
 
     request(
@@ -264,12 +260,10 @@ export class MintAndTransferIntent extends Intent {
     declare args: MintAndTransferArgs;
 
     async init() {
-        const intent = new MintAndTransferIntent(this.client, this.account, this.outcome, this.fields);
-        // resolve actions
-        const actions = await intent.fetchActions(this.fields.actionsId);
+        const actions = await this.fetchActions(this.fields.actionsId);
         const coinType = actions[0].type.match(/<([^>]*)>/)[1];
 
-        intent.args = {
+        this.args = {
             coinType,
             transfers: Array.from({ length: actions.length / 2 }, (_, i) => ({
                 amount: MintAction.fromFieldsWithTypes(coinType, actions[i * 2]).amount,
@@ -385,12 +379,10 @@ export class MintAndVestIntent extends Intent {
     declare args: MintAndVestArgs;
 
     async init() {
-        const intent = new MintAndVestIntent(this.client, this.account, this.outcome, this.fields);
-        // resolve actions
-        const actions = await intent.fetchActions(this.fields.actionsId);
+        const actions = await this.fetchActions(this.fields.actionsId);
         const coinType = actions[0].type.match(/<([^>]*)>/)[1];
 
-        intent.args = {
+        this.args = {
             coinType,
             amount: MintAction.fromFieldsWithTypes(coinType, actions[0]).amount,
             recipient: VestAction.fromFieldsWithTypes(actions[1]).recipient,
@@ -504,15 +496,13 @@ export class WithdrawAndBurnIntent extends Intent {
     declare args: WithdrawAndBurnArgs;
 
     async init() {
-        const intent = new WithdrawAndBurnIntent(this.client, this.account, this.outcome, this.fields);
-        // resolve actions
-        const actions = await intent.fetchActions(this.fields.actionsId);
+        const actions = await this.fetchActions(this.fields.actionsId);
 
         const withdrawAction = WithdrawAction.fromFieldsWithTypes(actions[0]); // CoinType, WithdrawAction
         const coinType = actions[1].type.match(/<([^>]*)>/)[1];
         const burnAction = BurnAction.fromFieldsWithTypes(coinType, actions[1]); // CoinType, BurnAction
 
-        intent.args = {
+        this.args = {
             coinType,
             coinId: withdrawAction.objectId,
             amount: burnAction.amount,

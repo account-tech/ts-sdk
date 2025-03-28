@@ -13,12 +13,10 @@ export class ConfigMultisigIntent extends Intent {
     declare args: ConfigMultisigArgs;
 
     async init() {
-        const intent = new ConfigMultisigIntent(this.client, this.account, this.outcome, this.fields);
-        // resolve actions
-        const actions = await intent.fetchActions(this.fields.actionsId);
+        const actions = await this.fetchActions(this.fields.actionsId);
         const configMultisigAction = ConfigMultisigAction.fromFieldsWithTypes(actions[0]);
 
-        intent.args = {
+        this.args = {
             members: configMultisigAction.config.members.map((member) => ({
                 address: member.addr,
                 weight: Number(member.weight),

@@ -13,12 +13,10 @@ export class ConfigDepsIntent extends Intent {
     declare args: ConfigDepsArgs;
 
     async init() {
-        const intent = new ConfigDepsIntent(this.client, this.account, this.outcome, this.fields);
-        // resolve actions
-        const actions = await intent.fetchActions(this.fields.actionsId);
+        const actions = await this.fetchActions(this.fields.actionsId);
         const configDepsAction = ConfigDepsAction.fromFieldsWithTypes(actions[0]);
 
-        intent.args = {
+        this.args = {
             deps: configDepsAction.deps.inner.map((dep) => ({
                 name: dep.name,
                 addr: dep.addr,
@@ -131,12 +129,10 @@ export class ToggleUnverifiedAllowedIntent extends Intent {
     declare args: ToggleUnverifiedAllowedArgs;
 
     async init() {
-        const intent = new ToggleUnverifiedAllowedIntent(this.client, this.account, this.outcome, this.fields);
-        // resolve actions
-        const actions = await intent.fetchActions(this.fields.actionsId);
+        const actions = await this.fetchActions(this.fields.actionsId);
         ToggleUnverifiedAllowedAction.fromFieldsWithTypes(actions[0]);
 
-        intent.args = {};
+        this.args = {};
     }
 
     request(
