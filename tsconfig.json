@@ -26,7 +26,7 @@
         "noFallthroughCasesInSwitch": true,
         // noUnused* overlap with @typescript-eslint/no-unused-vars, can disable if duplicative
         "noUnusedLocals": true,
-        "noUnusedParameters": true,
+        "noUnusedParameters": false,
         // use Node's module resolution algorithm, instead of the legacy TS one
         "moduleResolution": "node",
         // interop between ESM and CJS modules. Recommended by TS
@@ -40,7 +40,7 @@
         "baseUrl": "." /* Skip type checking all .d.ts files. */
     },
     "include": [
-        "src",
+        "src/**/*",
         "src/.gen/**/*"
     ],
     "exclude": [

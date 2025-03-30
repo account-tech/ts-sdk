@@ -7,11 +7,11 @@ export {
     SpendAndTransferIntent, SpendAndVestIntent,
 } from "./account-actions";
 export { ConfigDepsIntent, ToggleUnverifiedAllowedIntent } from "./protocol/config";
-export { ConfigMultisigIntent } from "./multisig/multisig";
 export { Intent, Intents } from "./intent";
+export { Outcome } from "./outcome";
 export type {
     IntentFields, IntentArgs, ActionsArgs, IntentStatus,
-    ConfigDepsArgs, ToggleUnverifiedAllowedArgs, ConfigMultisigArgs,
+    ConfigDepsArgs, ToggleUnverifiedAllowedArgs,
     BorrowCapArgs,
     DisableRulesArgs, UpdateMetadataArgs, MintAndTransferArgs, MintAndVestArgs, WithdrawAndBurnArgs,
     TakeNftsArgs, ListNftsArgs,

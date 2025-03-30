@@ -7,6 +7,7 @@ export interface Account {
 }
 
 export class Account implements AccountData {
+	static type: string;
 	id: string = "";
 	metadata: Metadata[] = [];
 	deps: Dep[] = [];

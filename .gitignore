@@ -3,6 +3,4 @@ dist
 build
 package-lock.json
 bun.lockb
-Move.lock
-/test/abis
-/test/types
+tsconfig.tsbuildinfo

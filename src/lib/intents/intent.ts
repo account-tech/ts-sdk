@@ -3,7 +3,7 @@ import { DynamicFieldInfo, SuiClient } from "@mysten/sui/client";
 import { newParams } from "../../.gen/account-protocol/intents/functions";
 import { confirmExecution } from "../../.gen/account-protocol/account/functions";
 import { ActionsArgs, IntentArgs, IntentFields } from "./types";
-import { Outcome } from "../outcomes";
+import { Outcome } from "./outcome";
 import { CLOCK } from "../../types/constants";
 
 export interface Intent {

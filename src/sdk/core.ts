@@ -3,7 +3,7 @@ import { Account, Intents, Owned, Managed, Extensions, User } from "../lib";
 import { SDKConfig } from "./types";
 
 export class AccountSDK {
-    private constructor(
+    protected constructor(
         public client: SuiClient,
         public extensions: Extensions,
         public user: User,
@@ -24,7 +24,7 @@ export class AccountSDK {
         const client = new SuiClient({ url });
 
         const extensions = await Extensions.init(client);
-        const user = await User.init(client, userAddr);
+        const user = await User.init(client, config.accountType.type, userAddr);
 
         const account = new config.accountType(client);
         await account.init(accountId);
@@ -40,7 +40,7 @@ export class AccountSDK {
             }
         }
 
-        return new AccountSDK(client, extensions, user, account, intents, managedAssets, ownedObjects, config);
+        return new this(client, extensions, user, account, intents, managedAssets, ownedObjects, config);
     }
 
     async refresh() {

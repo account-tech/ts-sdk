@@ -9,10 +9,6 @@ rpc = "https://rpc-testnet.suiscan.xyz:443"
 # AccountExtensions = { git = "https://github.com/account-tech/move-framework.git", subdir = "packages/extensions", rev = "testnet" }
 # AccountProtocol = { git = "https://github.com/account-tech/move-framework.git", subdir = "packages/protocol", rev = "testnet" }
 # AccountActions = { git = "https://github.com/account-tech/move-framework.git", subdir = "packages/actions", rev = "testnet" }
-# AccountMultisig = { git = "https://github.com/account-tech/move-registry.git", subdir = "packages/multisig", rev = "testnet" }
-# AccountPayment = { git = "https://github.com/account-tech/move-registry.git", subdir = "packages/payment", rev = "testnet" }
 AccountExtensions = { local = "../../../move-framework/packages/extensions" }
 AccountProtocol = { local = "../../../move-framework/packages/protocol" }
 AccountActions = { local = "../../../move-framework/packages/actions" }
-AccountMultisig = { local = "../../../move-framework/packages/multisig" }
-AccountPayment = { local = "../../../move-framework/packages/payment" }

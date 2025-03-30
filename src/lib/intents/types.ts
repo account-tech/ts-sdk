@@ -1,13 +1,9 @@
-import { ACCOUNT_ACTIONS, ACCOUNT_MULTISIG, ACCOUNT_PROTOCOL, TransactionPureInput } from "../../types";
-import { Threshold, Member, Dep } from "../account";
+import { ACCOUNT_ACTIONS, ACCOUNT_PROTOCOL, TransactionPureInput } from "../../types";
+import { Dep } from "../account";
 
 export const ProtocolIntentTypes = {
     ConfigDeps: `${ACCOUNT_PROTOCOL.V1.slice(2)}::config::ConfigDepsIntent`,
     ToggleUnverifiedAllowed: `${ACCOUNT_PROTOCOL.V1.slice(2)}::config::ToggleUnverifiedAllowedIntent`,
-} as const;
-
-export const MultisigIntentTypes = {
-    ConfigMultisig: `${ACCOUNT_MULTISIG.V1.slice(2)}::config::ConfigMultisigIntent`,
 } as const;
 
 export const ActionsIntentTypes = {
@@ -59,7 +55,7 @@ export type IntentArgs = {
 }
 
 export type ActionsArgs =
-    ConfigDepsArgs | ToggleUnverifiedAllowedArgs | ConfigMultisigArgs |
+    ConfigDepsArgs | ToggleUnverifiedAllowedArgs |
     BorrowCapArgs |
     DisableRulesArgs | UpdateMetadataArgs | MintAndTransferArgs | MintAndVestArgs | WithdrawAndBurnArgs |
     TakeNftsArgs | ListNftsArgs |
@@ -72,11 +68,6 @@ export type ConfigDepsArgs = {
 }
 
 export type ToggleUnverifiedAllowedArgs = {}
-
-export type ConfigMultisigArgs = {
-    members?: Member[];
-    thresholds?: { global: number, roles: Threshold[] };
-}
 
 export type BorrowCapArgs = {
     capType: string;

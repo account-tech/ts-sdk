@@ -13,7 +13,7 @@
   "types": "./dist/index.d.ts",
   "scripts": {
     "clean": "rm -rf tsconfig.tsbuildinfo ./dist",
-    "build": "rm -rf dist/ && rm -rf tsconfig.tsbuildinfo && bun build:tsup",
+    "build": "rm -rf dist/ && rm -rf tsconfig.tsbuildinfo && bun build:tsup && bun build:types",
     "build:tsup": "tsup ./src/* --format esm,cjs --sourcemap",
     "build:types": "tsc --build"
   },

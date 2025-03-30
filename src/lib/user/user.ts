@@ -5,25 +5,26 @@ import { User as UserRaw, Invite as InviteRaw } from "../../.gen/account-protoco
 import { acceptInvite, refuseInvite, reorderAccounts } from "../../.gen/account-protocol/user/functions";
 import { new_, transfer, destroy } from "../../.gen/account-protocol/user/functions";
 import { USER_REGISTRY, ACCOUNT_PROTOCOL, contractObjects } from "../../types/constants";
-import { UserData, AccountsByType, AccountPreview, Invite, InvitesByType, Profile } from "./types";
-import { AccountType, AccountTypes } from "../account/types";
+import { UserData, AccountPreview, Invite, Profile } from "./types";
 
 export class User implements UserData {
 	id: string = "";
 	profile: Profile = { username: "", avatar: "" };
-	accounts: AccountsByType = {};
-	invites: InvitesByType = {};
+	accounts: AccountPreview[] = [];
+	invites: Invite[] = [];
 
 	constructor(
 		public client: SuiClient,
+		public accountType: string,
 		public address?: string,
-	) { }
+	) {	}
 
 	static async init(
 		client: SuiClient,
+		accountType: string,
 		address?: string,
 	): Promise<User> {
-		const user = new User(client, address);
+		const user = new User(client, accountType, address);
 		if (address) await user.refresh();
 		return user;
 	}
@@ -74,10 +75,8 @@ export class User implements UserData {
 		return { username, avatar };
 	}
 
-	async fetchAccounts(allIds: string[] | undefined): Promise<AccountsByType> {
-		const accountsByType: AccountsByType = {};
-
-		if (!allIds || allIds.length === 0) return accountsByType;
+	async fetchAccounts(allIds: string[] | undefined): Promise<AccountPreview[]> {
+		if (!allIds || allIds.length === 0) return [];
 
 		// Fetch all account objects in one batch
 		// Process in batches of 50 due to API limitations
@@ -92,51 +91,39 @@ export class User implements UserData {
 		}
 
 		// Process each account object
-		accountsObjs.forEach((acc: SuiObjectResponse) => {
-			if (!acc.data?.content) return;
-			const moveObj = acc.data.content as SuiMoveObject;
+		const accounts = accountsObjs
+			.filter(acc => (acc.data?.content as SuiMoveObject).type.includes(this.accountType))
+			.map((acc: SuiObjectResponse) => {
+				const moveObj = acc.data?.content as SuiMoveObject;
 
-			// Get account type from the object type
-			Object.values(AccountTypes).forEach(accountType => {
-				if (moveObj.type.includes(accountType)) {
-					if (!accountsByType[accountType]) {
-						accountsByType[accountType] = [];
-					}
+				const name = (moveObj.fields as any).metadata.fields.inner.fields.contents
+					.find((entry: any) => entry.fields.key === "name")?.fields.value;
 
-					const name = (moveObj.fields as any).metadata.fields.inner.fields.contents
-						.find((entry: any) => entry.fields.key === "name")?.fields.value;
+				return {
+					id: (moveObj.fields as any).id.id,
+					name: name ?? ""
+				};
+			})
+			.sort((a, b) => a.name.localeCompare(b.name));
 
-					if (name) {
-						accountsByType[accountType].push({
-							id: (moveObj.fields as any).id.id,
-							name: name
-						});
-					}
-				}
-			});
-		});
-
-		// Sort each type's accounts by name
-		Object.values(accountsByType).forEach(accounts => {
-			accounts.sort((a, b) => a.name.localeCompare(b.name));
-		});
-
-		return accountsByType;
+		return accounts;
 	}
 
-	async fetchInvites(owner: string = this.address!): Promise<InvitesByType> {
+	async fetchInvites(owner: string = this.address!): Promise<Invite[]> {
 		// Fetch invite objects
 		const { data: inviteData } = await this.client.getOwnedObjects({
 			owner,
 			filter: { StructType: `${ACCOUNT_PROTOCOL.V1}::user::Invite` },
 			options: { showContent: true }
 		});
-		const invites = inviteData.map(invite => InviteRaw.fromSuiParsedData(invite.data?.content!));
-
-		if (invites.length === 0) return {};
+		if (inviteData.length === 0) return [];
+		
+		const invitesParsed = inviteData
+			.map(invite => InviteRaw.fromSuiParsedData(invite.data?.content!))
+			.filter(invite => "0x" + invite.accountType === this.accountType);
 
 		// Get all account addresses from invites
-		const accountAddrs = invites.map(invite => invite.accountAddr);
+		const accountAddrs = invitesParsed.map(invite => invite.accountAddr);
 
 		// Fetch all account objects in one batch
 		// Process in batches of 50 due to API limitations
@@ -163,25 +150,17 @@ export class User implements UserData {
 		});
 
 		// Group invites by account type
-		const invitesByType: InvitesByType = {};
-		invites.forEach(invite => {
-			const type = "0x" + invite.accountType.toString();
-			if (!invitesByType[type]) {
-				invitesByType[type] = [];
-			}
-			invitesByType[type].push({
-				id: invite.id,
-				accountAddr: invite.accountAddr,
-				accountName: accountNames.get(invite.accountAddr) ?? invite.accountAddr
-			});
-		});
+		const invites = invitesParsed
+			.map(invite => {
+				return {
+					id: invite.id,
+					accountAddr: invite.accountAddr,
+					accountName: accountNames.get(invite.accountAddr) ?? invite.accountAddr
+				};
+			})
+			.sort((a, b) => a.accountName.localeCompare(b.accountName));
 
-		// Sort each group by name
-		Object.values(invitesByType).forEach(invites => {
-			invites.sort((a, b) => a.accountName.localeCompare(b.accountName));
-		});
-
-		return invitesByType;
+		return invites;
 	}
 
 	async refresh(address: string = this.address!) {
@@ -202,14 +181,6 @@ export class User implements UserData {
 			accounts: this.accounts,
 			invites: this.invites
 		}
-	}
-
-	getAccounts(type: AccountType): AccountPreview[] {
-		return this.accounts[type] ?? [];
-	}
-
-	getInvites(type: string): Invite[] {
-		return this.invites[type] ?? [];
 	}
 
 	// returns an account object that can be used in the ptb before being transferred

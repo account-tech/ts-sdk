@@ -23,16 +23,9 @@ export enum ACCOUNT_EXTENSIONS {
 export enum ACCOUNT_PROTOCOL {
     V1 = "0x77a39df37fab5b6d47c9976f114ef1ac21313edee5a446135c08fdbaf615b623",
 }
-export enum ACCOUNT_MULTISIG {
-    V1 = "0x5b249579964953a3f49ed605ff0329302c0c218e1603fbb9921e19bfacb901a8",
-}
 export enum ACCOUNT_ACTIONS {
     V1 = "0x47f40cba7b543409155238c9ddd0914f2d9f1bd69ebd2116a32dd667da0f4aab",
 }
 // Shared objects
 export const EXTENSIONS = "0x519268651fbc7b3714db3ea0ec6c06ec707e6bb0788559852e1d61bd60c192d1";
 export const USER_REGISTRY = "0xf0535de74eb05b832755ff9bc58f6eaf52c48fa72442727dc41f81953b5a4be5";
-export const MULTISIG_FEES = "0x7f2fbf8b52a1324fbf36aceea947cd3c0a65d5ff56d409daa75a2339adf5a880";
-// Types
-export const MULTISIG_CONFIG_TYPE = `${ACCOUNT_MULTISIG.V1}::multisig::Multisig`;
-export const MULTISIG_GENERICS: [string, string] = [`${ACCOUNT_MULTISIG.V1}::multisig::Multisig`, `${ACCOUNT_MULTISIG.V1}::multisig::Approvals`];
