@@ -1,9 +1,9 @@
 {
-  "name": "@account-tech/sdk",
+  "name": "@account.tech/core",
   "author": "Thouny <thouny@tuta.io>",
-  "version": "0.0.1",
-  "license": "MIT",
-  "description": "Account.tech TypeScript SDK",
+  "description": "Core library for defining account sdks with account.tech",
+  "version": "0.1.0",
+  "license": "Apache-2.0",
   "files": [
     "dist"
   ],
