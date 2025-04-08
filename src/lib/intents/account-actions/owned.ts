@@ -10,11 +10,11 @@ import { WithdrawAction } from "../../../.gen/account-protocol/owned/structs";
 import { TransferAction } from "../../../.gen/account-actions/transfer/structs";
 import { VestAction } from "../../../.gen/account-actions/vesting/structs";
 import { DepositAction } from "../../../.gen/account-actions/vault/structs";
+import { phantom } from "../../../.gen/_framework/reified";
 
 import { ActionsIntentTypes, WithdrawAndTransferArgs, WithdrawAndTransferToVaultArgs, WithdrawAndVestArgs } from "../types";
 import { Intent } from "../intent";
 import { CLOCK } from "../../../types";
-
 export class WithdrawAndTransferToVaultIntent extends Intent {
     static type = ActionsIntentTypes.WithdrawAndTransferToVault;
     declare args: WithdrawAndTransferToVaultArgs;
@@ -27,8 +27,8 @@ export class WithdrawAndTransferToVaultIntent extends Intent {
         this.args = {
             coinType,
             coinId: WithdrawAction.fromFieldsWithTypes(actions[0]).objectId,
-            coinAmount: DepositAction.fromFieldsWithTypes(coinType, actions[1]).amount,
-            vaultName: DepositAction.fromFieldsWithTypes(coinType, actions[1]).name,
+            coinAmount: DepositAction.fromFieldsWithTypes(phantom(coinType), actions[1]).amount,
+            vaultName: DepositAction.fromFieldsWithTypes(phantom(coinType), actions[1]).name,
         };
     }
 

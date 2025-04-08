@@ -8,6 +8,7 @@ import * as vesting from "../../../.gen/account-actions/vesting/functions";
 import { SpendAction } from "../../../.gen/account-actions/vault/structs";
 import { TransferAction } from "../../../.gen/account-actions/transfer/structs";
 import { VestAction } from "../../../.gen/account-actions/vesting/structs";
+import { phantom } from "../../../.gen/_framework/reified";
 
 import { ActionsIntentTypes, SpendAndTransferArgs, SpendAndVestArgs } from "../types";
 import { Intent } from "../intent";
@@ -23,9 +24,9 @@ export class SpendAndTransferIntent extends Intent {
 
         this.args = {
             coinType,
-            treasuryName: SpendAction.fromFieldsWithTypes(coinType, actions[0]).name,
+            treasuryName: SpendAction.fromFieldsWithTypes(phantom(coinType), actions[0]).name,
             transfers: Array.from({ length: actions.length / 2 }, (_, i) => ({
-                amount: SpendAction.fromFieldsWithTypes(coinType, actions[i * 2]).amount,
+                amount: SpendAction.fromFieldsWithTypes(phantom(coinType), actions[i * 2]).amount,
                 recipient: TransferAction.fromFieldsWithTypes(actions[i * 2 + 1]).recipient,
             })),
         };
@@ -146,7 +147,7 @@ export class SpendAndVestIntent extends Intent {
         const actions = await this.fetchActions(this.fields.actionsId);
         const coinType = actions[0].type.match(/<([^>]*)>/)[1];
 
-        const spendAction = SpendAction.fromFieldsWithTypes(coinType, actions[0]);
+        const spendAction = SpendAction.fromFieldsWithTypes(phantom(coinType), actions[0]);
         const vestAction = VestAction.fromFieldsWithTypes(actions[1]);
 
         this.args = {
