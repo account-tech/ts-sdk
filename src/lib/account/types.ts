@@ -2,6 +2,8 @@ export type AccountData = {
     id: string;
     metadata: Metadata[];
     deps: Dep[];
+    unverifiedDepsAllowed: boolean;
+    lockedObjects: string[];
     intentsBagId: string;
 }
 

@@ -11,6 +11,8 @@ export class Account implements AccountData {
 	id: string = "";
 	metadata: Metadata[] = [];
 	deps: Dep[] = [];
+	unverifiedDepsAllowed: boolean = false;
+	lockedObjects: string[] = [];
 	intentsBagId: string = "";
 
 	constructor(
