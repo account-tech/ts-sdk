@@ -8,24 +8,20 @@ export type OwnedData = {
 
 export type Coin = {
     type: string;
-    refs: { objectId: string, version: string, digest: string }[];
-    amount: bigint;
+    instances: { amount: bigint, ref: { objectId: string, version: string, digest: string } }[];
+    totalAmount: bigint;
 }
 
 export type Nft = {
     type: string;
-    id: string;
-    version: string;
-    digest: string;
+    ref: { objectId: string, version: string, digest: string };
     name: string;
     image: string;
 }
 
 export type OtherObj = {
     type: string;
-    id: string;
-    version: string;
-    digest: string;
+    ref: { objectId: string, version: string, digest: string };
     fields: any;
 }
 
