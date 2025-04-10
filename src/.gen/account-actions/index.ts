@@ -1,1 +1,1 @@
-export const PACKAGE_ID = "0x47f40cba7b543409155238c9ddd0914f2d9f1bd69ebd2116a32dd667da0f4aab"; export const PUBLISHED_AT = "0x47f40cba7b543409155238c9ddd0914f2d9f1bd69ebd2116a32dd667da0f4aab"; export const PKG_V1 = "0x47f40cba7b543409155238c9ddd0914f2d9f1bd69ebd2116a32dd667da0f4aab";
+export const PACKAGE_ID = "0x3a13a30a15aeed4cffa6d9438ff4636e589f02dac2c0ce7d518c9cdab4f3118"; export const PUBLISHED_AT = "0x3a13a30a15aeed4cffa6d9438ff4636e589f02dac2c0ce7d518c9cdab4f3118"; export const PKG_V1 = "0x3a13a30a15aeed4cffa6d9438ff4636e589f02dac2c0ce7d518c9cdab4f3118";

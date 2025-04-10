@@ -3,14 +3,14 @@ import {PhantomReified, Reified, StructClass, ToField, ToTypeStr, decodeFromFiel
 import {FieldsWithTypes, composeSuiType, compressSuiType} from "../../../../_framework/util";
 import {Vector} from "../../../../_framework/vector";
 import {Option} from "../../0x1/option/structs";
-import {PKG_V28} from "../index";
+import {PKG_V29} from "../index";
 import {bcs} from "@mysten/sui/bcs";
 import {SuiClient, SuiObjectData, SuiParsedData} from "@mysten/sui/client";
 import {fromB64} from "@mysten/sui/utils";
 
 /* ============================== NitroAttestationDocument =============================== */
 
-export function isNitroAttestationDocument(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V28}::nitro_attestation::NitroAttestationDocument`; }
+export function isNitroAttestationDocument(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V29}::nitro_attestation::NitroAttestationDocument`; }
 
 export interface NitroAttestationDocumentFields { moduleId: ToField<Vector<"u8">>; timestamp: ToField<"u64">; digest: ToField<Vector<"u8">>; pcrs: ToField<Vector<PCREntry>>; publicKey: ToField<Option<Vector<"u8">>>; userData: ToField<Option<Vector<"u8">>>; nonce: ToField<Option<Vector<"u8">>> }
 
@@ -18,17 +18,17 @@ export type NitroAttestationDocumentReified = Reified< NitroAttestationDocument,
 
 export class NitroAttestationDocument implements StructClass { __StructClass = true as const;
 
- static readonly $typeName = `${PKG_V28}::nitro_attestation::NitroAttestationDocument`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
+ static readonly $typeName = `${PKG_V29}::nitro_attestation::NitroAttestationDocument`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
 
- readonly $typeName = NitroAttestationDocument.$typeName; readonly $fullTypeName: `${typeof PKG_V28}::nitro_attestation::NitroAttestationDocument`; readonly $typeArgs: []; readonly $isPhantom = NitroAttestationDocument.$isPhantom;
+ readonly $typeName = NitroAttestationDocument.$typeName; readonly $fullTypeName: `${typeof PKG_V29}::nitro_attestation::NitroAttestationDocument`; readonly $typeArgs: []; readonly $isPhantom = NitroAttestationDocument.$isPhantom;
 
  readonly moduleId: ToField<Vector<"u8">>; readonly timestamp: ToField<"u64">; readonly digest: ToField<Vector<"u8">>; readonly pcrs: ToField<Vector<PCREntry>>; readonly publicKey: ToField<Option<Vector<"u8">>>; readonly userData: ToField<Option<Vector<"u8">>>; readonly nonce: ToField<Option<Vector<"u8">>>
 
- private constructor(typeArgs: [], fields: NitroAttestationDocumentFields, ) { this.$fullTypeName = composeSuiType( NitroAttestationDocument.$typeName, ...typeArgs ) as `${typeof PKG_V28}::nitro_attestation::NitroAttestationDocument`; this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [], fields: NitroAttestationDocumentFields, ) { this.$fullTypeName = composeSuiType( NitroAttestationDocument.$typeName, ...typeArgs ) as `${typeof PKG_V29}::nitro_attestation::NitroAttestationDocument`; this.$typeArgs = typeArgs;
 
  this.moduleId = fields.moduleId;; this.timestamp = fields.timestamp;; this.digest = fields.digest;; this.pcrs = fields.pcrs;; this.publicKey = fields.publicKey;; this.userData = fields.userData;; this.nonce = fields.nonce; }
 
- static reified( ): NitroAttestationDocumentReified { return { typeName: NitroAttestationDocument.$typeName, fullTypeName: composeSuiType( NitroAttestationDocument.$typeName, ...[] ) as `${typeof PKG_V28}::nitro_attestation::NitroAttestationDocument`, typeArgs: [ ] as [], isPhantom: NitroAttestationDocument.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => NitroAttestationDocument.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => NitroAttestationDocument.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => NitroAttestationDocument.fromBcs( data, ), bcs: NitroAttestationDocument.bcs, fromJSONField: (field: any) => NitroAttestationDocument.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => NitroAttestationDocument.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => NitroAttestationDocument.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => NitroAttestationDocument.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => NitroAttestationDocument.fetch( client, id, ), new: ( fields: NitroAttestationDocumentFields, ) => { return new NitroAttestationDocument( [], fields ) }, kind: "StructClassReified", } }
+ static reified( ): NitroAttestationDocumentReified { return { typeName: NitroAttestationDocument.$typeName, fullTypeName: composeSuiType( NitroAttestationDocument.$typeName, ...[] ) as `${typeof PKG_V29}::nitro_attestation::NitroAttestationDocument`, typeArgs: [ ] as [], isPhantom: NitroAttestationDocument.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => NitroAttestationDocument.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => NitroAttestationDocument.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => NitroAttestationDocument.fromBcs( data, ), bcs: NitroAttestationDocument.bcs, fromJSONField: (field: any) => NitroAttestationDocument.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => NitroAttestationDocument.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => NitroAttestationDocument.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => NitroAttestationDocument.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => NitroAttestationDocument.fetch( client, id, ), new: ( fields: NitroAttestationDocumentFields, ) => { return new NitroAttestationDocument( [], fields ) }, kind: "StructClassReified", } }
 
  static get r() { return NitroAttestationDocument.reified() }
 
@@ -78,7 +78,7 @@ export class NitroAttestationDocument implements StructClass { __StructClass = t
 
 /* ============================== PCREntry =============================== */
 
-export function isPCREntry(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V28}::nitro_attestation::PCREntry`; }
+export function isPCREntry(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V29}::nitro_attestation::PCREntry`; }
 
 export interface PCREntryFields { index: ToField<"u8">; value: ToField<Vector<"u8">> }
 
@@ -86,17 +86,17 @@ export type PCREntryReified = Reified< PCREntry, PCREntryFields >;
 
 export class PCREntry implements StructClass { __StructClass = true as const;
 
- static readonly $typeName = `${PKG_V28}::nitro_attestation::PCREntry`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
+ static readonly $typeName = `${PKG_V29}::nitro_attestation::PCREntry`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
 
- readonly $typeName = PCREntry.$typeName; readonly $fullTypeName: `${typeof PKG_V28}::nitro_attestation::PCREntry`; readonly $typeArgs: []; readonly $isPhantom = PCREntry.$isPhantom;
+ readonly $typeName = PCREntry.$typeName; readonly $fullTypeName: `${typeof PKG_V29}::nitro_attestation::PCREntry`; readonly $typeArgs: []; readonly $isPhantom = PCREntry.$isPhantom;
 
  readonly index: ToField<"u8">; readonly value: ToField<Vector<"u8">>
 
- private constructor(typeArgs: [], fields: PCREntryFields, ) { this.$fullTypeName = composeSuiType( PCREntry.$typeName, ...typeArgs ) as `${typeof PKG_V28}::nitro_attestation::PCREntry`; this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [], fields: PCREntryFields, ) { this.$fullTypeName = composeSuiType( PCREntry.$typeName, ...typeArgs ) as `${typeof PKG_V29}::nitro_attestation::PCREntry`; this.$typeArgs = typeArgs;
 
  this.index = fields.index;; this.value = fields.value; }
 
- static reified( ): PCREntryReified { return { typeName: PCREntry.$typeName, fullTypeName: composeSuiType( PCREntry.$typeName, ...[] ) as `${typeof PKG_V28}::nitro_attestation::PCREntry`, typeArgs: [ ] as [], isPhantom: PCREntry.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => PCREntry.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => PCREntry.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => PCREntry.fromBcs( data, ), bcs: PCREntry.bcs, fromJSONField: (field: any) => PCREntry.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => PCREntry.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => PCREntry.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => PCREntry.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => PCREntry.fetch( client, id, ), new: ( fields: PCREntryFields, ) => { return new PCREntry( [], fields ) }, kind: "StructClassReified", } }
+ static reified( ): PCREntryReified { return { typeName: PCREntry.$typeName, fullTypeName: composeSuiType( PCREntry.$typeName, ...[] ) as `${typeof PKG_V29}::nitro_attestation::PCREntry`, typeArgs: [ ] as [], isPhantom: PCREntry.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => PCREntry.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => PCREntry.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => PCREntry.fromBcs( data, ), bcs: PCREntry.bcs, fromJSONField: (field: any) => PCREntry.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => PCREntry.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => PCREntry.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => PCREntry.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => PCREntry.fetch( client, id, ), new: ( fields: PCREntryFields, ) => { return new PCREntry( [], fields ) }, kind: "StructClassReified", } }
 
  static get r() { return PCREntry.reified() }
 

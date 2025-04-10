@@ -2,14 +2,14 @@ import * as reified from "../../../../_framework/reified";
 import {PhantomReified, Reified, StructClass, ToField, ToTypeStr, decodeFromFields, decodeFromFieldsWithTypes, decodeFromJSONField, fieldToJSON, phantom} from "../../../../_framework/reified";
 import {FieldsWithTypes, composeSuiType, compressSuiType} from "../../../../_framework/util";
 import {Vector} from "../../../../_framework/vector";
-import {PKG_V14} from "../index";
+import {PKG_V15} from "../index";
 import {bcs} from "@mysten/sui/bcs";
 import {SuiClient, SuiObjectData, SuiParsedData} from "@mysten/sui/client";
 import {fromB64} from "@mysten/sui/utils";
 
 /* ============================== BitVector =============================== */
 
-export function isBitVector(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V14}::bit_vector::BitVector`; }
+export function isBitVector(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V15}::bit_vector::BitVector`; }
 
 export interface BitVectorFields { length: ToField<"u64">; bitField: ToField<Vector<"bool">> }
 
@@ -17,17 +17,17 @@ export type BitVectorReified = Reified< BitVector, BitVectorFields >;
 
 export class BitVector implements StructClass { __StructClass = true as const;
 
- static readonly $typeName = `${PKG_V14}::bit_vector::BitVector`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
+ static readonly $typeName = `${PKG_V15}::bit_vector::BitVector`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
 
- readonly $typeName = BitVector.$typeName; readonly $fullTypeName: `${typeof PKG_V14}::bit_vector::BitVector`; readonly $typeArgs: []; readonly $isPhantom = BitVector.$isPhantom;
+ readonly $typeName = BitVector.$typeName; readonly $fullTypeName: `${typeof PKG_V15}::bit_vector::BitVector`; readonly $typeArgs: []; readonly $isPhantom = BitVector.$isPhantom;
 
  readonly length: ToField<"u64">; readonly bitField: ToField<Vector<"bool">>
 
- private constructor(typeArgs: [], fields: BitVectorFields, ) { this.$fullTypeName = composeSuiType( BitVector.$typeName, ...typeArgs ) as `${typeof PKG_V14}::bit_vector::BitVector`; this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [], fields: BitVectorFields, ) { this.$fullTypeName = composeSuiType( BitVector.$typeName, ...typeArgs ) as `${typeof PKG_V15}::bit_vector::BitVector`; this.$typeArgs = typeArgs;
 
  this.length = fields.length;; this.bitField = fields.bitField; }
 
- static reified( ): BitVectorReified { return { typeName: BitVector.$typeName, fullTypeName: composeSuiType( BitVector.$typeName, ...[] ) as `${typeof PKG_V14}::bit_vector::BitVector`, typeArgs: [ ] as [], isPhantom: BitVector.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => BitVector.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => BitVector.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => BitVector.fromBcs( data, ), bcs: BitVector.bcs, fromJSONField: (field: any) => BitVector.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => BitVector.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => BitVector.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => BitVector.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => BitVector.fetch( client, id, ), new: ( fields: BitVectorFields, ) => { return new BitVector( [], fields ) }, kind: "StructClassReified", } }
+ static reified( ): BitVectorReified { return { typeName: BitVector.$typeName, fullTypeName: composeSuiType( BitVector.$typeName, ...[] ) as `${typeof PKG_V15}::bit_vector::BitVector`, typeArgs: [ ] as [], isPhantom: BitVector.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => BitVector.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => BitVector.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => BitVector.fromBcs( data, ), bcs: BitVector.bcs, fromJSONField: (field: any) => BitVector.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => BitVector.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => BitVector.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => BitVector.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => BitVector.fetch( client, id, ), new: ( fields: BitVectorFields, ) => { return new BitVector( [], fields ) }, kind: "StructClassReified", } }
 
  static get r() { return BitVector.reified() }
 

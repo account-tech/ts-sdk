@@ -1,13 +1,13 @@
 import {PhantomReified, Reified, StructClass, ToField, ToTypeStr, decodeFromFields, decodeFromFieldsWithTypes, decodeFromJSONField, phantom} from "../../../../_framework/reified";
 import {FieldsWithTypes, composeSuiType, compressSuiType} from "../../../../_framework/util";
-import {PKG_V14} from "../index";
+import {PKG_V15} from "../index";
 import {bcs} from "@mysten/sui/bcs";
 import {SuiClient, SuiObjectData, SuiParsedData} from "@mysten/sui/client";
 import {fromB64} from "@mysten/sui/utils";
 
 /* ============================== UQ64_64 =============================== */
 
-export function isUQ64_64(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V14}::uq64_64::UQ64_64`; }
+export function isUQ64_64(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V15}::uq64_64::UQ64_64`; }
 
 export interface UQ64_64Fields { pos0: ToField<"u128"> }
 
@@ -15,17 +15,17 @@ export type UQ64_64Reified = Reified< UQ64_64, UQ64_64Fields >;
 
 export class UQ64_64 implements StructClass { __StructClass = true as const;
 
- static readonly $typeName = `${PKG_V14}::uq64_64::UQ64_64`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
+ static readonly $typeName = `${PKG_V15}::uq64_64::UQ64_64`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
 
- readonly $typeName = UQ64_64.$typeName; readonly $fullTypeName: `${typeof PKG_V14}::uq64_64::UQ64_64`; readonly $typeArgs: []; readonly $isPhantom = UQ64_64.$isPhantom;
+ readonly $typeName = UQ64_64.$typeName; readonly $fullTypeName: `${typeof PKG_V15}::uq64_64::UQ64_64`; readonly $typeArgs: []; readonly $isPhantom = UQ64_64.$isPhantom;
 
  readonly pos0: ToField<"u128">
 
- private constructor(typeArgs: [], fields: UQ64_64Fields, ) { this.$fullTypeName = composeSuiType( UQ64_64.$typeName, ...typeArgs ) as `${typeof PKG_V14}::uq64_64::UQ64_64`; this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [], fields: UQ64_64Fields, ) { this.$fullTypeName = composeSuiType( UQ64_64.$typeName, ...typeArgs ) as `${typeof PKG_V15}::uq64_64::UQ64_64`; this.$typeArgs = typeArgs;
 
  this.pos0 = fields.pos0; }
 
- static reified( ): UQ64_64Reified { return { typeName: UQ64_64.$typeName, fullTypeName: composeSuiType( UQ64_64.$typeName, ...[] ) as `${typeof PKG_V14}::uq64_64::UQ64_64`, typeArgs: [ ] as [], isPhantom: UQ64_64.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => UQ64_64.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => UQ64_64.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => UQ64_64.fromBcs( data, ), bcs: UQ64_64.bcs, fromJSONField: (field: any) => UQ64_64.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => UQ64_64.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => UQ64_64.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => UQ64_64.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => UQ64_64.fetch( client, id, ), new: ( fields: UQ64_64Fields, ) => { return new UQ64_64( [], fields ) }, kind: "StructClassReified", } }
+ static reified( ): UQ64_64Reified { return { typeName: UQ64_64.$typeName, fullTypeName: composeSuiType( UQ64_64.$typeName, ...[] ) as `${typeof PKG_V15}::uq64_64::UQ64_64`, typeArgs: [ ] as [], isPhantom: UQ64_64.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => UQ64_64.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => UQ64_64.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => UQ64_64.fromBcs( data, ), bcs: UQ64_64.bcs, fromJSONField: (field: any) => UQ64_64.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => UQ64_64.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => UQ64_64.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => UQ64_64.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => UQ64_64.fetch( client, id, ), new: ( fields: UQ64_64Fields, ) => { return new UQ64_64( [], fields ) }, kind: "StructClassReified", } }
 
  static get r() { return UQ64_64.reified() }
 

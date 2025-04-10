@@ -2,7 +2,7 @@ import * as reified from "../../_framework/reified";
 import {String} from "../../_dependencies/source/0x1/string/structs";
 import {TypeName} from "../../_dependencies/source/0x1/type-name/structs";
 import {Bag} from "../../_dependencies/source/0x2/bag/structs";
-import {ID} from "../../_dependencies/source/0x2/object/structs";
+import {ID, UID} from "../../_dependencies/source/0x2/object/structs";
 import {VecSet} from "../../_dependencies/source/0x2/vec-set/structs";
 import {PhantomReified, Reified, StructClass, ToField, ToTypeArgument, ToTypeStr, TypeArgument, assertFieldsWithTypesArgsMatch, assertReifiedTypeArgsMatch, decodeFromFields, decodeFromFieldsWithTypes, decodeFromJSONField, extractType, fieldToJSON, phantom, toBcs} from "../../_framework/reified";
 import {FieldsWithTypes, composeSuiType, compressSuiType, parseTypeName} from "../../_framework/util";
@@ -224,7 +224,7 @@ export class Intents implements StructClass { __StructClass = true as const;
 
 export function isParams(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::intents::Params`; }
 
-export interface ParamsFields { key: ToField<String>; description: ToField<String>; creationTime: ToField<"u64">; executionTimes: ToField<Vector<"u64">>; expirationTime: ToField<"u64"> }
+export interface ParamsFields { id: ToField<UID> }
 
 export type ParamsReified = Reified< Params, ParamsFields >;
 
@@ -234,11 +234,11 @@ export class Params implements StructClass { __StructClass = true as const;
 
  readonly $typeName = Params.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::intents::Params`; readonly $typeArgs: []; readonly $isPhantom = Params.$isPhantom;
 
- readonly key: ToField<String>; readonly description: ToField<String>; readonly creationTime: ToField<"u64">; readonly executionTimes: ToField<Vector<"u64">>; readonly expirationTime: ToField<"u64">
+ readonly id: ToField<UID>
 
  private constructor(typeArgs: [], fields: ParamsFields, ) { this.$fullTypeName = composeSuiType( Params.$typeName, ...typeArgs ) as `${typeof PKG_V1}::intents::Params`; this.$typeArgs = typeArgs;
 
- this.key = fields.key;; this.description = fields.description;; this.creationTime = fields.creationTime;; this.executionTimes = fields.executionTimes;; this.expirationTime = fields.expirationTime; }
+ this.id = fields.id; }
 
  static reified( ): ParamsReified { return { typeName: Params.$typeName, fullTypeName: composeSuiType( Params.$typeName, ...[] ) as `${typeof PKG_V1}::intents::Params`, typeArgs: [ ] as [], isPhantom: Params.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => Params.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => Params.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => Params.fromBcs( data, ), bcs: Params.bcs, fromJSONField: (field: any) => Params.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => Params.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => Params.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => Params.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => Params.fetch( client, id, ), new: ( fields: ParamsFields, ) => { return new Params( [], fields ) }, kind: "StructClassReified", } }
 
@@ -248,29 +248,29 @@ export class Params implements StructClass { __StructClass = true as const;
 
  static get bcs() { return bcs.struct("Params", {
 
- key: String.bcs, description: String.bcs, creation_time: bcs.u64(), execution_times: bcs.vector(bcs.u64()), expiration_time: bcs.u64()
+ id: UID.bcs
 
 }) };
 
- static fromFields( fields: Record<string, any> ): Params { return Params.reified( ).new( { key: decodeFromFields(String.reified(), fields.key), description: decodeFromFields(String.reified(), fields.description), creationTime: decodeFromFields("u64", fields.creation_time), executionTimes: decodeFromFields(reified.vector("u64"), fields.execution_times), expirationTime: decodeFromFields("u64", fields.expiration_time) } ) }
+ static fromFields( fields: Record<string, any> ): Params { return Params.reified( ).new( { id: decodeFromFields(UID.reified(), fields.id) } ) }
 
  static fromFieldsWithTypes( item: FieldsWithTypes ): Params { if (!isParams(item.type)) { throw new Error("not a Params type");
 
  }
 
- return Params.reified( ).new( { key: decodeFromFieldsWithTypes(String.reified(), item.fields.key), description: decodeFromFieldsWithTypes(String.reified(), item.fields.description), creationTime: decodeFromFieldsWithTypes("u64", item.fields.creation_time), executionTimes: decodeFromFieldsWithTypes(reified.vector("u64"), item.fields.execution_times), expirationTime: decodeFromFieldsWithTypes("u64", item.fields.expiration_time) } ) }
+ return Params.reified( ).new( { id: decodeFromFieldsWithTypes(UID.reified(), item.fields.id) } ) }
 
  static fromBcs( data: Uint8Array ): Params { return Params.fromFields( Params.bcs.parse(data) ) }
 
  toJSONField() { return {
 
- key: this.key,description: this.description,creationTime: this.creationTime.toString(),executionTimes: fieldToJSON<Vector<"u64">>(`vector<u64>`, this.executionTimes),expirationTime: this.expirationTime.toString(),
+ id: this.id,
 
 } }
 
  toJSON() { return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() } }
 
- static fromJSONField( field: any ): Params { return Params.reified( ).new( { key: decodeFromJSONField(String.reified(), field.key), description: decodeFromJSONField(String.reified(), field.description), creationTime: decodeFromJSONField("u64", field.creationTime), executionTimes: decodeFromJSONField(reified.vector("u64"), field.executionTimes), expirationTime: decodeFromJSONField("u64", field.expirationTime) } ) }
+ static fromJSONField( field: any ): Params { return Params.reified( ).new( { id: decodeFromJSONField(UID.reified(), field.id) } ) }
 
  static fromJSON( json: Record<string, any> ): Params { if (json.$typeName !== Params.$typeName) { throw new Error("not a WithTwoGenerics json object") };
 
@@ -285,5 +285,73 @@ export class Params implements StructClass { __StructClass = true as const;
  static async fetch( client: SuiClient, id: string ): Promise<Params> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching Params object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isParams(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a Params object`); }
 
  return Params.fromSuiObjectData( res.data ); }
+
+ }
+
+/* ============================== ParamsFieldsV1 =============================== */
+
+export function isParamsFieldsV1(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::intents::ParamsFieldsV1`; }
+
+export interface ParamsFieldsV1Fields { key: ToField<String>; description: ToField<String>; creationTime: ToField<"u64">; executionTimes: ToField<Vector<"u64">>; expirationTime: ToField<"u64"> }
+
+export type ParamsFieldsV1Reified = Reified< ParamsFieldsV1, ParamsFieldsV1Fields >;
+
+export class ParamsFieldsV1 implements StructClass { __StructClass = true as const;
+
+ static readonly $typeName = `${PKG_V1}::intents::ParamsFieldsV1`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
+
+ readonly $typeName = ParamsFieldsV1.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::intents::ParamsFieldsV1`; readonly $typeArgs: []; readonly $isPhantom = ParamsFieldsV1.$isPhantom;
+
+ readonly key: ToField<String>; readonly description: ToField<String>; readonly creationTime: ToField<"u64">; readonly executionTimes: ToField<Vector<"u64">>; readonly expirationTime: ToField<"u64">
+
+ private constructor(typeArgs: [], fields: ParamsFieldsV1Fields, ) { this.$fullTypeName = composeSuiType( ParamsFieldsV1.$typeName, ...typeArgs ) as `${typeof PKG_V1}::intents::ParamsFieldsV1`; this.$typeArgs = typeArgs;
+
+ this.key = fields.key;; this.description = fields.description;; this.creationTime = fields.creationTime;; this.executionTimes = fields.executionTimes;; this.expirationTime = fields.expirationTime; }
+
+ static reified( ): ParamsFieldsV1Reified { return { typeName: ParamsFieldsV1.$typeName, fullTypeName: composeSuiType( ParamsFieldsV1.$typeName, ...[] ) as `${typeof PKG_V1}::intents::ParamsFieldsV1`, typeArgs: [ ] as [], isPhantom: ParamsFieldsV1.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => ParamsFieldsV1.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => ParamsFieldsV1.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => ParamsFieldsV1.fromBcs( data, ), bcs: ParamsFieldsV1.bcs, fromJSONField: (field: any) => ParamsFieldsV1.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => ParamsFieldsV1.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => ParamsFieldsV1.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => ParamsFieldsV1.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => ParamsFieldsV1.fetch( client, id, ), new: ( fields: ParamsFieldsV1Fields, ) => { return new ParamsFieldsV1( [], fields ) }, kind: "StructClassReified", } }
+
+ static get r() { return ParamsFieldsV1.reified() }
+
+ static phantom( ): PhantomReified<ToTypeStr<ParamsFieldsV1>> { return phantom(ParamsFieldsV1.reified( )); } static get p() { return ParamsFieldsV1.phantom() }
+
+ static get bcs() { return bcs.struct("ParamsFieldsV1", {
+
+ key: String.bcs, description: String.bcs, creation_time: bcs.u64(), execution_times: bcs.vector(bcs.u64()), expiration_time: bcs.u64()
+
+}) };
+
+ static fromFields( fields: Record<string, any> ): ParamsFieldsV1 { return ParamsFieldsV1.reified( ).new( { key: decodeFromFields(String.reified(), fields.key), description: decodeFromFields(String.reified(), fields.description), creationTime: decodeFromFields("u64", fields.creation_time), executionTimes: decodeFromFields(reified.vector("u64"), fields.execution_times), expirationTime: decodeFromFields("u64", fields.expiration_time) } ) }
+
+ static fromFieldsWithTypes( item: FieldsWithTypes ): ParamsFieldsV1 { if (!isParamsFieldsV1(item.type)) { throw new Error("not a ParamsFieldsV1 type");
+
+ }
+
+ return ParamsFieldsV1.reified( ).new( { key: decodeFromFieldsWithTypes(String.reified(), item.fields.key), description: decodeFromFieldsWithTypes(String.reified(), item.fields.description), creationTime: decodeFromFieldsWithTypes("u64", item.fields.creation_time), executionTimes: decodeFromFieldsWithTypes(reified.vector("u64"), item.fields.execution_times), expirationTime: decodeFromFieldsWithTypes("u64", item.fields.expiration_time) } ) }
+
+ static fromBcs( data: Uint8Array ): ParamsFieldsV1 { return ParamsFieldsV1.fromFields( ParamsFieldsV1.bcs.parse(data) ) }
+
+ toJSONField() { return {
+
+ key: this.key,description: this.description,creationTime: this.creationTime.toString(),executionTimes: fieldToJSON<Vector<"u64">>(`vector<u64>`, this.executionTimes),expirationTime: this.expirationTime.toString(),
+
+} }
+
+ toJSON() { return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() } }
+
+ static fromJSONField( field: any ): ParamsFieldsV1 { return ParamsFieldsV1.reified( ).new( { key: decodeFromJSONField(String.reified(), field.key), description: decodeFromJSONField(String.reified(), field.description), creationTime: decodeFromJSONField("u64", field.creationTime), executionTimes: decodeFromJSONField(reified.vector("u64"), field.executionTimes), expirationTime: decodeFromJSONField("u64", field.expirationTime) } ) }
+
+ static fromJSON( json: Record<string, any> ): ParamsFieldsV1 { if (json.$typeName !== ParamsFieldsV1.$typeName) { throw new Error("not a WithTwoGenerics json object") };
+
+ return ParamsFieldsV1.fromJSONField( json, ) }
+
+ static fromSuiParsedData( content: SuiParsedData ): ParamsFieldsV1 { if (content.dataType !== "moveObject") { throw new Error("not an object"); } if (!isParamsFieldsV1(content.type)) { throw new Error(`object at ${(content.fields as any).id} is not a ParamsFieldsV1 object`); } return ParamsFieldsV1.fromFieldsWithTypes( content ); }
+
+ static fromSuiObjectData( data: SuiObjectData ): ParamsFieldsV1 { if (data.bcs) { if (data.bcs.dataType !== "moveObject" || !isParamsFieldsV1(data.bcs.type)) { throw new Error(`object at is not a ParamsFieldsV1 object`); }
+
+ return ParamsFieldsV1.fromBcs( fromB64(data.bcs.bcsBytes) ); } if (data.content) { return ParamsFieldsV1.fromSuiParsedData( data.content ) } throw new Error( "Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request." ); }
+
+ static async fetch( client: SuiClient, id: string ): Promise<ParamsFieldsV1> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching ParamsFieldsV1 object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isParamsFieldsV1(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a ParamsFieldsV1 object`); }
+
+ return ParamsFieldsV1.fromSuiObjectData( res.data ); }
 
  }

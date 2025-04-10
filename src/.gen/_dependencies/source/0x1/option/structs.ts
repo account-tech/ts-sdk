@@ -2,14 +2,14 @@ import * as reified from "../../../../_framework/reified";
 import {PhantomReified, Reified, StructClass, ToField, ToTypeArgument, ToTypeStr, TypeArgument, assertFieldsWithTypesArgsMatch, assertReifiedTypeArgsMatch, decodeFromFields, decodeFromFieldsWithTypes, decodeFromJSONField, extractType, fieldToJSON, phantom, toBcs} from "../../../../_framework/reified";
 import {FieldsWithTypes, composeSuiType, compressSuiType, parseTypeName} from "../../../../_framework/util";
 import {Vector} from "../../../../_framework/vector";
-import {PKG_V14} from "../index";
+import {PKG_V15} from "../index";
 import {BcsType, bcs} from "@mysten/sui/bcs";
 import {SuiClient, SuiObjectData, SuiParsedData} from "@mysten/sui/client";
 import {fromB64} from "@mysten/sui/utils";
 
 /* ============================== Option =============================== */
 
-export function isOption(type: string): boolean { type = compressSuiType(type); return type.startsWith(`${PKG_V14}::option::Option` + '<'); }
+export function isOption(type: string): boolean { type = compressSuiType(type); return type.startsWith(`${PKG_V15}::option::Option` + '<'); }
 
 export interface OptionFields<Element extends TypeArgument> { vec: ToField<Vector<Element>> }
 
@@ -17,19 +17,19 @@ export type OptionReified<Element extends TypeArgument> = Reified< Option<Elemen
 
 export class Option<Element extends TypeArgument> implements StructClass { __StructClass = true as const;
 
- static readonly $typeName = `${PKG_V14}::option::Option`; static readonly $numTypeParams = 1; static readonly $isPhantom = [false,] as const;
+ static readonly $typeName = `${PKG_V15}::option::Option`; static readonly $numTypeParams = 1; static readonly $isPhantom = [false,] as const;
 
  __inner: Element = null as unknown as Element; // for type checking in reified.ts
 
-; readonly $typeName = Option.$typeName; readonly $fullTypeName: `${typeof PKG_V14}::option::Option<${ToTypeStr<Element>}>`; readonly $typeArgs: [ToTypeStr<Element>]; readonly $isPhantom = Option.$isPhantom;
+; readonly $typeName = Option.$typeName; readonly $fullTypeName: `${typeof PKG_V15}::option::Option<${ToTypeStr<Element>}>`; readonly $typeArgs: [ToTypeStr<Element>]; readonly $isPhantom = Option.$isPhantom;
 
  readonly vec: ToField<Vector<Element>>
 
- private constructor(typeArgs: [ToTypeStr<Element>], fields: OptionFields<Element>, ) { this.$fullTypeName = composeSuiType( Option.$typeName, ...typeArgs ) as `${typeof PKG_V14}::option::Option<${ToTypeStr<Element>}>`; this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [ToTypeStr<Element>], fields: OptionFields<Element>, ) { this.$fullTypeName = composeSuiType( Option.$typeName, ...typeArgs ) as `${typeof PKG_V15}::option::Option<${ToTypeStr<Element>}>`; this.$typeArgs = typeArgs;
 
  this.vec = fields.vec; }
 
- static reified<Element extends Reified<TypeArgument, any>>( Element: Element ): OptionReified<ToTypeArgument<Element>> { return { typeName: Option.$typeName, fullTypeName: composeSuiType( Option.$typeName, ...[extractType(Element)] ) as `${typeof PKG_V14}::option::Option<${ToTypeStr<ToTypeArgument<Element>>}>`, typeArgs: [ extractType(Element) ] as [ToTypeStr<ToTypeArgument<Element>>], isPhantom: Option.$isPhantom, reifiedTypeArgs: [Element], fromFields: (fields: Record<string, any>) => Option.fromFields( Element, fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => Option.fromFieldsWithTypes( Element, item, ), fromBcs: (data: Uint8Array) => Option.fromBcs( Element, data, ), bcs: Option.bcs(toBcs(Element)), fromJSONField: (field: any) => Option.fromJSONField( Element, field, ), fromJSON: (json: Record<string, any>) => Option.fromJSON( Element, json, ), fromSuiParsedData: (content: SuiParsedData) => Option.fromSuiParsedData( Element, content, ), fromSuiObjectData: (content: SuiObjectData) => Option.fromSuiObjectData( Element, content, ), fetch: async (client: SuiClient, id: string) => Option.fetch( client, Element, id, ), new: ( fields: OptionFields<ToTypeArgument<Element>>, ) => { return new Option( [extractType(Element)], fields ) }, kind: "StructClassReified", } }
+ static reified<Element extends Reified<TypeArgument, any>>( Element: Element ): OptionReified<ToTypeArgument<Element>> { return { typeName: Option.$typeName, fullTypeName: composeSuiType( Option.$typeName, ...[extractType(Element)] ) as `${typeof PKG_V15}::option::Option<${ToTypeStr<ToTypeArgument<Element>>}>`, typeArgs: [ extractType(Element) ] as [ToTypeStr<ToTypeArgument<Element>>], isPhantom: Option.$isPhantom, reifiedTypeArgs: [Element], fromFields: (fields: Record<string, any>) => Option.fromFields( Element, fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => Option.fromFieldsWithTypes( Element, item, ), fromBcs: (data: Uint8Array) => Option.fromBcs( Element, data, ), bcs: Option.bcs(toBcs(Element)), fromJSONField: (field: any) => Option.fromJSONField( Element, field, ), fromJSON: (json: Record<string, any>) => Option.fromJSON( Element, json, ), fromSuiParsedData: (content: SuiParsedData) => Option.fromSuiParsedData( Element, content, ), fromSuiObjectData: (content: SuiObjectData) => Option.fromSuiObjectData( Element, content, ), fetch: async (client: SuiClient, id: string) => Option.fetch( client, Element, id, ), new: ( fields: OptionFields<ToTypeArgument<Element>>, ) => { return new Option( [extractType(Element)], fields ) }, kind: "StructClassReified", } }
 
  static get r() { return Option.reified }
 

@@ -1,13 +1,13 @@
 import {PhantomReified, Reified, StructClass, ToField, ToTypeStr, decodeFromFields, decodeFromFieldsWithTypes, decodeFromJSONField, phantom} from "../../../../_framework/reified";
 import {FieldsWithTypes, composeSuiType, compressSuiType} from "../../../../_framework/util";
-import {PKG_V14} from "../index";
+import {PKG_V15} from "../index";
 import {bcs} from "@mysten/sui/bcs";
 import {SuiClient, SuiObjectData, SuiParsedData} from "@mysten/sui/client";
 import {fromB64} from "@mysten/sui/utils";
 
 /* ============================== UQ32_32 =============================== */
 
-export function isUQ32_32(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V14}::uq32_32::UQ32_32`; }
+export function isUQ32_32(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V15}::uq32_32::UQ32_32`; }
 
 export interface UQ32_32Fields { pos0: ToField<"u64"> }
 
@@ -15,17 +15,17 @@ export type UQ32_32Reified = Reified< UQ32_32, UQ32_32Fields >;
 
 export class UQ32_32 implements StructClass { __StructClass = true as const;
 
- static readonly $typeName = `${PKG_V14}::uq32_32::UQ32_32`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
+ static readonly $typeName = `${PKG_V15}::uq32_32::UQ32_32`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
 
- readonly $typeName = UQ32_32.$typeName; readonly $fullTypeName: `${typeof PKG_V14}::uq32_32::UQ32_32`; readonly $typeArgs: []; readonly $isPhantom = UQ32_32.$isPhantom;
+ readonly $typeName = UQ32_32.$typeName; readonly $fullTypeName: `${typeof PKG_V15}::uq32_32::UQ32_32`; readonly $typeArgs: []; readonly $isPhantom = UQ32_32.$isPhantom;
 
  readonly pos0: ToField<"u64">
 
- private constructor(typeArgs: [], fields: UQ32_32Fields, ) { this.$fullTypeName = composeSuiType( UQ32_32.$typeName, ...typeArgs ) as `${typeof PKG_V14}::uq32_32::UQ32_32`; this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [], fields: UQ32_32Fields, ) { this.$fullTypeName = composeSuiType( UQ32_32.$typeName, ...typeArgs ) as `${typeof PKG_V15}::uq32_32::UQ32_32`; this.$typeArgs = typeArgs;
 
  this.pos0 = fields.pos0; }
 
- static reified( ): UQ32_32Reified { return { typeName: UQ32_32.$typeName, fullTypeName: composeSuiType( UQ32_32.$typeName, ...[] ) as `${typeof PKG_V14}::uq32_32::UQ32_32`, typeArgs: [ ] as [], isPhantom: UQ32_32.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => UQ32_32.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => UQ32_32.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => UQ32_32.fromBcs( data, ), bcs: UQ32_32.bcs, fromJSONField: (field: any) => UQ32_32.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => UQ32_32.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => UQ32_32.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => UQ32_32.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => UQ32_32.fetch( client, id, ), new: ( fields: UQ32_32Fields, ) => { return new UQ32_32( [], fields ) }, kind: "StructClassReified", } }
+ static reified( ): UQ32_32Reified { return { typeName: UQ32_32.$typeName, fullTypeName: composeSuiType( UQ32_32.$typeName, ...[] ) as `${typeof PKG_V15}::uq32_32::UQ32_32`, typeArgs: [ ] as [], isPhantom: UQ32_32.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => UQ32_32.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => UQ32_32.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => UQ32_32.fromBcs( data, ), bcs: UQ32_32.bcs, fromJSONField: (field: any) => UQ32_32.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => UQ32_32.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => UQ32_32.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => UQ32_32.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => UQ32_32.fetch( client, id, ), new: ( fields: UQ32_32Fields, ) => { return new UQ32_32( [], fields ) }, kind: "StructClassReified", } }
 
  static get r() { return UQ32_32.reified() }
 

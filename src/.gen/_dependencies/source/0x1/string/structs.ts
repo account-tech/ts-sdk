@@ -2,14 +2,14 @@ import * as reified from "../../../../_framework/reified";
 import {PhantomReified, Reified, StructClass, ToField, ToTypeStr, decodeFromFields, decodeFromFieldsWithTypes, decodeFromJSONField, fieldToJSON, phantom} from "../../../../_framework/reified";
 import {FieldsWithTypes, composeSuiType, compressSuiType} from "../../../../_framework/util";
 import {Vector} from "../../../../_framework/vector";
-import {PKG_V14} from "../index";
+import {PKG_V15} from "../index";
 import {bcs} from "@mysten/sui/bcs";
 import {SuiClient, SuiObjectData, SuiParsedData} from "@mysten/sui/client";
 import {fromB64} from "@mysten/sui/utils";
 
 /* ============================== String =============================== */
 
-export function isString(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V14}::string::String`; }
+export function isString(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V15}::string::String`; }
 
 export interface StringFields { bytes: ToField<Vector<"u8">> }
 
@@ -17,17 +17,17 @@ export type StringReified = Reified< String, StringFields >;
 
 export class String implements StructClass { __StructClass = true as const;
 
- static readonly $typeName = `${PKG_V14}::string::String`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
+ static readonly $typeName = `${PKG_V15}::string::String`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
 
- readonly $typeName = String.$typeName; readonly $fullTypeName: `${typeof PKG_V14}::string::String`; readonly $typeArgs: []; readonly $isPhantom = String.$isPhantom;
+ readonly $typeName = String.$typeName; readonly $fullTypeName: `${typeof PKG_V15}::string::String`; readonly $typeArgs: []; readonly $isPhantom = String.$isPhantom;
 
  readonly bytes: ToField<Vector<"u8">>
 
- private constructor(typeArgs: [], fields: StringFields, ) { this.$fullTypeName = composeSuiType( String.$typeName, ...typeArgs ) as `${typeof PKG_V14}::string::String`; this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [], fields: StringFields, ) { this.$fullTypeName = composeSuiType( String.$typeName, ...typeArgs ) as `${typeof PKG_V15}::string::String`; this.$typeArgs = typeArgs;
 
  this.bytes = fields.bytes; }
 
- static reified( ): StringReified { return { typeName: String.$typeName, fullTypeName: composeSuiType( String.$typeName, ...[] ) as `${typeof PKG_V14}::string::String`, typeArgs: [ ] as [], isPhantom: String.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => String.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => String.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => String.fromBcs( data, ), bcs: String.bcs, fromJSONField: (field: any) => String.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => String.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => String.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => String.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => String.fetch( client, id, ), new: ( fields: StringFields, ) => { return new String( [], fields ) }, kind: "StructClassReified", } }
+ static reified( ): StringReified { return { typeName: String.$typeName, fullTypeName: composeSuiType( String.$typeName, ...[] ) as `${typeof PKG_V15}::string::String`, typeArgs: [ ] as [], isPhantom: String.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => String.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => String.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => String.fromBcs( data, ), bcs: String.bcs, fromJSONField: (field: any) => String.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => String.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => String.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => String.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => String.fetch( client, id, ), new: ( fields: StringFields, ) => { return new String( [], fields ) }, kind: "StructClassReified", } }
 
  static get r() { return String.reified() }
 

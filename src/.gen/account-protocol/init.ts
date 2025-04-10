@@ -24,6 +24,7 @@ loader.register(intents.Expired);
 loader.register(intents.Intent);
 loader.register(intents.Intents);
 loader.register(intents.Params);
+loader.register(intents.ParamsFieldsV1);
 loader.register(metadata.Metadata);
 loader.register(owned.WithdrawAction);
 loader.register(user.Invite);
