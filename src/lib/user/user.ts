@@ -1,10 +1,10 @@
 import { Transaction, TransactionObjectInput, TransactionResult } from "@mysten/sui/transactions";
 import { SuiClient, SuiMoveObject, SuiObjectResponse } from "@mysten/sui/client";
-import { SuinsClient } from '@mysten/suins-toolkit';
+import { SuinsClient } from '@mysten/suins';
 import { User as UserRaw, Invite as InviteRaw } from "../../.gen/account-protocol/user/structs";
 import { acceptInvite, refuseInvite, reorderAccounts } from "../../.gen/account-protocol/user/functions";
 import { new_, transfer, destroy } from "../../.gen/account-protocol/user/functions";
-import { USER_REGISTRY, ACCOUNT_PROTOCOL, contractObjects } from "../../types/constants";
+import { USER_REGISTRY, ACCOUNT_PROTOCOL } from "../../types/constants";
 import { UserData, AccountPreview, Invite, Profile } from "./types";
 
 export class User implements UserData {
@@ -58,17 +58,16 @@ export class User implements UserData {
 
 	async fetchProfile(owner: string): Promise<Profile> {
 		// get user name and avatar
-		const suinsClient = new SuinsClient(this.client, { networkType: 'testnet', contractObjects });
-		const name = await suinsClient.getName(owner);
+		const suinsClient = new SuinsClient({ client: this.client, network: 'testnet' });
+		const nameRecord = await suinsClient.getNameRecord(owner);
 
 		let username = owner.slice(0, 5) + "..." + owner.slice(-3);
 		let avatar = "https://cdn1.iconfinder.com/data/icons/user-pictures/100/unknown-1024.png";
 
-		if (name) {
-			username = name;
-			const nameObject = await suinsClient.getNameObject(name, { showOwner: true });
-			if (nameObject?.avatar) {
-				avatar = nameObject.avatar;
+		if (nameRecord) {
+			username = nameRecord.name;
+			if (nameRecord.avatar) {
+				avatar = nameRecord.avatar;
 			}
 		}
 
