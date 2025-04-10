@@ -40,12 +40,12 @@ export class Owned implements OwnedData {
                 if (!coinMap.has(type)) {
                     coinMap.set(type, {
                         type,
-                        ids: [],
+                        refs: [],
                         amount: 0n
                     });
                 }
                 const coin = coinMap.get(type)!;
-                coin.ids.push(obj.data.objectId);
+                coin.refs.push({ objectId: obj.data.objectId, version: obj.data.version, digest: obj.data.digest });
                 coin.amount += BigInt((obj.data?.content as any).fields.balance);
             }
             // Check if it's a "visual" NFT
@@ -54,6 +54,8 @@ export class Owned implements OwnedData {
                 nfts.push({
                     type: obj.data.type,
                     id: obj.data.objectId,
+                    version: obj.data.version,
+                    digest: obj.data.digest,
                     name: display?.data?.name ?? "",
                     image: display?.data?.image_url ?? "" // TODO: add default
                 });
@@ -63,6 +65,8 @@ export class Owned implements OwnedData {
                 objects.push({
                     type: obj.data.type,
                     id: obj.data.objectId,
+                    version: obj.data.version,
+                    digest: obj.data.digest,
                     fields: Object.fromEntries(Object.entries((obj.data.content as SuiMoveObject).fields ?? {}).filter(([key]) => key !== 'id'))
                 });
             }
@@ -104,5 +108,11 @@ export class Owned implements OwnedData {
 
     getOtherObj(type: string): OtherObj | undefined {
         return this.objects.find(o => o.type === type);
+    }
+
+    getObjOrNftRefById(id: string): { objectId: string, version: string, digest: string } | undefined {
+        const obj = this.nfts.find(n => n.id === id) ?? this.objects.find(o => o.id === id);
+        if (!obj) return undefined;
+        return { objectId: obj.id, version: obj.version, digest: obj.digest };
     }
 }

@@ -8,13 +8,15 @@ export type OwnedData = {
 
 export type Coin = {
     type: string;
-    ids: string[];
+    refs: { objectId: string, version: string, digest: string }[];
     amount: bigint;
 }
 
 export type Nft = {
     type: string;
     id: string;
+    version: string;
+    digest: string;
     name: string;
     image: string;
 }
@@ -22,6 +24,8 @@ export type Nft = {
 export type OtherObj = {
     type: string;
     id: string;
+    version: string;
+    digest: string;
     fields: any;
 }
 
