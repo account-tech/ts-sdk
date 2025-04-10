@@ -45,8 +45,8 @@ export class Owned implements OwnedData {
                     });
                 }
                 const coin = coinMap.get(type)!;
-                coin.instances.push({ amount: (obj.data?.content as any).fields.balance, ref: { objectId: obj.data.objectId, version: obj.data.version, digest: obj.data.digest } });
-                coin.totalAmount += (obj.data?.content as any).fields.balance;
+                coin.instances.push({ amount: BigInt((obj.data?.content as any).fields.balance), ref: { objectId: obj.data.objectId, version: obj.data.version, digest: obj.data.digest } });
+                coin.totalAmount += BigInt((obj.data?.content as any).fields.balance);
             }
             // Check if it's a "visual" NFT
             else if (obj.data.display?.data) {
