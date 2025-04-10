@@ -111,4 +111,16 @@ export class Owned implements OwnedData {
         if (!obj) return undefined;
         return { objectId: obj.ref.objectId, version: obj.ref.version, digest: obj.ref.digest };
     }
+
+    getTypeById(id: string): string | undefined {
+        // Check coins first
+        for (const coin of this.coins) {
+            const instance = coin.instances.find(i => i.ref.objectId === id);
+            if (instance) return `0x2::coin::Coin<${coin.type}>`;
+        }
+        // Then check NFTs and other objects
+        const obj = this.nfts.find(n => n.ref.objectId === id) ?? this.objects.find(o => o.ref.objectId === id);
+        if (!obj) return undefined;
+        return obj.type;
+    }
 }

@@ -14,7 +14,9 @@ import { phantom } from "../../../.gen/_framework/reified";
 
 import { ActionsIntentTypes, WithdrawAndTransferArgs, WithdrawAndTransferToVaultArgs, WithdrawAndVestArgs } from "../types";
 import { Intent } from "../intent";
+import { Owned } from "../../objects/owned";
 import { CLOCK } from "../../../types";
+
 export class WithdrawAndTransferToVaultIntent extends Intent {
     static type = ActionsIntentTypes.WithdrawAndTransferToVault;
     declare args: WithdrawAndTransferToVaultArgs;
@@ -143,6 +145,7 @@ export class WithdrawAndTransferToVaultIntent extends Intent {
 export class WithdrawAndTransferIntent extends Intent {
     static type = ActionsIntentTypes.WithdrawAndTransfer;
     declare args: WithdrawAndTransferArgs;
+    typeById: Map<string, string> = new Map();
 
     async init() {
         const actions = await this.fetchActions(this.fields.actionsId);
@@ -153,6 +156,12 @@ export class WithdrawAndTransferIntent extends Intent {
                 recipient: TransferAction.fromFieldsWithTypes(actions[i * 2 + 1]).recipient,
             })),
         };
+    }
+
+    initTypeById(owned: Owned) {
+        this.args.transfers.forEach(transfer => {
+            this.typeById.set(transfer.objectId as string, owned.getTypeById(transfer.objectId as string)!);
+        });
     }
 
     request(
@@ -183,11 +192,15 @@ export class WithdrawAndTransferIntent extends Intent {
         accountGenerics: [string, string],
         executable: TransactionObjectInput,
     ): TransactionResult {
+        if (this.typeById.size === 0) {
+            throw new Error("Type by ID not initialized");
+        }
+
         let result;
         for (let i = 0; i < this.args!.transfers.length; i++) {
             result = ownedIntents.executeWithdrawAndTransfer(
                 tx,
-                [...accountGenerics, ""], // TODO: get object type
+                [...accountGenerics, this.typeById.get(this.args!.transfers[i].objectId as string)!],
                 {
                     executable,
                     account: this.account!,

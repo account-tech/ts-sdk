@@ -9,8 +9,9 @@ export {
 export { ConfigDepsIntent, ToggleUnverifiedAllowedIntent } from "./protocol/config";
 export { Intent, Intents } from "./intent";
 export { Outcome } from "./outcome";
+export { ActionsIntentTypes } from "./types";
 export type {
-    IntentFields, IntentArgs, ActionsArgs, IntentStatus,
+    IntentFields, IntentArgs, ActionsArgs, IntentStatus, 
     ConfigDepsArgs, ToggleUnverifiedAllowedArgs,
     BorrowCapArgs,
     DisableRulesArgs, UpdateMetadataArgs, MintAndTransferArgs, MintAndVestArgs, WithdrawAndBurnArgs,
