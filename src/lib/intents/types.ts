@@ -161,5 +161,12 @@ export type UpgradePackageArgs = {
 
 export type RestrictPolicyArgs = {
     packageName: string;
-    policy: number;
+    policy: typeof Policy[keyof typeof Policy];
 }
+
+export const Policy = {
+    Compatible: 0,
+    Additive: 128,
+    DepOnly: 192,
+    Immutable: 255,
+} as const;

@@ -120,6 +120,10 @@ export class RestrictPolicyIntent extends Intent {
         const actions = await this.fetchActions(this.fields.actionsId);
         const restrictAction = RestrictAction.fromFieldsWithTypes(actions[0]);
 
+        if (restrictAction.policy !== 0 && restrictAction.policy !== 128 && restrictAction.policy !== 192 && restrictAction.policy !== 255) {
+            throw new Error("Invalid policy");
+        }
+
         this.args = {
             packageName: restrictAction.name,
             policy: restrictAction.policy,
