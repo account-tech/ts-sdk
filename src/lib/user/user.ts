@@ -58,18 +58,18 @@ export class User implements UserData {
 
 	async fetchProfile(owner: string): Promise<Profile> {
 		// get user name and avatar
-		const suinsClient = new SuinsClient({ client: this.client, network: 'testnet' });
-		const nameRecord = await suinsClient.getNameRecord(owner);
+		// const suinsClient = new SuinsClient({ client: this.client, network: 'testnet' });
+		// const nameRecord = await suinsClient.getNameRecord(owner);
 
 		let username = owner.slice(0, 5) + "..." + owner.slice(-3);
 		let avatar = "https://cdn1.iconfinder.com/data/icons/user-pictures/100/unknown-1024.png";
 
-		if (nameRecord) {
-			username = nameRecord.name;
-			if (nameRecord.avatar) {
-				avatar = nameRecord.avatar;
-			}
-		}
+		// if (nameRecord) {
+		// 	username = nameRecord.name;
+		// 	if (nameRecord.avatar) {
+		// 		avatar = nameRecord.avatar;
+		// 	}
+		// }
 
 		return { username, avatar };
 	}
