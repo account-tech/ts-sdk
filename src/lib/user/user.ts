@@ -1,6 +1,6 @@
 import { Transaction, TransactionObjectInput, TransactionResult } from "@mysten/sui/transactions";
 import { SuiClient, SuiMoveObject, SuiObjectResponse } from "@mysten/sui/client";
-import { SuinsClient } from '@mysten/suins';
+// import { SuinsClient } from '@mysten/suins';
 import { User as UserRaw, Invite as InviteRaw } from "../../.gen/account-protocol/user/structs";
 import { acceptInvite, refuseInvite, reorderAccounts } from "../../.gen/account-protocol/user/functions";
 import { new_, transfer, destroy } from "../../.gen/account-protocol/user/functions";

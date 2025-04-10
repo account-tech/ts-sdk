@@ -17,7 +17,7 @@ export class ConfigDepsIntent extends Intent {
         const configDepsAction = ConfigDepsAction.fromFieldsWithTypes(actions[0]);
 
         this.args = {
-            deps: configDepsAction.deps.inner.map((dep) => ({
+            deps: configDepsAction.deps.map((dep) => ({
                 name: dep.name,
                 addr: dep.addr,
                 version: Number(dep.version),

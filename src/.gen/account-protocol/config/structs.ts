@@ -1,6 +1,8 @@
-import {PhantomReified, Reified, StructClass, ToField, ToTypeStr, decodeFromFields, decodeFromFieldsWithTypes, decodeFromJSONField, phantom} from "../../_framework/reified";
+import * as reified from "../../_framework/reified";
+import {PhantomReified, Reified, StructClass, ToField, ToTypeStr, decodeFromFields, decodeFromFieldsWithTypes, decodeFromJSONField, fieldToJSON, phantom} from "../../_framework/reified";
 import {FieldsWithTypes, composeSuiType, compressSuiType} from "../../_framework/util";
-import {Deps} from "../deps/structs";
+import {Vector} from "../../_framework/vector";
+import {Dep} from "../deps/structs";
 import {PKG_V1} from "../index";
 import {bcs} from "@mysten/sui/bcs";
 import {SuiClient, SuiObjectData, SuiParsedData} from "@mysten/sui/client";
@@ -10,7 +12,7 @@ import {fromB64} from "@mysten/sui/utils";
 
 export function isConfigDepsAction(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::config::ConfigDepsAction`; }
 
-export interface ConfigDepsActionFields { deps: ToField<Deps> }
+export interface ConfigDepsActionFields { deps: ToField<Vector<Dep>> }
 
 export type ConfigDepsActionReified = Reified< ConfigDepsAction, ConfigDepsActionFields >;
 
@@ -20,7 +22,7 @@ export class ConfigDepsAction implements StructClass { __StructClass = true as c
 
  readonly $typeName = ConfigDepsAction.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::config::ConfigDepsAction`; readonly $typeArgs: []; readonly $isPhantom = ConfigDepsAction.$isPhantom;
 
- readonly deps: ToField<Deps>
+ readonly deps: ToField<Vector<Dep>>
 
  private constructor(typeArgs: [], fields: ConfigDepsActionFields, ) { this.$fullTypeName = composeSuiType( ConfigDepsAction.$typeName, ...typeArgs ) as `${typeof PKG_V1}::config::ConfigDepsAction`; this.$typeArgs = typeArgs;
 
@@ -34,29 +36,29 @@ export class ConfigDepsAction implements StructClass { __StructClass = true as c
 
  static get bcs() { return bcs.struct("ConfigDepsAction", {
 
- deps: Deps.bcs
+ deps: bcs.vector(Dep.bcs)
 
 }) };
 
- static fromFields( fields: Record<string, any> ): ConfigDepsAction { return ConfigDepsAction.reified( ).new( { deps: decodeFromFields(Deps.reified(), fields.deps) } ) }
+ static fromFields( fields: Record<string, any> ): ConfigDepsAction { return ConfigDepsAction.reified( ).new( { deps: decodeFromFields(reified.vector(Dep.reified()), fields.deps) } ) }
 
  static fromFieldsWithTypes( item: FieldsWithTypes ): ConfigDepsAction { if (!isConfigDepsAction(item.type)) { throw new Error("not a ConfigDepsAction type");
 
  }
 
- return ConfigDepsAction.reified( ).new( { deps: decodeFromFieldsWithTypes(Deps.reified(), item.fields.deps) } ) }
+ return ConfigDepsAction.reified( ).new( { deps: decodeFromFieldsWithTypes(reified.vector(Dep.reified()), item.fields.deps) } ) }
 
  static fromBcs( data: Uint8Array ): ConfigDepsAction { return ConfigDepsAction.fromFields( ConfigDepsAction.bcs.parse(data) ) }
 
  toJSONField() { return {
 
- deps: this.deps.toJSONField(),
+ deps: fieldToJSON<Vector<Dep>>(`vector<${Dep.$typeName}>`, this.deps),
 
 } }
 
  toJSON() { return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() } }
 
- static fromJSONField( field: any ): ConfigDepsAction { return ConfigDepsAction.reified( ).new( { deps: decodeFromJSONField(Deps.reified(), field.deps) } ) }
+ static fromJSONField( field: any ): ConfigDepsAction { return ConfigDepsAction.reified( ).new( { deps: decodeFromJSONField(reified.vector(Dep.reified()), field.deps) } ) }
 
  static fromJSON( json: Record<string, any> ): ConfigDepsAction { if (json.$typeName !== ConfigDepsAction.$typeName) { throw new Error("not a WithTwoGenerics json object") };
 

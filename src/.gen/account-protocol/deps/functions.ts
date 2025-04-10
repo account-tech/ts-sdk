@@ -29,6 +29,8 @@ export interface GetByNameArgs { deps: TransactionObjectInput; name: string | Tr
 
 export function getByName( tx: Transaction, args: GetByNameArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::deps::get_by_name`, arguments: [ obj(tx, args.deps), pure(tx, args.name, `${String.$typeName}`) ], }) }
 
+export function innerMut( tx: Transaction, deps: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::deps::inner_mut`, arguments: [ obj(tx, deps) ], }) }
+
 export function length( tx: Transaction, deps: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::deps::length`, arguments: [ obj(tx, deps) ], }) }
 
 export function name( tx: Transaction, dep: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::deps::name`, arguments: [ obj(tx, dep) ], }) }
@@ -36,6 +38,10 @@ export function name( tx: Transaction, dep: TransactionObjectInput ) { return tx
 export interface NewArgs { extensions: TransactionObjectInput; unverifiedAllowed: boolean | TransactionArgument; names: Array<string | TransactionArgument> | TransactionArgument; addresses: Array<string | TransactionArgument> | TransactionArgument; versions: Array<bigint | TransactionArgument> | TransactionArgument }
 
 export function new_( tx: Transaction, args: NewArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::deps::new`, arguments: [ obj(tx, args.extensions), pure(tx, args.unverifiedAllowed, `bool`), pure(tx, args.names, `vector<${String.$typeName}>`), pure(tx, args.addresses, `vector<address>`), pure(tx, args.versions, `vector<u64>`) ], }) }
+
+export interface NewInnerArgs { extensions: TransactionObjectInput; deps: TransactionObjectInput; names: Array<string | TransactionArgument> | TransactionArgument; addresses: Array<string | TransactionArgument> | TransactionArgument; versions: Array<bigint | TransactionArgument> | TransactionArgument }
+
+export function newInner( tx: Transaction, args: NewInnerArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::deps::new_inner`, arguments: [ obj(tx, args.extensions), obj(tx, args.deps), pure(tx, args.names, `vector<${String.$typeName}>`), pure(tx, args.addresses, `vector<address>`), pure(tx, args.versions, `vector<u64>`) ], }) }
 
 export interface NewLatestExtensionsArgs { extensions: TransactionObjectInput; names: Array<string | TransactionArgument> | TransactionArgument }
 
