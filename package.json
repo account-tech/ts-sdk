@@ -2,7 +2,7 @@
   "name": "@account.tech/core",
   "author": "Thouny <thouny@tuta.io>",
   "description": "Core library for defining account sdks with account.tech",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "license": "Apache-2.0",
   "files": [
     "dist"
