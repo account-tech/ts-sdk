@@ -46,7 +46,6 @@ export class Vaults extends Asset {
                     cursor: nextCursor
                 }));
                 dfs.push(...data);
-                nextCursor = nextCursor;
             }
             
             // Map field IDs to their coin types

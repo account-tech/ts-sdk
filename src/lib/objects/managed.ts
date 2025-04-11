@@ -60,7 +60,6 @@ export class Managed {
                 cursor: nextCursor
             }));
             dfs.push(...data);
-            nextCursor = nextCursor;
         }
         
         const assets = await Promise.all(this.assetRegistry.map(async assetClass => {
