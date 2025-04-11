@@ -86,6 +86,10 @@ export interface NewParamsArgs { key: string | TransactionArgument; description:
 
 export function newParams( tx: Transaction, args: NewParamsArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::intents::new_params`, arguments: [ pure(tx, args.key, `${String.$typeName}`), pure(tx, args.description, `${String.$typeName}`), pure(tx, args.executionTimes, `vector<u64>`), pure(tx, args.expirationTime, `u64`), obj(tx, args.clock) ], }) }
 
+export interface NewParamsWithRandKeyArgs { description: string | TransactionArgument; executionTimes: Array<bigint | TransactionArgument> | TransactionArgument; expirationTime: bigint | TransactionArgument; clock: TransactionObjectInput }
+
+export function newParamsWithRandKey( tx: Transaction, args: NewParamsWithRandKeyArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::intents::new_params_with_rand_key`, arguments: [ pure(tx, args.description, `${String.$typeName}`), pure(tx, args.executionTimes, `vector<u64>`), pure(tx, args.expirationTime, `u64`), obj(tx, args.clock) ], }) }
+
 export function newRole( tx: Transaction, typeArg: string, managedName: string | TransactionArgument ) { return tx.moveCall({ target: `${PUBLISHED_AT}::intents::new_role`, typeArguments: [typeArg], arguments: [ pure(tx, managedName, `${String.$typeName}`) ], }) }
 
 export function outcome( tx: Transaction, typeArg: string, intent: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::intents::outcome`, typeArguments: [typeArg], arguments: [ obj(tx, intent) ], }) }

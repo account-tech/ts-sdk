@@ -1,6 +1,6 @@
 import { Transaction, TransactionObjectInput, TransactionResult } from "@mysten/sui/transactions";
 import { DynamicFieldInfo, SuiClient } from "@mysten/sui/client";
-import { newParams } from "../../.gen/account-protocol/intents/functions";
+import { newParams, newParamsWithRandKey } from "../../.gen/account-protocol/intents/functions";
 import { confirmExecution } from "../../.gen/account-protocol/account/functions";
 import { ActionsArgs, IntentArgs, IntentFields } from "./types";
 import { Outcome } from "./outcome";
@@ -55,6 +55,15 @@ export class Intent {
     static createParams(tx: Transaction, intentArgs: IntentArgs): TransactionResult {
         return newParams(tx, { 
             key: intentArgs.key, 
+            description: intentArgs.description ?? "",
+            executionTimes: intentArgs.executionTimes ?? [0n],
+            expirationTime: intentArgs.expirationTime ?? BigInt(Math.floor(Date.now()) + 7 * 24 * 60 * 60 * 1000),
+            clock: CLOCK 
+        });
+    }
+
+    static createParamsWithRandKey(tx: Transaction, intentArgs: Pick<IntentArgs, "description" | "executionTimes" | "expirationTime">): TransactionResult {
+        return newParamsWithRandKey(tx, { 
             description: intentArgs.description ?? "",
             executionTimes: intentArgs.executionTimes ?? [0n],
             expirationTime: intentArgs.expirationTime ?? BigInt(Math.floor(Date.now()) + 7 * 24 * 60 * 60 * 1000),
