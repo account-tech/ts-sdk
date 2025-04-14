@@ -112,6 +112,14 @@ export class Owned implements OwnedData {
         return { objectId: obj.ref.objectId, version: obj.ref.version, digest: obj.ref.digest };
     }
 
+    getCoinTypeById(id: string): string | undefined {
+        for (const coin of this.coins) {
+            const instance = coin.instances.find(i => i.ref.objectId === id);
+            if (instance) return coin.type;
+        }
+        return undefined;
+    }
+
     getTypeById(id: string): string | undefined {
         // Check coins first
         for (const coin of this.coins) {

@@ -198,9 +198,13 @@ export class WithdrawAndTransferIntent extends Intent {
 
         let result;
         for (let i = 0; i < this.args!.transfers.length; i++) {
+            const objectType = this.typeById.get(this.args!.transfers[i].objectId as string);
+            if (!objectType) {
+                throw new Error("Object type not found");
+            }
             result = ownedIntents.executeWithdrawAndTransfer(
                 tx,
-                [...accountGenerics, this.typeById.get(this.args!.transfers[i].objectId as string)!],
+                [...accountGenerics, objectType],
                 {
                     executable,
                     account: this.account!,
@@ -284,6 +288,7 @@ export class WithdrawAndTransferIntent extends Intent {
 export class WithdrawAndVestIntent extends Intent {
     static type = ActionsIntentTypes.WithdrawAndVest;
     declare args: WithdrawAndVestArgs;
+    coinType: string | undefined;
 
     async init() {
         const actions = await this.fetchActions(this.fields.actionsId);
@@ -294,6 +299,10 @@ export class WithdrawAndVestIntent extends Intent {
             end: VestAction.fromFieldsWithTypes(actions[1]).endTimestamp,
             recipient: VestAction.fromFieldsWithTypes(actions[1]).recipient,
         };
+    }
+
+    initTypeById(owned: Owned) {
+        this.coinType = owned.getCoinTypeById(this.args.coinId as string)!;
     }
 
     request(
@@ -326,9 +335,13 @@ export class WithdrawAndVestIntent extends Intent {
         accountGenerics: [string, string],
         executable: TransactionObjectInput,
     ): TransactionResult {
+        if (!this.coinType) {
+            throw new Error("Coin type not initialized");
+        }
+
         return ownedIntents.executeWithdrawAndVest(
             tx,
-            [...accountGenerics, ""], // TODO: get CoinType
+            [...accountGenerics, this.coinType], 
             {
                 executable,
                 account: this.account!,
