@@ -77,14 +77,25 @@ export class Intent {
 
     async fetchActions(parentId: string): Promise<any[]> {
         // get the actions in each proposal bag
-        const { data } = await this.client.getDynamicFields({ parentId });
+        let dfs: DynamicFieldInfo[] = [];
+        let data: DynamicFieldInfo[] = [];
+        let nextCursor: string | null | undefined = null;
+        let hasNextPage = true;
+        while (hasNextPage) {
+            ({ data, hasNextPage, nextCursor } = await this.client.getDynamicFields({
+                parentId,
+                cursor: nextCursor,
+            }));
+
+            dfs.push(...data);
+        }
         // sort actions by ascending order 
-        const ids = data
+        const ids = dfs
             .sort((a, b) => Number(a.name.value) - Number(b.name.value))
             .map(df => df.objectId);
 
         let actions: any[] = [];
-        if (data.length > 0) {
+        if (dfs.length > 0) {
             // Process in batches of 50 due to API limitations
             const allActionDfs = [];
             for (let i = 0; i < ids.length; i += 50) {
@@ -155,7 +166,6 @@ export class Intents {
                 cursor: nextCursor
             }));
             dfs.push(...data);
-            nextCursor = nextCursor;
         }
         const dfIds = dfs.map((df) => df.objectId);
         // Process in batches of 50 due to API limitations

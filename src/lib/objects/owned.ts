@@ -1,4 +1,4 @@
-import { SuiClient, SuiMoveObject } from "@mysten/sui/client";
+import { SuiClient, SuiMoveObject, SuiObjectResponse } from "@mysten/sui/client";
 import { OwnedData, Coin, Nft, OtherObj } from "./types";
 
 export class Owned implements OwnedData {
@@ -21,17 +21,26 @@ export class Owned implements OwnedData {
         if (!accountId && !this.accountId) {
             throw new Error("Multisig address missing");
         }
-
-        const { data } = await this.client.getOwnedObjects({
-            owner: accountId,
-            options: { showContent: true, showType: true, showDisplay: true }
-        });
-
+        
+        let allObjects: SuiObjectResponse[] = [];
+        let data: SuiObjectResponse[] = [];
+        let nextCursor: string | null | undefined = null;
+        let hasNextPage = true;
+        while (hasNextPage) {
+            ({ data, hasNextPage, nextCursor } = await this.client.getOwnedObjects({
+                owner: accountId,
+                cursor: nextCursor,
+                options: { showContent: true, showType: true, showDisplay: true }
+            }));
+            
+            allObjects.push(...data);
+        }
+        
         const coinMap = new Map<string, Coin>(); // type -> Coin
         const nfts: Nft[] = [];
         const objects: OtherObj[] = [];
 
-        data.forEach(obj => {
+        allObjects.forEach(obj => {
             if (!obj.data?.type || !obj.data?.objectId) return;
 
             // Check if it's a Coin
