@@ -74,6 +74,7 @@ export type Kiosk = {
 export type Package = {
     packageId: string;
     capId: string;
+    policy: number;
     delayMs: bigint;
 }
 

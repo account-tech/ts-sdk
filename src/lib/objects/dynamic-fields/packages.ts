@@ -55,6 +55,7 @@ export class Packages extends Asset {
             this.assets[name] = {
                 packageId: upgradeCap.package,
                 capId: upgradeCap.id,
+                policy: upgradeCap.policy,
                 delayMs: upgradeRules.delayMs,
             };
         }
