@@ -29,14 +29,12 @@ export interface Intent {
     clearEmpty(
         tx: Transaction, 
         accountGenerics: [string, string], 
-        account: TransactionObjectInput, 
         key: string
     ): TransactionResult;
     
     deleteExpired(
         tx: Transaction, 
         accountGenerics: [string, string], 
-        account: TransactionObjectInput, 
         key: string
     ): TransactionResult;
 }

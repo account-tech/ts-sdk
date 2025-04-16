@@ -56,8 +56,25 @@ export class UpgradePackageIntent extends Intent {
             accountGenerics,
             {
                 executable,
-                account: this.account!,
+                account: this.account,
                 clock: CLOCK
+            }
+        );
+    }
+
+    commit(
+        tx: Transaction,
+        accountGenerics: [string, string],
+        executable: TransactionObjectInput,
+        receipt: TransactionObjectInput,
+    ): TransactionResult {
+        return upgradePoliciesIntents.executeCommitUpgrade(
+            tx,
+            accountGenerics,
+            {
+                executable,
+                account: this.account,
+                receipt,
             }
         );
     }
@@ -65,18 +82,21 @@ export class UpgradePackageIntent extends Intent {
     clearEmpty(
         tx: Transaction,
         accountGenerics: [string, string],
-        account: TransactionObjectInput,
         key: string,
     ): TransactionResult {
         const expired = accountProtocol.destroyEmptyIntent(
             tx,
             accountGenerics,
             {
-                account,
+                account: this.account,
                 key,
             }
         );
         upgradePolicies.deleteUpgrade(
+            tx,
+            expired
+        );
+        upgradePolicies.deleteCommit(
             tx,
             expired
         );
@@ -89,19 +109,22 @@ export class UpgradePackageIntent extends Intent {
     deleteExpired(
         tx: Transaction,
         accountGenerics: [string, string],
-        account: TransactionObjectInput,
         key: string,
     ): TransactionResult {
         const expired = accountProtocol.deleteExpiredIntent(
             tx,
             accountGenerics,
             {
-                account,
+                account: this.account,
                 key,
                 clock: CLOCK,
             }
         );
         upgradePolicies.deleteUpgrade(
+            tx,
+            expired
+        );
+        upgradePolicies.deleteCommit(
             tx,
             expired
         );
@@ -163,7 +186,7 @@ export class RestrictPolicyIntent extends Intent {
             accountGenerics,
             {
                 executable,
-                account: this.account!,
+                account: this.account,
             }
         );
     }
@@ -171,14 +194,13 @@ export class RestrictPolicyIntent extends Intent {
     clearEmpty(
         tx: Transaction,
         accountGenerics: [string, string],
-        account: TransactionObjectInput,
         key: string,
     ): TransactionResult {
         const expired = accountProtocol.destroyEmptyIntent(
             tx,
             accountGenerics,
             {
-                account,
+                account: this.account,
                 key,
             }
         );
@@ -195,14 +217,13 @@ export class RestrictPolicyIntent extends Intent {
     deleteExpired(
         tx: Transaction,
         accountGenerics: [string, string],
-        account: TransactionObjectInput,
         key: string,
     ): TransactionResult {
         const expired = accountProtocol.deleteExpiredIntent(
             tx,
             accountGenerics,
             {
-                account,
+                account: this.account,
                 key,
                 clock: CLOCK,
             }

@@ -52,15 +52,14 @@ export class BorrowCapIntent extends Intent {
             [...accountGenerics, this.args!.capType],
             {
                 executable,
-                account: this.account!,
+                account: this.account,
             }
         );
     }
 
-    returnCap(
+    return(
         tx: Transaction,
         accountGenerics: [string, string],
-        account: TransactionObjectInput,
         executable: TransactionObjectInput,
         cap: TransactionObjectInput,
     ): TransactionResult {
@@ -68,7 +67,7 @@ export class BorrowCapIntent extends Intent {
             tx,
             [...accountGenerics, this.args!.capType],
             {
-                account,
+                account: this.account,
                 executable,
                 cap,
             }
@@ -78,14 +77,13 @@ export class BorrowCapIntent extends Intent {
     clearEmpty(
         tx: Transaction,
         accountGenerics: [string, string],
-        account: TransactionObjectInput,
         key: string,
     ): TransactionResult {
         const expired = accountProtocol.destroyEmptyIntent(
             tx,
             accountGenerics,
             {
-                account,
+                account: this.account,
                 key,
             }
         );
@@ -108,14 +106,13 @@ export class BorrowCapIntent extends Intent {
     deleteExpired(
         tx: Transaction,
         accountGenerics: [string, string],
-        account: TransactionObjectInput,
         key: string,
     ): TransactionResult {
         const expired = accountProtocol.deleteExpiredIntent(
             tx,
             accountGenerics,
             {
-                account,
+                account: this.account,
                 key,
                 clock: CLOCK,
             }

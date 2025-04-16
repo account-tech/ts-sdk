@@ -64,7 +64,7 @@ export class TakeNftsIntent extends Intent {
                 [...accountGenerics, type],
                 {
                     executable,
-                    account: this.account!,
+                    account: this.account,
                     accountKiosk,
                     recipientKiosk,
                     recipientCap,
@@ -78,14 +78,13 @@ export class TakeNftsIntent extends Intent {
     clearEmpty(
         tx: Transaction,
         accountGenerics: [string, string],
-        account: TransactionObjectInput,
         key: string,
     ): TransactionResult {
         const expired = accountProtocol.destroyEmptyIntent(
             tx,
             accountGenerics,
             {
-                account,
+                account: this.account,
                 key,
             }
         );
@@ -104,14 +103,13 @@ export class TakeNftsIntent extends Intent {
     deleteExpired(
         tx: Transaction,
         accountGenerics: [string, string],
-        account: TransactionObjectInput,
         key: string,
     ): TransactionResult {
         const expired = accountProtocol.deleteExpiredIntent(
             tx,
             accountGenerics,
             {
-                account,
+                account: this.account,
                 key,
                 clock: CLOCK,
             }
@@ -181,7 +179,7 @@ export class ListNftsIntent extends Intent {
                 [...accountGenerics, type],
                 {
                     executable,
-                    account: this.account!,
+                    account: this.account,
                     kiosk: accountKiosk,
                 }
             );
@@ -192,14 +190,13 @@ export class ListNftsIntent extends Intent {
     clearEmpty(
         tx: Transaction,
         accountGenerics: [string, string],
-        account: TransactionObjectInput,
         key: string,
     ): TransactionResult {
         const expired = accountProtocol.destroyEmptyIntent(
             tx,
             accountGenerics,
             {
-                account,
+                account: this.account,
                 key,
             }
         );
@@ -218,14 +215,13 @@ export class ListNftsIntent extends Intent {
     deleteExpired(
         tx: Transaction,
         accountGenerics: [string, string],
-        account: TransactionObjectInput,
         key: string,
     ): TransactionResult {
         const expired = accountProtocol.deleteExpiredIntent(
             tx,
             accountGenerics,
             {
-                account,
+                account: this.account,
                 key,
                 clock: CLOCK,
             }

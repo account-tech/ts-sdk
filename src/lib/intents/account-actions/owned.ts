@@ -68,7 +68,7 @@ export class WithdrawAndTransferToVaultIntent extends Intent {
             [...accountGenerics, this.args!.coinType],
             {
                 executable,
-                account: this.account!,
+                account: this.account,
                 receiving: this.args!.coinId,
             }
         );
@@ -77,14 +77,13 @@ export class WithdrawAndTransferToVaultIntent extends Intent {
     clearEmpty(
         tx: Transaction,
         accountGenerics: [string, string],
-        account: TransactionObjectInput,
         key: string,
     ): TransactionResult {
         const expired = accountProtocol.destroyEmptyIntent(
             tx,
             accountGenerics,
             {
-                account,
+                account: this.account,
                 key,
             }
         );
@@ -93,7 +92,7 @@ export class WithdrawAndTransferToVaultIntent extends Intent {
             accountGenerics[0],
             {
                 expired,
-                account
+                account: this.account,
             }
         );
         vault.deleteDeposit(
@@ -110,14 +109,13 @@ export class WithdrawAndTransferToVaultIntent extends Intent {
     deleteExpired(
         tx: Transaction,
         accountGenerics: [string, string],
-        account: TransactionObjectInput,
         key: string,
     ): TransactionResult {
         const expired = accountProtocol.deleteExpiredIntent(
             tx,
             accountGenerics,
             {
-                account,
+                account: this.account,
                 key,
                 clock: CLOCK,
             }
@@ -127,7 +125,7 @@ export class WithdrawAndTransferToVaultIntent extends Intent {
             accountGenerics[0],
             {
                 expired,
-                account
+                account: this.account,
             }
         );
         vault.deleteDeposit(
@@ -207,7 +205,7 @@ export class WithdrawAndTransferIntent extends Intent {
                 [...accountGenerics, objectType],
                 {
                     executable,
-                    account: this.account!,
+                    account: this.account,
                     receiving: this.args!.transfers[i].objectId,
                 }
             );
@@ -218,14 +216,13 @@ export class WithdrawAndTransferIntent extends Intent {
     clearEmpty(
         tx: Transaction,
         accountGenerics: [string, string],
-        account: TransactionObjectInput,
         key: string,
     ): TransactionResult {
         const expired = accountProtocol.destroyEmptyIntent(
             tx,
             accountGenerics,
             {
-                account,
+                account: this.account,
                 key,
             }
         );
@@ -235,7 +232,7 @@ export class WithdrawAndTransferIntent extends Intent {
                 accountGenerics[0],
                 {
                     expired,
-                    account
+                    account: this.account,     
                 }
             );
             transfer.deleteTransfer(
@@ -252,14 +249,13 @@ export class WithdrawAndTransferIntent extends Intent {
     deleteExpired(
         tx: Transaction,
         accountGenerics: [string, string],
-        account: TransactionObjectInput,
         key: string,
     ): TransactionResult {
         const expired = accountProtocol.deleteExpiredIntent(
             tx,
             accountGenerics,
             {
-                account,
+                account: this.account,
                 key,
                 clock: CLOCK,
             }
@@ -270,7 +266,7 @@ export class WithdrawAndTransferIntent extends Intent {
                 accountGenerics[0],
                 {
                     expired,
-                    account
+                    account: this.account,
                 }
             );
             transfer.deleteTransfer(
@@ -344,7 +340,7 @@ export class WithdrawAndVestIntent extends Intent {
             [...accountGenerics, this.coinType], 
             {
                 executable,
-                account: this.account!,
+                account: this.account,
                 receiving: this.args!.coinId,
             }
         );
@@ -353,14 +349,13 @@ export class WithdrawAndVestIntent extends Intent {
     clearEmpty(
         tx: Transaction,
         accountGenerics: [string, string],
-        account: TransactionObjectInput,
         key: string,
     ): TransactionResult {
         const expired = accountProtocol.destroyEmptyIntent(
             tx,
             accountGenerics,
             {
-                account,
+                account: this.account,
                 key,
             }
         );
@@ -369,7 +364,7 @@ export class WithdrawAndVestIntent extends Intent {
             accountGenerics[0],
             {
                 expired,
-                account
+                account: this.account, 
             }
         );
         vesting.deleteVest(
@@ -385,14 +380,13 @@ export class WithdrawAndVestIntent extends Intent {
     deleteExpired(
         tx: Transaction,
         accountGenerics: [string, string],
-        account: TransactionObjectInput,
         key: string,
     ): TransactionResult {
         const expired = accountProtocol.deleteExpiredIntent(
             tx,
             accountGenerics,
             {
-                account,
+                account: this.account,
                 key,
                 clock: CLOCK,
             }
@@ -402,7 +396,7 @@ export class WithdrawAndVestIntent extends Intent {
             accountGenerics[0],
             {
                 expired,
-                account
+                account: this.account,
             }
         );
         vesting.deleteVest(

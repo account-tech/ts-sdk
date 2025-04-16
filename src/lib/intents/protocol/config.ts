@@ -69,7 +69,7 @@ export class ConfigDepsIntent extends Intent {
             accountGenerics,
             {
                 executable,
-                account: this.account!,
+                account: this.account,
             }
         );
     }
@@ -77,14 +77,13 @@ export class ConfigDepsIntent extends Intent {
     clearEmpty(
         tx: Transaction,
         accountGenerics: [string, string],
-        account: TransactionObjectInput,
         key: string,
     ): TransactionResult {
         const expired = accountProtocol.destroyEmptyIntent(
             tx,
             accountGenerics,
             {
-                account,
+                account: this.account,
                 key,
             }
         );
@@ -101,14 +100,13 @@ export class ConfigDepsIntent extends Intent {
     deleteExpired(
         tx: Transaction,
         accountGenerics: [string, string],
-        account: TransactionObjectInput,
         key: string,
     ): TransactionResult {
         const expired = accountProtocol.deleteExpiredIntent(
             tx,
             accountGenerics,
             {
-                account,
+                account: this.account,
                 key,
                 clock: CLOCK,
             }
@@ -166,7 +164,7 @@ export class ToggleUnverifiedAllowedIntent extends Intent {
             accountGenerics,
             {
                 executable,
-                account: this.account!,
+                account: this.account,
             }
         );
     }
@@ -174,14 +172,13 @@ export class ToggleUnverifiedAllowedIntent extends Intent {
     clearEmpty(
         tx: Transaction,
         accountGenerics: [string, string],
-        account: TransactionObjectInput,
         key: string,
     ): TransactionResult {
         const expired = accountProtocol.destroyEmptyIntent(
             tx,
             accountGenerics,
             {
-                account,
+                account: this.account,
                 key,
             }
         );
@@ -198,14 +195,13 @@ export class ToggleUnverifiedAllowedIntent extends Intent {
     deleteExpired(
         tx: Transaction,
         accountGenerics: [string, string],
-        account: TransactionObjectInput,
         key: string,
     ): TransactionResult {
         const expired = accountProtocol.deleteExpiredIntent(
             tx,
             accountGenerics,
             {
-                account,
+                account: this.account,
                 key,
                 clock: CLOCK,
             }

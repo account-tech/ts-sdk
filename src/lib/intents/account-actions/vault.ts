@@ -68,7 +68,7 @@ export class SpendAndTransferIntent extends Intent {
                 [...accountGenerics, this.args!.coinType],
                 {
                     executable,
-                    account: this.account!,
+                    account: this.account,
                 }
             );
         }
@@ -78,14 +78,13 @@ export class SpendAndTransferIntent extends Intent {
     clearEmpty(
         tx: Transaction,
         accountGenerics: [string, string],
-        account: TransactionObjectInput,
         key: string,
     ): TransactionResult {
         const expired = accountProtocol.destroyEmptyIntent(
             tx,
             accountGenerics,
             {
-                account,
+                account: this.account,
                 key,
             }
         );
@@ -109,14 +108,13 @@ export class SpendAndTransferIntent extends Intent {
     deleteExpired(
         tx: Transaction,
         accountGenerics: [string, string],
-        account: TransactionObjectInput,
         key: string,
     ): TransactionResult {
         const expired = accountProtocol.deleteExpiredIntent(
             tx,
             accountGenerics,
             {
-                account,
+                account: this.account,
                 key,
                 clock: CLOCK,
             }
@@ -196,7 +194,7 @@ export class SpendAndVestIntent extends Intent {
             [...accountGenerics, this.args!.coinType],
             {
                 executable,
-                account: this.account!,
+                account: this.account,
             }
         );
     }
@@ -204,14 +202,13 @@ export class SpendAndVestIntent extends Intent {
     clearEmpty(
         tx: Transaction,
         accountGenerics: [string, string],
-        account: TransactionObjectInput,
         key: string,
     ): TransactionResult {
         const expired = accountProtocol.destroyEmptyIntent(
             tx,
             accountGenerics,
             {
-                account,
+                account: this.account,
                 key,
             }
         );
@@ -233,14 +230,13 @@ export class SpendAndVestIntent extends Intent {
     deleteExpired(
         tx: Transaction,
         accountGenerics: [string, string],
-        account: TransactionObjectInput,
         key: string,
     ): TransactionResult {
         const expired = accountProtocol.deleteExpiredIntent(
             tx,
             accountGenerics,
             {
-                account,
+                account: this.account,
                 key,
                 clock: CLOCK,
             }

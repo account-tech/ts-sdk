@@ -9,11 +9,11 @@ export function depositUpgradeCap(
     account: TransactionObjectInput,
     upgradeCap: TransactionObjectInput,
     packageName: string, // can be anything
-    delayMs: number,
+    delayMs: bigint,
 ): TransactionResult {
     return lockCap(
         tx,
         configType,
-        { auth, account, cap: upgradeCap, name: packageName, delayMs: BigInt(delayMs) },
+        { auth, account, cap: upgradeCap, name: packageName, delayMs },
     );
 }
