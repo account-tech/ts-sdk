@@ -14,7 +14,7 @@ export class BorrowCapIntent extends Intent {
 
     async init() {
         const actions = await this.fetchActions(this.fields.actionsId);
-        const capType = actions[0].type;
+        const capType = actions[0].type.match(/<(.+)>/)![1];
 
         this.args = {
             capType,
@@ -57,6 +57,24 @@ export class BorrowCapIntent extends Intent {
         );
     }
 
+    returnCap(
+        tx: Transaction,
+        accountGenerics: [string, string],
+        account: TransactionObjectInput,
+        executable: TransactionObjectInput,
+        cap: TransactionObjectInput,
+    ): TransactionResult {
+        return accessControlIntent.executeReturnCap(
+            tx,
+            [...accountGenerics, this.args!.capType],
+            {
+                account,
+                executable,
+                cap,
+            }
+        );
+    }
+
     clearEmpty(
         tx: Transaction,
         accountGenerics: [string, string],
@@ -72,6 +90,11 @@ export class BorrowCapIntent extends Intent {
             }
         );
         accessControl.deleteBorrow(
+            tx,
+            this.args!.capType,
+            expired,
+        );
+        accessControl.deleteReturn(
             tx,
             this.args!.capType,
             expired,
@@ -98,6 +121,11 @@ export class BorrowCapIntent extends Intent {
             }
         );
         accessControl.deleteBorrow(
+            tx,
+            this.args!.capType,
+            expired,
+        );
+        accessControl.deleteReturn(
             tx,
             this.args!.capType,
             expired,

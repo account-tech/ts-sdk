@@ -10,9 +10,8 @@ export class Caps extends Asset {
         this.dfs = this.dfs.filter(df => Caps.keys.some(key => df.name.type.includes(key)));
         
         this.dfs.forEach(df => {
-            const capType = df.name.type.match(/<([^>]*)>/)![1];
-            this.assets[capType] = {
-                type: capType,
+            this.assets[df.objectType] = {
+                type: df.objectType,
             };
         });
     }
