@@ -5,74 +5,6 @@ import {bcs} from "@mysten/sui/bcs";
 import {SuiClient, SuiObjectData, SuiParsedData} from "@mysten/sui/client";
 import {fromB64} from "@mysten/sui/utils";
 
-/* ============================== ListNftsIntent =============================== */
-
-export function isListNftsIntent(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::kiosk_intents::ListNftsIntent`; }
-
-export interface ListNftsIntentFields { dummyField: ToField<"bool"> }
-
-export type ListNftsIntentReified = Reified< ListNftsIntent, ListNftsIntentFields >;
-
-export class ListNftsIntent implements StructClass { __StructClass = true as const;
-
- static readonly $typeName = `${PKG_V1}::kiosk_intents::ListNftsIntent`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
-
- readonly $typeName = ListNftsIntent.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::kiosk_intents::ListNftsIntent`; readonly $typeArgs: []; readonly $isPhantom = ListNftsIntent.$isPhantom;
-
- readonly dummyField: ToField<"bool">
-
- private constructor(typeArgs: [], fields: ListNftsIntentFields, ) { this.$fullTypeName = composeSuiType( ListNftsIntent.$typeName, ...typeArgs ) as `${typeof PKG_V1}::kiosk_intents::ListNftsIntent`; this.$typeArgs = typeArgs;
-
- this.dummyField = fields.dummyField; }
-
- static reified( ): ListNftsIntentReified { return { typeName: ListNftsIntent.$typeName, fullTypeName: composeSuiType( ListNftsIntent.$typeName, ...[] ) as `${typeof PKG_V1}::kiosk_intents::ListNftsIntent`, typeArgs: [ ] as [], isPhantom: ListNftsIntent.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => ListNftsIntent.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => ListNftsIntent.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => ListNftsIntent.fromBcs( data, ), bcs: ListNftsIntent.bcs, fromJSONField: (field: any) => ListNftsIntent.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => ListNftsIntent.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => ListNftsIntent.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => ListNftsIntent.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => ListNftsIntent.fetch( client, id, ), new: ( fields: ListNftsIntentFields, ) => { return new ListNftsIntent( [], fields ) }, kind: "StructClassReified", } }
-
- static get r() { return ListNftsIntent.reified() }
-
- static phantom( ): PhantomReified<ToTypeStr<ListNftsIntent>> { return phantom(ListNftsIntent.reified( )); } static get p() { return ListNftsIntent.phantom() }
-
- static get bcs() { return bcs.struct("ListNftsIntent", {
-
- dummy_field: bcs.bool()
-
-}) };
-
- static fromFields( fields: Record<string, any> ): ListNftsIntent { return ListNftsIntent.reified( ).new( { dummyField: decodeFromFields("bool", fields.dummy_field) } ) }
-
- static fromFieldsWithTypes( item: FieldsWithTypes ): ListNftsIntent { if (!isListNftsIntent(item.type)) { throw new Error("not a ListNftsIntent type");
-
- }
-
- return ListNftsIntent.reified( ).new( { dummyField: decodeFromFieldsWithTypes("bool", item.fields.dummy_field) } ) }
-
- static fromBcs( data: Uint8Array ): ListNftsIntent { return ListNftsIntent.fromFields( ListNftsIntent.bcs.parse(data) ) }
-
- toJSONField() { return {
-
- dummyField: this.dummyField,
-
-} }
-
- toJSON() { return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() } }
-
- static fromJSONField( field: any ): ListNftsIntent { return ListNftsIntent.reified( ).new( { dummyField: decodeFromJSONField("bool", field.dummyField) } ) }
-
- static fromJSON( json: Record<string, any> ): ListNftsIntent { if (json.$typeName !== ListNftsIntent.$typeName) { throw new Error("not a WithTwoGenerics json object") };
-
- return ListNftsIntent.fromJSONField( json, ) }
-
- static fromSuiParsedData( content: SuiParsedData ): ListNftsIntent { if (content.dataType !== "moveObject") { throw new Error("not an object"); } if (!isListNftsIntent(content.type)) { throw new Error(`object at ${(content.fields as any).id} is not a ListNftsIntent object`); } return ListNftsIntent.fromFieldsWithTypes( content ); }
-
- static fromSuiObjectData( data: SuiObjectData ): ListNftsIntent { if (data.bcs) { if (data.bcs.dataType !== "moveObject" || !isListNftsIntent(data.bcs.type)) { throw new Error(`object at is not a ListNftsIntent object`); }
-
- return ListNftsIntent.fromBcs( fromB64(data.bcs.bcsBytes) ); } if (data.content) { return ListNftsIntent.fromSuiParsedData( data.content ) } throw new Error( "Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request." ); }
-
- static async fetch( client: SuiClient, id: string ): Promise<ListNftsIntent> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching ListNftsIntent object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isListNftsIntent(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a ListNftsIntent object`); }
-
- return ListNftsIntent.fromSuiObjectData( res.data ); }
-
- }
-
 /* ============================== TakeNftsIntent =============================== */
 
 export function isTakeNftsIntent(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::kiosk_intents::TakeNftsIntent`; }
@@ -138,5 +70,73 @@ export class TakeNftsIntent implements StructClass { __StructClass = true as con
  static async fetch( client: SuiClient, id: string ): Promise<TakeNftsIntent> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching TakeNftsIntent object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isTakeNftsIntent(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a TakeNftsIntent object`); }
 
  return TakeNftsIntent.fromSuiObjectData( res.data ); }
+
+ }
+
+/* ============================== ListNftsIntent =============================== */
+
+export function isListNftsIntent(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::kiosk_intents::ListNftsIntent`; }
+
+export interface ListNftsIntentFields { dummyField: ToField<"bool"> }
+
+export type ListNftsIntentReified = Reified< ListNftsIntent, ListNftsIntentFields >;
+
+export class ListNftsIntent implements StructClass { __StructClass = true as const;
+
+ static readonly $typeName = `${PKG_V1}::kiosk_intents::ListNftsIntent`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
+
+ readonly $typeName = ListNftsIntent.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::kiosk_intents::ListNftsIntent`; readonly $typeArgs: []; readonly $isPhantom = ListNftsIntent.$isPhantom;
+
+ readonly dummyField: ToField<"bool">
+
+ private constructor(typeArgs: [], fields: ListNftsIntentFields, ) { this.$fullTypeName = composeSuiType( ListNftsIntent.$typeName, ...typeArgs ) as `${typeof PKG_V1}::kiosk_intents::ListNftsIntent`; this.$typeArgs = typeArgs;
+
+ this.dummyField = fields.dummyField; }
+
+ static reified( ): ListNftsIntentReified { return { typeName: ListNftsIntent.$typeName, fullTypeName: composeSuiType( ListNftsIntent.$typeName, ...[] ) as `${typeof PKG_V1}::kiosk_intents::ListNftsIntent`, typeArgs: [ ] as [], isPhantom: ListNftsIntent.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => ListNftsIntent.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => ListNftsIntent.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => ListNftsIntent.fromBcs( data, ), bcs: ListNftsIntent.bcs, fromJSONField: (field: any) => ListNftsIntent.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => ListNftsIntent.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => ListNftsIntent.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => ListNftsIntent.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => ListNftsIntent.fetch( client, id, ), new: ( fields: ListNftsIntentFields, ) => { return new ListNftsIntent( [], fields ) }, kind: "StructClassReified", } }
+
+ static get r() { return ListNftsIntent.reified() }
+
+ static phantom( ): PhantomReified<ToTypeStr<ListNftsIntent>> { return phantom(ListNftsIntent.reified( )); } static get p() { return ListNftsIntent.phantom() }
+
+ static get bcs() { return bcs.struct("ListNftsIntent", {
+
+ dummy_field: bcs.bool()
+
+}) };
+
+ static fromFields( fields: Record<string, any> ): ListNftsIntent { return ListNftsIntent.reified( ).new( { dummyField: decodeFromFields("bool", fields.dummy_field) } ) }
+
+ static fromFieldsWithTypes( item: FieldsWithTypes ): ListNftsIntent { if (!isListNftsIntent(item.type)) { throw new Error("not a ListNftsIntent type");
+
+ }
+
+ return ListNftsIntent.reified( ).new( { dummyField: decodeFromFieldsWithTypes("bool", item.fields.dummy_field) } ) }
+
+ static fromBcs( data: Uint8Array ): ListNftsIntent { return ListNftsIntent.fromFields( ListNftsIntent.bcs.parse(data) ) }
+
+ toJSONField() { return {
+
+ dummyField: this.dummyField,
+
+} }
+
+ toJSON() { return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() } }
+
+ static fromJSONField( field: any ): ListNftsIntent { return ListNftsIntent.reified( ).new( { dummyField: decodeFromJSONField("bool", field.dummyField) } ) }
+
+ static fromJSON( json: Record<string, any> ): ListNftsIntent { if (json.$typeName !== ListNftsIntent.$typeName) { throw new Error("not a WithTwoGenerics json object") };
+
+ return ListNftsIntent.fromJSONField( json, ) }
+
+ static fromSuiParsedData( content: SuiParsedData ): ListNftsIntent { if (content.dataType !== "moveObject") { throw new Error("not an object"); } if (!isListNftsIntent(content.type)) { throw new Error(`object at ${(content.fields as any).id} is not a ListNftsIntent object`); } return ListNftsIntent.fromFieldsWithTypes( content ); }
+
+ static fromSuiObjectData( data: SuiObjectData ): ListNftsIntent { if (data.bcs) { if (data.bcs.dataType !== "moveObject" || !isListNftsIntent(data.bcs.type)) { throw new Error(`object at is not a ListNftsIntent object`); }
+
+ return ListNftsIntent.fromBcs( fromB64(data.bcs.bcsBytes) ); } if (data.content) { return ListNftsIntent.fromSuiParsedData( data.content ) } throw new Error( "Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request." ); }
+
+ static async fetch( client: SuiClient, id: string ): Promise<ListNftsIntent> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching ListNftsIntent object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isListNftsIntent(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a ListNftsIntent object`); }
+
+ return ListNftsIntent.fromSuiObjectData( res.data ); }
 
  }

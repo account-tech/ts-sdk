@@ -8,143 +8,73 @@ import {bcs} from "@mysten/sui/bcs";
 import {SuiClient, SuiObjectData, SuiParsedData} from "@mysten/sui/client";
 import {fromB64} from "@mysten/sui/utils";
 
-/* ============================== BurnAction =============================== */
+/* ============================== TreasuryCapKey =============================== */
 
-export function isBurnAction(type: string): boolean { type = compressSuiType(type); return type.startsWith(`${PKG_V1}::currency::BurnAction` + '<'); }
+export function isTreasuryCapKey(type: string): boolean { type = compressSuiType(type); return type.startsWith(`${PKG_V1}::currency::TreasuryCapKey` + '<'); }
 
-export interface BurnActionFields<CoinType extends PhantomTypeArgument> { amount: ToField<"u64"> }
+export interface TreasuryCapKeyFields<CoinType extends PhantomTypeArgument> { dummyField: ToField<"bool"> }
 
-export type BurnActionReified<CoinType extends PhantomTypeArgument> = Reified< BurnAction<CoinType>, BurnActionFields<CoinType> >;
+export type TreasuryCapKeyReified<CoinType extends PhantomTypeArgument> = Reified< TreasuryCapKey<CoinType>, TreasuryCapKeyFields<CoinType> >;
 
-export class BurnAction<CoinType extends PhantomTypeArgument> implements StructClass { __StructClass = true as const;
+export class TreasuryCapKey<CoinType extends PhantomTypeArgument> implements StructClass { __StructClass = true as const;
 
- static readonly $typeName = `${PKG_V1}::currency::BurnAction`; static readonly $numTypeParams = 1; static readonly $isPhantom = [true,] as const;
+ static readonly $typeName = `${PKG_V1}::currency::TreasuryCapKey`; static readonly $numTypeParams = 1; static readonly $isPhantom = [true,] as const;
 
- readonly $typeName = BurnAction.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::currency::BurnAction<${PhantomToTypeStr<CoinType>}>`; readonly $typeArgs: [PhantomToTypeStr<CoinType>]; readonly $isPhantom = BurnAction.$isPhantom;
+ readonly $typeName = TreasuryCapKey.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::currency::TreasuryCapKey<${PhantomToTypeStr<CoinType>}>`; readonly $typeArgs: [PhantomToTypeStr<CoinType>]; readonly $isPhantom = TreasuryCapKey.$isPhantom;
 
- readonly amount: ToField<"u64">
+ readonly dummyField: ToField<"bool">
 
- private constructor(typeArgs: [PhantomToTypeStr<CoinType>], fields: BurnActionFields<CoinType>, ) { this.$fullTypeName = composeSuiType( BurnAction.$typeName, ...typeArgs ) as `${typeof PKG_V1}::currency::BurnAction<${PhantomToTypeStr<CoinType>}>`; this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [PhantomToTypeStr<CoinType>], fields: TreasuryCapKeyFields<CoinType>, ) { this.$fullTypeName = composeSuiType( TreasuryCapKey.$typeName, ...typeArgs ) as `${typeof PKG_V1}::currency::TreasuryCapKey<${PhantomToTypeStr<CoinType>}>`; this.$typeArgs = typeArgs;
 
- this.amount = fields.amount; }
+ this.dummyField = fields.dummyField; }
 
- static reified<CoinType extends PhantomReified<PhantomTypeArgument>>( CoinType: CoinType ): BurnActionReified<ToPhantomTypeArgument<CoinType>> { return { typeName: BurnAction.$typeName, fullTypeName: composeSuiType( BurnAction.$typeName, ...[extractType(CoinType)] ) as `${typeof PKG_V1}::currency::BurnAction<${PhantomToTypeStr<ToPhantomTypeArgument<CoinType>>}>`, typeArgs: [ extractType(CoinType) ] as [PhantomToTypeStr<ToPhantomTypeArgument<CoinType>>], isPhantom: BurnAction.$isPhantom, reifiedTypeArgs: [CoinType], fromFields: (fields: Record<string, any>) => BurnAction.fromFields( CoinType, fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => BurnAction.fromFieldsWithTypes( CoinType, item, ), fromBcs: (data: Uint8Array) => BurnAction.fromBcs( CoinType, data, ), bcs: BurnAction.bcs, fromJSONField: (field: any) => BurnAction.fromJSONField( CoinType, field, ), fromJSON: (json: Record<string, any>) => BurnAction.fromJSON( CoinType, json, ), fromSuiParsedData: (content: SuiParsedData) => BurnAction.fromSuiParsedData( CoinType, content, ), fromSuiObjectData: (content: SuiObjectData) => BurnAction.fromSuiObjectData( CoinType, content, ), fetch: async (client: SuiClient, id: string) => BurnAction.fetch( client, CoinType, id, ), new: ( fields: BurnActionFields<ToPhantomTypeArgument<CoinType>>, ) => { return new BurnAction( [extractType(CoinType)], fields ) }, kind: "StructClassReified", } }
+ static reified<CoinType extends PhantomReified<PhantomTypeArgument>>( CoinType: CoinType ): TreasuryCapKeyReified<ToPhantomTypeArgument<CoinType>> { return { typeName: TreasuryCapKey.$typeName, fullTypeName: composeSuiType( TreasuryCapKey.$typeName, ...[extractType(CoinType)] ) as `${typeof PKG_V1}::currency::TreasuryCapKey<${PhantomToTypeStr<ToPhantomTypeArgument<CoinType>>}>`, typeArgs: [ extractType(CoinType) ] as [PhantomToTypeStr<ToPhantomTypeArgument<CoinType>>], isPhantom: TreasuryCapKey.$isPhantom, reifiedTypeArgs: [CoinType], fromFields: (fields: Record<string, any>) => TreasuryCapKey.fromFields( CoinType, fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => TreasuryCapKey.fromFieldsWithTypes( CoinType, item, ), fromBcs: (data: Uint8Array) => TreasuryCapKey.fromBcs( CoinType, data, ), bcs: TreasuryCapKey.bcs, fromJSONField: (field: any) => TreasuryCapKey.fromJSONField( CoinType, field, ), fromJSON: (json: Record<string, any>) => TreasuryCapKey.fromJSON( CoinType, json, ), fromSuiParsedData: (content: SuiParsedData) => TreasuryCapKey.fromSuiParsedData( CoinType, content, ), fromSuiObjectData: (content: SuiObjectData) => TreasuryCapKey.fromSuiObjectData( CoinType, content, ), fetch: async (client: SuiClient, id: string) => TreasuryCapKey.fetch( client, CoinType, id, ), new: ( fields: TreasuryCapKeyFields<ToPhantomTypeArgument<CoinType>>, ) => { return new TreasuryCapKey( [extractType(CoinType)], fields ) }, kind: "StructClassReified", } }
 
- static get r() { return BurnAction.reified }
+ static get r() { return TreasuryCapKey.reified }
 
- static phantom<CoinType extends PhantomReified<PhantomTypeArgument>>( CoinType: CoinType ): PhantomReified<ToTypeStr<BurnAction<ToPhantomTypeArgument<CoinType>>>> { return phantom(BurnAction.reified( CoinType )); } static get p() { return BurnAction.phantom }
+ static phantom<CoinType extends PhantomReified<PhantomTypeArgument>>( CoinType: CoinType ): PhantomReified<ToTypeStr<TreasuryCapKey<ToPhantomTypeArgument<CoinType>>>> { return phantom(TreasuryCapKey.reified( CoinType )); } static get p() { return TreasuryCapKey.phantom }
 
- static get bcs() { return bcs.struct("BurnAction", {
+ static get bcs() { return bcs.struct("TreasuryCapKey", {
 
- amount: bcs.u64()
+ dummy_field: bcs.bool()
 
 }) };
 
- static fromFields<CoinType extends PhantomReified<PhantomTypeArgument>>( typeArg: CoinType, fields: Record<string, any> ): BurnAction<ToPhantomTypeArgument<CoinType>> { return BurnAction.reified( typeArg, ).new( { amount: decodeFromFields("u64", fields.amount) } ) }
+ static fromFields<CoinType extends PhantomReified<PhantomTypeArgument>>( typeArg: CoinType, fields: Record<string, any> ): TreasuryCapKey<ToPhantomTypeArgument<CoinType>> { return TreasuryCapKey.reified( typeArg, ).new( { dummyField: decodeFromFields("bool", fields.dummy_field) } ) }
 
- static fromFieldsWithTypes<CoinType extends PhantomReified<PhantomTypeArgument>>( typeArg: CoinType, item: FieldsWithTypes ): BurnAction<ToPhantomTypeArgument<CoinType>> { if (!isBurnAction(item.type)) { throw new Error("not a BurnAction type");
+ static fromFieldsWithTypes<CoinType extends PhantomReified<PhantomTypeArgument>>( typeArg: CoinType, item: FieldsWithTypes ): TreasuryCapKey<ToPhantomTypeArgument<CoinType>> { if (!isTreasuryCapKey(item.type)) { throw new Error("not a TreasuryCapKey type");
 
  } assertFieldsWithTypesArgsMatch(item, [typeArg]);
 
- return BurnAction.reified( typeArg, ).new( { amount: decodeFromFieldsWithTypes("u64", item.fields.amount) } ) }
+ return TreasuryCapKey.reified( typeArg, ).new( { dummyField: decodeFromFieldsWithTypes("bool", item.fields.dummy_field) } ) }
 
- static fromBcs<CoinType extends PhantomReified<PhantomTypeArgument>>( typeArg: CoinType, data: Uint8Array ): BurnAction<ToPhantomTypeArgument<CoinType>> { return BurnAction.fromFields( typeArg, BurnAction.bcs.parse(data) ) }
+ static fromBcs<CoinType extends PhantomReified<PhantomTypeArgument>>( typeArg: CoinType, data: Uint8Array ): TreasuryCapKey<ToPhantomTypeArgument<CoinType>> { return TreasuryCapKey.fromFields( typeArg, TreasuryCapKey.bcs.parse(data) ) }
 
  toJSONField() { return {
 
- amount: this.amount.toString(),
+ dummyField: this.dummyField,
 
 } }
 
  toJSON() { return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() } }
 
- static fromJSONField<CoinType extends PhantomReified<PhantomTypeArgument>>( typeArg: CoinType, field: any ): BurnAction<ToPhantomTypeArgument<CoinType>> { return BurnAction.reified( typeArg, ).new( { amount: decodeFromJSONField("u64", field.amount) } ) }
+ static fromJSONField<CoinType extends PhantomReified<PhantomTypeArgument>>( typeArg: CoinType, field: any ): TreasuryCapKey<ToPhantomTypeArgument<CoinType>> { return TreasuryCapKey.reified( typeArg, ).new( { dummyField: decodeFromJSONField("bool", field.dummyField) } ) }
 
- static fromJSON<CoinType extends PhantomReified<PhantomTypeArgument>>( typeArg: CoinType, json: Record<string, any> ): BurnAction<ToPhantomTypeArgument<CoinType>> { if (json.$typeName !== BurnAction.$typeName) { throw new Error("not a WithTwoGenerics json object") }; assertReifiedTypeArgsMatch( composeSuiType(BurnAction.$typeName, extractType(typeArg)), json.$typeArgs, [typeArg], )
+ static fromJSON<CoinType extends PhantomReified<PhantomTypeArgument>>( typeArg: CoinType, json: Record<string, any> ): TreasuryCapKey<ToPhantomTypeArgument<CoinType>> { if (json.$typeName !== TreasuryCapKey.$typeName) { throw new Error("not a WithTwoGenerics json object") }; assertReifiedTypeArgsMatch( composeSuiType(TreasuryCapKey.$typeName, extractType(typeArg)), json.$typeArgs, [typeArg], )
 
- return BurnAction.fromJSONField( typeArg, json, ) }
+ return TreasuryCapKey.fromJSONField( typeArg, json, ) }
 
- static fromSuiParsedData<CoinType extends PhantomReified<PhantomTypeArgument>>( typeArg: CoinType, content: SuiParsedData ): BurnAction<ToPhantomTypeArgument<CoinType>> { if (content.dataType !== "moveObject") { throw new Error("not an object"); } if (!isBurnAction(content.type)) { throw new Error(`object at ${(content.fields as any).id} is not a BurnAction object`); } return BurnAction.fromFieldsWithTypes( typeArg, content ); }
+ static fromSuiParsedData<CoinType extends PhantomReified<PhantomTypeArgument>>( typeArg: CoinType, content: SuiParsedData ): TreasuryCapKey<ToPhantomTypeArgument<CoinType>> { if (content.dataType !== "moveObject") { throw new Error("not an object"); } if (!isTreasuryCapKey(content.type)) { throw new Error(`object at ${(content.fields as any).id} is not a TreasuryCapKey object`); } return TreasuryCapKey.fromFieldsWithTypes( typeArg, content ); }
 
- static fromSuiObjectData<CoinType extends PhantomReified<PhantomTypeArgument>>( typeArg: CoinType, data: SuiObjectData ): BurnAction<ToPhantomTypeArgument<CoinType>> { if (data.bcs) { if (data.bcs.dataType !== "moveObject" || !isBurnAction(data.bcs.type)) { throw new Error(`object at is not a BurnAction object`); }
-
- const gotTypeArgs = parseTypeName(data.bcs.type).typeArgs; if (gotTypeArgs.length !== 1) { throw new Error(`type argument mismatch: expected 1 type argument but got '${gotTypeArgs.length}'`); }; const gotTypeArg = compressSuiType(gotTypeArgs[0]); const expectedTypeArg = compressSuiType(extractType(typeArg)); if (gotTypeArg !== compressSuiType(extractType(typeArg))) { throw new Error(`type argument mismatch: expected '${expectedTypeArg}' but got '${gotTypeArg}'`); };
-
- return BurnAction.fromBcs( typeArg, fromB64(data.bcs.bcsBytes) ); } if (data.content) { return BurnAction.fromSuiParsedData( typeArg, data.content ) } throw new Error( "Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request." ); }
-
- static async fetch<CoinType extends PhantomReified<PhantomTypeArgument>>( client: SuiClient, typeArg: CoinType, id: string ): Promise<BurnAction<ToPhantomTypeArgument<CoinType>>> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching BurnAction object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isBurnAction(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a BurnAction object`); }
-
- return BurnAction.fromSuiObjectData( typeArg, res.data ); }
-
- }
-
-/* ============================== CurrencyRules =============================== */
-
-export function isCurrencyRules(type: string): boolean { type = compressSuiType(type); return type.startsWith(`${PKG_V1}::currency::CurrencyRules` + '<'); }
-
-export interface CurrencyRulesFields<CoinType extends PhantomTypeArgument> { maxSupply: ToField<Option<"u64">>; totalMinted: ToField<"u64">; totalBurned: ToField<"u64">; canMint: ToField<"bool">; canBurn: ToField<"bool">; canUpdateSymbol: ToField<"bool">; canUpdateName: ToField<"bool">; canUpdateDescription: ToField<"bool">; canUpdateIcon: ToField<"bool"> }
-
-export type CurrencyRulesReified<CoinType extends PhantomTypeArgument> = Reified< CurrencyRules<CoinType>, CurrencyRulesFields<CoinType> >;
-
-export class CurrencyRules<CoinType extends PhantomTypeArgument> implements StructClass { __StructClass = true as const;
-
- static readonly $typeName = `${PKG_V1}::currency::CurrencyRules`; static readonly $numTypeParams = 1; static readonly $isPhantom = [true,] as const;
-
- readonly $typeName = CurrencyRules.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::currency::CurrencyRules<${PhantomToTypeStr<CoinType>}>`; readonly $typeArgs: [PhantomToTypeStr<CoinType>]; readonly $isPhantom = CurrencyRules.$isPhantom;
-
- readonly maxSupply: ToField<Option<"u64">>; readonly totalMinted: ToField<"u64">; readonly totalBurned: ToField<"u64">; readonly canMint: ToField<"bool">; readonly canBurn: ToField<"bool">; readonly canUpdateSymbol: ToField<"bool">; readonly canUpdateName: ToField<"bool">; readonly canUpdateDescription: ToField<"bool">; readonly canUpdateIcon: ToField<"bool">
-
- private constructor(typeArgs: [PhantomToTypeStr<CoinType>], fields: CurrencyRulesFields<CoinType>, ) { this.$fullTypeName = composeSuiType( CurrencyRules.$typeName, ...typeArgs ) as `${typeof PKG_V1}::currency::CurrencyRules<${PhantomToTypeStr<CoinType>}>`; this.$typeArgs = typeArgs;
-
- this.maxSupply = fields.maxSupply;; this.totalMinted = fields.totalMinted;; this.totalBurned = fields.totalBurned;; this.canMint = fields.canMint;; this.canBurn = fields.canBurn;; this.canUpdateSymbol = fields.canUpdateSymbol;; this.canUpdateName = fields.canUpdateName;; this.canUpdateDescription = fields.canUpdateDescription;; this.canUpdateIcon = fields.canUpdateIcon; }
-
- static reified<CoinType extends PhantomReified<PhantomTypeArgument>>( CoinType: CoinType ): CurrencyRulesReified<ToPhantomTypeArgument<CoinType>> { return { typeName: CurrencyRules.$typeName, fullTypeName: composeSuiType( CurrencyRules.$typeName, ...[extractType(CoinType)] ) as `${typeof PKG_V1}::currency::CurrencyRules<${PhantomToTypeStr<ToPhantomTypeArgument<CoinType>>}>`, typeArgs: [ extractType(CoinType) ] as [PhantomToTypeStr<ToPhantomTypeArgument<CoinType>>], isPhantom: CurrencyRules.$isPhantom, reifiedTypeArgs: [CoinType], fromFields: (fields: Record<string, any>) => CurrencyRules.fromFields( CoinType, fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => CurrencyRules.fromFieldsWithTypes( CoinType, item, ), fromBcs: (data: Uint8Array) => CurrencyRules.fromBcs( CoinType, data, ), bcs: CurrencyRules.bcs, fromJSONField: (field: any) => CurrencyRules.fromJSONField( CoinType, field, ), fromJSON: (json: Record<string, any>) => CurrencyRules.fromJSON( CoinType, json, ), fromSuiParsedData: (content: SuiParsedData) => CurrencyRules.fromSuiParsedData( CoinType, content, ), fromSuiObjectData: (content: SuiObjectData) => CurrencyRules.fromSuiObjectData( CoinType, content, ), fetch: async (client: SuiClient, id: string) => CurrencyRules.fetch( client, CoinType, id, ), new: ( fields: CurrencyRulesFields<ToPhantomTypeArgument<CoinType>>, ) => { return new CurrencyRules( [extractType(CoinType)], fields ) }, kind: "StructClassReified", } }
-
- static get r() { return CurrencyRules.reified }
-
- static phantom<CoinType extends PhantomReified<PhantomTypeArgument>>( CoinType: CoinType ): PhantomReified<ToTypeStr<CurrencyRules<ToPhantomTypeArgument<CoinType>>>> { return phantom(CurrencyRules.reified( CoinType )); } static get p() { return CurrencyRules.phantom }
-
- static get bcs() { return bcs.struct("CurrencyRules", {
-
- max_supply: Option.bcs(bcs.u64()), total_minted: bcs.u64(), total_burned: bcs.u64(), can_mint: bcs.bool(), can_burn: bcs.bool(), can_update_symbol: bcs.bool(), can_update_name: bcs.bool(), can_update_description: bcs.bool(), can_update_icon: bcs.bool()
-
-}) };
-
- static fromFields<CoinType extends PhantomReified<PhantomTypeArgument>>( typeArg: CoinType, fields: Record<string, any> ): CurrencyRules<ToPhantomTypeArgument<CoinType>> { return CurrencyRules.reified( typeArg, ).new( { maxSupply: decodeFromFields(Option.reified("u64"), fields.max_supply), totalMinted: decodeFromFields("u64", fields.total_minted), totalBurned: decodeFromFields("u64", fields.total_burned), canMint: decodeFromFields("bool", fields.can_mint), canBurn: decodeFromFields("bool", fields.can_burn), canUpdateSymbol: decodeFromFields("bool", fields.can_update_symbol), canUpdateName: decodeFromFields("bool", fields.can_update_name), canUpdateDescription: decodeFromFields("bool", fields.can_update_description), canUpdateIcon: decodeFromFields("bool", fields.can_update_icon) } ) }
-
- static fromFieldsWithTypes<CoinType extends PhantomReified<PhantomTypeArgument>>( typeArg: CoinType, item: FieldsWithTypes ): CurrencyRules<ToPhantomTypeArgument<CoinType>> { if (!isCurrencyRules(item.type)) { throw new Error("not a CurrencyRules type");
-
- } assertFieldsWithTypesArgsMatch(item, [typeArg]);
-
- return CurrencyRules.reified( typeArg, ).new( { maxSupply: decodeFromFieldsWithTypes(Option.reified("u64"), item.fields.max_supply), totalMinted: decodeFromFieldsWithTypes("u64", item.fields.total_minted), totalBurned: decodeFromFieldsWithTypes("u64", item.fields.total_burned), canMint: decodeFromFieldsWithTypes("bool", item.fields.can_mint), canBurn: decodeFromFieldsWithTypes("bool", item.fields.can_burn), canUpdateSymbol: decodeFromFieldsWithTypes("bool", item.fields.can_update_symbol), canUpdateName: decodeFromFieldsWithTypes("bool", item.fields.can_update_name), canUpdateDescription: decodeFromFieldsWithTypes("bool", item.fields.can_update_description), canUpdateIcon: decodeFromFieldsWithTypes("bool", item.fields.can_update_icon) } ) }
-
- static fromBcs<CoinType extends PhantomReified<PhantomTypeArgument>>( typeArg: CoinType, data: Uint8Array ): CurrencyRules<ToPhantomTypeArgument<CoinType>> { return CurrencyRules.fromFields( typeArg, CurrencyRules.bcs.parse(data) ) }
-
- toJSONField() { return {
-
- maxSupply: fieldToJSON<Option<"u64">>(`${Option.$typeName}<u64>`, this.maxSupply),totalMinted: this.totalMinted.toString(),totalBurned: this.totalBurned.toString(),canMint: this.canMint,canBurn: this.canBurn,canUpdateSymbol: this.canUpdateSymbol,canUpdateName: this.canUpdateName,canUpdateDescription: this.canUpdateDescription,canUpdateIcon: this.canUpdateIcon,
-
-} }
-
- toJSON() { return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() } }
-
- static fromJSONField<CoinType extends PhantomReified<PhantomTypeArgument>>( typeArg: CoinType, field: any ): CurrencyRules<ToPhantomTypeArgument<CoinType>> { return CurrencyRules.reified( typeArg, ).new( { maxSupply: decodeFromJSONField(Option.reified("u64"), field.maxSupply), totalMinted: decodeFromJSONField("u64", field.totalMinted), totalBurned: decodeFromJSONField("u64", field.totalBurned), canMint: decodeFromJSONField("bool", field.canMint), canBurn: decodeFromJSONField("bool", field.canBurn), canUpdateSymbol: decodeFromJSONField("bool", field.canUpdateSymbol), canUpdateName: decodeFromJSONField("bool", field.canUpdateName), canUpdateDescription: decodeFromJSONField("bool", field.canUpdateDescription), canUpdateIcon: decodeFromJSONField("bool", field.canUpdateIcon) } ) }
-
- static fromJSON<CoinType extends PhantomReified<PhantomTypeArgument>>( typeArg: CoinType, json: Record<string, any> ): CurrencyRules<ToPhantomTypeArgument<CoinType>> { if (json.$typeName !== CurrencyRules.$typeName) { throw new Error("not a WithTwoGenerics json object") }; assertReifiedTypeArgsMatch( composeSuiType(CurrencyRules.$typeName, extractType(typeArg)), json.$typeArgs, [typeArg], )
-
- return CurrencyRules.fromJSONField( typeArg, json, ) }
-
- static fromSuiParsedData<CoinType extends PhantomReified<PhantomTypeArgument>>( typeArg: CoinType, content: SuiParsedData ): CurrencyRules<ToPhantomTypeArgument<CoinType>> { if (content.dataType !== "moveObject") { throw new Error("not an object"); } if (!isCurrencyRules(content.type)) { throw new Error(`object at ${(content.fields as any).id} is not a CurrencyRules object`); } return CurrencyRules.fromFieldsWithTypes( typeArg, content ); }
-
- static fromSuiObjectData<CoinType extends PhantomReified<PhantomTypeArgument>>( typeArg: CoinType, data: SuiObjectData ): CurrencyRules<ToPhantomTypeArgument<CoinType>> { if (data.bcs) { if (data.bcs.dataType !== "moveObject" || !isCurrencyRules(data.bcs.type)) { throw new Error(`object at is not a CurrencyRules object`); }
+ static fromSuiObjectData<CoinType extends PhantomReified<PhantomTypeArgument>>( typeArg: CoinType, data: SuiObjectData ): TreasuryCapKey<ToPhantomTypeArgument<CoinType>> { if (data.bcs) { if (data.bcs.dataType !== "moveObject" || !isTreasuryCapKey(data.bcs.type)) { throw new Error(`object at is not a TreasuryCapKey object`); }
 
  const gotTypeArgs = parseTypeName(data.bcs.type).typeArgs; if (gotTypeArgs.length !== 1) { throw new Error(`type argument mismatch: expected 1 type argument but got '${gotTypeArgs.length}'`); }; const gotTypeArg = compressSuiType(gotTypeArgs[0]); const expectedTypeArg = compressSuiType(extractType(typeArg)); if (gotTypeArg !== compressSuiType(extractType(typeArg))) { throw new Error(`type argument mismatch: expected '${expectedTypeArg}' but got '${gotTypeArg}'`); };
 
- return CurrencyRules.fromBcs( typeArg, fromB64(data.bcs.bcsBytes) ); } if (data.content) { return CurrencyRules.fromSuiParsedData( typeArg, data.content ) } throw new Error( "Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request." ); }
+ return TreasuryCapKey.fromBcs( typeArg, fromB64(data.bcs.bcsBytes) ); } if (data.content) { return TreasuryCapKey.fromSuiParsedData( typeArg, data.content ) } throw new Error( "Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request." ); }
 
- static async fetch<CoinType extends PhantomReified<PhantomTypeArgument>>( client: SuiClient, typeArg: CoinType, id: string ): Promise<CurrencyRules<ToPhantomTypeArgument<CoinType>>> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching CurrencyRules object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isCurrencyRules(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a CurrencyRules object`); }
+ static async fetch<CoinType extends PhantomReified<PhantomTypeArgument>>( client: SuiClient, typeArg: CoinType, id: string ): Promise<TreasuryCapKey<ToPhantomTypeArgument<CoinType>>> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching TreasuryCapKey object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isTreasuryCapKey(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a TreasuryCapKey object`); }
 
- return CurrencyRules.fromSuiObjectData( typeArg, res.data ); }
+ return TreasuryCapKey.fromSuiObjectData( typeArg, res.data ); }
 
  }
 
@@ -215,6 +145,76 @@ export class CurrencyRulesKey<CoinType extends PhantomTypeArgument> implements S
  static async fetch<CoinType extends PhantomReified<PhantomTypeArgument>>( client: SuiClient, typeArg: CoinType, id: string ): Promise<CurrencyRulesKey<ToPhantomTypeArgument<CoinType>>> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching CurrencyRulesKey object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isCurrencyRulesKey(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a CurrencyRulesKey object`); }
 
  return CurrencyRulesKey.fromSuiObjectData( typeArg, res.data ); }
+
+ }
+
+/* ============================== CurrencyRules =============================== */
+
+export function isCurrencyRules(type: string): boolean { type = compressSuiType(type); return type.startsWith(`${PKG_V1}::currency::CurrencyRules` + '<'); }
+
+export interface CurrencyRulesFields<CoinType extends PhantomTypeArgument> { maxSupply: ToField<Option<"u64">>; totalMinted: ToField<"u64">; totalBurned: ToField<"u64">; canMint: ToField<"bool">; canBurn: ToField<"bool">; canUpdateSymbol: ToField<"bool">; canUpdateName: ToField<"bool">; canUpdateDescription: ToField<"bool">; canUpdateIcon: ToField<"bool"> }
+
+export type CurrencyRulesReified<CoinType extends PhantomTypeArgument> = Reified< CurrencyRules<CoinType>, CurrencyRulesFields<CoinType> >;
+
+export class CurrencyRules<CoinType extends PhantomTypeArgument> implements StructClass { __StructClass = true as const;
+
+ static readonly $typeName = `${PKG_V1}::currency::CurrencyRules`; static readonly $numTypeParams = 1; static readonly $isPhantom = [true,] as const;
+
+ readonly $typeName = CurrencyRules.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::currency::CurrencyRules<${PhantomToTypeStr<CoinType>}>`; readonly $typeArgs: [PhantomToTypeStr<CoinType>]; readonly $isPhantom = CurrencyRules.$isPhantom;
+
+ readonly maxSupply: ToField<Option<"u64">>; readonly totalMinted: ToField<"u64">; readonly totalBurned: ToField<"u64">; readonly canMint: ToField<"bool">; readonly canBurn: ToField<"bool">; readonly canUpdateSymbol: ToField<"bool">; readonly canUpdateName: ToField<"bool">; readonly canUpdateDescription: ToField<"bool">; readonly canUpdateIcon: ToField<"bool">
+
+ private constructor(typeArgs: [PhantomToTypeStr<CoinType>], fields: CurrencyRulesFields<CoinType>, ) { this.$fullTypeName = composeSuiType( CurrencyRules.$typeName, ...typeArgs ) as `${typeof PKG_V1}::currency::CurrencyRules<${PhantomToTypeStr<CoinType>}>`; this.$typeArgs = typeArgs;
+
+ this.maxSupply = fields.maxSupply;; this.totalMinted = fields.totalMinted;; this.totalBurned = fields.totalBurned;; this.canMint = fields.canMint;; this.canBurn = fields.canBurn;; this.canUpdateSymbol = fields.canUpdateSymbol;; this.canUpdateName = fields.canUpdateName;; this.canUpdateDescription = fields.canUpdateDescription;; this.canUpdateIcon = fields.canUpdateIcon; }
+
+ static reified<CoinType extends PhantomReified<PhantomTypeArgument>>( CoinType: CoinType ): CurrencyRulesReified<ToPhantomTypeArgument<CoinType>> { return { typeName: CurrencyRules.$typeName, fullTypeName: composeSuiType( CurrencyRules.$typeName, ...[extractType(CoinType)] ) as `${typeof PKG_V1}::currency::CurrencyRules<${PhantomToTypeStr<ToPhantomTypeArgument<CoinType>>}>`, typeArgs: [ extractType(CoinType) ] as [PhantomToTypeStr<ToPhantomTypeArgument<CoinType>>], isPhantom: CurrencyRules.$isPhantom, reifiedTypeArgs: [CoinType], fromFields: (fields: Record<string, any>) => CurrencyRules.fromFields( CoinType, fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => CurrencyRules.fromFieldsWithTypes( CoinType, item, ), fromBcs: (data: Uint8Array) => CurrencyRules.fromBcs( CoinType, data, ), bcs: CurrencyRules.bcs, fromJSONField: (field: any) => CurrencyRules.fromJSONField( CoinType, field, ), fromJSON: (json: Record<string, any>) => CurrencyRules.fromJSON( CoinType, json, ), fromSuiParsedData: (content: SuiParsedData) => CurrencyRules.fromSuiParsedData( CoinType, content, ), fromSuiObjectData: (content: SuiObjectData) => CurrencyRules.fromSuiObjectData( CoinType, content, ), fetch: async (client: SuiClient, id: string) => CurrencyRules.fetch( client, CoinType, id, ), new: ( fields: CurrencyRulesFields<ToPhantomTypeArgument<CoinType>>, ) => { return new CurrencyRules( [extractType(CoinType)], fields ) }, kind: "StructClassReified", } }
+
+ static get r() { return CurrencyRules.reified }
+
+ static phantom<CoinType extends PhantomReified<PhantomTypeArgument>>( CoinType: CoinType ): PhantomReified<ToTypeStr<CurrencyRules<ToPhantomTypeArgument<CoinType>>>> { return phantom(CurrencyRules.reified( CoinType )); } static get p() { return CurrencyRules.phantom }
+
+ static get bcs() { return bcs.struct("CurrencyRules", {
+
+ max_supply: Option.bcs(bcs.u64()), total_minted: bcs.u64(), total_burned: bcs.u64(), can_mint: bcs.bool(), can_burn: bcs.bool(), can_update_symbol: bcs.bool(), can_update_name: bcs.bool(), can_update_description: bcs.bool(), can_update_icon: bcs.bool()
+
+}) };
+
+ static fromFields<CoinType extends PhantomReified<PhantomTypeArgument>>( typeArg: CoinType, fields: Record<string, any> ): CurrencyRules<ToPhantomTypeArgument<CoinType>> { return CurrencyRules.reified( typeArg, ).new( { maxSupply: decodeFromFields(Option.reified("u64"), fields.max_supply), totalMinted: decodeFromFields("u64", fields.total_minted), totalBurned: decodeFromFields("u64", fields.total_burned), canMint: decodeFromFields("bool", fields.can_mint), canBurn: decodeFromFields("bool", fields.can_burn), canUpdateSymbol: decodeFromFields("bool", fields.can_update_symbol), canUpdateName: decodeFromFields("bool", fields.can_update_name), canUpdateDescription: decodeFromFields("bool", fields.can_update_description), canUpdateIcon: decodeFromFields("bool", fields.can_update_icon) } ) }
+
+ static fromFieldsWithTypes<CoinType extends PhantomReified<PhantomTypeArgument>>( typeArg: CoinType, item: FieldsWithTypes ): CurrencyRules<ToPhantomTypeArgument<CoinType>> { if (!isCurrencyRules(item.type)) { throw new Error("not a CurrencyRules type");
+
+ } assertFieldsWithTypesArgsMatch(item, [typeArg]);
+
+ return CurrencyRules.reified( typeArg, ).new( { maxSupply: decodeFromFieldsWithTypes(Option.reified("u64"), item.fields.max_supply), totalMinted: decodeFromFieldsWithTypes("u64", item.fields.total_minted), totalBurned: decodeFromFieldsWithTypes("u64", item.fields.total_burned), canMint: decodeFromFieldsWithTypes("bool", item.fields.can_mint), canBurn: decodeFromFieldsWithTypes("bool", item.fields.can_burn), canUpdateSymbol: decodeFromFieldsWithTypes("bool", item.fields.can_update_symbol), canUpdateName: decodeFromFieldsWithTypes("bool", item.fields.can_update_name), canUpdateDescription: decodeFromFieldsWithTypes("bool", item.fields.can_update_description), canUpdateIcon: decodeFromFieldsWithTypes("bool", item.fields.can_update_icon) } ) }
+
+ static fromBcs<CoinType extends PhantomReified<PhantomTypeArgument>>( typeArg: CoinType, data: Uint8Array ): CurrencyRules<ToPhantomTypeArgument<CoinType>> { return CurrencyRules.fromFields( typeArg, CurrencyRules.bcs.parse(data) ) }
+
+ toJSONField() { return {
+
+ maxSupply: fieldToJSON<Option<"u64">>(`${Option.$typeName}<u64>`, this.maxSupply),totalMinted: this.totalMinted.toString(),totalBurned: this.totalBurned.toString(),canMint: this.canMint,canBurn: this.canBurn,canUpdateSymbol: this.canUpdateSymbol,canUpdateName: this.canUpdateName,canUpdateDescription: this.canUpdateDescription,canUpdateIcon: this.canUpdateIcon,
+
+} }
+
+ toJSON() { return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() } }
+
+ static fromJSONField<CoinType extends PhantomReified<PhantomTypeArgument>>( typeArg: CoinType, field: any ): CurrencyRules<ToPhantomTypeArgument<CoinType>> { return CurrencyRules.reified( typeArg, ).new( { maxSupply: decodeFromJSONField(Option.reified("u64"), field.maxSupply), totalMinted: decodeFromJSONField("u64", field.totalMinted), totalBurned: decodeFromJSONField("u64", field.totalBurned), canMint: decodeFromJSONField("bool", field.canMint), canBurn: decodeFromJSONField("bool", field.canBurn), canUpdateSymbol: decodeFromJSONField("bool", field.canUpdateSymbol), canUpdateName: decodeFromJSONField("bool", field.canUpdateName), canUpdateDescription: decodeFromJSONField("bool", field.canUpdateDescription), canUpdateIcon: decodeFromJSONField("bool", field.canUpdateIcon) } ) }
+
+ static fromJSON<CoinType extends PhantomReified<PhantomTypeArgument>>( typeArg: CoinType, json: Record<string, any> ): CurrencyRules<ToPhantomTypeArgument<CoinType>> { if (json.$typeName !== CurrencyRules.$typeName) { throw new Error("not a WithTwoGenerics json object") }; assertReifiedTypeArgsMatch( composeSuiType(CurrencyRules.$typeName, extractType(typeArg)), json.$typeArgs, [typeArg], )
+
+ return CurrencyRules.fromJSONField( typeArg, json, ) }
+
+ static fromSuiParsedData<CoinType extends PhantomReified<PhantomTypeArgument>>( typeArg: CoinType, content: SuiParsedData ): CurrencyRules<ToPhantomTypeArgument<CoinType>> { if (content.dataType !== "moveObject") { throw new Error("not an object"); } if (!isCurrencyRules(content.type)) { throw new Error(`object at ${(content.fields as any).id} is not a CurrencyRules object`); } return CurrencyRules.fromFieldsWithTypes( typeArg, content ); }
+
+ static fromSuiObjectData<CoinType extends PhantomReified<PhantomTypeArgument>>( typeArg: CoinType, data: SuiObjectData ): CurrencyRules<ToPhantomTypeArgument<CoinType>> { if (data.bcs) { if (data.bcs.dataType !== "moveObject" || !isCurrencyRules(data.bcs.type)) { throw new Error(`object at is not a CurrencyRules object`); }
+
+ const gotTypeArgs = parseTypeName(data.bcs.type).typeArgs; if (gotTypeArgs.length !== 1) { throw new Error(`type argument mismatch: expected 1 type argument but got '${gotTypeArgs.length}'`); }; const gotTypeArg = compressSuiType(gotTypeArgs[0]); const expectedTypeArg = compressSuiType(extractType(typeArg)); if (gotTypeArg !== compressSuiType(extractType(typeArg))) { throw new Error(`type argument mismatch: expected '${expectedTypeArg}' but got '${gotTypeArg}'`); };
+
+ return CurrencyRules.fromBcs( typeArg, fromB64(data.bcs.bcsBytes) ); } if (data.content) { return CurrencyRules.fromSuiParsedData( typeArg, data.content ) } throw new Error( "Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request." ); }
+
+ static async fetch<CoinType extends PhantomReified<PhantomTypeArgument>>( client: SuiClient, typeArg: CoinType, id: string ): Promise<CurrencyRules<ToPhantomTypeArgument<CoinType>>> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching CurrencyRules object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isCurrencyRules(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a CurrencyRules object`); }
+
+ return CurrencyRules.fromSuiObjectData( typeArg, res.data ); }
 
  }
 
@@ -358,73 +358,73 @@ export class MintAction<CoinType extends PhantomTypeArgument> implements StructC
 
  }
 
-/* ============================== TreasuryCapKey =============================== */
+/* ============================== BurnAction =============================== */
 
-export function isTreasuryCapKey(type: string): boolean { type = compressSuiType(type); return type.startsWith(`${PKG_V1}::currency::TreasuryCapKey` + '<'); }
+export function isBurnAction(type: string): boolean { type = compressSuiType(type); return type.startsWith(`${PKG_V1}::currency::BurnAction` + '<'); }
 
-export interface TreasuryCapKeyFields<CoinType extends PhantomTypeArgument> { dummyField: ToField<"bool"> }
+export interface BurnActionFields<CoinType extends PhantomTypeArgument> { amount: ToField<"u64"> }
 
-export type TreasuryCapKeyReified<CoinType extends PhantomTypeArgument> = Reified< TreasuryCapKey<CoinType>, TreasuryCapKeyFields<CoinType> >;
+export type BurnActionReified<CoinType extends PhantomTypeArgument> = Reified< BurnAction<CoinType>, BurnActionFields<CoinType> >;
 
-export class TreasuryCapKey<CoinType extends PhantomTypeArgument> implements StructClass { __StructClass = true as const;
+export class BurnAction<CoinType extends PhantomTypeArgument> implements StructClass { __StructClass = true as const;
 
- static readonly $typeName = `${PKG_V1}::currency::TreasuryCapKey`; static readonly $numTypeParams = 1; static readonly $isPhantom = [true,] as const;
+ static readonly $typeName = `${PKG_V1}::currency::BurnAction`; static readonly $numTypeParams = 1; static readonly $isPhantom = [true,] as const;
 
- readonly $typeName = TreasuryCapKey.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::currency::TreasuryCapKey<${PhantomToTypeStr<CoinType>}>`; readonly $typeArgs: [PhantomToTypeStr<CoinType>]; readonly $isPhantom = TreasuryCapKey.$isPhantom;
+ readonly $typeName = BurnAction.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::currency::BurnAction<${PhantomToTypeStr<CoinType>}>`; readonly $typeArgs: [PhantomToTypeStr<CoinType>]; readonly $isPhantom = BurnAction.$isPhantom;
 
- readonly dummyField: ToField<"bool">
+ readonly amount: ToField<"u64">
 
- private constructor(typeArgs: [PhantomToTypeStr<CoinType>], fields: TreasuryCapKeyFields<CoinType>, ) { this.$fullTypeName = composeSuiType( TreasuryCapKey.$typeName, ...typeArgs ) as `${typeof PKG_V1}::currency::TreasuryCapKey<${PhantomToTypeStr<CoinType>}>`; this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [PhantomToTypeStr<CoinType>], fields: BurnActionFields<CoinType>, ) { this.$fullTypeName = composeSuiType( BurnAction.$typeName, ...typeArgs ) as `${typeof PKG_V1}::currency::BurnAction<${PhantomToTypeStr<CoinType>}>`; this.$typeArgs = typeArgs;
 
- this.dummyField = fields.dummyField; }
+ this.amount = fields.amount; }
 
- static reified<CoinType extends PhantomReified<PhantomTypeArgument>>( CoinType: CoinType ): TreasuryCapKeyReified<ToPhantomTypeArgument<CoinType>> { return { typeName: TreasuryCapKey.$typeName, fullTypeName: composeSuiType( TreasuryCapKey.$typeName, ...[extractType(CoinType)] ) as `${typeof PKG_V1}::currency::TreasuryCapKey<${PhantomToTypeStr<ToPhantomTypeArgument<CoinType>>}>`, typeArgs: [ extractType(CoinType) ] as [PhantomToTypeStr<ToPhantomTypeArgument<CoinType>>], isPhantom: TreasuryCapKey.$isPhantom, reifiedTypeArgs: [CoinType], fromFields: (fields: Record<string, any>) => TreasuryCapKey.fromFields( CoinType, fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => TreasuryCapKey.fromFieldsWithTypes( CoinType, item, ), fromBcs: (data: Uint8Array) => TreasuryCapKey.fromBcs( CoinType, data, ), bcs: TreasuryCapKey.bcs, fromJSONField: (field: any) => TreasuryCapKey.fromJSONField( CoinType, field, ), fromJSON: (json: Record<string, any>) => TreasuryCapKey.fromJSON( CoinType, json, ), fromSuiParsedData: (content: SuiParsedData) => TreasuryCapKey.fromSuiParsedData( CoinType, content, ), fromSuiObjectData: (content: SuiObjectData) => TreasuryCapKey.fromSuiObjectData( CoinType, content, ), fetch: async (client: SuiClient, id: string) => TreasuryCapKey.fetch( client, CoinType, id, ), new: ( fields: TreasuryCapKeyFields<ToPhantomTypeArgument<CoinType>>, ) => { return new TreasuryCapKey( [extractType(CoinType)], fields ) }, kind: "StructClassReified", } }
+ static reified<CoinType extends PhantomReified<PhantomTypeArgument>>( CoinType: CoinType ): BurnActionReified<ToPhantomTypeArgument<CoinType>> { return { typeName: BurnAction.$typeName, fullTypeName: composeSuiType( BurnAction.$typeName, ...[extractType(CoinType)] ) as `${typeof PKG_V1}::currency::BurnAction<${PhantomToTypeStr<ToPhantomTypeArgument<CoinType>>}>`, typeArgs: [ extractType(CoinType) ] as [PhantomToTypeStr<ToPhantomTypeArgument<CoinType>>], isPhantom: BurnAction.$isPhantom, reifiedTypeArgs: [CoinType], fromFields: (fields: Record<string, any>) => BurnAction.fromFields( CoinType, fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => BurnAction.fromFieldsWithTypes( CoinType, item, ), fromBcs: (data: Uint8Array) => BurnAction.fromBcs( CoinType, data, ), bcs: BurnAction.bcs, fromJSONField: (field: any) => BurnAction.fromJSONField( CoinType, field, ), fromJSON: (json: Record<string, any>) => BurnAction.fromJSON( CoinType, json, ), fromSuiParsedData: (content: SuiParsedData) => BurnAction.fromSuiParsedData( CoinType, content, ), fromSuiObjectData: (content: SuiObjectData) => BurnAction.fromSuiObjectData( CoinType, content, ), fetch: async (client: SuiClient, id: string) => BurnAction.fetch( client, CoinType, id, ), new: ( fields: BurnActionFields<ToPhantomTypeArgument<CoinType>>, ) => { return new BurnAction( [extractType(CoinType)], fields ) }, kind: "StructClassReified", } }
 
- static get r() { return TreasuryCapKey.reified }
+ static get r() { return BurnAction.reified }
 
- static phantom<CoinType extends PhantomReified<PhantomTypeArgument>>( CoinType: CoinType ): PhantomReified<ToTypeStr<TreasuryCapKey<ToPhantomTypeArgument<CoinType>>>> { return phantom(TreasuryCapKey.reified( CoinType )); } static get p() { return TreasuryCapKey.phantom }
+ static phantom<CoinType extends PhantomReified<PhantomTypeArgument>>( CoinType: CoinType ): PhantomReified<ToTypeStr<BurnAction<ToPhantomTypeArgument<CoinType>>>> { return phantom(BurnAction.reified( CoinType )); } static get p() { return BurnAction.phantom }
 
- static get bcs() { return bcs.struct("TreasuryCapKey", {
+ static get bcs() { return bcs.struct("BurnAction", {
 
- dummy_field: bcs.bool()
+ amount: bcs.u64()
 
 }) };
 
- static fromFields<CoinType extends PhantomReified<PhantomTypeArgument>>( typeArg: CoinType, fields: Record<string, any> ): TreasuryCapKey<ToPhantomTypeArgument<CoinType>> { return TreasuryCapKey.reified( typeArg, ).new( { dummyField: decodeFromFields("bool", fields.dummy_field) } ) }
+ static fromFields<CoinType extends PhantomReified<PhantomTypeArgument>>( typeArg: CoinType, fields: Record<string, any> ): BurnAction<ToPhantomTypeArgument<CoinType>> { return BurnAction.reified( typeArg, ).new( { amount: decodeFromFields("u64", fields.amount) } ) }
 
- static fromFieldsWithTypes<CoinType extends PhantomReified<PhantomTypeArgument>>( typeArg: CoinType, item: FieldsWithTypes ): TreasuryCapKey<ToPhantomTypeArgument<CoinType>> { if (!isTreasuryCapKey(item.type)) { throw new Error("not a TreasuryCapKey type");
+ static fromFieldsWithTypes<CoinType extends PhantomReified<PhantomTypeArgument>>( typeArg: CoinType, item: FieldsWithTypes ): BurnAction<ToPhantomTypeArgument<CoinType>> { if (!isBurnAction(item.type)) { throw new Error("not a BurnAction type");
 
  } assertFieldsWithTypesArgsMatch(item, [typeArg]);
 
- return TreasuryCapKey.reified( typeArg, ).new( { dummyField: decodeFromFieldsWithTypes("bool", item.fields.dummy_field) } ) }
+ return BurnAction.reified( typeArg, ).new( { amount: decodeFromFieldsWithTypes("u64", item.fields.amount) } ) }
 
- static fromBcs<CoinType extends PhantomReified<PhantomTypeArgument>>( typeArg: CoinType, data: Uint8Array ): TreasuryCapKey<ToPhantomTypeArgument<CoinType>> { return TreasuryCapKey.fromFields( typeArg, TreasuryCapKey.bcs.parse(data) ) }
+ static fromBcs<CoinType extends PhantomReified<PhantomTypeArgument>>( typeArg: CoinType, data: Uint8Array ): BurnAction<ToPhantomTypeArgument<CoinType>> { return BurnAction.fromFields( typeArg, BurnAction.bcs.parse(data) ) }
 
  toJSONField() { return {
 
- dummyField: this.dummyField,
+ amount: this.amount.toString(),
 
 } }
 
  toJSON() { return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() } }
 
- static fromJSONField<CoinType extends PhantomReified<PhantomTypeArgument>>( typeArg: CoinType, field: any ): TreasuryCapKey<ToPhantomTypeArgument<CoinType>> { return TreasuryCapKey.reified( typeArg, ).new( { dummyField: decodeFromJSONField("bool", field.dummyField) } ) }
+ static fromJSONField<CoinType extends PhantomReified<PhantomTypeArgument>>( typeArg: CoinType, field: any ): BurnAction<ToPhantomTypeArgument<CoinType>> { return BurnAction.reified( typeArg, ).new( { amount: decodeFromJSONField("u64", field.amount) } ) }
 
- static fromJSON<CoinType extends PhantomReified<PhantomTypeArgument>>( typeArg: CoinType, json: Record<string, any> ): TreasuryCapKey<ToPhantomTypeArgument<CoinType>> { if (json.$typeName !== TreasuryCapKey.$typeName) { throw new Error("not a WithTwoGenerics json object") }; assertReifiedTypeArgsMatch( composeSuiType(TreasuryCapKey.$typeName, extractType(typeArg)), json.$typeArgs, [typeArg], )
+ static fromJSON<CoinType extends PhantomReified<PhantomTypeArgument>>( typeArg: CoinType, json: Record<string, any> ): BurnAction<ToPhantomTypeArgument<CoinType>> { if (json.$typeName !== BurnAction.$typeName) { throw new Error("not a WithTwoGenerics json object") }; assertReifiedTypeArgsMatch( composeSuiType(BurnAction.$typeName, extractType(typeArg)), json.$typeArgs, [typeArg], )
 
- return TreasuryCapKey.fromJSONField( typeArg, json, ) }
+ return BurnAction.fromJSONField( typeArg, json, ) }
 
- static fromSuiParsedData<CoinType extends PhantomReified<PhantomTypeArgument>>( typeArg: CoinType, content: SuiParsedData ): TreasuryCapKey<ToPhantomTypeArgument<CoinType>> { if (content.dataType !== "moveObject") { throw new Error("not an object"); } if (!isTreasuryCapKey(content.type)) { throw new Error(`object at ${(content.fields as any).id} is not a TreasuryCapKey object`); } return TreasuryCapKey.fromFieldsWithTypes( typeArg, content ); }
+ static fromSuiParsedData<CoinType extends PhantomReified<PhantomTypeArgument>>( typeArg: CoinType, content: SuiParsedData ): BurnAction<ToPhantomTypeArgument<CoinType>> { if (content.dataType !== "moveObject") { throw new Error("not an object"); } if (!isBurnAction(content.type)) { throw new Error(`object at ${(content.fields as any).id} is not a BurnAction object`); } return BurnAction.fromFieldsWithTypes( typeArg, content ); }
 
- static fromSuiObjectData<CoinType extends PhantomReified<PhantomTypeArgument>>( typeArg: CoinType, data: SuiObjectData ): TreasuryCapKey<ToPhantomTypeArgument<CoinType>> { if (data.bcs) { if (data.bcs.dataType !== "moveObject" || !isTreasuryCapKey(data.bcs.type)) { throw new Error(`object at is not a TreasuryCapKey object`); }
+ static fromSuiObjectData<CoinType extends PhantomReified<PhantomTypeArgument>>( typeArg: CoinType, data: SuiObjectData ): BurnAction<ToPhantomTypeArgument<CoinType>> { if (data.bcs) { if (data.bcs.dataType !== "moveObject" || !isBurnAction(data.bcs.type)) { throw new Error(`object at is not a BurnAction object`); }
 
  const gotTypeArgs = parseTypeName(data.bcs.type).typeArgs; if (gotTypeArgs.length !== 1) { throw new Error(`type argument mismatch: expected 1 type argument but got '${gotTypeArgs.length}'`); }; const gotTypeArg = compressSuiType(gotTypeArgs[0]); const expectedTypeArg = compressSuiType(extractType(typeArg)); if (gotTypeArg !== compressSuiType(extractType(typeArg))) { throw new Error(`type argument mismatch: expected '${expectedTypeArg}' but got '${gotTypeArg}'`); };
 
- return TreasuryCapKey.fromBcs( typeArg, fromB64(data.bcs.bcsBytes) ); } if (data.content) { return TreasuryCapKey.fromSuiParsedData( typeArg, data.content ) } throw new Error( "Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request." ); }
+ return BurnAction.fromBcs( typeArg, fromB64(data.bcs.bcsBytes) ); } if (data.content) { return BurnAction.fromSuiParsedData( typeArg, data.content ) } throw new Error( "Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request." ); }
 
- static async fetch<CoinType extends PhantomReified<PhantomTypeArgument>>( client: SuiClient, typeArg: CoinType, id: string ): Promise<TreasuryCapKey<ToPhantomTypeArgument<CoinType>>> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching TreasuryCapKey object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isTreasuryCapKey(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a TreasuryCapKey object`); }
+ static async fetch<CoinType extends PhantomReified<PhantomTypeArgument>>( client: SuiClient, typeArg: CoinType, id: string ): Promise<BurnAction<ToPhantomTypeArgument<CoinType>>> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching BurnAction object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isBurnAction(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a BurnAction object`); }
 
- return TreasuryCapKey.fromSuiObjectData( typeArg, res.data ); }
+ return BurnAction.fromSuiObjectData( typeArg, res.data ); }
 
  }
 

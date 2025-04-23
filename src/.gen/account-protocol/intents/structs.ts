@@ -12,71 +12,71 @@ import {BcsType, bcs} from "@mysten/sui/bcs";
 import {SuiClient, SuiObjectData, SuiParsedData} from "@mysten/sui/client";
 import {fromB64, fromHEX, toHEX} from "@mysten/sui/utils";
 
-/* ============================== Expired =============================== */
+/* ============================== Intents =============================== */
 
-export function isExpired(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::intents::Expired`; }
+export function isIntents(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::intents::Intents`; }
 
-export interface ExpiredFields { account: ToField<"address">; startIndex: ToField<"u64">; actions: ToField<Bag> }
+export interface IntentsFields { inner: ToField<Bag>; locked: ToField<VecSet<ID>> }
 
-export type ExpiredReified = Reified< Expired, ExpiredFields >;
+export type IntentsReified = Reified< Intents, IntentsFields >;
 
-export class Expired implements StructClass { __StructClass = true as const;
+export class Intents implements StructClass { __StructClass = true as const;
 
- static readonly $typeName = `${PKG_V1}::intents::Expired`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
+ static readonly $typeName = `${PKG_V1}::intents::Intents`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
 
- readonly $typeName = Expired.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::intents::Expired`; readonly $typeArgs: []; readonly $isPhantom = Expired.$isPhantom;
+ readonly $typeName = Intents.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::intents::Intents`; readonly $typeArgs: []; readonly $isPhantom = Intents.$isPhantom;
 
- readonly account: ToField<"address">; readonly startIndex: ToField<"u64">; readonly actions: ToField<Bag>
+ readonly inner: ToField<Bag>; readonly locked: ToField<VecSet<ID>>
 
- private constructor(typeArgs: [], fields: ExpiredFields, ) { this.$fullTypeName = composeSuiType( Expired.$typeName, ...typeArgs ) as `${typeof PKG_V1}::intents::Expired`; this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [], fields: IntentsFields, ) { this.$fullTypeName = composeSuiType( Intents.$typeName, ...typeArgs ) as `${typeof PKG_V1}::intents::Intents`; this.$typeArgs = typeArgs;
 
- this.account = fields.account;; this.startIndex = fields.startIndex;; this.actions = fields.actions; }
+ this.inner = fields.inner;; this.locked = fields.locked; }
 
- static reified( ): ExpiredReified { return { typeName: Expired.$typeName, fullTypeName: composeSuiType( Expired.$typeName, ...[] ) as `${typeof PKG_V1}::intents::Expired`, typeArgs: [ ] as [], isPhantom: Expired.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => Expired.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => Expired.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => Expired.fromBcs( data, ), bcs: Expired.bcs, fromJSONField: (field: any) => Expired.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => Expired.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => Expired.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => Expired.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => Expired.fetch( client, id, ), new: ( fields: ExpiredFields, ) => { return new Expired( [], fields ) }, kind: "StructClassReified", } }
+ static reified( ): IntentsReified { return { typeName: Intents.$typeName, fullTypeName: composeSuiType( Intents.$typeName, ...[] ) as `${typeof PKG_V1}::intents::Intents`, typeArgs: [ ] as [], isPhantom: Intents.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => Intents.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => Intents.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => Intents.fromBcs( data, ), bcs: Intents.bcs, fromJSONField: (field: any) => Intents.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => Intents.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => Intents.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => Intents.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => Intents.fetch( client, id, ), new: ( fields: IntentsFields, ) => { return new Intents( [], fields ) }, kind: "StructClassReified", } }
 
- static get r() { return Expired.reified() }
+ static get r() { return Intents.reified() }
 
- static phantom( ): PhantomReified<ToTypeStr<Expired>> { return phantom(Expired.reified( )); } static get p() { return Expired.phantom() }
+ static phantom( ): PhantomReified<ToTypeStr<Intents>> { return phantom(Intents.reified( )); } static get p() { return Intents.phantom() }
 
- static get bcs() { return bcs.struct("Expired", {
+ static get bcs() { return bcs.struct("Intents", {
 
- account: bcs.bytes(32).transform({ input: (val: string) => fromHEX(val), output: (val: Uint8Array) => toHEX(val), }), start_index: bcs.u64(), actions: Bag.bcs
+ inner: Bag.bcs, locked: VecSet.bcs(ID.bcs)
 
 }) };
 
- static fromFields( fields: Record<string, any> ): Expired { return Expired.reified( ).new( { account: decodeFromFields("address", fields.account), startIndex: decodeFromFields("u64", fields.start_index), actions: decodeFromFields(Bag.reified(), fields.actions) } ) }
+ static fromFields( fields: Record<string, any> ): Intents { return Intents.reified( ).new( { inner: decodeFromFields(Bag.reified(), fields.inner), locked: decodeFromFields(VecSet.reified(ID.reified()), fields.locked) } ) }
 
- static fromFieldsWithTypes( item: FieldsWithTypes ): Expired { if (!isExpired(item.type)) { throw new Error("not a Expired type");
+ static fromFieldsWithTypes( item: FieldsWithTypes ): Intents { if (!isIntents(item.type)) { throw new Error("not a Intents type");
 
  }
 
- return Expired.reified( ).new( { account: decodeFromFieldsWithTypes("address", item.fields.account), startIndex: decodeFromFieldsWithTypes("u64", item.fields.start_index), actions: decodeFromFieldsWithTypes(Bag.reified(), item.fields.actions) } ) }
+ return Intents.reified( ).new( { inner: decodeFromFieldsWithTypes(Bag.reified(), item.fields.inner), locked: decodeFromFieldsWithTypes(VecSet.reified(ID.reified()), item.fields.locked) } ) }
 
- static fromBcs( data: Uint8Array ): Expired { return Expired.fromFields( Expired.bcs.parse(data) ) }
+ static fromBcs( data: Uint8Array ): Intents { return Intents.fromFields( Intents.bcs.parse(data) ) }
 
  toJSONField() { return {
 
- account: this.account,startIndex: this.startIndex.toString(),actions: this.actions.toJSONField(),
+ inner: this.inner.toJSONField(),locked: this.locked.toJSONField(),
 
 } }
 
  toJSON() { return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() } }
 
- static fromJSONField( field: any ): Expired { return Expired.reified( ).new( { account: decodeFromJSONField("address", field.account), startIndex: decodeFromJSONField("u64", field.startIndex), actions: decodeFromJSONField(Bag.reified(), field.actions) } ) }
+ static fromJSONField( field: any ): Intents { return Intents.reified( ).new( { inner: decodeFromJSONField(Bag.reified(), field.inner), locked: decodeFromJSONField(VecSet.reified(ID.reified()), field.locked) } ) }
 
- static fromJSON( json: Record<string, any> ): Expired { if (json.$typeName !== Expired.$typeName) { throw new Error("not a WithTwoGenerics json object") };
+ static fromJSON( json: Record<string, any> ): Intents { if (json.$typeName !== Intents.$typeName) { throw new Error("not a WithTwoGenerics json object") };
 
- return Expired.fromJSONField( json, ) }
+ return Intents.fromJSONField( json, ) }
 
- static fromSuiParsedData( content: SuiParsedData ): Expired { if (content.dataType !== "moveObject") { throw new Error("not an object"); } if (!isExpired(content.type)) { throw new Error(`object at ${(content.fields as any).id} is not a Expired object`); } return Expired.fromFieldsWithTypes( content ); }
+ static fromSuiParsedData( content: SuiParsedData ): Intents { if (content.dataType !== "moveObject") { throw new Error("not an object"); } if (!isIntents(content.type)) { throw new Error(`object at ${(content.fields as any).id} is not a Intents object`); } return Intents.fromFieldsWithTypes( content ); }
 
- static fromSuiObjectData( data: SuiObjectData ): Expired { if (data.bcs) { if (data.bcs.dataType !== "moveObject" || !isExpired(data.bcs.type)) { throw new Error(`object at is not a Expired object`); }
+ static fromSuiObjectData( data: SuiObjectData ): Intents { if (data.bcs) { if (data.bcs.dataType !== "moveObject" || !isIntents(data.bcs.type)) { throw new Error(`object at is not a Intents object`); }
 
- return Expired.fromBcs( fromB64(data.bcs.bcsBytes) ); } if (data.content) { return Expired.fromSuiParsedData( data.content ) } throw new Error( "Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request." ); }
+ return Intents.fromBcs( fromB64(data.bcs.bcsBytes) ); } if (data.content) { return Intents.fromSuiParsedData( data.content ) } throw new Error( "Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request." ); }
 
- static async fetch( client: SuiClient, id: string ): Promise<Expired> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching Expired object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isExpired(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a Expired object`); }
+ static async fetch( client: SuiClient, id: string ): Promise<Intents> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching Intents object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isIntents(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a Intents object`); }
 
- return Expired.fromSuiObjectData( res.data ); }
+ return Intents.fromSuiObjectData( res.data ); }
 
  }
 
@@ -152,71 +152,71 @@ export class Intent<Outcome extends TypeArgument> implements StructClass { __Str
 
  }
 
-/* ============================== Intents =============================== */
+/* ============================== Expired =============================== */
 
-export function isIntents(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::intents::Intents`; }
+export function isExpired(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::intents::Expired`; }
 
-export interface IntentsFields { inner: ToField<Bag>; locked: ToField<VecSet<ID>> }
+export interface ExpiredFields { account: ToField<"address">; startIndex: ToField<"u64">; actions: ToField<Bag> }
 
-export type IntentsReified = Reified< Intents, IntentsFields >;
+export type ExpiredReified = Reified< Expired, ExpiredFields >;
 
-export class Intents implements StructClass { __StructClass = true as const;
+export class Expired implements StructClass { __StructClass = true as const;
 
- static readonly $typeName = `${PKG_V1}::intents::Intents`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
+ static readonly $typeName = `${PKG_V1}::intents::Expired`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
 
- readonly $typeName = Intents.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::intents::Intents`; readonly $typeArgs: []; readonly $isPhantom = Intents.$isPhantom;
+ readonly $typeName = Expired.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::intents::Expired`; readonly $typeArgs: []; readonly $isPhantom = Expired.$isPhantom;
 
- readonly inner: ToField<Bag>; readonly locked: ToField<VecSet<ID>>
+ readonly account: ToField<"address">; readonly startIndex: ToField<"u64">; readonly actions: ToField<Bag>
 
- private constructor(typeArgs: [], fields: IntentsFields, ) { this.$fullTypeName = composeSuiType( Intents.$typeName, ...typeArgs ) as `${typeof PKG_V1}::intents::Intents`; this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [], fields: ExpiredFields, ) { this.$fullTypeName = composeSuiType( Expired.$typeName, ...typeArgs ) as `${typeof PKG_V1}::intents::Expired`; this.$typeArgs = typeArgs;
 
- this.inner = fields.inner;; this.locked = fields.locked; }
+ this.account = fields.account;; this.startIndex = fields.startIndex;; this.actions = fields.actions; }
 
- static reified( ): IntentsReified { return { typeName: Intents.$typeName, fullTypeName: composeSuiType( Intents.$typeName, ...[] ) as `${typeof PKG_V1}::intents::Intents`, typeArgs: [ ] as [], isPhantom: Intents.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => Intents.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => Intents.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => Intents.fromBcs( data, ), bcs: Intents.bcs, fromJSONField: (field: any) => Intents.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => Intents.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => Intents.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => Intents.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => Intents.fetch( client, id, ), new: ( fields: IntentsFields, ) => { return new Intents( [], fields ) }, kind: "StructClassReified", } }
+ static reified( ): ExpiredReified { return { typeName: Expired.$typeName, fullTypeName: composeSuiType( Expired.$typeName, ...[] ) as `${typeof PKG_V1}::intents::Expired`, typeArgs: [ ] as [], isPhantom: Expired.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => Expired.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => Expired.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => Expired.fromBcs( data, ), bcs: Expired.bcs, fromJSONField: (field: any) => Expired.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => Expired.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => Expired.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => Expired.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => Expired.fetch( client, id, ), new: ( fields: ExpiredFields, ) => { return new Expired( [], fields ) }, kind: "StructClassReified", } }
 
- static get r() { return Intents.reified() }
+ static get r() { return Expired.reified() }
 
- static phantom( ): PhantomReified<ToTypeStr<Intents>> { return phantom(Intents.reified( )); } static get p() { return Intents.phantom() }
+ static phantom( ): PhantomReified<ToTypeStr<Expired>> { return phantom(Expired.reified( )); } static get p() { return Expired.phantom() }
 
- static get bcs() { return bcs.struct("Intents", {
+ static get bcs() { return bcs.struct("Expired", {
 
- inner: Bag.bcs, locked: VecSet.bcs(ID.bcs)
+ account: bcs.bytes(32).transform({ input: (val: string) => fromHEX(val), output: (val: Uint8Array) => toHEX(val), }), start_index: bcs.u64(), actions: Bag.bcs
 
 }) };
 
- static fromFields( fields: Record<string, any> ): Intents { return Intents.reified( ).new( { inner: decodeFromFields(Bag.reified(), fields.inner), locked: decodeFromFields(VecSet.reified(ID.reified()), fields.locked) } ) }
+ static fromFields( fields: Record<string, any> ): Expired { return Expired.reified( ).new( { account: decodeFromFields("address", fields.account), startIndex: decodeFromFields("u64", fields.start_index), actions: decodeFromFields(Bag.reified(), fields.actions) } ) }
 
- static fromFieldsWithTypes( item: FieldsWithTypes ): Intents { if (!isIntents(item.type)) { throw new Error("not a Intents type");
+ static fromFieldsWithTypes( item: FieldsWithTypes ): Expired { if (!isExpired(item.type)) { throw new Error("not a Expired type");
 
  }
 
- return Intents.reified( ).new( { inner: decodeFromFieldsWithTypes(Bag.reified(), item.fields.inner), locked: decodeFromFieldsWithTypes(VecSet.reified(ID.reified()), item.fields.locked) } ) }
+ return Expired.reified( ).new( { account: decodeFromFieldsWithTypes("address", item.fields.account), startIndex: decodeFromFieldsWithTypes("u64", item.fields.start_index), actions: decodeFromFieldsWithTypes(Bag.reified(), item.fields.actions) } ) }
 
- static fromBcs( data: Uint8Array ): Intents { return Intents.fromFields( Intents.bcs.parse(data) ) }
+ static fromBcs( data: Uint8Array ): Expired { return Expired.fromFields( Expired.bcs.parse(data) ) }
 
  toJSONField() { return {
 
- inner: this.inner.toJSONField(),locked: this.locked.toJSONField(),
+ account: this.account,startIndex: this.startIndex.toString(),actions: this.actions.toJSONField(),
 
 } }
 
  toJSON() { return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() } }
 
- static fromJSONField( field: any ): Intents { return Intents.reified( ).new( { inner: decodeFromJSONField(Bag.reified(), field.inner), locked: decodeFromJSONField(VecSet.reified(ID.reified()), field.locked) } ) }
+ static fromJSONField( field: any ): Expired { return Expired.reified( ).new( { account: decodeFromJSONField("address", field.account), startIndex: decodeFromJSONField("u64", field.startIndex), actions: decodeFromJSONField(Bag.reified(), field.actions) } ) }
 
- static fromJSON( json: Record<string, any> ): Intents { if (json.$typeName !== Intents.$typeName) { throw new Error("not a WithTwoGenerics json object") };
+ static fromJSON( json: Record<string, any> ): Expired { if (json.$typeName !== Expired.$typeName) { throw new Error("not a WithTwoGenerics json object") };
 
- return Intents.fromJSONField( json, ) }
+ return Expired.fromJSONField( json, ) }
 
- static fromSuiParsedData( content: SuiParsedData ): Intents { if (content.dataType !== "moveObject") { throw new Error("not an object"); } if (!isIntents(content.type)) { throw new Error(`object at ${(content.fields as any).id} is not a Intents object`); } return Intents.fromFieldsWithTypes( content ); }
+ static fromSuiParsedData( content: SuiParsedData ): Expired { if (content.dataType !== "moveObject") { throw new Error("not an object"); } if (!isExpired(content.type)) { throw new Error(`object at ${(content.fields as any).id} is not a Expired object`); } return Expired.fromFieldsWithTypes( content ); }
 
- static fromSuiObjectData( data: SuiObjectData ): Intents { if (data.bcs) { if (data.bcs.dataType !== "moveObject" || !isIntents(data.bcs.type)) { throw new Error(`object at is not a Intents object`); }
+ static fromSuiObjectData( data: SuiObjectData ): Expired { if (data.bcs) { if (data.bcs.dataType !== "moveObject" || !isExpired(data.bcs.type)) { throw new Error(`object at is not a Expired object`); }
 
- return Intents.fromBcs( fromB64(data.bcs.bcsBytes) ); } if (data.content) { return Intents.fromSuiParsedData( data.content ) } throw new Error( "Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request." ); }
+ return Expired.fromBcs( fromB64(data.bcs.bcsBytes) ); } if (data.content) { return Expired.fromSuiParsedData( data.content ) } throw new Error( "Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request." ); }
 
- static async fetch( client: SuiClient, id: string ): Promise<Intents> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching Intents object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isIntents(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a Intents object`); }
+ static async fetch( client: SuiClient, id: string ): Promise<Expired> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching Expired object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isExpired(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a Expired object`); }
 
- return Intents.fromSuiObjectData( res.data ); }
+ return Expired.fromSuiObjectData( res.data ); }
 
  }
 

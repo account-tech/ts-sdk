@@ -9,71 +9,71 @@ import {bcs} from "@mysten/sui/bcs";
 import {SuiClient, SuiObjectData, SuiParsedData} from "@mysten/sui/client";
 import {fromB64, fromHEX, toHEX} from "@mysten/sui/utils";
 
-/* ============================== AdminCap =============================== */
+/* ============================== Extensions =============================== */
 
-export function isAdminCap(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::extensions::AdminCap`; }
+export function isExtensions(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::extensions::Extensions`; }
 
-export interface AdminCapFields { id: ToField<UID> }
+export interface ExtensionsFields { id: ToField<UID>; inner: ToField<Vector<Extension>> }
 
-export type AdminCapReified = Reified< AdminCap, AdminCapFields >;
+export type ExtensionsReified = Reified< Extensions, ExtensionsFields >;
 
-export class AdminCap implements StructClass { __StructClass = true as const;
+export class Extensions implements StructClass { __StructClass = true as const;
 
- static readonly $typeName = `${PKG_V1}::extensions::AdminCap`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
+ static readonly $typeName = `${PKG_V1}::extensions::Extensions`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
 
- readonly $typeName = AdminCap.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::extensions::AdminCap`; readonly $typeArgs: []; readonly $isPhantom = AdminCap.$isPhantom;
+ readonly $typeName = Extensions.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::extensions::Extensions`; readonly $typeArgs: []; readonly $isPhantom = Extensions.$isPhantom;
 
- readonly id: ToField<UID>
+ readonly id: ToField<UID>; readonly inner: ToField<Vector<Extension>>
 
- private constructor(typeArgs: [], fields: AdminCapFields, ) { this.$fullTypeName = composeSuiType( AdminCap.$typeName, ...typeArgs ) as `${typeof PKG_V1}::extensions::AdminCap`; this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [], fields: ExtensionsFields, ) { this.$fullTypeName = composeSuiType( Extensions.$typeName, ...typeArgs ) as `${typeof PKG_V1}::extensions::Extensions`; this.$typeArgs = typeArgs;
 
- this.id = fields.id; }
+ this.id = fields.id;; this.inner = fields.inner; }
 
- static reified( ): AdminCapReified { return { typeName: AdminCap.$typeName, fullTypeName: composeSuiType( AdminCap.$typeName, ...[] ) as `${typeof PKG_V1}::extensions::AdminCap`, typeArgs: [ ] as [], isPhantom: AdminCap.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => AdminCap.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => AdminCap.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => AdminCap.fromBcs( data, ), bcs: AdminCap.bcs, fromJSONField: (field: any) => AdminCap.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => AdminCap.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => AdminCap.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => AdminCap.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => AdminCap.fetch( client, id, ), new: ( fields: AdminCapFields, ) => { return new AdminCap( [], fields ) }, kind: "StructClassReified", } }
+ static reified( ): ExtensionsReified { return { typeName: Extensions.$typeName, fullTypeName: composeSuiType( Extensions.$typeName, ...[] ) as `${typeof PKG_V1}::extensions::Extensions`, typeArgs: [ ] as [], isPhantom: Extensions.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => Extensions.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => Extensions.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => Extensions.fromBcs( data, ), bcs: Extensions.bcs, fromJSONField: (field: any) => Extensions.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => Extensions.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => Extensions.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => Extensions.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => Extensions.fetch( client, id, ), new: ( fields: ExtensionsFields, ) => { return new Extensions( [], fields ) }, kind: "StructClassReified", } }
 
- static get r() { return AdminCap.reified() }
+ static get r() { return Extensions.reified() }
 
- static phantom( ): PhantomReified<ToTypeStr<AdminCap>> { return phantom(AdminCap.reified( )); } static get p() { return AdminCap.phantom() }
+ static phantom( ): PhantomReified<ToTypeStr<Extensions>> { return phantom(Extensions.reified( )); } static get p() { return Extensions.phantom() }
 
- static get bcs() { return bcs.struct("AdminCap", {
+ static get bcs() { return bcs.struct("Extensions", {
 
- id: UID.bcs
+ id: UID.bcs, inner: bcs.vector(Extension.bcs)
 
 }) };
 
- static fromFields( fields: Record<string, any> ): AdminCap { return AdminCap.reified( ).new( { id: decodeFromFields(UID.reified(), fields.id) } ) }
+ static fromFields( fields: Record<string, any> ): Extensions { return Extensions.reified( ).new( { id: decodeFromFields(UID.reified(), fields.id), inner: decodeFromFields(reified.vector(Extension.reified()), fields.inner) } ) }
 
- static fromFieldsWithTypes( item: FieldsWithTypes ): AdminCap { if (!isAdminCap(item.type)) { throw new Error("not a AdminCap type");
+ static fromFieldsWithTypes( item: FieldsWithTypes ): Extensions { if (!isExtensions(item.type)) { throw new Error("not a Extensions type");
 
  }
 
- return AdminCap.reified( ).new( { id: decodeFromFieldsWithTypes(UID.reified(), item.fields.id) } ) }
+ return Extensions.reified( ).new( { id: decodeFromFieldsWithTypes(UID.reified(), item.fields.id), inner: decodeFromFieldsWithTypes(reified.vector(Extension.reified()), item.fields.inner) } ) }
 
- static fromBcs( data: Uint8Array ): AdminCap { return AdminCap.fromFields( AdminCap.bcs.parse(data) ) }
+ static fromBcs( data: Uint8Array ): Extensions { return Extensions.fromFields( Extensions.bcs.parse(data) ) }
 
  toJSONField() { return {
 
- id: this.id,
+ id: this.id,inner: fieldToJSON<Vector<Extension>>(`vector<${Extension.$typeName}>`, this.inner),
 
 } }
 
  toJSON() { return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() } }
 
- static fromJSONField( field: any ): AdminCap { return AdminCap.reified( ).new( { id: decodeFromJSONField(UID.reified(), field.id) } ) }
+ static fromJSONField( field: any ): Extensions { return Extensions.reified( ).new( { id: decodeFromJSONField(UID.reified(), field.id), inner: decodeFromJSONField(reified.vector(Extension.reified()), field.inner) } ) }
 
- static fromJSON( json: Record<string, any> ): AdminCap { if (json.$typeName !== AdminCap.$typeName) { throw new Error("not a WithTwoGenerics json object") };
+ static fromJSON( json: Record<string, any> ): Extensions { if (json.$typeName !== Extensions.$typeName) { throw new Error("not a WithTwoGenerics json object") };
 
- return AdminCap.fromJSONField( json, ) }
+ return Extensions.fromJSONField( json, ) }
 
- static fromSuiParsedData( content: SuiParsedData ): AdminCap { if (content.dataType !== "moveObject") { throw new Error("not an object"); } if (!isAdminCap(content.type)) { throw new Error(`object at ${(content.fields as any).id} is not a AdminCap object`); } return AdminCap.fromFieldsWithTypes( content ); }
+ static fromSuiParsedData( content: SuiParsedData ): Extensions { if (content.dataType !== "moveObject") { throw new Error("not an object"); } if (!isExtensions(content.type)) { throw new Error(`object at ${(content.fields as any).id} is not a Extensions object`); } return Extensions.fromFieldsWithTypes( content ); }
 
- static fromSuiObjectData( data: SuiObjectData ): AdminCap { if (data.bcs) { if (data.bcs.dataType !== "moveObject" || !isAdminCap(data.bcs.type)) { throw new Error(`object at is not a AdminCap object`); }
+ static fromSuiObjectData( data: SuiObjectData ): Extensions { if (data.bcs) { if (data.bcs.dataType !== "moveObject" || !isExtensions(data.bcs.type)) { throw new Error(`object at is not a Extensions object`); }
 
- return AdminCap.fromBcs( fromB64(data.bcs.bcsBytes) ); } if (data.content) { return AdminCap.fromSuiParsedData( data.content ) } throw new Error( "Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request." ); }
+ return Extensions.fromBcs( fromB64(data.bcs.bcsBytes) ); } if (data.content) { return Extensions.fromSuiParsedData( data.content ) } throw new Error( "Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request." ); }
 
- static async fetch( client: SuiClient, id: string ): Promise<AdminCap> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching AdminCap object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isAdminCap(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a AdminCap object`); }
+ static async fetch( client: SuiClient, id: string ): Promise<Extensions> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching Extensions object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isExtensions(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a Extensions object`); }
 
- return AdminCap.fromSuiObjectData( res.data ); }
+ return Extensions.fromSuiObjectData( res.data ); }
 
  }
 
@@ -145,74 +145,6 @@ export class Extension implements StructClass { __StructClass = true as const;
 
  }
 
-/* ============================== Extensions =============================== */
-
-export function isExtensions(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::extensions::Extensions`; }
-
-export interface ExtensionsFields { id: ToField<UID>; inner: ToField<Vector<Extension>> }
-
-export type ExtensionsReified = Reified< Extensions, ExtensionsFields >;
-
-export class Extensions implements StructClass { __StructClass = true as const;
-
- static readonly $typeName = `${PKG_V1}::extensions::Extensions`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
-
- readonly $typeName = Extensions.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::extensions::Extensions`; readonly $typeArgs: []; readonly $isPhantom = Extensions.$isPhantom;
-
- readonly id: ToField<UID>; readonly inner: ToField<Vector<Extension>>
-
- private constructor(typeArgs: [], fields: ExtensionsFields, ) { this.$fullTypeName = composeSuiType( Extensions.$typeName, ...typeArgs ) as `${typeof PKG_V1}::extensions::Extensions`; this.$typeArgs = typeArgs;
-
- this.id = fields.id;; this.inner = fields.inner; }
-
- static reified( ): ExtensionsReified { return { typeName: Extensions.$typeName, fullTypeName: composeSuiType( Extensions.$typeName, ...[] ) as `${typeof PKG_V1}::extensions::Extensions`, typeArgs: [ ] as [], isPhantom: Extensions.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => Extensions.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => Extensions.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => Extensions.fromBcs( data, ), bcs: Extensions.bcs, fromJSONField: (field: any) => Extensions.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => Extensions.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => Extensions.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => Extensions.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => Extensions.fetch( client, id, ), new: ( fields: ExtensionsFields, ) => { return new Extensions( [], fields ) }, kind: "StructClassReified", } }
-
- static get r() { return Extensions.reified() }
-
- static phantom( ): PhantomReified<ToTypeStr<Extensions>> { return phantom(Extensions.reified( )); } static get p() { return Extensions.phantom() }
-
- static get bcs() { return bcs.struct("Extensions", {
-
- id: UID.bcs, inner: bcs.vector(Extension.bcs)
-
-}) };
-
- static fromFields( fields: Record<string, any> ): Extensions { return Extensions.reified( ).new( { id: decodeFromFields(UID.reified(), fields.id), inner: decodeFromFields(reified.vector(Extension.reified()), fields.inner) } ) }
-
- static fromFieldsWithTypes( item: FieldsWithTypes ): Extensions { if (!isExtensions(item.type)) { throw new Error("not a Extensions type");
-
- }
-
- return Extensions.reified( ).new( { id: decodeFromFieldsWithTypes(UID.reified(), item.fields.id), inner: decodeFromFieldsWithTypes(reified.vector(Extension.reified()), item.fields.inner) } ) }
-
- static fromBcs( data: Uint8Array ): Extensions { return Extensions.fromFields( Extensions.bcs.parse(data) ) }
-
- toJSONField() { return {
-
- id: this.id,inner: fieldToJSON<Vector<Extension>>(`vector<${Extension.$typeName}>`, this.inner),
-
-} }
-
- toJSON() { return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() } }
-
- static fromJSONField( field: any ): Extensions { return Extensions.reified( ).new( { id: decodeFromJSONField(UID.reified(), field.id), inner: decodeFromJSONField(reified.vector(Extension.reified()), field.inner) } ) }
-
- static fromJSON( json: Record<string, any> ): Extensions { if (json.$typeName !== Extensions.$typeName) { throw new Error("not a WithTwoGenerics json object") };
-
- return Extensions.fromJSONField( json, ) }
-
- static fromSuiParsedData( content: SuiParsedData ): Extensions { if (content.dataType !== "moveObject") { throw new Error("not an object"); } if (!isExtensions(content.type)) { throw new Error(`object at ${(content.fields as any).id} is not a Extensions object`); } return Extensions.fromFieldsWithTypes( content ); }
-
- static fromSuiObjectData( data: SuiObjectData ): Extensions { if (data.bcs) { if (data.bcs.dataType !== "moveObject" || !isExtensions(data.bcs.type)) { throw new Error(`object at is not a Extensions object`); }
-
- return Extensions.fromBcs( fromB64(data.bcs.bcsBytes) ); } if (data.content) { return Extensions.fromSuiParsedData( data.content ) } throw new Error( "Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request." ); }
-
- static async fetch( client: SuiClient, id: string ): Promise<Extensions> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching Extensions object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isExtensions(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a Extensions object`); }
-
- return Extensions.fromSuiObjectData( res.data ); }
-
- }
-
 /* ============================== History =============================== */
 
 export function isHistory(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::extensions::History`; }
@@ -278,5 +210,73 @@ export class History implements StructClass { __StructClass = true as const;
  static async fetch( client: SuiClient, id: string ): Promise<History> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching History object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isHistory(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a History object`); }
 
  return History.fromSuiObjectData( res.data ); }
+
+ }
+
+/* ============================== AdminCap =============================== */
+
+export function isAdminCap(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::extensions::AdminCap`; }
+
+export interface AdminCapFields { id: ToField<UID> }
+
+export type AdminCapReified = Reified< AdminCap, AdminCapFields >;
+
+export class AdminCap implements StructClass { __StructClass = true as const;
+
+ static readonly $typeName = `${PKG_V1}::extensions::AdminCap`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
+
+ readonly $typeName = AdminCap.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::extensions::AdminCap`; readonly $typeArgs: []; readonly $isPhantom = AdminCap.$isPhantom;
+
+ readonly id: ToField<UID>
+
+ private constructor(typeArgs: [], fields: AdminCapFields, ) { this.$fullTypeName = composeSuiType( AdminCap.$typeName, ...typeArgs ) as `${typeof PKG_V1}::extensions::AdminCap`; this.$typeArgs = typeArgs;
+
+ this.id = fields.id; }
+
+ static reified( ): AdminCapReified { return { typeName: AdminCap.$typeName, fullTypeName: composeSuiType( AdminCap.$typeName, ...[] ) as `${typeof PKG_V1}::extensions::AdminCap`, typeArgs: [ ] as [], isPhantom: AdminCap.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => AdminCap.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => AdminCap.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => AdminCap.fromBcs( data, ), bcs: AdminCap.bcs, fromJSONField: (field: any) => AdminCap.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => AdminCap.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => AdminCap.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => AdminCap.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => AdminCap.fetch( client, id, ), new: ( fields: AdminCapFields, ) => { return new AdminCap( [], fields ) }, kind: "StructClassReified", } }
+
+ static get r() { return AdminCap.reified() }
+
+ static phantom( ): PhantomReified<ToTypeStr<AdminCap>> { return phantom(AdminCap.reified( )); } static get p() { return AdminCap.phantom() }
+
+ static get bcs() { return bcs.struct("AdminCap", {
+
+ id: UID.bcs
+
+}) };
+
+ static fromFields( fields: Record<string, any> ): AdminCap { return AdminCap.reified( ).new( { id: decodeFromFields(UID.reified(), fields.id) } ) }
+
+ static fromFieldsWithTypes( item: FieldsWithTypes ): AdminCap { if (!isAdminCap(item.type)) { throw new Error("not a AdminCap type");
+
+ }
+
+ return AdminCap.reified( ).new( { id: decodeFromFieldsWithTypes(UID.reified(), item.fields.id) } ) }
+
+ static fromBcs( data: Uint8Array ): AdminCap { return AdminCap.fromFields( AdminCap.bcs.parse(data) ) }
+
+ toJSONField() { return {
+
+ id: this.id,
+
+} }
+
+ toJSON() { return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() } }
+
+ static fromJSONField( field: any ): AdminCap { return AdminCap.reified( ).new( { id: decodeFromJSONField(UID.reified(), field.id) } ) }
+
+ static fromJSON( json: Record<string, any> ): AdminCap { if (json.$typeName !== AdminCap.$typeName) { throw new Error("not a WithTwoGenerics json object") };
+
+ return AdminCap.fromJSONField( json, ) }
+
+ static fromSuiParsedData( content: SuiParsedData ): AdminCap { if (content.dataType !== "moveObject") { throw new Error("not an object"); } if (!isAdminCap(content.type)) { throw new Error(`object at ${(content.fields as any).id} is not a AdminCap object`); } return AdminCap.fromFieldsWithTypes( content ); }
+
+ static fromSuiObjectData( data: SuiObjectData ): AdminCap { if (data.bcs) { if (data.bcs.dataType !== "moveObject" || !isAdminCap(data.bcs.type)) { throw new Error(`object at is not a AdminCap object`); }
+
+ return AdminCap.fromBcs( fromB64(data.bcs.bcsBytes) ); } if (data.content) { return AdminCap.fromSuiParsedData( data.content ) } throw new Error( "Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request." ); }
+
+ static async fetch( client: SuiClient, id: string ): Promise<AdminCap> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching AdminCap object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isAdminCap(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a AdminCap object`); }
+
+ return AdminCap.fromSuiObjectData( res.data ); }
 
  }

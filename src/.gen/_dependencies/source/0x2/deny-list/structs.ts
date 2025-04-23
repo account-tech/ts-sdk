@@ -11,139 +11,71 @@ import {bcs} from "@mysten/sui/bcs";
 import {SuiClient, SuiObjectData, SuiParsedData} from "@mysten/sui/client";
 import {fromB64, fromHEX, toHEX} from "@mysten/sui/utils";
 
-/* ============================== AddressKey =============================== */
+/* ============================== DenyList =============================== */
 
-export function isAddressKey(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V29}::deny_list::AddressKey`; }
+export function isDenyList(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V29}::deny_list::DenyList`; }
 
-export interface AddressKeyFields { pos0: ToField<"address"> }
+export interface DenyListFields { id: ToField<UID>; lists: ToField<Bag> }
 
-export type AddressKeyReified = Reified< AddressKey, AddressKeyFields >;
+export type DenyListReified = Reified< DenyList, DenyListFields >;
 
-export class AddressKey implements StructClass { __StructClass = true as const;
+export class DenyList implements StructClass { __StructClass = true as const;
 
- static readonly $typeName = `${PKG_V29}::deny_list::AddressKey`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
+ static readonly $typeName = `${PKG_V29}::deny_list::DenyList`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
 
- readonly $typeName = AddressKey.$typeName; readonly $fullTypeName: `${typeof PKG_V29}::deny_list::AddressKey`; readonly $typeArgs: []; readonly $isPhantom = AddressKey.$isPhantom;
+ readonly $typeName = DenyList.$typeName; readonly $fullTypeName: `${typeof PKG_V29}::deny_list::DenyList`; readonly $typeArgs: []; readonly $isPhantom = DenyList.$isPhantom;
 
- readonly pos0: ToField<"address">
+ readonly id: ToField<UID>; readonly lists: ToField<Bag>
 
- private constructor(typeArgs: [], fields: AddressKeyFields, ) { this.$fullTypeName = composeSuiType( AddressKey.$typeName, ...typeArgs ) as `${typeof PKG_V29}::deny_list::AddressKey`; this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [], fields: DenyListFields, ) { this.$fullTypeName = composeSuiType( DenyList.$typeName, ...typeArgs ) as `${typeof PKG_V29}::deny_list::DenyList`; this.$typeArgs = typeArgs;
 
- this.pos0 = fields.pos0; }
+ this.id = fields.id;; this.lists = fields.lists; }
 
- static reified( ): AddressKeyReified { return { typeName: AddressKey.$typeName, fullTypeName: composeSuiType( AddressKey.$typeName, ...[] ) as `${typeof PKG_V29}::deny_list::AddressKey`, typeArgs: [ ] as [], isPhantom: AddressKey.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => AddressKey.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => AddressKey.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => AddressKey.fromBcs( data, ), bcs: AddressKey.bcs, fromJSONField: (field: any) => AddressKey.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => AddressKey.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => AddressKey.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => AddressKey.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => AddressKey.fetch( client, id, ), new: ( fields: AddressKeyFields, ) => { return new AddressKey( [], fields ) }, kind: "StructClassReified", } }
+ static reified( ): DenyListReified { return { typeName: DenyList.$typeName, fullTypeName: composeSuiType( DenyList.$typeName, ...[] ) as `${typeof PKG_V29}::deny_list::DenyList`, typeArgs: [ ] as [], isPhantom: DenyList.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => DenyList.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => DenyList.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => DenyList.fromBcs( data, ), bcs: DenyList.bcs, fromJSONField: (field: any) => DenyList.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => DenyList.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => DenyList.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => DenyList.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => DenyList.fetch( client, id, ), new: ( fields: DenyListFields, ) => { return new DenyList( [], fields ) }, kind: "StructClassReified", } }
 
- static get r() { return AddressKey.reified() }
+ static get r() { return DenyList.reified() }
 
- static phantom( ): PhantomReified<ToTypeStr<AddressKey>> { return phantom(AddressKey.reified( )); } static get p() { return AddressKey.phantom() }
+ static phantom( ): PhantomReified<ToTypeStr<DenyList>> { return phantom(DenyList.reified( )); } static get p() { return DenyList.phantom() }
 
- static get bcs() { return bcs.struct("AddressKey", {
+ static get bcs() { return bcs.struct("DenyList", {
 
- pos0: bcs.bytes(32).transform({ input: (val: string) => fromHEX(val), output: (val: Uint8Array) => toHEX(val), })
+ id: UID.bcs, lists: Bag.bcs
 
 }) };
 
- static fromFields( fields: Record<string, any> ): AddressKey { return AddressKey.reified( ).new( { pos0: decodeFromFields("address", fields.pos0) } ) }
+ static fromFields( fields: Record<string, any> ): DenyList { return DenyList.reified( ).new( { id: decodeFromFields(UID.reified(), fields.id), lists: decodeFromFields(Bag.reified(), fields.lists) } ) }
 
- static fromFieldsWithTypes( item: FieldsWithTypes ): AddressKey { if (!isAddressKey(item.type)) { throw new Error("not a AddressKey type");
+ static fromFieldsWithTypes( item: FieldsWithTypes ): DenyList { if (!isDenyList(item.type)) { throw new Error("not a DenyList type");
 
  }
 
- return AddressKey.reified( ).new( { pos0: decodeFromFieldsWithTypes("address", item.fields.pos0) } ) }
+ return DenyList.reified( ).new( { id: decodeFromFieldsWithTypes(UID.reified(), item.fields.id), lists: decodeFromFieldsWithTypes(Bag.reified(), item.fields.lists) } ) }
 
- static fromBcs( data: Uint8Array ): AddressKey { return AddressKey.fromFields( AddressKey.bcs.parse(data) ) }
+ static fromBcs( data: Uint8Array ): DenyList { return DenyList.fromFields( DenyList.bcs.parse(data) ) }
 
  toJSONField() { return {
 
- pos0: this.pos0,
+ id: this.id,lists: this.lists.toJSONField(),
 
 } }
 
  toJSON() { return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() } }
 
- static fromJSONField( field: any ): AddressKey { return AddressKey.reified( ).new( { pos0: decodeFromJSONField("address", field.pos0) } ) }
+ static fromJSONField( field: any ): DenyList { return DenyList.reified( ).new( { id: decodeFromJSONField(UID.reified(), field.id), lists: decodeFromJSONField(Bag.reified(), field.lists) } ) }
 
- static fromJSON( json: Record<string, any> ): AddressKey { if (json.$typeName !== AddressKey.$typeName) { throw new Error("not a WithTwoGenerics json object") };
+ static fromJSON( json: Record<string, any> ): DenyList { if (json.$typeName !== DenyList.$typeName) { throw new Error("not a WithTwoGenerics json object") };
 
- return AddressKey.fromJSONField( json, ) }
+ return DenyList.fromJSONField( json, ) }
 
- static fromSuiParsedData( content: SuiParsedData ): AddressKey { if (content.dataType !== "moveObject") { throw new Error("not an object"); } if (!isAddressKey(content.type)) { throw new Error(`object at ${(content.fields as any).id} is not a AddressKey object`); } return AddressKey.fromFieldsWithTypes( content ); }
+ static fromSuiParsedData( content: SuiParsedData ): DenyList { if (content.dataType !== "moveObject") { throw new Error("not an object"); } if (!isDenyList(content.type)) { throw new Error(`object at ${(content.fields as any).id} is not a DenyList object`); } return DenyList.fromFieldsWithTypes( content ); }
 
- static fromSuiObjectData( data: SuiObjectData ): AddressKey { if (data.bcs) { if (data.bcs.dataType !== "moveObject" || !isAddressKey(data.bcs.type)) { throw new Error(`object at is not a AddressKey object`); }
+ static fromSuiObjectData( data: SuiObjectData ): DenyList { if (data.bcs) { if (data.bcs.dataType !== "moveObject" || !isDenyList(data.bcs.type)) { throw new Error(`object at is not a DenyList object`); }
 
- return AddressKey.fromBcs( fromB64(data.bcs.bcsBytes) ); } if (data.content) { return AddressKey.fromSuiParsedData( data.content ) } throw new Error( "Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request." ); }
+ return DenyList.fromBcs( fromB64(data.bcs.bcsBytes) ); } if (data.content) { return DenyList.fromSuiParsedData( data.content ) } throw new Error( "Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request." ); }
 
- static async fetch( client: SuiClient, id: string ): Promise<AddressKey> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching AddressKey object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isAddressKey(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a AddressKey object`); }
+ static async fetch( client: SuiClient, id: string ): Promise<DenyList> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching DenyList object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isDenyList(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a DenyList object`); }
 
- return AddressKey.fromSuiObjectData( res.data ); }
-
- }
-
-/* ============================== ConfigKey =============================== */
-
-export function isConfigKey(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V29}::deny_list::ConfigKey`; }
-
-export interface ConfigKeyFields { perTypeIndex: ToField<"u64">; perTypeKey: ToField<Vector<"u8">> }
-
-export type ConfigKeyReified = Reified< ConfigKey, ConfigKeyFields >;
-
-export class ConfigKey implements StructClass { __StructClass = true as const;
-
- static readonly $typeName = `${PKG_V29}::deny_list::ConfigKey`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
-
- readonly $typeName = ConfigKey.$typeName; readonly $fullTypeName: `${typeof PKG_V29}::deny_list::ConfigKey`; readonly $typeArgs: []; readonly $isPhantom = ConfigKey.$isPhantom;
-
- readonly perTypeIndex: ToField<"u64">; readonly perTypeKey: ToField<Vector<"u8">>
-
- private constructor(typeArgs: [], fields: ConfigKeyFields, ) { this.$fullTypeName = composeSuiType( ConfigKey.$typeName, ...typeArgs ) as `${typeof PKG_V29}::deny_list::ConfigKey`; this.$typeArgs = typeArgs;
-
- this.perTypeIndex = fields.perTypeIndex;; this.perTypeKey = fields.perTypeKey; }
-
- static reified( ): ConfigKeyReified { return { typeName: ConfigKey.$typeName, fullTypeName: composeSuiType( ConfigKey.$typeName, ...[] ) as `${typeof PKG_V29}::deny_list::ConfigKey`, typeArgs: [ ] as [], isPhantom: ConfigKey.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => ConfigKey.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => ConfigKey.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => ConfigKey.fromBcs( data, ), bcs: ConfigKey.bcs, fromJSONField: (field: any) => ConfigKey.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => ConfigKey.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => ConfigKey.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => ConfigKey.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => ConfigKey.fetch( client, id, ), new: ( fields: ConfigKeyFields, ) => { return new ConfigKey( [], fields ) }, kind: "StructClassReified", } }
-
- static get r() { return ConfigKey.reified() }
-
- static phantom( ): PhantomReified<ToTypeStr<ConfigKey>> { return phantom(ConfigKey.reified( )); } static get p() { return ConfigKey.phantom() }
-
- static get bcs() { return bcs.struct("ConfigKey", {
-
- per_type_index: bcs.u64(), per_type_key: bcs.vector(bcs.u8())
-
-}) };
-
- static fromFields( fields: Record<string, any> ): ConfigKey { return ConfigKey.reified( ).new( { perTypeIndex: decodeFromFields("u64", fields.per_type_index), perTypeKey: decodeFromFields(reified.vector("u8"), fields.per_type_key) } ) }
-
- static fromFieldsWithTypes( item: FieldsWithTypes ): ConfigKey { if (!isConfigKey(item.type)) { throw new Error("not a ConfigKey type");
-
- }
-
- return ConfigKey.reified( ).new( { perTypeIndex: decodeFromFieldsWithTypes("u64", item.fields.per_type_index), perTypeKey: decodeFromFieldsWithTypes(reified.vector("u8"), item.fields.per_type_key) } ) }
-
- static fromBcs( data: Uint8Array ): ConfigKey { return ConfigKey.fromFields( ConfigKey.bcs.parse(data) ) }
-
- toJSONField() { return {
-
- perTypeIndex: this.perTypeIndex.toString(),perTypeKey: fieldToJSON<Vector<"u8">>(`vector<u8>`, this.perTypeKey),
-
-} }
-
- toJSON() { return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() } }
-
- static fromJSONField( field: any ): ConfigKey { return ConfigKey.reified( ).new( { perTypeIndex: decodeFromJSONField("u64", field.perTypeIndex), perTypeKey: decodeFromJSONField(reified.vector("u8"), field.perTypeKey) } ) }
-
- static fromJSON( json: Record<string, any> ): ConfigKey { if (json.$typeName !== ConfigKey.$typeName) { throw new Error("not a WithTwoGenerics json object") };
-
- return ConfigKey.fromJSONField( json, ) }
-
- static fromSuiParsedData( content: SuiParsedData ): ConfigKey { if (content.dataType !== "moveObject") { throw new Error("not an object"); } if (!isConfigKey(content.type)) { throw new Error(`object at ${(content.fields as any).id} is not a ConfigKey object`); } return ConfigKey.fromFieldsWithTypes( content ); }
-
- static fromSuiObjectData( data: SuiObjectData ): ConfigKey { if (data.bcs) { if (data.bcs.dataType !== "moveObject" || !isConfigKey(data.bcs.type)) { throw new Error(`object at is not a ConfigKey object`); }
-
- return ConfigKey.fromBcs( fromB64(data.bcs.bcsBytes) ); } if (data.content) { return ConfigKey.fromSuiParsedData( data.content ) } throw new Error( "Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request." ); }
-
- static async fetch( client: SuiClient, id: string ): Promise<ConfigKey> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching ConfigKey object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isConfigKey(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a ConfigKey object`); }
-
- return ConfigKey.fromSuiObjectData( res.data ); }
+ return DenyList.fromSuiObjectData( res.data ); }
 
  }
 
@@ -215,71 +147,139 @@ export class ConfigWriteCap implements StructClass { __StructClass = true as con
 
  }
 
-/* ============================== DenyList =============================== */
+/* ============================== ConfigKey =============================== */
 
-export function isDenyList(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V29}::deny_list::DenyList`; }
+export function isConfigKey(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V29}::deny_list::ConfigKey`; }
 
-export interface DenyListFields { id: ToField<UID>; lists: ToField<Bag> }
+export interface ConfigKeyFields { perTypeIndex: ToField<"u64">; perTypeKey: ToField<Vector<"u8">> }
 
-export type DenyListReified = Reified< DenyList, DenyListFields >;
+export type ConfigKeyReified = Reified< ConfigKey, ConfigKeyFields >;
 
-export class DenyList implements StructClass { __StructClass = true as const;
+export class ConfigKey implements StructClass { __StructClass = true as const;
 
- static readonly $typeName = `${PKG_V29}::deny_list::DenyList`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
+ static readonly $typeName = `${PKG_V29}::deny_list::ConfigKey`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
 
- readonly $typeName = DenyList.$typeName; readonly $fullTypeName: `${typeof PKG_V29}::deny_list::DenyList`; readonly $typeArgs: []; readonly $isPhantom = DenyList.$isPhantom;
+ readonly $typeName = ConfigKey.$typeName; readonly $fullTypeName: `${typeof PKG_V29}::deny_list::ConfigKey`; readonly $typeArgs: []; readonly $isPhantom = ConfigKey.$isPhantom;
 
- readonly id: ToField<UID>; readonly lists: ToField<Bag>
+ readonly perTypeIndex: ToField<"u64">; readonly perTypeKey: ToField<Vector<"u8">>
 
- private constructor(typeArgs: [], fields: DenyListFields, ) { this.$fullTypeName = composeSuiType( DenyList.$typeName, ...typeArgs ) as `${typeof PKG_V29}::deny_list::DenyList`; this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [], fields: ConfigKeyFields, ) { this.$fullTypeName = composeSuiType( ConfigKey.$typeName, ...typeArgs ) as `${typeof PKG_V29}::deny_list::ConfigKey`; this.$typeArgs = typeArgs;
 
- this.id = fields.id;; this.lists = fields.lists; }
+ this.perTypeIndex = fields.perTypeIndex;; this.perTypeKey = fields.perTypeKey; }
 
- static reified( ): DenyListReified { return { typeName: DenyList.$typeName, fullTypeName: composeSuiType( DenyList.$typeName, ...[] ) as `${typeof PKG_V29}::deny_list::DenyList`, typeArgs: [ ] as [], isPhantom: DenyList.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => DenyList.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => DenyList.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => DenyList.fromBcs( data, ), bcs: DenyList.bcs, fromJSONField: (field: any) => DenyList.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => DenyList.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => DenyList.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => DenyList.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => DenyList.fetch( client, id, ), new: ( fields: DenyListFields, ) => { return new DenyList( [], fields ) }, kind: "StructClassReified", } }
+ static reified( ): ConfigKeyReified { return { typeName: ConfigKey.$typeName, fullTypeName: composeSuiType( ConfigKey.$typeName, ...[] ) as `${typeof PKG_V29}::deny_list::ConfigKey`, typeArgs: [ ] as [], isPhantom: ConfigKey.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => ConfigKey.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => ConfigKey.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => ConfigKey.fromBcs( data, ), bcs: ConfigKey.bcs, fromJSONField: (field: any) => ConfigKey.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => ConfigKey.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => ConfigKey.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => ConfigKey.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => ConfigKey.fetch( client, id, ), new: ( fields: ConfigKeyFields, ) => { return new ConfigKey( [], fields ) }, kind: "StructClassReified", } }
 
- static get r() { return DenyList.reified() }
+ static get r() { return ConfigKey.reified() }
 
- static phantom( ): PhantomReified<ToTypeStr<DenyList>> { return phantom(DenyList.reified( )); } static get p() { return DenyList.phantom() }
+ static phantom( ): PhantomReified<ToTypeStr<ConfigKey>> { return phantom(ConfigKey.reified( )); } static get p() { return ConfigKey.phantom() }
 
- static get bcs() { return bcs.struct("DenyList", {
+ static get bcs() { return bcs.struct("ConfigKey", {
 
- id: UID.bcs, lists: Bag.bcs
+ per_type_index: bcs.u64(), per_type_key: bcs.vector(bcs.u8())
 
 }) };
 
- static fromFields( fields: Record<string, any> ): DenyList { return DenyList.reified( ).new( { id: decodeFromFields(UID.reified(), fields.id), lists: decodeFromFields(Bag.reified(), fields.lists) } ) }
+ static fromFields( fields: Record<string, any> ): ConfigKey { return ConfigKey.reified( ).new( { perTypeIndex: decodeFromFields("u64", fields.per_type_index), perTypeKey: decodeFromFields(reified.vector("u8"), fields.per_type_key) } ) }
 
- static fromFieldsWithTypes( item: FieldsWithTypes ): DenyList { if (!isDenyList(item.type)) { throw new Error("not a DenyList type");
+ static fromFieldsWithTypes( item: FieldsWithTypes ): ConfigKey { if (!isConfigKey(item.type)) { throw new Error("not a ConfigKey type");
 
  }
 
- return DenyList.reified( ).new( { id: decodeFromFieldsWithTypes(UID.reified(), item.fields.id), lists: decodeFromFieldsWithTypes(Bag.reified(), item.fields.lists) } ) }
+ return ConfigKey.reified( ).new( { perTypeIndex: decodeFromFieldsWithTypes("u64", item.fields.per_type_index), perTypeKey: decodeFromFieldsWithTypes(reified.vector("u8"), item.fields.per_type_key) } ) }
 
- static fromBcs( data: Uint8Array ): DenyList { return DenyList.fromFields( DenyList.bcs.parse(data) ) }
+ static fromBcs( data: Uint8Array ): ConfigKey { return ConfigKey.fromFields( ConfigKey.bcs.parse(data) ) }
 
  toJSONField() { return {
 
- id: this.id,lists: this.lists.toJSONField(),
+ perTypeIndex: this.perTypeIndex.toString(),perTypeKey: fieldToJSON<Vector<"u8">>(`vector<u8>`, this.perTypeKey),
 
 } }
 
  toJSON() { return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() } }
 
- static fromJSONField( field: any ): DenyList { return DenyList.reified( ).new( { id: decodeFromJSONField(UID.reified(), field.id), lists: decodeFromJSONField(Bag.reified(), field.lists) } ) }
+ static fromJSONField( field: any ): ConfigKey { return ConfigKey.reified( ).new( { perTypeIndex: decodeFromJSONField("u64", field.perTypeIndex), perTypeKey: decodeFromJSONField(reified.vector("u8"), field.perTypeKey) } ) }
 
- static fromJSON( json: Record<string, any> ): DenyList { if (json.$typeName !== DenyList.$typeName) { throw new Error("not a WithTwoGenerics json object") };
+ static fromJSON( json: Record<string, any> ): ConfigKey { if (json.$typeName !== ConfigKey.$typeName) { throw new Error("not a WithTwoGenerics json object") };
 
- return DenyList.fromJSONField( json, ) }
+ return ConfigKey.fromJSONField( json, ) }
 
- static fromSuiParsedData( content: SuiParsedData ): DenyList { if (content.dataType !== "moveObject") { throw new Error("not an object"); } if (!isDenyList(content.type)) { throw new Error(`object at ${(content.fields as any).id} is not a DenyList object`); } return DenyList.fromFieldsWithTypes( content ); }
+ static fromSuiParsedData( content: SuiParsedData ): ConfigKey { if (content.dataType !== "moveObject") { throw new Error("not an object"); } if (!isConfigKey(content.type)) { throw new Error(`object at ${(content.fields as any).id} is not a ConfigKey object`); } return ConfigKey.fromFieldsWithTypes( content ); }
 
- static fromSuiObjectData( data: SuiObjectData ): DenyList { if (data.bcs) { if (data.bcs.dataType !== "moveObject" || !isDenyList(data.bcs.type)) { throw new Error(`object at is not a DenyList object`); }
+ static fromSuiObjectData( data: SuiObjectData ): ConfigKey { if (data.bcs) { if (data.bcs.dataType !== "moveObject" || !isConfigKey(data.bcs.type)) { throw new Error(`object at is not a ConfigKey object`); }
 
- return DenyList.fromBcs( fromB64(data.bcs.bcsBytes) ); } if (data.content) { return DenyList.fromSuiParsedData( data.content ) } throw new Error( "Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request." ); }
+ return ConfigKey.fromBcs( fromB64(data.bcs.bcsBytes) ); } if (data.content) { return ConfigKey.fromSuiParsedData( data.content ) } throw new Error( "Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request." ); }
 
- static async fetch( client: SuiClient, id: string ): Promise<DenyList> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching DenyList object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isDenyList(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a DenyList object`); }
+ static async fetch( client: SuiClient, id: string ): Promise<ConfigKey> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching ConfigKey object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isConfigKey(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a ConfigKey object`); }
 
- return DenyList.fromSuiObjectData( res.data ); }
+ return ConfigKey.fromSuiObjectData( res.data ); }
+
+ }
+
+/* ============================== AddressKey =============================== */
+
+export function isAddressKey(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V29}::deny_list::AddressKey`; }
+
+export interface AddressKeyFields { pos0: ToField<"address"> }
+
+export type AddressKeyReified = Reified< AddressKey, AddressKeyFields >;
+
+export class AddressKey implements StructClass { __StructClass = true as const;
+
+ static readonly $typeName = `${PKG_V29}::deny_list::AddressKey`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
+
+ readonly $typeName = AddressKey.$typeName; readonly $fullTypeName: `${typeof PKG_V29}::deny_list::AddressKey`; readonly $typeArgs: []; readonly $isPhantom = AddressKey.$isPhantom;
+
+ readonly pos0: ToField<"address">
+
+ private constructor(typeArgs: [], fields: AddressKeyFields, ) { this.$fullTypeName = composeSuiType( AddressKey.$typeName, ...typeArgs ) as `${typeof PKG_V29}::deny_list::AddressKey`; this.$typeArgs = typeArgs;
+
+ this.pos0 = fields.pos0; }
+
+ static reified( ): AddressKeyReified { return { typeName: AddressKey.$typeName, fullTypeName: composeSuiType( AddressKey.$typeName, ...[] ) as `${typeof PKG_V29}::deny_list::AddressKey`, typeArgs: [ ] as [], isPhantom: AddressKey.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => AddressKey.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => AddressKey.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => AddressKey.fromBcs( data, ), bcs: AddressKey.bcs, fromJSONField: (field: any) => AddressKey.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => AddressKey.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => AddressKey.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => AddressKey.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => AddressKey.fetch( client, id, ), new: ( fields: AddressKeyFields, ) => { return new AddressKey( [], fields ) }, kind: "StructClassReified", } }
+
+ static get r() { return AddressKey.reified() }
+
+ static phantom( ): PhantomReified<ToTypeStr<AddressKey>> { return phantom(AddressKey.reified( )); } static get p() { return AddressKey.phantom() }
+
+ static get bcs() { return bcs.struct("AddressKey", {
+
+ pos0: bcs.bytes(32).transform({ input: (val: string) => fromHEX(val), output: (val: Uint8Array) => toHEX(val), })
+
+}) };
+
+ static fromFields( fields: Record<string, any> ): AddressKey { return AddressKey.reified( ).new( { pos0: decodeFromFields("address", fields.pos0) } ) }
+
+ static fromFieldsWithTypes( item: FieldsWithTypes ): AddressKey { if (!isAddressKey(item.type)) { throw new Error("not a AddressKey type");
+
+ }
+
+ return AddressKey.reified( ).new( { pos0: decodeFromFieldsWithTypes("address", item.fields.pos0) } ) }
+
+ static fromBcs( data: Uint8Array ): AddressKey { return AddressKey.fromFields( AddressKey.bcs.parse(data) ) }
+
+ toJSONField() { return {
+
+ pos0: this.pos0,
+
+} }
+
+ toJSON() { return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() } }
+
+ static fromJSONField( field: any ): AddressKey { return AddressKey.reified( ).new( { pos0: decodeFromJSONField("address", field.pos0) } ) }
+
+ static fromJSON( json: Record<string, any> ): AddressKey { if (json.$typeName !== AddressKey.$typeName) { throw new Error("not a WithTwoGenerics json object") };
+
+ return AddressKey.fromJSONField( json, ) }
+
+ static fromSuiParsedData( content: SuiParsedData ): AddressKey { if (content.dataType !== "moveObject") { throw new Error("not an object"); } if (!isAddressKey(content.type)) { throw new Error(`object at ${(content.fields as any).id} is not a AddressKey object`); } return AddressKey.fromFieldsWithTypes( content ); }
+
+ static fromSuiObjectData( data: SuiObjectData ): AddressKey { if (data.bcs) { if (data.bcs.dataType !== "moveObject" || !isAddressKey(data.bcs.type)) { throw new Error(`object at is not a AddressKey object`); }
+
+ return AddressKey.fromBcs( fromB64(data.bcs.bcsBytes) ); } if (data.content) { return AddressKey.fromSuiParsedData( data.content ) } throw new Error( "Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request." ); }
+
+ static async fetch( client: SuiClient, id: string ): Promise<AddressKey> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching AddressKey object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isAddressKey(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a AddressKey object`); }
+
+ return AddressKey.fromSuiObjectData( res.data ); }
 
  }
 

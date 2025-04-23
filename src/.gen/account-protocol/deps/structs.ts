@@ -8,74 +8,6 @@ import {bcs} from "@mysten/sui/bcs";
 import {SuiClient, SuiObjectData, SuiParsedData} from "@mysten/sui/client";
 import {fromB64, fromHEX, toHEX} from "@mysten/sui/utils";
 
-/* ============================== Dep =============================== */
-
-export function isDep(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::deps::Dep`; }
-
-export interface DepFields { name: ToField<String>; addr: ToField<"address">; version: ToField<"u64"> }
-
-export type DepReified = Reified< Dep, DepFields >;
-
-export class Dep implements StructClass { __StructClass = true as const;
-
- static readonly $typeName = `${PKG_V1}::deps::Dep`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
-
- readonly $typeName = Dep.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::deps::Dep`; readonly $typeArgs: []; readonly $isPhantom = Dep.$isPhantom;
-
- readonly name: ToField<String>; readonly addr: ToField<"address">; readonly version: ToField<"u64">
-
- private constructor(typeArgs: [], fields: DepFields, ) { this.$fullTypeName = composeSuiType( Dep.$typeName, ...typeArgs ) as `${typeof PKG_V1}::deps::Dep`; this.$typeArgs = typeArgs;
-
- this.name = fields.name;; this.addr = fields.addr;; this.version = fields.version; }
-
- static reified( ): DepReified { return { typeName: Dep.$typeName, fullTypeName: composeSuiType( Dep.$typeName, ...[] ) as `${typeof PKG_V1}::deps::Dep`, typeArgs: [ ] as [], isPhantom: Dep.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => Dep.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => Dep.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => Dep.fromBcs( data, ), bcs: Dep.bcs, fromJSONField: (field: any) => Dep.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => Dep.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => Dep.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => Dep.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => Dep.fetch( client, id, ), new: ( fields: DepFields, ) => { return new Dep( [], fields ) }, kind: "StructClassReified", } }
-
- static get r() { return Dep.reified() }
-
- static phantom( ): PhantomReified<ToTypeStr<Dep>> { return phantom(Dep.reified( )); } static get p() { return Dep.phantom() }
-
- static get bcs() { return bcs.struct("Dep", {
-
- name: String.bcs, addr: bcs.bytes(32).transform({ input: (val: string) => fromHEX(val), output: (val: Uint8Array) => toHEX(val), }), version: bcs.u64()
-
-}) };
-
- static fromFields( fields: Record<string, any> ): Dep { return Dep.reified( ).new( { name: decodeFromFields(String.reified(), fields.name), addr: decodeFromFields("address", fields.addr), version: decodeFromFields("u64", fields.version) } ) }
-
- static fromFieldsWithTypes( item: FieldsWithTypes ): Dep { if (!isDep(item.type)) { throw new Error("not a Dep type");
-
- }
-
- return Dep.reified( ).new( { name: decodeFromFieldsWithTypes(String.reified(), item.fields.name), addr: decodeFromFieldsWithTypes("address", item.fields.addr), version: decodeFromFieldsWithTypes("u64", item.fields.version) } ) }
-
- static fromBcs( data: Uint8Array ): Dep { return Dep.fromFields( Dep.bcs.parse(data) ) }
-
- toJSONField() { return {
-
- name: this.name,addr: this.addr,version: this.version.toString(),
-
-} }
-
- toJSON() { return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() } }
-
- static fromJSONField( field: any ): Dep { return Dep.reified( ).new( { name: decodeFromJSONField(String.reified(), field.name), addr: decodeFromJSONField("address", field.addr), version: decodeFromJSONField("u64", field.version) } ) }
-
- static fromJSON( json: Record<string, any> ): Dep { if (json.$typeName !== Dep.$typeName) { throw new Error("not a WithTwoGenerics json object") };
-
- return Dep.fromJSONField( json, ) }
-
- static fromSuiParsedData( content: SuiParsedData ): Dep { if (content.dataType !== "moveObject") { throw new Error("not an object"); } if (!isDep(content.type)) { throw new Error(`object at ${(content.fields as any).id} is not a Dep object`); } return Dep.fromFieldsWithTypes( content ); }
-
- static fromSuiObjectData( data: SuiObjectData ): Dep { if (data.bcs) { if (data.bcs.dataType !== "moveObject" || !isDep(data.bcs.type)) { throw new Error(`object at is not a Dep object`); }
-
- return Dep.fromBcs( fromB64(data.bcs.bcsBytes) ); } if (data.content) { return Dep.fromSuiParsedData( data.content ) } throw new Error( "Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request." ); }
-
- static async fetch( client: SuiClient, id: string ): Promise<Dep> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching Dep object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isDep(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a Dep object`); }
-
- return Dep.fromSuiObjectData( res.data ); }
-
- }
-
 /* ============================== Deps =============================== */
 
 export function isDeps(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::deps::Deps`; }
@@ -141,5 +73,73 @@ export class Deps implements StructClass { __StructClass = true as const;
  static async fetch( client: SuiClient, id: string ): Promise<Deps> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching Deps object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isDeps(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a Deps object`); }
 
  return Deps.fromSuiObjectData( res.data ); }
+
+ }
+
+/* ============================== Dep =============================== */
+
+export function isDep(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::deps::Dep`; }
+
+export interface DepFields { name: ToField<String>; addr: ToField<"address">; version: ToField<"u64"> }
+
+export type DepReified = Reified< Dep, DepFields >;
+
+export class Dep implements StructClass { __StructClass = true as const;
+
+ static readonly $typeName = `${PKG_V1}::deps::Dep`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
+
+ readonly $typeName = Dep.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::deps::Dep`; readonly $typeArgs: []; readonly $isPhantom = Dep.$isPhantom;
+
+ readonly name: ToField<String>; readonly addr: ToField<"address">; readonly version: ToField<"u64">
+
+ private constructor(typeArgs: [], fields: DepFields, ) { this.$fullTypeName = composeSuiType( Dep.$typeName, ...typeArgs ) as `${typeof PKG_V1}::deps::Dep`; this.$typeArgs = typeArgs;
+
+ this.name = fields.name;; this.addr = fields.addr;; this.version = fields.version; }
+
+ static reified( ): DepReified { return { typeName: Dep.$typeName, fullTypeName: composeSuiType( Dep.$typeName, ...[] ) as `${typeof PKG_V1}::deps::Dep`, typeArgs: [ ] as [], isPhantom: Dep.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => Dep.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => Dep.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => Dep.fromBcs( data, ), bcs: Dep.bcs, fromJSONField: (field: any) => Dep.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => Dep.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => Dep.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => Dep.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => Dep.fetch( client, id, ), new: ( fields: DepFields, ) => { return new Dep( [], fields ) }, kind: "StructClassReified", } }
+
+ static get r() { return Dep.reified() }
+
+ static phantom( ): PhantomReified<ToTypeStr<Dep>> { return phantom(Dep.reified( )); } static get p() { return Dep.phantom() }
+
+ static get bcs() { return bcs.struct("Dep", {
+
+ name: String.bcs, addr: bcs.bytes(32).transform({ input: (val: string) => fromHEX(val), output: (val: Uint8Array) => toHEX(val), }), version: bcs.u64()
+
+}) };
+
+ static fromFields( fields: Record<string, any> ): Dep { return Dep.reified( ).new( { name: decodeFromFields(String.reified(), fields.name), addr: decodeFromFields("address", fields.addr), version: decodeFromFields("u64", fields.version) } ) }
+
+ static fromFieldsWithTypes( item: FieldsWithTypes ): Dep { if (!isDep(item.type)) { throw new Error("not a Dep type");
+
+ }
+
+ return Dep.reified( ).new( { name: decodeFromFieldsWithTypes(String.reified(), item.fields.name), addr: decodeFromFieldsWithTypes("address", item.fields.addr), version: decodeFromFieldsWithTypes("u64", item.fields.version) } ) }
+
+ static fromBcs( data: Uint8Array ): Dep { return Dep.fromFields( Dep.bcs.parse(data) ) }
+
+ toJSONField() { return {
+
+ name: this.name,addr: this.addr,version: this.version.toString(),
+
+} }
+
+ toJSON() { return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() } }
+
+ static fromJSONField( field: any ): Dep { return Dep.reified( ).new( { name: decodeFromJSONField(String.reified(), field.name), addr: decodeFromJSONField("address", field.addr), version: decodeFromJSONField("u64", field.version) } ) }
+
+ static fromJSON( json: Record<string, any> ): Dep { if (json.$typeName !== Dep.$typeName) { throw new Error("not a WithTwoGenerics json object") };
+
+ return Dep.fromJSONField( json, ) }
+
+ static fromSuiParsedData( content: SuiParsedData ): Dep { if (content.dataType !== "moveObject") { throw new Error("not an object"); } if (!isDep(content.type)) { throw new Error(`object at ${(content.fields as any).id} is not a Dep object`); } return Dep.fromFieldsWithTypes( content ); }
+
+ static fromSuiObjectData( data: SuiObjectData ): Dep { if (data.bcs) { if (data.bcs.dataType !== "moveObject" || !isDep(data.bcs.type)) { throw new Error(`object at is not a Dep object`); }
+
+ return Dep.fromBcs( fromB64(data.bcs.bcsBytes) ); } if (data.content) { return Dep.fromSuiParsedData( data.content ) } throw new Error( "Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request." ); }
+
+ static async fetch( client: SuiClient, id: string ): Promise<Dep> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching Dep object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isDep(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a Dep object`); }
+
+ return Dep.fromSuiObjectData( res.data ); }
 
  }

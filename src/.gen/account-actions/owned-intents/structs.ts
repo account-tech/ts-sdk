@@ -5,74 +5,6 @@ import {bcs} from "@mysten/sui/bcs";
 import {SuiClient, SuiObjectData, SuiParsedData} from "@mysten/sui/client";
 import {fromB64} from "@mysten/sui/utils";
 
-/* ============================== WithdrawAndTransferIntent =============================== */
-
-export function isWithdrawAndTransferIntent(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::owned_intents::WithdrawAndTransferIntent`; }
-
-export interface WithdrawAndTransferIntentFields { dummyField: ToField<"bool"> }
-
-export type WithdrawAndTransferIntentReified = Reified< WithdrawAndTransferIntent, WithdrawAndTransferIntentFields >;
-
-export class WithdrawAndTransferIntent implements StructClass { __StructClass = true as const;
-
- static readonly $typeName = `${PKG_V1}::owned_intents::WithdrawAndTransferIntent`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
-
- readonly $typeName = WithdrawAndTransferIntent.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::owned_intents::WithdrawAndTransferIntent`; readonly $typeArgs: []; readonly $isPhantom = WithdrawAndTransferIntent.$isPhantom;
-
- readonly dummyField: ToField<"bool">
-
- private constructor(typeArgs: [], fields: WithdrawAndTransferIntentFields, ) { this.$fullTypeName = composeSuiType( WithdrawAndTransferIntent.$typeName, ...typeArgs ) as `${typeof PKG_V1}::owned_intents::WithdrawAndTransferIntent`; this.$typeArgs = typeArgs;
-
- this.dummyField = fields.dummyField; }
-
- static reified( ): WithdrawAndTransferIntentReified { return { typeName: WithdrawAndTransferIntent.$typeName, fullTypeName: composeSuiType( WithdrawAndTransferIntent.$typeName, ...[] ) as `${typeof PKG_V1}::owned_intents::WithdrawAndTransferIntent`, typeArgs: [ ] as [], isPhantom: WithdrawAndTransferIntent.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => WithdrawAndTransferIntent.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => WithdrawAndTransferIntent.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => WithdrawAndTransferIntent.fromBcs( data, ), bcs: WithdrawAndTransferIntent.bcs, fromJSONField: (field: any) => WithdrawAndTransferIntent.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => WithdrawAndTransferIntent.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => WithdrawAndTransferIntent.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => WithdrawAndTransferIntent.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => WithdrawAndTransferIntent.fetch( client, id, ), new: ( fields: WithdrawAndTransferIntentFields, ) => { return new WithdrawAndTransferIntent( [], fields ) }, kind: "StructClassReified", } }
-
- static get r() { return WithdrawAndTransferIntent.reified() }
-
- static phantom( ): PhantomReified<ToTypeStr<WithdrawAndTransferIntent>> { return phantom(WithdrawAndTransferIntent.reified( )); } static get p() { return WithdrawAndTransferIntent.phantom() }
-
- static get bcs() { return bcs.struct("WithdrawAndTransferIntent", {
-
- dummy_field: bcs.bool()
-
-}) };
-
- static fromFields( fields: Record<string, any> ): WithdrawAndTransferIntent { return WithdrawAndTransferIntent.reified( ).new( { dummyField: decodeFromFields("bool", fields.dummy_field) } ) }
-
- static fromFieldsWithTypes( item: FieldsWithTypes ): WithdrawAndTransferIntent { if (!isWithdrawAndTransferIntent(item.type)) { throw new Error("not a WithdrawAndTransferIntent type");
-
- }
-
- return WithdrawAndTransferIntent.reified( ).new( { dummyField: decodeFromFieldsWithTypes("bool", item.fields.dummy_field) } ) }
-
- static fromBcs( data: Uint8Array ): WithdrawAndTransferIntent { return WithdrawAndTransferIntent.fromFields( WithdrawAndTransferIntent.bcs.parse(data) ) }
-
- toJSONField() { return {
-
- dummyField: this.dummyField,
-
-} }
-
- toJSON() { return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() } }
-
- static fromJSONField( field: any ): WithdrawAndTransferIntent { return WithdrawAndTransferIntent.reified( ).new( { dummyField: decodeFromJSONField("bool", field.dummyField) } ) }
-
- static fromJSON( json: Record<string, any> ): WithdrawAndTransferIntent { if (json.$typeName !== WithdrawAndTransferIntent.$typeName) { throw new Error("not a WithTwoGenerics json object") };
-
- return WithdrawAndTransferIntent.fromJSONField( json, ) }
-
- static fromSuiParsedData( content: SuiParsedData ): WithdrawAndTransferIntent { if (content.dataType !== "moveObject") { throw new Error("not an object"); } if (!isWithdrawAndTransferIntent(content.type)) { throw new Error(`object at ${(content.fields as any).id} is not a WithdrawAndTransferIntent object`); } return WithdrawAndTransferIntent.fromFieldsWithTypes( content ); }
-
- static fromSuiObjectData( data: SuiObjectData ): WithdrawAndTransferIntent { if (data.bcs) { if (data.bcs.dataType !== "moveObject" || !isWithdrawAndTransferIntent(data.bcs.type)) { throw new Error(`object at is not a WithdrawAndTransferIntent object`); }
-
- return WithdrawAndTransferIntent.fromBcs( fromB64(data.bcs.bcsBytes) ); } if (data.content) { return WithdrawAndTransferIntent.fromSuiParsedData( data.content ) } throw new Error( "Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request." ); }
-
- static async fetch( client: SuiClient, id: string ): Promise<WithdrawAndTransferIntent> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching WithdrawAndTransferIntent object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isWithdrawAndTransferIntent(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a WithdrawAndTransferIntent object`); }
-
- return WithdrawAndTransferIntent.fromSuiObjectData( res.data ); }
-
- }
-
 /* ============================== WithdrawAndTransferToVaultIntent =============================== */
 
 export function isWithdrawAndTransferToVaultIntent(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::owned_intents::WithdrawAndTransferToVaultIntent`; }
@@ -138,6 +70,74 @@ export class WithdrawAndTransferToVaultIntent implements StructClass { __StructC
  static async fetch( client: SuiClient, id: string ): Promise<WithdrawAndTransferToVaultIntent> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching WithdrawAndTransferToVaultIntent object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isWithdrawAndTransferToVaultIntent(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a WithdrawAndTransferToVaultIntent object`); }
 
  return WithdrawAndTransferToVaultIntent.fromSuiObjectData( res.data ); }
+
+ }
+
+/* ============================== WithdrawAndTransferIntent =============================== */
+
+export function isWithdrawAndTransferIntent(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::owned_intents::WithdrawAndTransferIntent`; }
+
+export interface WithdrawAndTransferIntentFields { dummyField: ToField<"bool"> }
+
+export type WithdrawAndTransferIntentReified = Reified< WithdrawAndTransferIntent, WithdrawAndTransferIntentFields >;
+
+export class WithdrawAndTransferIntent implements StructClass { __StructClass = true as const;
+
+ static readonly $typeName = `${PKG_V1}::owned_intents::WithdrawAndTransferIntent`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
+
+ readonly $typeName = WithdrawAndTransferIntent.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::owned_intents::WithdrawAndTransferIntent`; readonly $typeArgs: []; readonly $isPhantom = WithdrawAndTransferIntent.$isPhantom;
+
+ readonly dummyField: ToField<"bool">
+
+ private constructor(typeArgs: [], fields: WithdrawAndTransferIntentFields, ) { this.$fullTypeName = composeSuiType( WithdrawAndTransferIntent.$typeName, ...typeArgs ) as `${typeof PKG_V1}::owned_intents::WithdrawAndTransferIntent`; this.$typeArgs = typeArgs;
+
+ this.dummyField = fields.dummyField; }
+
+ static reified( ): WithdrawAndTransferIntentReified { return { typeName: WithdrawAndTransferIntent.$typeName, fullTypeName: composeSuiType( WithdrawAndTransferIntent.$typeName, ...[] ) as `${typeof PKG_V1}::owned_intents::WithdrawAndTransferIntent`, typeArgs: [ ] as [], isPhantom: WithdrawAndTransferIntent.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => WithdrawAndTransferIntent.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => WithdrawAndTransferIntent.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => WithdrawAndTransferIntent.fromBcs( data, ), bcs: WithdrawAndTransferIntent.bcs, fromJSONField: (field: any) => WithdrawAndTransferIntent.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => WithdrawAndTransferIntent.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => WithdrawAndTransferIntent.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => WithdrawAndTransferIntent.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => WithdrawAndTransferIntent.fetch( client, id, ), new: ( fields: WithdrawAndTransferIntentFields, ) => { return new WithdrawAndTransferIntent( [], fields ) }, kind: "StructClassReified", } }
+
+ static get r() { return WithdrawAndTransferIntent.reified() }
+
+ static phantom( ): PhantomReified<ToTypeStr<WithdrawAndTransferIntent>> { return phantom(WithdrawAndTransferIntent.reified( )); } static get p() { return WithdrawAndTransferIntent.phantom() }
+
+ static get bcs() { return bcs.struct("WithdrawAndTransferIntent", {
+
+ dummy_field: bcs.bool()
+
+}) };
+
+ static fromFields( fields: Record<string, any> ): WithdrawAndTransferIntent { return WithdrawAndTransferIntent.reified( ).new( { dummyField: decodeFromFields("bool", fields.dummy_field) } ) }
+
+ static fromFieldsWithTypes( item: FieldsWithTypes ): WithdrawAndTransferIntent { if (!isWithdrawAndTransferIntent(item.type)) { throw new Error("not a WithdrawAndTransferIntent type");
+
+ }
+
+ return WithdrawAndTransferIntent.reified( ).new( { dummyField: decodeFromFieldsWithTypes("bool", item.fields.dummy_field) } ) }
+
+ static fromBcs( data: Uint8Array ): WithdrawAndTransferIntent { return WithdrawAndTransferIntent.fromFields( WithdrawAndTransferIntent.bcs.parse(data) ) }
+
+ toJSONField() { return {
+
+ dummyField: this.dummyField,
+
+} }
+
+ toJSON() { return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() } }
+
+ static fromJSONField( field: any ): WithdrawAndTransferIntent { return WithdrawAndTransferIntent.reified( ).new( { dummyField: decodeFromJSONField("bool", field.dummyField) } ) }
+
+ static fromJSON( json: Record<string, any> ): WithdrawAndTransferIntent { if (json.$typeName !== WithdrawAndTransferIntent.$typeName) { throw new Error("not a WithTwoGenerics json object") };
+
+ return WithdrawAndTransferIntent.fromJSONField( json, ) }
+
+ static fromSuiParsedData( content: SuiParsedData ): WithdrawAndTransferIntent { if (content.dataType !== "moveObject") { throw new Error("not an object"); } if (!isWithdrawAndTransferIntent(content.type)) { throw new Error(`object at ${(content.fields as any).id} is not a WithdrawAndTransferIntent object`); } return WithdrawAndTransferIntent.fromFieldsWithTypes( content ); }
+
+ static fromSuiObjectData( data: SuiObjectData ): WithdrawAndTransferIntent { if (data.bcs) { if (data.bcs.dataType !== "moveObject" || !isWithdrawAndTransferIntent(data.bcs.type)) { throw new Error(`object at is not a WithdrawAndTransferIntent object`); }
+
+ return WithdrawAndTransferIntent.fromBcs( fromB64(data.bcs.bcsBytes) ); } if (data.content) { return WithdrawAndTransferIntent.fromSuiParsedData( data.content ) } throw new Error( "Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request." ); }
+
+ static async fetch( client: SuiClient, id: string ): Promise<WithdrawAndTransferIntent> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching WithdrawAndTransferIntent object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isWithdrawAndTransferIntent(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a WithdrawAndTransferIntent object`); }
+
+ return WithdrawAndTransferIntent.fromSuiObjectData( res.data ); }
 
  }
 

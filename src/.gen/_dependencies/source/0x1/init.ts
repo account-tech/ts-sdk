@@ -8,8 +8,8 @@ import * as uq3232 from "./uq32-32/structs";
 import * as uq6464 from "./uq64-64/structs";
 import {StructClassLoader} from "../../../_framework/loader";
 
-export function registerClasses(loader: StructClassLoader) { loader.register(ascii.Char);
-loader.register(ascii.String);
+export function registerClasses(loader: StructClassLoader) { loader.register(ascii.String);
+loader.register(ascii.Char);
 loader.register(bitVector.BitVector);
 loader.register(fixedPoint32.FixedPoint32);
 loader.register(option.Option);

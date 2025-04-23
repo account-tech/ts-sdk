@@ -8,6 +8,74 @@ import {bcs} from "@mysten/sui/bcs";
 import {SuiClient, SuiObjectData, SuiParsedData} from "@mysten/sui/client";
 import {fromB64} from "@mysten/sui/utils";
 
+/* ============================== PersonalKioskCap =============================== */
+
+export function isPersonalKioskCap(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::personal_kiosk::PersonalKioskCap`; }
+
+export interface PersonalKioskCapFields { id: ToField<UID>; cap: ToField<Option<KioskOwnerCap>> }
+
+export type PersonalKioskCapReified = Reified< PersonalKioskCap, PersonalKioskCapFields >;
+
+export class PersonalKioskCap implements StructClass { __StructClass = true as const;
+
+ static readonly $typeName = `${PKG_V1}::personal_kiosk::PersonalKioskCap`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
+
+ readonly $typeName = PersonalKioskCap.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::personal_kiosk::PersonalKioskCap`; readonly $typeArgs: []; readonly $isPhantom = PersonalKioskCap.$isPhantom;
+
+ readonly id: ToField<UID>; readonly cap: ToField<Option<KioskOwnerCap>>
+
+ private constructor(typeArgs: [], fields: PersonalKioskCapFields, ) { this.$fullTypeName = composeSuiType( PersonalKioskCap.$typeName, ...typeArgs ) as `${typeof PKG_V1}::personal_kiosk::PersonalKioskCap`; this.$typeArgs = typeArgs;
+
+ this.id = fields.id;; this.cap = fields.cap; }
+
+ static reified( ): PersonalKioskCapReified { return { typeName: PersonalKioskCap.$typeName, fullTypeName: composeSuiType( PersonalKioskCap.$typeName, ...[] ) as `${typeof PKG_V1}::personal_kiosk::PersonalKioskCap`, typeArgs: [ ] as [], isPhantom: PersonalKioskCap.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => PersonalKioskCap.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => PersonalKioskCap.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => PersonalKioskCap.fromBcs( data, ), bcs: PersonalKioskCap.bcs, fromJSONField: (field: any) => PersonalKioskCap.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => PersonalKioskCap.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => PersonalKioskCap.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => PersonalKioskCap.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => PersonalKioskCap.fetch( client, id, ), new: ( fields: PersonalKioskCapFields, ) => { return new PersonalKioskCap( [], fields ) }, kind: "StructClassReified", } }
+
+ static get r() { return PersonalKioskCap.reified() }
+
+ static phantom( ): PhantomReified<ToTypeStr<PersonalKioskCap>> { return phantom(PersonalKioskCap.reified( )); } static get p() { return PersonalKioskCap.phantom() }
+
+ static get bcs() { return bcs.struct("PersonalKioskCap", {
+
+ id: UID.bcs, cap: Option.bcs(KioskOwnerCap.bcs)
+
+}) };
+
+ static fromFields( fields: Record<string, any> ): PersonalKioskCap { return PersonalKioskCap.reified( ).new( { id: decodeFromFields(UID.reified(), fields.id), cap: decodeFromFields(Option.reified(KioskOwnerCap.reified()), fields.cap) } ) }
+
+ static fromFieldsWithTypes( item: FieldsWithTypes ): PersonalKioskCap { if (!isPersonalKioskCap(item.type)) { throw new Error("not a PersonalKioskCap type");
+
+ }
+
+ return PersonalKioskCap.reified( ).new( { id: decodeFromFieldsWithTypes(UID.reified(), item.fields.id), cap: decodeFromFieldsWithTypes(Option.reified(KioskOwnerCap.reified()), item.fields.cap) } ) }
+
+ static fromBcs( data: Uint8Array ): PersonalKioskCap { return PersonalKioskCap.fromFields( PersonalKioskCap.bcs.parse(data) ) }
+
+ toJSONField() { return {
+
+ id: this.id,cap: fieldToJSON<Option<KioskOwnerCap>>(`${Option.$typeName}<${KioskOwnerCap.$typeName}>`, this.cap),
+
+} }
+
+ toJSON() { return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() } }
+
+ static fromJSONField( field: any ): PersonalKioskCap { return PersonalKioskCap.reified( ).new( { id: decodeFromJSONField(UID.reified(), field.id), cap: decodeFromJSONField(Option.reified(KioskOwnerCap.reified()), field.cap) } ) }
+
+ static fromJSON( json: Record<string, any> ): PersonalKioskCap { if (json.$typeName !== PersonalKioskCap.$typeName) { throw new Error("not a WithTwoGenerics json object") };
+
+ return PersonalKioskCap.fromJSONField( json, ) }
+
+ static fromSuiParsedData( content: SuiParsedData ): PersonalKioskCap { if (content.dataType !== "moveObject") { throw new Error("not an object"); } if (!isPersonalKioskCap(content.type)) { throw new Error(`object at ${(content.fields as any).id} is not a PersonalKioskCap object`); } return PersonalKioskCap.fromFieldsWithTypes( content ); }
+
+ static fromSuiObjectData( data: SuiObjectData ): PersonalKioskCap { if (data.bcs) { if (data.bcs.dataType !== "moveObject" || !isPersonalKioskCap(data.bcs.type)) { throw new Error(`object at is not a PersonalKioskCap object`); }
+
+ return PersonalKioskCap.fromBcs( fromB64(data.bcs.bcsBytes) ); } if (data.content) { return PersonalKioskCap.fromSuiParsedData( data.content ) } throw new Error( "Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request." ); }
+
+ static async fetch( client: SuiClient, id: string ): Promise<PersonalKioskCap> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching PersonalKioskCap object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isPersonalKioskCap(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a PersonalKioskCap object`); }
+
+ return PersonalKioskCap.fromSuiObjectData( res.data ); }
+
+ }
+
 /* ============================== Borrow =============================== */
 
 export function isBorrow(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::personal_kiosk::Borrow`; }
@@ -73,74 +141,6 @@ export class Borrow implements StructClass { __StructClass = true as const;
  static async fetch( client: SuiClient, id: string ): Promise<Borrow> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching Borrow object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isBorrow(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a Borrow object`); }
 
  return Borrow.fromSuiObjectData( res.data ); }
-
- }
-
-/* ============================== NewPersonalKiosk =============================== */
-
-export function isNewPersonalKiosk(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::personal_kiosk::NewPersonalKiosk`; }
-
-export interface NewPersonalKioskFields { kioskId: ToField<ID> }
-
-export type NewPersonalKioskReified = Reified< NewPersonalKiosk, NewPersonalKioskFields >;
-
-export class NewPersonalKiosk implements StructClass { __StructClass = true as const;
-
- static readonly $typeName = `${PKG_V1}::personal_kiosk::NewPersonalKiosk`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
-
- readonly $typeName = NewPersonalKiosk.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::personal_kiosk::NewPersonalKiosk`; readonly $typeArgs: []; readonly $isPhantom = NewPersonalKiosk.$isPhantom;
-
- readonly kioskId: ToField<ID>
-
- private constructor(typeArgs: [], fields: NewPersonalKioskFields, ) { this.$fullTypeName = composeSuiType( NewPersonalKiosk.$typeName, ...typeArgs ) as `${typeof PKG_V1}::personal_kiosk::NewPersonalKiosk`; this.$typeArgs = typeArgs;
-
- this.kioskId = fields.kioskId; }
-
- static reified( ): NewPersonalKioskReified { return { typeName: NewPersonalKiosk.$typeName, fullTypeName: composeSuiType( NewPersonalKiosk.$typeName, ...[] ) as `${typeof PKG_V1}::personal_kiosk::NewPersonalKiosk`, typeArgs: [ ] as [], isPhantom: NewPersonalKiosk.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => NewPersonalKiosk.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => NewPersonalKiosk.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => NewPersonalKiosk.fromBcs( data, ), bcs: NewPersonalKiosk.bcs, fromJSONField: (field: any) => NewPersonalKiosk.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => NewPersonalKiosk.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => NewPersonalKiosk.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => NewPersonalKiosk.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => NewPersonalKiosk.fetch( client, id, ), new: ( fields: NewPersonalKioskFields, ) => { return new NewPersonalKiosk( [], fields ) }, kind: "StructClassReified", } }
-
- static get r() { return NewPersonalKiosk.reified() }
-
- static phantom( ): PhantomReified<ToTypeStr<NewPersonalKiosk>> { return phantom(NewPersonalKiosk.reified( )); } static get p() { return NewPersonalKiosk.phantom() }
-
- static get bcs() { return bcs.struct("NewPersonalKiosk", {
-
- kiosk_id: ID.bcs
-
-}) };
-
- static fromFields( fields: Record<string, any> ): NewPersonalKiosk { return NewPersonalKiosk.reified( ).new( { kioskId: decodeFromFields(ID.reified(), fields.kiosk_id) } ) }
-
- static fromFieldsWithTypes( item: FieldsWithTypes ): NewPersonalKiosk { if (!isNewPersonalKiosk(item.type)) { throw new Error("not a NewPersonalKiosk type");
-
- }
-
- return NewPersonalKiosk.reified( ).new( { kioskId: decodeFromFieldsWithTypes(ID.reified(), item.fields.kiosk_id) } ) }
-
- static fromBcs( data: Uint8Array ): NewPersonalKiosk { return NewPersonalKiosk.fromFields( NewPersonalKiosk.bcs.parse(data) ) }
-
- toJSONField() { return {
-
- kioskId: this.kioskId,
-
-} }
-
- toJSON() { return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() } }
-
- static fromJSONField( field: any ): NewPersonalKiosk { return NewPersonalKiosk.reified( ).new( { kioskId: decodeFromJSONField(ID.reified(), field.kioskId) } ) }
-
- static fromJSON( json: Record<string, any> ): NewPersonalKiosk { if (json.$typeName !== NewPersonalKiosk.$typeName) { throw new Error("not a WithTwoGenerics json object") };
-
- return NewPersonalKiosk.fromJSONField( json, ) }
-
- static fromSuiParsedData( content: SuiParsedData ): NewPersonalKiosk { if (content.dataType !== "moveObject") { throw new Error("not an object"); } if (!isNewPersonalKiosk(content.type)) { throw new Error(`object at ${(content.fields as any).id} is not a NewPersonalKiosk object`); } return NewPersonalKiosk.fromFieldsWithTypes( content ); }
-
- static fromSuiObjectData( data: SuiObjectData ): NewPersonalKiosk { if (data.bcs) { if (data.bcs.dataType !== "moveObject" || !isNewPersonalKiosk(data.bcs.type)) { throw new Error(`object at is not a NewPersonalKiosk object`); }
-
- return NewPersonalKiosk.fromBcs( fromB64(data.bcs.bcsBytes) ); } if (data.content) { return NewPersonalKiosk.fromSuiParsedData( data.content ) } throw new Error( "Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request." ); }
-
- static async fetch( client: SuiClient, id: string ): Promise<NewPersonalKiosk> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching NewPersonalKiosk object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isNewPersonalKiosk(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a NewPersonalKiosk object`); }
-
- return NewPersonalKiosk.fromSuiObjectData( res.data ); }
 
  }
 
@@ -212,70 +212,70 @@ export class OwnerMarker implements StructClass { __StructClass = true as const;
 
  }
 
-/* ============================== PersonalKioskCap =============================== */
+/* ============================== NewPersonalKiosk =============================== */
 
-export function isPersonalKioskCap(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::personal_kiosk::PersonalKioskCap`; }
+export function isNewPersonalKiosk(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::personal_kiosk::NewPersonalKiosk`; }
 
-export interface PersonalKioskCapFields { id: ToField<UID>; cap: ToField<Option<KioskOwnerCap>> }
+export interface NewPersonalKioskFields { kioskId: ToField<ID> }
 
-export type PersonalKioskCapReified = Reified< PersonalKioskCap, PersonalKioskCapFields >;
+export type NewPersonalKioskReified = Reified< NewPersonalKiosk, NewPersonalKioskFields >;
 
-export class PersonalKioskCap implements StructClass { __StructClass = true as const;
+export class NewPersonalKiosk implements StructClass { __StructClass = true as const;
 
- static readonly $typeName = `${PKG_V1}::personal_kiosk::PersonalKioskCap`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
+ static readonly $typeName = `${PKG_V1}::personal_kiosk::NewPersonalKiosk`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
 
- readonly $typeName = PersonalKioskCap.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::personal_kiosk::PersonalKioskCap`; readonly $typeArgs: []; readonly $isPhantom = PersonalKioskCap.$isPhantom;
+ readonly $typeName = NewPersonalKiosk.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::personal_kiosk::NewPersonalKiosk`; readonly $typeArgs: []; readonly $isPhantom = NewPersonalKiosk.$isPhantom;
 
- readonly id: ToField<UID>; readonly cap: ToField<Option<KioskOwnerCap>>
+ readonly kioskId: ToField<ID>
 
- private constructor(typeArgs: [], fields: PersonalKioskCapFields, ) { this.$fullTypeName = composeSuiType( PersonalKioskCap.$typeName, ...typeArgs ) as `${typeof PKG_V1}::personal_kiosk::PersonalKioskCap`; this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [], fields: NewPersonalKioskFields, ) { this.$fullTypeName = composeSuiType( NewPersonalKiosk.$typeName, ...typeArgs ) as `${typeof PKG_V1}::personal_kiosk::NewPersonalKiosk`; this.$typeArgs = typeArgs;
 
- this.id = fields.id;; this.cap = fields.cap; }
+ this.kioskId = fields.kioskId; }
 
- static reified( ): PersonalKioskCapReified { return { typeName: PersonalKioskCap.$typeName, fullTypeName: composeSuiType( PersonalKioskCap.$typeName, ...[] ) as `${typeof PKG_V1}::personal_kiosk::PersonalKioskCap`, typeArgs: [ ] as [], isPhantom: PersonalKioskCap.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => PersonalKioskCap.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => PersonalKioskCap.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => PersonalKioskCap.fromBcs( data, ), bcs: PersonalKioskCap.bcs, fromJSONField: (field: any) => PersonalKioskCap.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => PersonalKioskCap.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => PersonalKioskCap.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => PersonalKioskCap.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => PersonalKioskCap.fetch( client, id, ), new: ( fields: PersonalKioskCapFields, ) => { return new PersonalKioskCap( [], fields ) }, kind: "StructClassReified", } }
+ static reified( ): NewPersonalKioskReified { return { typeName: NewPersonalKiosk.$typeName, fullTypeName: composeSuiType( NewPersonalKiosk.$typeName, ...[] ) as `${typeof PKG_V1}::personal_kiosk::NewPersonalKiosk`, typeArgs: [ ] as [], isPhantom: NewPersonalKiosk.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => NewPersonalKiosk.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => NewPersonalKiosk.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => NewPersonalKiosk.fromBcs( data, ), bcs: NewPersonalKiosk.bcs, fromJSONField: (field: any) => NewPersonalKiosk.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => NewPersonalKiosk.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => NewPersonalKiosk.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => NewPersonalKiosk.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => NewPersonalKiosk.fetch( client, id, ), new: ( fields: NewPersonalKioskFields, ) => { return new NewPersonalKiosk( [], fields ) }, kind: "StructClassReified", } }
 
- static get r() { return PersonalKioskCap.reified() }
+ static get r() { return NewPersonalKiosk.reified() }
 
- static phantom( ): PhantomReified<ToTypeStr<PersonalKioskCap>> { return phantom(PersonalKioskCap.reified( )); } static get p() { return PersonalKioskCap.phantom() }
+ static phantom( ): PhantomReified<ToTypeStr<NewPersonalKiosk>> { return phantom(NewPersonalKiosk.reified( )); } static get p() { return NewPersonalKiosk.phantom() }
 
- static get bcs() { return bcs.struct("PersonalKioskCap", {
+ static get bcs() { return bcs.struct("NewPersonalKiosk", {
 
- id: UID.bcs, cap: Option.bcs(KioskOwnerCap.bcs)
+ kiosk_id: ID.bcs
 
 }) };
 
- static fromFields( fields: Record<string, any> ): PersonalKioskCap { return PersonalKioskCap.reified( ).new( { id: decodeFromFields(UID.reified(), fields.id), cap: decodeFromFields(Option.reified(KioskOwnerCap.reified()), fields.cap) } ) }
+ static fromFields( fields: Record<string, any> ): NewPersonalKiosk { return NewPersonalKiosk.reified( ).new( { kioskId: decodeFromFields(ID.reified(), fields.kiosk_id) } ) }
 
- static fromFieldsWithTypes( item: FieldsWithTypes ): PersonalKioskCap { if (!isPersonalKioskCap(item.type)) { throw new Error("not a PersonalKioskCap type");
+ static fromFieldsWithTypes( item: FieldsWithTypes ): NewPersonalKiosk { if (!isNewPersonalKiosk(item.type)) { throw new Error("not a NewPersonalKiosk type");
 
  }
 
- return PersonalKioskCap.reified( ).new( { id: decodeFromFieldsWithTypes(UID.reified(), item.fields.id), cap: decodeFromFieldsWithTypes(Option.reified(KioskOwnerCap.reified()), item.fields.cap) } ) }
+ return NewPersonalKiosk.reified( ).new( { kioskId: decodeFromFieldsWithTypes(ID.reified(), item.fields.kiosk_id) } ) }
 
- static fromBcs( data: Uint8Array ): PersonalKioskCap { return PersonalKioskCap.fromFields( PersonalKioskCap.bcs.parse(data) ) }
+ static fromBcs( data: Uint8Array ): NewPersonalKiosk { return NewPersonalKiosk.fromFields( NewPersonalKiosk.bcs.parse(data) ) }
 
  toJSONField() { return {
 
- id: this.id,cap: fieldToJSON<Option<KioskOwnerCap>>(`${Option.$typeName}<${KioskOwnerCap.$typeName}>`, this.cap),
+ kioskId: this.kioskId,
 
 } }
 
  toJSON() { return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() } }
 
- static fromJSONField( field: any ): PersonalKioskCap { return PersonalKioskCap.reified( ).new( { id: decodeFromJSONField(UID.reified(), field.id), cap: decodeFromJSONField(Option.reified(KioskOwnerCap.reified()), field.cap) } ) }
+ static fromJSONField( field: any ): NewPersonalKiosk { return NewPersonalKiosk.reified( ).new( { kioskId: decodeFromJSONField(ID.reified(), field.kioskId) } ) }
 
- static fromJSON( json: Record<string, any> ): PersonalKioskCap { if (json.$typeName !== PersonalKioskCap.$typeName) { throw new Error("not a WithTwoGenerics json object") };
+ static fromJSON( json: Record<string, any> ): NewPersonalKiosk { if (json.$typeName !== NewPersonalKiosk.$typeName) { throw new Error("not a WithTwoGenerics json object") };
 
- return PersonalKioskCap.fromJSONField( json, ) }
+ return NewPersonalKiosk.fromJSONField( json, ) }
 
- static fromSuiParsedData( content: SuiParsedData ): PersonalKioskCap { if (content.dataType !== "moveObject") { throw new Error("not an object"); } if (!isPersonalKioskCap(content.type)) { throw new Error(`object at ${(content.fields as any).id} is not a PersonalKioskCap object`); } return PersonalKioskCap.fromFieldsWithTypes( content ); }
+ static fromSuiParsedData( content: SuiParsedData ): NewPersonalKiosk { if (content.dataType !== "moveObject") { throw new Error("not an object"); } if (!isNewPersonalKiosk(content.type)) { throw new Error(`object at ${(content.fields as any).id} is not a NewPersonalKiosk object`); } return NewPersonalKiosk.fromFieldsWithTypes( content ); }
 
- static fromSuiObjectData( data: SuiObjectData ): PersonalKioskCap { if (data.bcs) { if (data.bcs.dataType !== "moveObject" || !isPersonalKioskCap(data.bcs.type)) { throw new Error(`object at is not a PersonalKioskCap object`); }
+ static fromSuiObjectData( data: SuiObjectData ): NewPersonalKiosk { if (data.bcs) { if (data.bcs.dataType !== "moveObject" || !isNewPersonalKiosk(data.bcs.type)) { throw new Error(`object at is not a NewPersonalKiosk object`); }
 
- return PersonalKioskCap.fromBcs( fromB64(data.bcs.bcsBytes) ); } if (data.content) { return PersonalKioskCap.fromSuiParsedData( data.content ) } throw new Error( "Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request." ); }
+ return NewPersonalKiosk.fromBcs( fromB64(data.bcs.bcsBytes) ); } if (data.content) { return NewPersonalKiosk.fromSuiParsedData( data.content ) } throw new Error( "Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request." ); }
 
- static async fetch( client: SuiClient, id: string ): Promise<PersonalKioskCap> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching PersonalKioskCap object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isPersonalKioskCap(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a PersonalKioskCap object`); }
+ static async fetch( client: SuiClient, id: string ): Promise<NewPersonalKiosk> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching NewPersonalKiosk object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isNewPersonalKiosk(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a NewPersonalKiosk object`); }
 
- return PersonalKioskCap.fromSuiObjectData( res.data ); }
+ return NewPersonalKiosk.fromSuiObjectData( res.data ); }
 
  }

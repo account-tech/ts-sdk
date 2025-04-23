@@ -11,74 +11,6 @@ import {bcs} from "@mysten/sui/bcs";
 import {SuiClient, SuiObjectData, SuiParsedData} from "@mysten/sui/client";
 import {fromB64, fromHEX, toHEX} from "@mysten/sui/utils";
 
-/* ============================== Invite =============================== */
-
-export function isInvite(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::user::Invite`; }
-
-export interface InviteFields { id: ToField<UID>; accountAddr: ToField<"address">; accountType: ToField<String> }
-
-export type InviteReified = Reified< Invite, InviteFields >;
-
-export class Invite implements StructClass { __StructClass = true as const;
-
- static readonly $typeName = `${PKG_V1}::user::Invite`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
-
- readonly $typeName = Invite.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::user::Invite`; readonly $typeArgs: []; readonly $isPhantom = Invite.$isPhantom;
-
- readonly id: ToField<UID>; readonly accountAddr: ToField<"address">; readonly accountType: ToField<String>
-
- private constructor(typeArgs: [], fields: InviteFields, ) { this.$fullTypeName = composeSuiType( Invite.$typeName, ...typeArgs ) as `${typeof PKG_V1}::user::Invite`; this.$typeArgs = typeArgs;
-
- this.id = fields.id;; this.accountAddr = fields.accountAddr;; this.accountType = fields.accountType; }
-
- static reified( ): InviteReified { return { typeName: Invite.$typeName, fullTypeName: composeSuiType( Invite.$typeName, ...[] ) as `${typeof PKG_V1}::user::Invite`, typeArgs: [ ] as [], isPhantom: Invite.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => Invite.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => Invite.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => Invite.fromBcs( data, ), bcs: Invite.bcs, fromJSONField: (field: any) => Invite.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => Invite.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => Invite.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => Invite.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => Invite.fetch( client, id, ), new: ( fields: InviteFields, ) => { return new Invite( [], fields ) }, kind: "StructClassReified", } }
-
- static get r() { return Invite.reified() }
-
- static phantom( ): PhantomReified<ToTypeStr<Invite>> { return phantom(Invite.reified( )); } static get p() { return Invite.phantom() }
-
- static get bcs() { return bcs.struct("Invite", {
-
- id: UID.bcs, account_addr: bcs.bytes(32).transform({ input: (val: string) => fromHEX(val), output: (val: Uint8Array) => toHEX(val), }), account_type: String.bcs
-
-}) };
-
- static fromFields( fields: Record<string, any> ): Invite { return Invite.reified( ).new( { id: decodeFromFields(UID.reified(), fields.id), accountAddr: decodeFromFields("address", fields.account_addr), accountType: decodeFromFields(String.reified(), fields.account_type) } ) }
-
- static fromFieldsWithTypes( item: FieldsWithTypes ): Invite { if (!isInvite(item.type)) { throw new Error("not a Invite type");
-
- }
-
- return Invite.reified( ).new( { id: decodeFromFieldsWithTypes(UID.reified(), item.fields.id), accountAddr: decodeFromFieldsWithTypes("address", item.fields.account_addr), accountType: decodeFromFieldsWithTypes(String.reified(), item.fields.account_type) } ) }
-
- static fromBcs( data: Uint8Array ): Invite { return Invite.fromFields( Invite.bcs.parse(data) ) }
-
- toJSONField() { return {
-
- id: this.id,accountAddr: this.accountAddr,accountType: this.accountType,
-
-} }
-
- toJSON() { return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() } }
-
- static fromJSONField( field: any ): Invite { return Invite.reified( ).new( { id: decodeFromJSONField(UID.reified(), field.id), accountAddr: decodeFromJSONField("address", field.accountAddr), accountType: decodeFromJSONField(String.reified(), field.accountType) } ) }
-
- static fromJSON( json: Record<string, any> ): Invite { if (json.$typeName !== Invite.$typeName) { throw new Error("not a WithTwoGenerics json object") };
-
- return Invite.fromJSONField( json, ) }
-
- static fromSuiParsedData( content: SuiParsedData ): Invite { if (content.dataType !== "moveObject") { throw new Error("not an object"); } if (!isInvite(content.type)) { throw new Error(`object at ${(content.fields as any).id} is not a Invite object`); } return Invite.fromFieldsWithTypes( content ); }
-
- static fromSuiObjectData( data: SuiObjectData ): Invite { if (data.bcs) { if (data.bcs.dataType !== "moveObject" || !isInvite(data.bcs.type)) { throw new Error(`object at is not a Invite object`); }
-
- return Invite.fromBcs( fromB64(data.bcs.bcsBytes) ); } if (data.content) { return Invite.fromSuiParsedData( data.content ) } throw new Error( "Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request." ); }
-
- static async fetch( client: SuiClient, id: string ): Promise<Invite> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching Invite object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isInvite(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a Invite object`); }
-
- return Invite.fromSuiObjectData( res.data ); }
-
- }
-
 /* ============================== Registry =============================== */
 
 export function isRegistry(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::user::Registry`; }
@@ -212,5 +144,73 @@ export class User implements StructClass { __StructClass = true as const;
  static async fetch( client: SuiClient, id: string ): Promise<User> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching User object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isUser(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a User object`); }
 
  return User.fromSuiObjectData( res.data ); }
+
+ }
+
+/* ============================== Invite =============================== */
+
+export function isInvite(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::user::Invite`; }
+
+export interface InviteFields { id: ToField<UID>; accountAddr: ToField<"address">; accountType: ToField<String> }
+
+export type InviteReified = Reified< Invite, InviteFields >;
+
+export class Invite implements StructClass { __StructClass = true as const;
+
+ static readonly $typeName = `${PKG_V1}::user::Invite`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
+
+ readonly $typeName = Invite.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::user::Invite`; readonly $typeArgs: []; readonly $isPhantom = Invite.$isPhantom;
+
+ readonly id: ToField<UID>; readonly accountAddr: ToField<"address">; readonly accountType: ToField<String>
+
+ private constructor(typeArgs: [], fields: InviteFields, ) { this.$fullTypeName = composeSuiType( Invite.$typeName, ...typeArgs ) as `${typeof PKG_V1}::user::Invite`; this.$typeArgs = typeArgs;
+
+ this.id = fields.id;; this.accountAddr = fields.accountAddr;; this.accountType = fields.accountType; }
+
+ static reified( ): InviteReified { return { typeName: Invite.$typeName, fullTypeName: composeSuiType( Invite.$typeName, ...[] ) as `${typeof PKG_V1}::user::Invite`, typeArgs: [ ] as [], isPhantom: Invite.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => Invite.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => Invite.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => Invite.fromBcs( data, ), bcs: Invite.bcs, fromJSONField: (field: any) => Invite.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => Invite.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => Invite.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => Invite.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => Invite.fetch( client, id, ), new: ( fields: InviteFields, ) => { return new Invite( [], fields ) }, kind: "StructClassReified", } }
+
+ static get r() { return Invite.reified() }
+
+ static phantom( ): PhantomReified<ToTypeStr<Invite>> { return phantom(Invite.reified( )); } static get p() { return Invite.phantom() }
+
+ static get bcs() { return bcs.struct("Invite", {
+
+ id: UID.bcs, account_addr: bcs.bytes(32).transform({ input: (val: string) => fromHEX(val), output: (val: Uint8Array) => toHEX(val), }), account_type: String.bcs
+
+}) };
+
+ static fromFields( fields: Record<string, any> ): Invite { return Invite.reified( ).new( { id: decodeFromFields(UID.reified(), fields.id), accountAddr: decodeFromFields("address", fields.account_addr), accountType: decodeFromFields(String.reified(), fields.account_type) } ) }
+
+ static fromFieldsWithTypes( item: FieldsWithTypes ): Invite { if (!isInvite(item.type)) { throw new Error("not a Invite type");
+
+ }
+
+ return Invite.reified( ).new( { id: decodeFromFieldsWithTypes(UID.reified(), item.fields.id), accountAddr: decodeFromFieldsWithTypes("address", item.fields.account_addr), accountType: decodeFromFieldsWithTypes(String.reified(), item.fields.account_type) } ) }
+
+ static fromBcs( data: Uint8Array ): Invite { return Invite.fromFields( Invite.bcs.parse(data) ) }
+
+ toJSONField() { return {
+
+ id: this.id,accountAddr: this.accountAddr,accountType: this.accountType,
+
+} }
+
+ toJSON() { return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() } }
+
+ static fromJSONField( field: any ): Invite { return Invite.reified( ).new( { id: decodeFromJSONField(UID.reified(), field.id), accountAddr: decodeFromJSONField("address", field.accountAddr), accountType: decodeFromJSONField(String.reified(), field.accountType) } ) }
+
+ static fromJSON( json: Record<string, any> ): Invite { if (json.$typeName !== Invite.$typeName) { throw new Error("not a WithTwoGenerics json object") };
+
+ return Invite.fromJSONField( json, ) }
+
+ static fromSuiParsedData( content: SuiParsedData ): Invite { if (content.dataType !== "moveObject") { throw new Error("not an object"); } if (!isInvite(content.type)) { throw new Error(`object at ${(content.fields as any).id} is not a Invite object`); } return Invite.fromFieldsWithTypes( content ); }
+
+ static fromSuiObjectData( data: SuiObjectData ): Invite { if (data.bcs) { if (data.bcs.dataType !== "moveObject" || !isInvite(data.bcs.type)) { throw new Error(`object at is not a Invite object`); }
+
+ return Invite.fromBcs( fromB64(data.bcs.bcsBytes) ); } if (data.content) { return Invite.fromSuiParsedData( data.content ) } throw new Error( "Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request." ); }
+
+ static async fetch( client: SuiClient, id: string ): Promise<Invite> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching Invite object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isInvite(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a Invite object`); }
+
+ return Invite.fromSuiObjectData( res.data ); }
 
  }
