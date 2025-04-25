@@ -19,26 +19,26 @@ export interface Intent {
         params: TransactionObjectInput, 
         outcome: TransactionObjectInput, 
         actionArgs: ActionsArgs
-    ): TransactionResult;
+    ): void;
     
     execute(
         tx: Transaction, 
         accountGenerics: [string, string], 
         executable: TransactionObjectInput, 
         ...args: any[]
-    ): TransactionResult;
+    ): TransactionResult | void;
     
     clearEmpty(
         tx: Transaction, 
         accountGenerics: [string, string], 
         key: string
-    ): TransactionResult;
+    ): void;
     
     deleteExpired(
         tx: Transaction, 
         accountGenerics: [string, string], 
         key: string
-    ): TransactionResult;
+    ): void;
 }
 
 export class Intent {
@@ -71,8 +71,8 @@ export class Intent {
         });
     }
 
-    completeExecution(tx: Transaction, accountGenerics: [string, string], executable: TransactionObjectInput): TransactionResult {
-        return confirmExecution(tx, accountGenerics, { account: this.account!, executable });
+    completeExecution(tx: Transaction, accountGenerics: [string, string], executable: TransactionObjectInput) {
+        confirmExecution(tx, accountGenerics, { account: this.account!, executable });
     }
 
     async fetchActions(parentId: string): Promise<any[]> {

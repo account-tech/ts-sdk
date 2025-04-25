@@ -1,4 +1,4 @@
-import { Transaction, TransactionObjectInput, TransactionResult } from "@mysten/sui/transactions";
+import { Transaction, TransactionObjectInput } from "@mysten/sui/transactions";
 import * as accountProtocol from "../../../.gen/account-protocol/account/functions";
 import * as intents from "../../../.gen/account-protocol/intents/functions";
 import * as vault from "../../../.gen/account-actions/vault/functions";
@@ -40,8 +40,8 @@ export class SpendAndTransferIntent extends Intent {
         params: TransactionObjectInput,
         outcome: TransactionObjectInput,
         actionArgs: SpendAndTransferArgs,
-    ): TransactionResult {
-        return vaultIntents.requestSpendAndTransfer(
+    ) {
+        vaultIntents.requestSpendAndTransfer(
             tx,
             [...accountGenerics, actionArgs.coinType],
             {
@@ -60,10 +60,9 @@ export class SpendAndTransferIntent extends Intent {
         tx: Transaction,
         accountGenerics: [string, string],
         executable: TransactionObjectInput,
-    ): TransactionResult {
-        let result;
+    ) {
         for (let i = 0; i < this.args!.transfers.length; i++) {
-            result = vaultIntents.executeSpendAndTransfer(
+            vaultIntents.executeSpendAndTransfer(
                 tx,
                 [...accountGenerics, this.args!.coinType],
                 {
@@ -72,14 +71,13 @@ export class SpendAndTransferIntent extends Intent {
                 }
             );
         }
-        return result!;
     }
 
     clearEmpty(
         tx: Transaction,
         accountGenerics: [string, string],
         key: string,
-    ): TransactionResult {
+    ) {
         const expired = accountProtocol.destroyEmptyIntent(
             tx,
             accountGenerics,
@@ -99,7 +97,7 @@ export class SpendAndTransferIntent extends Intent {
                 expired
             );
         }
-        return intents.destroyEmptyExpired(
+        intents.destroyEmptyExpired(
             tx,
             expired,
         );
@@ -109,7 +107,7 @@ export class SpendAndTransferIntent extends Intent {
         tx: Transaction,
         accountGenerics: [string, string],
         key: string,
-    ): TransactionResult {
+    ) {
         const expired = accountProtocol.deleteExpiredIntent(
             tx,
             accountGenerics,
@@ -130,7 +128,7 @@ export class SpendAndTransferIntent extends Intent {
                 expired
             );
         });
-        return intents.destroyEmptyExpired(
+        intents.destroyEmptyExpired(
             tx,
             expired,
         );
@@ -166,8 +164,8 @@ export class SpendAndVestIntent extends Intent {
         params: TransactionObjectInput,
         outcome: TransactionObjectInput,
         actionArgs: SpendAndVestArgs,
-    ): TransactionResult {
-        return vaultIntents.requestSpendAndVest(
+    ) {
+        vaultIntents.requestSpendAndVest(
             tx,
             [...accountGenerics, actionArgs.coinType],
             {
@@ -188,8 +186,8 @@ export class SpendAndVestIntent extends Intent {
         tx: Transaction,
         accountGenerics: [string, string],
         executable: TransactionObjectInput,
-    ): TransactionResult {
-        return vaultIntents.executeSpendAndVest(
+    ) {
+        vaultIntents.executeSpendAndVest(
             tx,
             [...accountGenerics, this.args!.coinType],
             {
@@ -203,7 +201,7 @@ export class SpendAndVestIntent extends Intent {
         tx: Transaction,
         accountGenerics: [string, string],
         key: string,
-    ): TransactionResult {
+    ) {
         const expired = accountProtocol.destroyEmptyIntent(
             tx,
             accountGenerics,
@@ -221,7 +219,7 @@ export class SpendAndVestIntent extends Intent {
             tx,
             expired
         );
-        return intents.destroyEmptyExpired(
+        intents.destroyEmptyExpired(
             tx,
             expired,
         );
@@ -231,7 +229,7 @@ export class SpendAndVestIntent extends Intent {
         tx: Transaction,
         accountGenerics: [string, string],
         key: string,
-    ): TransactionResult {
+    ) {
         const expired = accountProtocol.deleteExpiredIntent(
             tx,
             accountGenerics,
@@ -250,7 +248,7 @@ export class SpendAndVestIntent extends Intent {
             tx,
             expired
         );
-        return intents.destroyEmptyExpired(
+        intents.destroyEmptyExpired(
             tx,
             expired,
         );

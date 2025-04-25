@@ -1,5 +1,5 @@
 import { open, deposit, close } from "src/.gen/account-actions/vault/functions";
-import { Transaction, TransactionObjectInput, TransactionResult } from "@mysten/sui/transactions";
+import { Transaction, TransactionObjectInput } from "@mysten/sui/transactions";
 
 /// Opens a Vault managed by the Account
 export function openVault(
@@ -8,8 +8,8 @@ export function openVault(
     auth: TransactionObjectInput,
     account: TransactionObjectInput,
     name: string,
-): TransactionResult {
-    return open(
+) {
+    open(
         tx,
         configType,
         { auth, account, name },
@@ -25,8 +25,8 @@ export function depositFromWallet(
     account: TransactionObjectInput,
     name: string,
     coin: TransactionObjectInput,
-): TransactionResult {
-    return deposit(
+) {
+    deposit(
         tx,
         [configType, coinType],
         { auth, account, name, coin },
@@ -40,8 +40,8 @@ export function closeVault(
     auth: TransactionObjectInput,
     account: TransactionObjectInput,
     name: string,
-): TransactionResult {
-    return close(
+) {
+    close(
         tx,
         configType,
         { auth, account, name },

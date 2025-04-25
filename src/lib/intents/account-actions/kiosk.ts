@@ -1,4 +1,4 @@
-import { Transaction, TransactionObjectInput, TransactionResult } from "@mysten/sui/transactions";
+import { Transaction, TransactionObjectInput } from "@mysten/sui/transactions";
 import { ListAction, TakeAction } from "../../../.gen/account-actions/kiosk/structs";
 import * as kiosk from "../../../.gen/account-actions/kiosk/functions";
 import * as kioskIntent from "../../../.gen/account-actions/kiosk-intents/functions";
@@ -56,8 +56,7 @@ export class TakeNftsIntent extends Intent {
         accountKiosk: string,
         recipientKiosk: string,
         recipientCap: string,
-    ): TransactionResult {
-        let result;
+    ) {
         for (const { type, policy } of typesAndPolicies) {
             const request = kioskIntent.executeTakeNfts(
                 tx,
@@ -77,14 +76,13 @@ export class TakeNftsIntent extends Intent {
                 arguments: [tx.object(policy), request]
             });
         }
-        return result!;
     }
 
     clearEmpty(
         tx: Transaction,
         accountGenerics: [string, string],
         key: string,
-    ): TransactionResult {
+    ) {
         const expired = accountProtocol.destroyEmptyIntent(
             tx,
             accountGenerics,
@@ -99,7 +97,7 @@ export class TakeNftsIntent extends Intent {
                 expired
             );
         });
-        return intents.destroyEmptyExpired(
+        intents.destroyEmptyExpired(
             tx,
             expired,
         );
@@ -109,7 +107,7 @@ export class TakeNftsIntent extends Intent {
         tx: Transaction,
         accountGenerics: [string, string],
         key: string,
-    ): TransactionResult {
+    ) {
         const expired = accountProtocol.deleteExpiredIntent(
             tx,
             accountGenerics,
@@ -125,7 +123,7 @@ export class TakeNftsIntent extends Intent {
                 expired,
             );
         });
-        return intents.destroyEmptyExpired(
+        intents.destroyEmptyExpired(
             tx,
             expired,
         );
@@ -154,8 +152,8 @@ export class ListNftsIntent extends Intent {
         params: TransactionObjectInput,
         outcome: TransactionObjectInput,
         actionArgs: ListNftsArgs,
-    ): TransactionResult {
-        return kioskIntent.requestListNfts(
+    ) {
+        kioskIntent.requestListNfts(
             tx,
             accountGenerics,
             {
@@ -176,10 +174,9 @@ export class ListNftsIntent extends Intent {
         executable: TransactionObjectInput,
         nftTypes: string[],
         accountKiosk: string,
-    ): TransactionResult {
-        let result;
+    ) {
         for (const type of nftTypes) {
-            result = kioskIntent.executeListNfts(
+            kioskIntent.executeListNfts(
                 tx,
                 [...accountGenerics, type],
                 {
@@ -189,14 +186,13 @@ export class ListNftsIntent extends Intent {
                 }
             );
         }
-        return result!;
     }
 
     clearEmpty(
         tx: Transaction,
         accountGenerics: [string, string],
         key: string,
-    ): TransactionResult {
+    ) {
         const expired = accountProtocol.destroyEmptyIntent(
             tx,
             accountGenerics,
@@ -211,7 +207,7 @@ export class ListNftsIntent extends Intent {
                 expired
             );
         });
-        return intents.destroyEmptyExpired(
+        intents.destroyEmptyExpired(
             tx,
             expired,
         );
@@ -221,7 +217,7 @@ export class ListNftsIntent extends Intent {
         tx: Transaction,
         accountGenerics: [string, string],
         key: string,
-    ): TransactionResult {
+    ) {
         const expired = accountProtocol.deleteExpiredIntent(
             tx,
             accountGenerics,
@@ -237,7 +233,7 @@ export class ListNftsIntent extends Intent {
                 expired,
             );
         });
-        return intents.destroyEmptyExpired(
+        intents.destroyEmptyExpired(
             tx,
             expired,
         );

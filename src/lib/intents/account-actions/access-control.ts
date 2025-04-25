@@ -29,8 +29,8 @@ export class BorrowCapIntent extends Intent {
         params: TransactionObjectInput,
         outcome: TransactionObjectInput,
         actionArgs: BorrowCapArgs,
-    ): TransactionResult {
-        return accessControlIntent.requestBorrowCap(
+    ) {
+        accessControlIntent.requestBorrowCap(
             tx,
             [...accountGenerics, actionArgs.capType],
             {
@@ -46,7 +46,7 @@ export class BorrowCapIntent extends Intent {
         tx: Transaction,
         accountGenerics: [string, string],
         executable: TransactionObjectInput,
-    ): TransactionResult {
+    ): TransactionResult { // Cap
         return accessControlIntent.executeBorrowCap(
             tx,
             [...accountGenerics, this.args!.capType],
@@ -62,8 +62,8 @@ export class BorrowCapIntent extends Intent {
         accountGenerics: [string, string],
         executable: TransactionObjectInput,
         cap: TransactionObjectInput,
-    ): TransactionResult {
-        return accessControlIntent.executeReturnCap(
+    ) {
+        accessControlIntent.executeReturnCap(
             tx,
             [...accountGenerics, this.args!.capType],
             {
@@ -78,7 +78,7 @@ export class BorrowCapIntent extends Intent {
         tx: Transaction,
         accountGenerics: [string, string],
         key: string,
-    ): TransactionResult {
+    ) {
         const expired = accountProtocol.destroyEmptyIntent(
             tx,
             accountGenerics,
@@ -97,7 +97,7 @@ export class BorrowCapIntent extends Intent {
             this.args!.capType,
             expired,
         );
-        return intents.destroyEmptyExpired(
+        intents.destroyEmptyExpired(
             tx,
             expired,
         );
@@ -107,7 +107,7 @@ export class BorrowCapIntent extends Intent {
         tx: Transaction,
         accountGenerics: [string, string],
         key: string,
-    ): TransactionResult {
+    ) {
         const expired = accountProtocol.deleteExpiredIntent(
             tx,
             accountGenerics,
@@ -127,7 +127,7 @@ export class BorrowCapIntent extends Intent {
             this.args!.capType,
             expired,
         );
-        return intents.destroyEmptyExpired(
+        intents.destroyEmptyExpired(
             tx,
             expired,
         );

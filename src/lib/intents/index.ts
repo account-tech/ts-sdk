@@ -1,5 +1,5 @@
 export { 
-    BorrowCapIntent, 
+    BorrowCapIntent, EmptyIntent,
     UpdateMetadataIntent, DisableRulesIntent, MintAndTransferIntent, MintAndVestIntent, WithdrawAndBurnIntent,
     TakeNftsIntent, ListNftsIntent,
     UpgradePackageIntent, RestrictPolicyIntent,

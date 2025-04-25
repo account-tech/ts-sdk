@@ -1,4 +1,4 @@
-import { Transaction, TransactionObjectInput, TransactionResult } from "@mysten/sui/transactions";
+import { Transaction, TransactionObjectInput } from "@mysten/sui/transactions";
 import * as accountProtocol from "../../../.gen/account-protocol/account/functions";
 import * as intents from "../../../.gen/account-protocol/intents/functions";
 import * as emptyIntent from "../../../.gen/account-actions/empty-intents/functions";
@@ -19,8 +19,8 @@ export class EmptyIntent extends Intent {
         account: string,
         params: TransactionObjectInput,
         outcome: TransactionObjectInput,
-    ): TransactionResult {
-        return emptyIntent.requestEmpty(
+    ) {
+        emptyIntent.requestEmpty(
             tx,
             [...accountGenerics],
             {
@@ -36,8 +36,8 @@ export class EmptyIntent extends Intent {
         tx: Transaction,
         accountGenerics: [string, string],
         executable: TransactionObjectInput,
-    ): TransactionResult {
-        return emptyIntent.executeEmpty(
+    ) {
+        emptyIntent.executeEmpty(
             tx,
             [...accountGenerics],
             {
@@ -51,7 +51,7 @@ export class EmptyIntent extends Intent {
         tx: Transaction,
         accountGenerics: [string, string],
         key: string,
-    ): TransactionResult {
+    ) {
         const expired = accountProtocol.destroyEmptyIntent(
             tx,
             accountGenerics,
@@ -60,7 +60,7 @@ export class EmptyIntent extends Intent {
                 key,
             }
         );
-        return intents.destroyEmptyExpired(
+        intents.destroyEmptyExpired(
             tx,
             expired,
         );
@@ -70,7 +70,7 @@ export class EmptyIntent extends Intent {
         tx: Transaction,
         accountGenerics: [string, string],
         key: string,
-    ): TransactionResult {
+    ) {
         const expired = accountProtocol.deleteExpiredIntent(
             tx,
             accountGenerics,
@@ -80,7 +80,7 @@ export class EmptyIntent extends Intent {
                 clock: CLOCK,
             }
         );
-        return intents.destroyEmptyExpired(
+        intents.destroyEmptyExpired(
             tx,
             expired,
         );

@@ -1,5 +1,5 @@
 import { editMetadata, updateExtensionsToLatest } from "src/.gen/account-protocol/config/functions";
-import { Transaction, TransactionObjectInput, TransactionResult } from "@mysten/sui/transactions";
+import { Transaction, TransactionObjectInput } from "@mysten/sui/transactions";
 import { EXTENSIONS } from "src/types/constants";
 
 /// Replaces the metadata of an account, first element must be "name"
@@ -10,10 +10,10 @@ export function replaceMetadata(
     account: TransactionObjectInput,
     keys: string[],
     values: string[],
-): TransactionResult {
+) {
     if (keys[0] !== "name") throw new Error("'name' must be the first key in metadata");
 
-    return editMetadata(
+    editMetadata(
         tx,
         configType,
         { auth, account, keys, values },
@@ -27,7 +27,7 @@ export function updateVerifiedDepsToLatest(
     auth: TransactionObjectInput,
     account: TransactionObjectInput,
 ) {
-    return updateExtensionsToLatest(
+    updateExtensionsToLatest(
         tx,
         configType,
         { auth, account, extensions: EXTENSIONS },

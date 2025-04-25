@@ -31,8 +31,8 @@ export class UpgradePackageIntent extends Intent {
         params: TransactionObjectInput,
         outcome: TransactionObjectInput,
         actionArgs: UpgradePackageArgs,
-    ): TransactionResult {
-        return upgradePoliciesIntents.requestUpgradePackage(
+    ) {
+        upgradePoliciesIntents.requestUpgradePackage(
             tx,
             accountGenerics,
             {
@@ -50,7 +50,7 @@ export class UpgradePackageIntent extends Intent {
         tx: Transaction,
         accountGenerics: [string, string],
         executable: TransactionObjectInput,
-    ): TransactionResult {
+    ): TransactionResult { // Ticket
         return upgradePoliciesIntents.executeUpgradePackage(
             tx,
             accountGenerics,
@@ -67,8 +67,8 @@ export class UpgradePackageIntent extends Intent {
         accountGenerics: [string, string],
         executable: TransactionObjectInput,
         receipt: TransactionObjectInput,
-    ): TransactionResult {
-        return upgradePoliciesIntents.executeCommitUpgrade(
+    ) {
+        upgradePoliciesIntents.executeCommitUpgrade(
             tx,
             accountGenerics,
             {
@@ -83,7 +83,7 @@ export class UpgradePackageIntent extends Intent {
         tx: Transaction,
         accountGenerics: [string, string],
         key: string,
-    ): TransactionResult {
+    ) {
         const expired = accountProtocol.destroyEmptyIntent(
             tx,
             accountGenerics,
@@ -100,7 +100,7 @@ export class UpgradePackageIntent extends Intent {
             tx,
             expired
         );
-        return intents.destroyEmptyExpired(
+        intents.destroyEmptyExpired(
             tx,
             expired,
         );
@@ -110,7 +110,7 @@ export class UpgradePackageIntent extends Intent {
         tx: Transaction,
         accountGenerics: [string, string],
         key: string,
-    ): TransactionResult {
+    ) {
         const expired = accountProtocol.deleteExpiredIntent(
             tx,
             accountGenerics,
@@ -128,7 +128,7 @@ export class UpgradePackageIntent extends Intent {
             tx,
             expired
         );
-        return intents.destroyEmptyExpired(
+        intents.destroyEmptyExpired(
             tx,
             expired,
         );
@@ -161,8 +161,8 @@ export class RestrictPolicyIntent extends Intent {
         params: TransactionObjectInput,
         outcome: TransactionObjectInput,
         actionArgs: RestrictPolicyArgs,
-    ): TransactionResult {
-        return upgradePoliciesIntents.requestRestrictPolicy(
+    ) {
+        upgradePoliciesIntents.requestRestrictPolicy(
             tx,
             accountGenerics,
             {
@@ -180,8 +180,8 @@ export class RestrictPolicyIntent extends Intent {
         tx: Transaction,
         accountGenerics: [string, string],
         executable: TransactionObjectInput,
-    ): TransactionResult {
-        return upgradePoliciesIntents.executeRestrictPolicy(
+    ) {
+        upgradePoliciesIntents.executeRestrictPolicy(
             tx,
             accountGenerics,
             {
@@ -195,7 +195,7 @@ export class RestrictPolicyIntent extends Intent {
         tx: Transaction,
         accountGenerics: [string, string],
         key: string,
-    ): TransactionResult {
+    ) {
         const expired = accountProtocol.destroyEmptyIntent(
             tx,
             accountGenerics,
@@ -208,7 +208,7 @@ export class RestrictPolicyIntent extends Intent {
             tx,
             expired
         );
-        return intents.destroyEmptyExpired(
+        intents.destroyEmptyExpired(
             tx,
             expired,
         );
@@ -218,7 +218,7 @@ export class RestrictPolicyIntent extends Intent {
         tx: Transaction,
         accountGenerics: [string, string],
         key: string,
-    ): TransactionResult {
+    ) {
         const expired = accountProtocol.deleteExpiredIntent(
             tx,
             accountGenerics,
@@ -232,7 +232,7 @@ export class RestrictPolicyIntent extends Intent {
             tx,
             expired
         );
-        return intents.destroyEmptyExpired(
+        intents.destroyEmptyExpired(
             tx,
             expired,
         );
