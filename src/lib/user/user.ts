@@ -45,7 +45,7 @@ export class User implements UserData {
 
 		const profile = await this.fetchProfile(owner);
 
-		const allIds = userRaw?.accounts.contents.flatMap((entry) => entry.value);
+		const allIds = userRaw?.accounts.contents.flatMap((entry) => entry.value) ?? [];
 		const accounts = await this.fetchAccounts(allIds);
 		const invites = await this.fetchInvites(owner);
 
@@ -75,8 +75,8 @@ export class User implements UserData {
 		return { username, avatar };
 	}
 
-	async fetchAccounts(allIds: string[] | undefined): Promise<AccountPreview[]> {
-		if (!allIds || allIds.length === 0) return [];
+	async fetchAccounts(allIds: string[]): Promise<AccountPreview[]> {
+		if (allIds.length === 0) return [];
 
 		// Fetch all account objects in one batch
 		// Process in batches of 50 due to API limitations
@@ -104,7 +104,12 @@ export class User implements UserData {
 					name: name ?? ""
 				};
 			})
-			.sort((a, b) => a.name.localeCompare(b.name));
+			.sort((a, b) => {
+				// Create a map of id to its position in allIds for sorting
+				const idPositionMap = new Map(allIds.map((id, index) => [id, index]));
+				// Sort based on the original order in allIds
+				return idPositionMap.get(a.id)! - idPositionMap.get(b.id)!;
+			});
 
 		return accounts;
 	}
