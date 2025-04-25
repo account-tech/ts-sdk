@@ -7,7 +7,7 @@ import * as intents from "../../../.gen/account-protocol/intents/functions";
 
 import { ListNftsArgs, TakeNftsArgs, ActionsIntentTypes } from "../types";
 import { Intent } from "../intent";
-import { CLOCK } from "../../../types";
+import { CLOCK, SUI_FRAMEWORK } from "../../../types";
 
 export class TakeNftsIntent extends Intent {
     static type = ActionsIntentTypes.TakeNfts;
@@ -32,8 +32,8 @@ export class TakeNftsIntent extends Intent {
         params: TransactionObjectInput,
         outcome: TransactionObjectInput,
         actionArgs: TakeNftsArgs,
-    ): TransactionResult {
-        return kioskIntent.requestTakeNfts(
+    ) {
+        kioskIntent.requestTakeNfts(
             tx,
             accountGenerics,
             {
@@ -59,7 +59,7 @@ export class TakeNftsIntent extends Intent {
     ): TransactionResult {
         let result;
         for (const { type, policy } of typesAndPolicies) {
-            result = kioskIntent.executeTakeNfts(
+            const request = kioskIntent.executeTakeNfts(
                 tx,
                 [...accountGenerics, type],
                 {
@@ -71,6 +71,11 @@ export class TakeNftsIntent extends Intent {
                     policy,
                 }
             );
+            tx.moveCall({
+                target: `${SUI_FRAMEWORK}::transfer_policy::confirm_request`,
+                typeArguments: [type],
+                arguments: [tx.object(policy), request]
+            });
         }
         return result!;
     }
