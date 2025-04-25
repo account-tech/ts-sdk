@@ -2,33 +2,33 @@ import { ACCOUNT_ACTIONS, ACCOUNT_PROTOCOL, TransactionPureInput } from "../../t
 import { Dep } from "../account";
 
 export const ProtocolIntentTypes = {
-    ConfigDeps: `${ACCOUNT_PROTOCOL.V1.slice(2)}::config::ConfigDepsIntent`,
-    ToggleUnverifiedAllowed: `${ACCOUNT_PROTOCOL.V1.slice(2)}::config::ToggleUnverifiedAllowedIntent`,
+    ConfigDeps: `${ACCOUNT_PROTOCOL.V1}::config::ConfigDepsIntent`,
+    ToggleUnverifiedAllowed: `${ACCOUNT_PROTOCOL.V1}::config::ToggleUnverifiedAllowedIntent`,
 } as const;
 
 export const ActionsIntentTypes = {
-    Empty: `${ACCOUNT_ACTIONS.V1.slice(2)}::empty_intents::EmptyIntent`,
+    Empty: `${ACCOUNT_ACTIONS.V1}::empty_intents::EmptyIntent`,
 
-    BorrowCap: `${ACCOUNT_ACTIONS.V1.slice(2)}::access_control_intents::BorrowCapIntent`,
+    BorrowCap: `${ACCOUNT_ACTIONS.V1}::access_control_intents::BorrowCapIntent`,
     
-    DisableRules: `${ACCOUNT_ACTIONS.V1.slice(2)}::currency_intents::DisableRulesIntent`,
-    UpdateMetadata: `${ACCOUNT_ACTIONS.V1.slice(2)}::currency_intents::UpdateMetadataIntent`,
-    MintAndTransfer: `${ACCOUNT_ACTIONS.V1.slice(2)}::currency_intents::MintAndTransferIntent`,
-    MintAndVest: `${ACCOUNT_ACTIONS.V1.slice(2)}::currency_intents::MintAndVestIntent`,
-    WithdrawAndBurn: `${ACCOUNT_ACTIONS.V1.slice(2)}::currency_intents::WithdrawAndBurnIntent`,
+    DisableRules: `${ACCOUNT_ACTIONS.V1}::currency_intents::DisableRulesIntent`,
+    UpdateMetadata: `${ACCOUNT_ACTIONS.V1}::currency_intents::UpdateMetadataIntent`,
+    MintAndTransfer: `${ACCOUNT_ACTIONS.V1}::currency_intents::MintAndTransferIntent`,
+    MintAndVest: `${ACCOUNT_ACTIONS.V1}::currency_intents::MintAndVestIntent`,
+    WithdrawAndBurn: `${ACCOUNT_ACTIONS.V1}::currency_intents::WithdrawAndBurnIntent`,
 
-    TakeNfts: `${ACCOUNT_ACTIONS.V1.slice(2)}::kiosk_intents::TakeNftsIntent`,
-    ListNfts: `${ACCOUNT_ACTIONS.V1.slice(2)}::kiosk_intents::ListNftsIntent`,
+    TakeNfts: `${ACCOUNT_ACTIONS.V1}::kiosk_intents::TakeNftsIntent`,
+    ListNfts: `${ACCOUNT_ACTIONS.V1}::kiosk_intents::ListNftsIntent`,
 
-    WithdrawAndTransferToVault: `${ACCOUNT_ACTIONS.V1.slice(2)}::owned_intents::WithdrawAndTransferToVaultIntent`,
-    WithdrawAndTransfer: `${ACCOUNT_ACTIONS.V1.slice(2)}::owned_intents::WithdrawAndTransferIntent`,
-    WithdrawAndVest: `${ACCOUNT_ACTIONS.V1.slice(2)}::owned_intents::WithdrawAndVestIntent`,
+    WithdrawAndTransferToVault: `${ACCOUNT_ACTIONS.V1}::owned_intents::WithdrawAndTransferToVaultIntent`,
+    WithdrawAndTransfer: `${ACCOUNT_ACTIONS.V1}::owned_intents::WithdrawAndTransferIntent`,
+    WithdrawAndVest: `${ACCOUNT_ACTIONS.V1}::owned_intents::WithdrawAndVestIntent`,
 
-    UpgradePackage: `${ACCOUNT_ACTIONS.V1.slice(2)}::package_upgrade_intents::UpgradePackageIntent`,
-    RestrictPolicy: `${ACCOUNT_ACTIONS.V1.slice(2)}::package_upgrade_intents::RestrictPolicyIntent`,
+    UpgradePackage: `${ACCOUNT_ACTIONS.V1}::package_upgrade_intents::UpgradePackageIntent`,
+    RestrictPolicy: `${ACCOUNT_ACTIONS.V1}::package_upgrade_intents::RestrictPolicyIntent`,
 
-    SpendAndTransfer: `${ACCOUNT_ACTIONS.V1.slice(2)}::vault_intents::SpendAndTransferIntent`,
-    SpendAndVest: `${ACCOUNT_ACTIONS.V1.slice(2)}::vault_intents::SpendAndVestIntent`,
+    SpendAndTransfer: `${ACCOUNT_ACTIONS.V1}::vault_intents::SpendAndTransferIntent`,
+    SpendAndVest: `${ACCOUNT_ACTIONS.V1}::vault_intents::SpendAndVestIntent`,
 } as const;
 
 export type IntentStatus = {

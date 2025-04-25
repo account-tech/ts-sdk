@@ -1,5 +1,7 @@
 import { Transaction, TransactionObjectInput, TransactionResult } from "@mysten/sui/transactions";
 import { DynamicFieldInfo, SuiClient } from "@mysten/sui/client";
+import { normalizeStructTag } from "@mysten/sui/utils";
+
 import { newParams, newParamsWithRandKey } from "../../.gen/account-protocol/intents/functions";
 import { confirmExecution } from "../../.gen/account-protocol/account/functions";
 import { ActionsArgs, IntentArgs, IntentFields } from "./types";
@@ -185,7 +187,7 @@ export class Intents {
             const outcome = new outcomeType(this.accountId, intentRaw.key, intentRaw.outcome);
             
             const fields: IntentFields = {
-                type_: intentRaw.type_.fields.name,
+                type_: normalizeStructTag(intentRaw.type_.fields.name),
                 key: intentRaw.key,
                 description: intentRaw.description,
                 account: intentRaw.account,
@@ -197,9 +199,9 @@ export class Intents {
                 actionsId: intentRaw.actions.fields.id.id,
             }
             
-            let intentType = this.intentFactory.find(intent => intent.type === fields.type_);
+            let intentType = this.intentFactory.find(intent => intent.type === normalizeStructTag(fields.type_));
             if (!intentType) {
-                throw new Error(`Intent type ${fields.type_} not registered`);
+                throw new Error(`Intent type ${normalizeStructTag(fields.type_)} not registered`);
             }
             let intent = new intentType(this.client, this.accountId, outcome, fields);
             await intent.init();

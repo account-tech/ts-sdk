@@ -1,5 +1,6 @@
 import { Transaction, TransactionObjectInput, TransactionResult } from "@mysten/sui/transactions";
 import { SuiClient, SuiMoveObject, SuiObjectResponse } from "@mysten/sui/client";
+import { normalizeStructTag } from "@mysten/sui/utils";
 // import { SuinsClient } from '@mysten/suins';
 import { User as UserRaw, Invite as InviteRaw } from "../../.gen/account-protocol/user/structs";
 import { acceptInvite, refuseInvite, reorderAccounts } from "../../.gen/account-protocol/user/functions";
@@ -119,7 +120,7 @@ export class User implements UserData {
 		
 		const invitesParsed = inviteData
 			.map(invite => InviteRaw.fromSuiParsedData(invite.data?.content!))
-			.filter(invite => "0x" + invite.accountType === this.accountType);
+			.filter(invite => normalizeStructTag(invite.accountType) === this.accountType);
 
 		// Get all account addresses from invites
 		const accountAddrs = invitesParsed.map(invite => invite.accountAddr);
