@@ -1,7 +1,8 @@
 import { Transaction, TransactionObjectInput, TransactionResult } from "@mysten/sui/transactions";
 import { SuiClient, SuiMoveObject, SuiObjectResponse } from "@mysten/sui/client";
 import { normalizeStructTag } from "@mysten/sui/utils";
-// import { SuinsClient } from '@mysten/suins';
+import { SuinsClient } from '@mysten/suins';
+
 import { User as UserRaw, Invite as InviteRaw } from "../../.gen/account-protocol/user/structs";
 import { acceptInvite, refuseInvite, reorderAccounts } from "../../.gen/account-protocol/user/functions";
 import { new_, transfer, destroy } from "../../.gen/account-protocol/user/functions";
@@ -58,19 +59,19 @@ export class User implements UserData {
 	}
 
 	async fetchProfile(owner: string): Promise<Profile> {
-		// get user name and avatar
-		// const suinsClient = new SuinsClient({ client: this.client, network: 'testnet' });
-		// const nameRecord = await suinsClient.getNameRecord(owner);
-
+		// default values
 		let username = owner.slice(0, 5) + "..." + owner.slice(-3);
 		let avatar = "https://cdn1.iconfinder.com/data/icons/user-pictures/100/unknown-1024.png";
-
-		// if (nameRecord) {
-		// 	username = nameRecord.name;
-		// 	if (nameRecord.avatar) {
-		// 		avatar = nameRecord.avatar;
-		// 	}
-		// }
+		
+		const names = (await this.client.resolveNameServiceNames({ format: "at", address: owner })).data;
+		if (names.length > 0) {
+			username = names[0];
+			// get user avatar
+			const suinsClient = new SuinsClient({ client: this.client, network: 'mainnet' });
+			const nameRecord = await suinsClient.getNameRecord(names[0]);
+	
+			nameRecord && nameRecord.avatar && (avatar = nameRecord.avatar);
+		}
 
 		return { username, avatar };
 	}
