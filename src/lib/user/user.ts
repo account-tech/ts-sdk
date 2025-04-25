@@ -1,7 +1,7 @@
 import { Transaction, TransactionObjectInput, TransactionResult } from "@mysten/sui/transactions";
 import { SuiClient, SuiMoveObject, SuiObjectResponse } from "@mysten/sui/client";
 import { normalizeStructTag } from "@mysten/sui/utils";
-import { SuinsClient } from '@mysten/suins';
+import { ALLOWED_METADATA, SuinsClient, SuinsTransaction } from '@mysten/suins';
 
 import { User as UserRaw, Invite as InviteRaw } from "../../.gen/account-protocol/user/structs";
 import { acceptInvite, refuseInvite, reorderAccounts } from "../../.gen/account-protocol/user/functions";
@@ -190,29 +190,51 @@ export class User implements UserData {
 	}
 
 	// returns an account object that can be used in the ptb before being transferred
-	createUser(tx: Transaction): TransactionResult {
-		// TODO: if no suins, create a sub domain
+	createUser(tx: Transaction, username: string, avatar: string): TransactionResult {
+		// TODO: uncomment for mainnet
+		// if (this.profile.username.slice(6, 9) === "...") {
+		// 	const suinsClient = new SuinsClient({ client: this.client, network: 'mainnet' });
+		// 	const suinsTransaction = new SuinsTransaction(suinsClient, tx);
+
+		// 	const subNameNft = suinsTransaction.createSubName({
+		// 		parentNft: "0x0080100390e27b7cae27c999a55ba6c8a8162e9f4cbee5a77cbfdbfc018bd3fc", // user@account
+		// 		name: username,
+		// 		expirationTimestampMs: 1911625240737,
+		// 		allowChildCreation: true,
+		// 		allowTimeExtension: false,
+		// 	});
+
+		// 	suinsTransaction.setUserData({
+		// 		nft: subNameNft,
+		// 		key: ALLOWED_METADATA.avatar,
+		// 		value: avatar,
+		// 		isSubname: false,
+		// 	});
+
+		// 	tx.transferObjects([subNameNft], tx.pure.address(this.address!));
+		// }
+
 		return new_(tx);
 	}
 
-	transferUser(tx: Transaction, user: TransactionObjectInput, recipient: string): TransactionResult {
-		return transfer(tx, { registry: USER_REGISTRY, user, recipient });
+	transferUser(tx: Transaction, user: TransactionObjectInput, recipient: string) {
+		transfer(tx, { registry: USER_REGISTRY, user, recipient });
 	}
 
-	deleteUser(tx: Transaction, user: TransactionObjectInput): TransactionResult {
-		return destroy(tx, { registry: USER_REGISTRY, user });
+	deleteUser(tx: Transaction, user: TransactionObjectInput) {
+		destroy(tx, { registry: USER_REGISTRY, user });
 	}
 
-	acceptInvite(tx: Transaction, user: TransactionObjectInput, invite: TransactionObjectInput): TransactionResult {
-		return acceptInvite(tx, { user, invite });
+	acceptInvite(tx: Transaction, user: TransactionObjectInput, invite: TransactionObjectInput) {
+		acceptInvite(tx, { user, invite });
 	}
 
-	refuseInvite(tx: Transaction, invite: TransactionObjectInput): TransactionResult {
-		return refuseInvite(tx, invite);
+	refuseInvite(tx: Transaction, invite: TransactionObjectInput) {
+		refuseInvite(tx, invite);
 	}
 
 	reorderAccounts(tx: Transaction, user: TransactionObjectInput, accountType: string, accountAddrs: string[]) {
-		return reorderAccounts(tx, accountType, { user, addrs: accountAddrs });
+		reorderAccounts(tx, accountType, { user, addrs: accountAddrs });
 	}
 }
 
