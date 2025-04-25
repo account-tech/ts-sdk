@@ -7,8 +7,10 @@ export const ProtocolIntentTypes = {
 } as const;
 
 export const ActionsIntentTypes = {
-    BorrowCap: `${ACCOUNT_ACTIONS.V1.slice(2)}::access_control_intents::BorrowCapIntent`,
+    Empty: `${ACCOUNT_ACTIONS.V1.slice(2)}::empty_intents::EmptyIntent`,
 
+    BorrowCap: `${ACCOUNT_ACTIONS.V1.slice(2)}::access_control_intents::BorrowCapIntent`,
+    
     DisableRules: `${ACCOUNT_ACTIONS.V1.slice(2)}::currency_intents::DisableRulesIntent`,
     UpdateMetadata: `${ACCOUNT_ACTIONS.V1.slice(2)}::currency_intents::UpdateMetadataIntent`,
     MintAndTransfer: `${ACCOUNT_ACTIONS.V1.slice(2)}::currency_intents::MintAndTransferIntent`,
