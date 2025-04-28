@@ -19,6 +19,7 @@ export class User implements UserData {
 		public client: SuiClient,
 		public accountType: string,
 		public address?: string,
+		public baseSuiNS: string = "0x0080100390e27b7cae27c999a55ba6c8a8162e9f4cbee5a77cbfdbfc018bd3fc"
 	) {	}
 
 	static async init(
@@ -190,26 +191,28 @@ export class User implements UserData {
 	}
 
 	// returns an account object that can be used in the ptb before being transferred
-	createUser(tx: Transaction, username: string, avatar: string): TransactionResult {
+	createUser(tx: Transaction, username?: string, avatar?: string): TransactionResult {
 		// TODO: uncomment for mainnet
-		// if (this.profile.username.slice(6, 9) === "...") {
+		// if (username && this.profile.username.slice(6, 9) === "...") {
 		// 	const suinsClient = new SuinsClient({ client: this.client, network: 'mainnet' });
 		// 	const suinsTransaction = new SuinsTransaction(suinsClient, tx);
 
 		// 	const subNameNft = suinsTransaction.createSubName({
-		// 		parentNft: "0x0080100390e27b7cae27c999a55ba6c8a8162e9f4cbee5a77cbfdbfc018bd3fc", // user@account
+		// 		parentNft: this.baseSuiNS, // user@account
 		// 		name: username,
 		// 		expirationTimestampMs: 1911625240737,
 		// 		allowChildCreation: true,
 		// 		allowTimeExtension: false,
 		// 	});
 
+		// if (avatar) {
 		// 	suinsTransaction.setUserData({
 		// 		nft: subNameNft,
 		// 		key: ALLOWED_METADATA.avatar,
 		// 		value: avatar,
 		// 		isSubname: false,
 		// 	});
+		// }
 
 		// 	tx.transferObjects([subNameNft], tx.pure.address(this.address!));
 		// }
