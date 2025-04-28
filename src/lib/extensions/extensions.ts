@@ -9,9 +9,7 @@ export class Extensions {
 
     private constructor(
         public client: SuiClient,
-    ) {
-        this.client = client;
-    }
+    ) {}
 
     static async init(client: SuiClient): Promise<Extensions> {
         const extensions = new Extensions(client);
