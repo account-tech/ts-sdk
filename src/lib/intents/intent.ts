@@ -13,8 +13,8 @@ export interface Intent {
 
     request(
         tx: Transaction, 
-        accountGenerics: [string, string], 
-        auth: TransactionObjectInput, 
+        accountGenerics: [string, string] | null, 
+        auth: TransactionObjectInput | null,  
         account: string, 
         params: TransactionObjectInput, 
         outcome: TransactionObjectInput, 
@@ -23,7 +23,7 @@ export interface Intent {
     
     execute(
         tx: Transaction, 
-        accountGenerics: [string, string], 
+        accountGenerics: [string, string] | null, 
         executable: TransactionObjectInput, 
         ...args: any[]
     ): TransactionResult | void;

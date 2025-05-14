@@ -7,12 +7,12 @@ import { User as UserRaw, Invite as InviteRaw } from "../../.gen/account-protoco
 import { acceptInvite, refuseInvite, reorderAccounts } from "../../.gen/account-protocol/user/functions";
 import { new_, transfer, destroy } from "../../.gen/account-protocol/user/functions";
 import { USER_REGISTRY, ACCOUNT_PROTOCOL } from "../../types/constants";
-import { UserData, AccountPreview, Invite, Profile } from "./types";
+import { UserData, Invite, Profile } from "./types";
 
 export class User implements UserData {
 	id: string = "";
 	profile: Profile = { username: "", avatar: "" };
-	accounts: AccountPreview[] = [];
+	accountIds: string[] = [];
 	invites: Invite[] = [];
 
 	constructor(
@@ -47,14 +47,13 @@ export class User implements UserData {
 
 		const profile = await this.fetchProfile(owner);
 
-		const allIds = userRaw?.accounts.contents.flatMap((entry) => entry.value) ?? [];
-		const accounts = await this.fetchAccounts(allIds);
+		const accountIds = userRaw?.accounts.contents.flatMap((entry) => entry.value) ?? [];
 		const invites = await this.fetchInvites(owner);
 
 		return {
 			id: userRaw?.id ?? "",
 			profile,
-			accounts,
+			accountIds,
 			invites,
 		}
 	}
@@ -75,45 +74,6 @@ export class User implements UserData {
 		}
 
 		return { username, avatar };
-	}
-
-	async fetchAccounts(allIds: string[]): Promise<AccountPreview[]> {
-		if (allIds.length === 0) return [];
-
-		// Fetch all account objects in one batch
-		// Process in batches of 50 due to API limitations
-		const accountsObjs = [];
-		for (let i = 0; i < allIds.length; i += 50) {
-			const batch = allIds.slice(i, i + 50);
-			const batchResults = await this.client.multiGetObjects({
-				ids: batch,
-				options: { showContent: true }
-			});
-			accountsObjs.push(...batchResults);
-		}
-
-		// Process each account object
-		const accounts = accountsObjs
-			.filter(acc => (acc.data?.content as SuiMoveObject).type.includes(this.accountType))
-			.map((acc: SuiObjectResponse) => {
-				const moveObj = acc.data?.content as SuiMoveObject;
-
-				const name = (moveObj.fields as any).metadata.fields.inner.fields.contents
-					.find((entry: any) => entry.fields.key === "name")?.fields.value;
-
-				return {
-					id: (moveObj.fields as any).id.id,
-					name: name ?? ""
-				};
-			})
-			.sort((a, b) => {
-				// Create a map of id to its position in allIds for sorting
-				const idPositionMap = new Map(allIds.map((id, index) => [id, index]));
-				// Sort based on the original order in allIds
-				return idPositionMap.get(a.id)! - idPositionMap.get(b.id)!;
-			});
-
-		return accounts;
 	}
 
 	async fetchInvites(owner: string = this.address!): Promise<Invite[]> {
@@ -177,7 +137,7 @@ export class User implements UserData {
 	setData(account: UserData) {
 		this.id = account.id;
 		this.profile = account.profile;
-		this.accounts = account.accounts;
+		this.accountIds = account.accountIds;
 		this.invites = account.invites;
 	}
 
@@ -185,7 +145,7 @@ export class User implements UserData {
 		return {
 			id: this.id,
 			profile: this.profile,
-			accounts: this.accounts,
+			accountIds: this.accountIds,
 			invites: this.invites
 		}
 	}
