@@ -2,7 +2,7 @@
   "name": "@account.tech/core",
   "author": "Thouny <thouny@tuta.io>",
   "description": "Core library for defining account sdks with account.tech",
-  "version": "0.1.19",
+  "version": "0.1.20",
   "license": "Apache-2.0",
   "files": [
     "dist"
@@ -18,16 +18,16 @@
     "build:types": "tsc --build"
   },
   "dependencies": {
-    "@mysten/kiosk": "^0.12.3",
-    "@mysten/sui": "^1.28.2",
-    "@mysten/suins": "^0.7.13",
+    "@mysten/kiosk": "^0.12.5",
+    "@mysten/sui": "^1.29.1",
+    "@mysten/suins": "^0.7.15",
     "@polymedia/coinmeta": "^0.0.24",
-    "bun-types": "^1.2.10"
+    "bun-types": "^1.2.13"
   },
   "devDependencies": {
     "@types/bun": "latest",
     "@types/chai": "^4.3.20",
-    "@types/node": "^20.17.31",
+    "@types/node": "^20.17.47",
     "chai": "^5.2.0",
     "tsup": "^8.4.0",
     "typescript": "^5.8.3"

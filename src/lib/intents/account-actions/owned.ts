@@ -68,7 +68,7 @@ export class WithdrawAndTransferToVaultIntent extends Intent {
             {
                 executable,
                 account: this.account,
-                receiving: this.args!.coinId,
+                receiving: this.args!.coinId as string,
             }
         );
     }
@@ -193,23 +193,21 @@ export class WithdrawAndTransferIntent extends Intent {
             throw new Error("Type by ID not initialized");
         }
 
-        let result;
         for (let i = 0; i < this.args!.transfers.length; i++) {
             const objectType = this.typeById.get(this.args!.transfers[i].objectId as string);
             if (!objectType) {
                 throw new Error("Object type not found");
             }
-            result = ownedIntents.executeWithdrawAndTransfer(
+            ownedIntents.executeWithdrawAndTransfer(
                 tx,
                 [...accountGenerics, objectType],
                 {
                     executable,
                     account: this.account,
-                    receiving: this.args!.transfers[i].objectId,
+                    receiving: this.args!.transfers[i].objectId as string,
                 }
             );
-        }
-        return result!;
+        };
     }
 
     clearEmpty(
@@ -340,7 +338,7 @@ export class WithdrawAndVestIntent extends Intent {
             {
                 executable,
                 account: this.account,
-                receiving: this.args!.coinId,
+                receiving: this.args!.coinId as string,
             }
         );
     }

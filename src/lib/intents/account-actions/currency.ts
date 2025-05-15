@@ -541,7 +541,7 @@ export class WithdrawAndBurnIntent extends Intent {
             {
                 executable,
                 account: this.account,
-                receiving: this.args!.coinId,
+                receiving: this.args!.coinId as string,
             }
         );
     }

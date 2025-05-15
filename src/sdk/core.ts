@@ -55,4 +55,15 @@ export class AccountSDK {
             }
         }
     }
+
+    async switch(accountId: string) {
+        this.account.id = accountId;
+        
+        await this.account.refresh();
+        this.intents = await Intents.init(this.client, this.account.id, this.account.intentsBagId, this.config.intentFactory, this.config.outcomeFactory);
+        this.managedAssets = await Managed.init(this.client, this.account.id, this.config.assetFactory);
+        if (this.config.ownedObjects) {
+            this.ownedObjects = await Owned.init(this.client, this.account.id);
+        }
+    }
 }
