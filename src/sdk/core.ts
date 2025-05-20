@@ -46,8 +46,8 @@ export class AccountSDK {
     async refresh() {
         await this.extensions.refresh();
         await this.user.refresh();
-        await this.account.refresh();
         if (this.account.id) {
+            await this.account.refresh();
             this.intents = await Intents.init(this.client, this.account.id, this.account.intentsBagId, this.config.intentFactory, this.config.outcomeFactory);
             this.managedAssets = await Managed.init(this.client, this.account.id, this.config.assetFactory);
             if (this.config.ownedObjects) {
