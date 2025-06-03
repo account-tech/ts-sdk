@@ -215,7 +215,7 @@ export class SpendAndVestIntent extends Intent {
             this.args!.coinType,
             expired
         );
-        transfer.deleteTransfer(
+        vesting.deleteVest(
             tx,
             expired
         );
