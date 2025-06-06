@@ -13,3 +13,5 @@ export function executeBorrowCap( tx: Transaction, typeArgs: [string, string, st
 export interface ExecuteReturnCapArgs { executable: TransactionObjectInput; account: TransactionObjectInput; cap: GenericArg }
 
 export function executeReturnCap( tx: Transaction, typeArgs: [string, string, string], args: ExecuteReturnCapArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::access_control_intents::execute_return_cap`, typeArguments: typeArgs, arguments: [ obj(tx, args.executable), obj(tx, args.account), generic(tx, `${typeArgs[2]}`, args.cap) ], }) }
+
+export function typeNameToString( tx: Transaction, typeArg: string, ) { return tx.moveCall({ target: `${PUBLISHED_AT}::access_control_intents::type_name_to_string`, typeArguments: [typeArg], arguments: [ ], }) }
