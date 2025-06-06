@@ -24,7 +24,7 @@ export class SpendAndTransferIntent extends Intent {
 
         this.args = {
             coinType,
-            treasuryName: SpendAction.fromFieldsWithTypes(phantom(coinType), actions[0]).name,
+            vaultName: SpendAction.fromFieldsWithTypes(phantom(coinType), actions[0]).name,
             transfers: Array.from({ length: actions.length / 2 }, (_, i) => ({
                 amount: SpendAction.fromFieldsWithTypes(phantom(coinType), actions[i * 2]).amount,
                 recipient: TransferAction.fromFieldsWithTypes(actions[i * 2 + 1]).recipient,
@@ -49,7 +49,7 @@ export class SpendAndTransferIntent extends Intent {
                 account,
                 params,
                 outcome,
-                vaultName: actionArgs.treasuryName,
+                vaultName: actionArgs.vaultName,
                 amounts: actionArgs.transfers.map(transfer => BigInt(transfer.amount)),
                 recipients: actionArgs.transfers.map(transfer => transfer.recipient),
             }
@@ -147,7 +147,7 @@ export class SpendAndVestIntent extends Intent {
         const vestAction = VestAction.fromFieldsWithTypes(actions[1]);
 
         this.args = {
-            treasuryName: spendAction.name,
+            vaultName: spendAction.name,
             coinType,
             amount: spendAction.amount,
             start: vestAction.startTimestamp,
@@ -173,7 +173,7 @@ export class SpendAndVestIntent extends Intent {
                 account,
                 params,
                 outcome,
-                vaultName: actionArgs.treasuryName,
+                vaultName: actionArgs.vaultName,
                 coinAmount: BigInt(actionArgs.amount),
                 startTimestamp: BigInt(actionArgs.start),
                 endTimestamp: BigInt(actionArgs.end),
