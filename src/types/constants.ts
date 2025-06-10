@@ -11,14 +11,14 @@ export const TRANSFER_POLICY_RULES = [
 ];
 // Account.tech Published Packages
 export enum ACCOUNT_EXTENSIONS {
-    V1 = "0x2f10ccb3323bae290b908c48e383a4136e309ea47ec42d33f5671e4fd61f3953",
+    V1 = "0x87bee60d3ea6dc5b42e1074134373af27733fb3c5ebc3ac8e013901426d85d53",
 }
 export enum ACCOUNT_PROTOCOL {
-    V1 = "0x043d63bbb07420bcef4b933e6b0dd59d1fb42fa2fa5d1a39e91e26a5e6e50049",
+    V1 = "0x10c87c29ea5d5674458652ababa246742a763f9deafed11608b7f0baea296484",
 }
 export enum ACCOUNT_ACTIONS {
-    V1 = "0x8d549e5480a5f3e3484d052264016c195338e2a7f1d29d0b8ee20258de76ce16",
+    V1 = "0xf477dbfad6ab1de1fdcb6042c0afeda2aa5bf12eb7ef42d280059fc8d6c36c94",
 }
 // Shared objects
-export const EXTENSIONS = "0xd3efc4100464aa1505362c16f92ed01f5c9af93d4312b33bc717ca33502806c2";
-export const USER_REGISTRY = "0xa9c7fa2e6426ea16c7c6e5ff64250c5929abf57af0ccfcfcdc9bc36c28c4cddb";
+export const EXTENSIONS = "0x698bc414f25a7036d9a72d6861d9d268e478492dc8bfef8b5c1c2f1eae769254";
+export const USER_REGISTRY = "0xa9ec2fd2c9ac1ed9cde4972da6014818c3343a1d65dc140a8d51567c20d8992e";

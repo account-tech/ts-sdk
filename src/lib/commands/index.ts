@@ -5,3 +5,4 @@ export { openKiosk, placeInKiosk, delistFromKiosk, withdrawProfitsFromKiosk, clo
 export { mergeAndSplit } from "./owned";
 export { depositUpgradeCap } from "./package-upgrade";
 export { openVault, depositFromWallet, closeVault } from "./vault";
+export { getCaps, getVestings, claim, cancelPayment, destroyEmpty, destroyCap } from "./vesting";

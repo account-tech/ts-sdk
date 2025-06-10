@@ -1,6 +1,20 @@
 import { ACCOUNT_ACTIONS, ACCOUNT_PROTOCOL, TransactionPureInput } from "../../types";
 import { Dep } from "../account";
 
+export const ProtocolRoles = {
+    Config: `${ACCOUNT_PROTOCOL.V1.slice(2)}::config`,
+} as const;
+
+export const ActionsRoles = {
+    Empty: `${ACCOUNT_ACTIONS.V1.slice(2)}::empty_intents`,
+    AccessControl: `${ACCOUNT_ACTIONS.V1.slice(2)}::access_control_intents`,
+    Currency: `${ACCOUNT_ACTIONS.V1.slice(2)}::currency_intents`,
+    Kiosk: `${ACCOUNT_ACTIONS.V1.slice(2)}::kiosk_intents`,
+    Owned: `${ACCOUNT_ACTIONS.V1.slice(2)}::owned_intents`,
+    PackageUpgrade: `${ACCOUNT_ACTIONS.V1.slice(2)}::package_upgrade_intents`,
+    Vault: `${ACCOUNT_ACTIONS.V1.slice(2)}::vault_intents`,
+} as const;
+
 export const ProtocolIntentTypes = {
     ConfigDeps: `${ACCOUNT_PROTOCOL.V1}::config::ConfigDepsIntent`,
     ToggleUnverifiedAllowed: `${ACCOUNT_PROTOCOL.V1}::config::ToggleUnverifiedAllowedIntent`,
@@ -142,13 +156,13 @@ export type WithdrawAndVestArgs = {
 }
 
 export type SpendAndTransferArgs = {
-    treasuryName: string;
+    vaultName: string;
     coinType: string;
     transfers: { amount: bigint, recipient: string }[];
 }
 
 export type SpendAndVestArgs = {
-    treasuryName: string;
+    vaultName: string;
     coinType: string;
     amount: bigint;
     start: bigint;

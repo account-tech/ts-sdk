@@ -9,7 +9,7 @@ export {
 export { ConfigDepsIntent, ToggleUnverifiedAllowedIntent } from "./protocol/config";
 export { Intent, Intents } from "./intent";
 export { Outcome } from "./outcome";
-export { ActionsIntentTypes, Policy } from "./types";
+export { ActionsIntentTypes, Policy, ActionsRoles, ProtocolRoles } from "./types";
 export type {
     IntentFields, IntentArgs, ActionsArgs, IntentStatus, 
     ConfigDepsArgs, ToggleUnverifiedAllowedArgs,
@@ -18,5 +18,5 @@ export type {
     TakeNftsArgs, ListNftsArgs,
     WithdrawAndTransferToVaultArgs, WithdrawAndTransferArgs, WithdrawAndVestArgs,
     SpendAndTransferArgs, SpendAndVestArgs,
-    UpgradePackageArgs, RestrictPolicyArgs
+    UpgradePackageArgs, RestrictPolicyArgs,
 } from "./types";
